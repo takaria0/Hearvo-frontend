@@ -1,0 +1,55 @@
+.header {
+  color: black;
+  background-color: white;
+  padding: 20px;
+  font-size: 60px;
+  font-family: Arial;
+  text-align: left;
+}
+
+.li {
+  text-align: center;
+  display: block;
+  padding: 20px;
+  /* padding-left: 80px; */
+  font-size: 28px;
+  color: #black;
+  background-color: EEEBEB;
+  margin: 20px;
+  position: relative;
+}
+
+.title {
+  font-size: 28px;
+}
+
+
+.content {
+  font-size: 16px;
+}
+
+.menu {
+  list-style-type: none;
+  margin: 10;
+  padding: 10;
+  overflow: hidden;
+  background-color: white;
+}
+
+.menulist {
+  font-size: 28px;
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+
+.menulist a {
+  color: gray;
+}
+
+.menulist a:hover {
+  color: red;
+}

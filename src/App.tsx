@@ -5,7 +5,7 @@ import Feed from './components/Feed';
 function App() {
   return (
     <div className="App">
-      <Feed service="Twitter"></Feed>
+      <Feed service="Hearvo"></Feed>
     </div>
   );
 }

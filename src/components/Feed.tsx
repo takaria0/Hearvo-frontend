@@ -1,10 +1,18 @@
 import React from 'react';
+import { Button } from '@material-ui/core';
 
+import * as styles from '../css/feed.module.css';
 
 type PostType = {
   post_id: number;
   title: string,
   content: string;
+}
+
+type VoteSelectType = {
+  vote_select_id: number;
+  post_id: number,
+  content: string,
 }
 
 const someData: PostType[] = [
@@ -21,13 +29,26 @@ const someData: PostType[] = [
 ];
 
 
-const categoryData = [
+const categoryData: Array<string> = [
   "popular",
   "latest",
   "science",
   "IT",
   "environment",
   "politics",
+]
+
+const voteSelectData: VoteSelectType[] = [
+  {
+    vote_select_id: 1,
+    post_id: 1,
+    content: "Good",
+  },
+  {
+    vote_select_id: 2,
+    post_id: 1,
+    content: "Bad",
+  },
 ]
 
 
@@ -51,22 +72,74 @@ type FeedCategoryProps = {
 type FeedCategoryState = {
 };
 
+type VoteSelectListProps = {
+  // using `interface` is also ok
+  voteSelectArray: VoteSelectType[];
+};
 
+type VoteSelectListState = {
+  // using `interface` is also ok
+  vote_select_id: number;
+};
+
+// Feed posts
+class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectListState> {
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      "vote_select_id": 0,
+    };
+  }
+
+  someFunc(voteSelectId: number, event: any) {
+    this.setState({vote_select_id: voteSelectId});
+  };
+
+  render() {
+    return (
+      <div >
+        <ul>
+          {
+            this.props.voteSelectArray.map((da) => {
+              return (
+                <li className={styles.li}>
+                  <div className={styles.content}>
+                    <Button variant="contained" color="primary" onClick={(e) => this.someFunc(da.vote_select_id, e)}>
+                      vote
+                    </Button>
+                    {'   '}{da.content}{'   '}{this.state.vote_select_id}
+                  </div>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </div>
+    );
+  }
+}
  
 // Feed posts
 class FeedList extends React.Component<FeedListProps, FeedListState> {
   
   render() {
     return (
-      <div className="feed-list">
-        <h1>Feed</h1>
+      <div >
         <ul>
           {
             this.props.data.map((da) => {
               return (
-                <li>
-                  {da.title}:
-                  {da.content}
+                <li className={styles.li}>
+                  <div className={styles.title}>
+                    {da.title}
+                  </div>
+                  <div className={styles.content}>
+                    {da.content}
+                  </div>
+                  <div>
+                    <VoteSelectList voteSelectArray={voteSelectData}></VoteSelectList>
+                  </div>
                 </li>
               )
             })
@@ -83,13 +156,12 @@ class FeedCategory extends React.Component<FeedCategoryProps, FeedCategoryState>
   render() {
     return (
       <div className="feed-category">
-        <h1>Category</h1>
-        <ul>
+        <ul className={styles.menu}>
           {
           this.props.data.map((data)=> {
             return (
-            <li>
-              {data}
+              <li className={styles.menulist}>
+                <a>{data}</a>
             </li>
             )
           })
@@ -105,14 +177,15 @@ class FeedCategory extends React.Component<FeedCategoryProps, FeedCategoryState>
 class Feed extends React.Component<FeedProps, FeedState> {
 
   componentDidMount() {
-    
+
   }
 
   render() {
     return (
       <div className="feed">
+        <h1 className={styles.header}>{this.props.service}</h1>
         <FeedCategory data={categoryData}></FeedCategory>
-        <h1>Shopping List for {this.props.service}</h1>
+        
         <FeedList data={someData}></FeedList>
       </div>
     );
