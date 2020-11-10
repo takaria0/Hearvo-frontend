@@ -1,33 +1,18 @@
+
 import React from 'react';
 import { Button } from '@material-ui/core';
+import axios from './Api';
 
 import * as styles from '../css/feed.module.css';
 
-type PostType = {
-  post_id: number;
-  title: string,
-  content: string;
-}
 
-type VoteSelectType = {
-  vote_select_id: number;
-  post_id: number,
-  content: string,
-}
+const TOKEN = process.env.REACT_APP_BEARER_TOKEN_LOCAL;
 
-const someData: PostType[] = [
-  {
-    post_id: 1,
-    title: "What do you think about Trump?",
-    content: "Folks, I want you to answer this question"
-  },
-  {
-    post_id: 2,
-    title: "How much money do you make?",
-    content: "Folks, I want you to answer this question"
-  },
-];
-
+/*
+*
+* just some data for test
+*
+*/
 
 const categoryData: Array<string> = [
   "popular",
@@ -52,25 +37,11 @@ const voteSelectData: VoteSelectType[] = [
 ]
 
 
-
-type FeedProps = {
-  service: string;
-};
-type FeedState = {
-};
-
-type FeedListProps = {
-  // using `interface` is also ok
-  data: PostType[];
-};
-type FeedListState = {
-};
-
-type FeedCategoryProps = {
-  data: Array<string>;
-};
-type FeedCategoryState = {
-};
+type VoteSelectType = {
+  vote_select_id: number;
+  post_id: number,
+  content: string,
+}
 
 type VoteSelectListProps = {
   // using `interface` is also ok
@@ -80,6 +51,7 @@ type VoteSelectListProps = {
 type VoteSelectListState = {
   // using `interface` is also ok
   vote_select_id: number;
+  user_id: number;
 };
 
 // Feed posts
@@ -89,12 +61,27 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
     super(props);
     this.state = {
       "vote_select_id": 0,
+      "user_id": 0,
     };
   }
 
-  someFunc(voteSelectId: number, event: any) {
-    this.setState({vote_select_id: voteSelectId});
-  };
+  handleSubmit(voteSelectId: number, event: any)  {
+    event.preventDefault();
+
+    this.setState({ vote_select_id: voteSelectId });
+
+    const postObj = {
+      user_id: this.state.user_id,
+      vote_select_id: this.state.vote_select_id
+    };
+
+    axios.post("/vote_select_user", { postObj }, {headers: { 'Authorization': 'Bearer ' + TOKEN }})
+      .then(res => {
+        console.log(res);
+      })
+  }
+
+
 
   render() {
     return (
@@ -105,7 +92,7 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
               return (
                 <li className={styles.li}>
                   <div className={styles.content}>
-                    <Button variant="contained" color="primary" onClick={(e) => this.someFunc(da.vote_select_id, e)}>
+                    <Button variant="contained" color="primary" onClick={(e) => this.handleSubmit(da.vote_select_id, e)}>
                       vote
                     </Button>
                     {'   '}{da.content}{'   '}{this.state.vote_select_id}
@@ -119,7 +106,26 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
     );
   }
 }
- 
+
+
+type PostType = {
+  post_id: number;
+  title: string;
+  content: string;
+  start_at: string;
+  end_at: string;
+  created_at: string;
+  updated_at: string;
+}
+
+
+type FeedListProps = {
+  data: PostType[];
+};
+type FeedListState = {
+};
+
+
 // Feed posts
 class FeedList extends React.Component<FeedListProps, FeedListState> {
   
@@ -134,10 +140,13 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
                   <div className={styles.title}>
                     {da.title}
                   </div>
+                  <div className={styles.created_at}>
+                    <b>created_at:</b> {da.created_at}, <b>modified_at:</b> {da.updated_at}
+                  </div>
                   <div className={styles.content}>
                     {da.content}
                   </div>
-                  <div>
+                  <div className={styles.vote_section}>
                     <VoteSelectList voteSelectArray={voteSelectData}></VoteSelectList>
                   </div>
                 </li>
@@ -150,6 +159,12 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
   }
 }
 
+
+type FeedCategoryProps = {
+  data: Array<string>;
+};
+type FeedCategoryState = {
+};
 // Category
 class FeedCategory extends React.Component<FeedCategoryProps, FeedCategoryState> {
 
@@ -173,11 +188,36 @@ class FeedCategory extends React.Component<FeedCategoryProps, FeedCategoryState>
 }
 
 
+
+type FeedProps = {
+  service: string;
+
+};
+type FeedState = {
+  categoryData: Array<string>,
+  postData: PostType[],
+};
+
+
 // Base Component
 class Feed extends React.Component<FeedProps, FeedState> {
 
-  componentDidMount() {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      categoryData: [],
+      postData: [],
+    }
+  }
 
+  componentDidMount() {
+    axios.get("/posts", { headers: { 'Authorization': 'Bearer ' + TOKEN } })
+      .then(res => {
+        const postData = res.data;
+        this.setState({ postData });
+      }).catch((err)=> {
+        // console.log(err.response.data);
+      })
   }
 
   render() {
@@ -185,8 +225,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       <div className="feed">
         <h1 className={styles.header}>{this.props.service}</h1>
         <FeedCategory data={categoryData}></FeedCategory>
-        
-        <FeedList data={someData}></FeedList>
+        <FeedList data={this.state.postData}></FeedList>
       </div>
     );
   }

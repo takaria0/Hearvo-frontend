@@ -21,12 +21,23 @@
 
 .title {
   font-size: 28px;
+  margin: 10px;
 }
 
 
 .content {
   font-size: 16px;
+  margin: 10px;
+  border: 10px black;
+  
 }
+
+.vote_section {
+  margin: 10px;
+  border: 10px black;
+  background-color: rgba(186, 247, 252, 0.411);
+} 
+
 
 .menu {
   list-style-type: none;
@@ -52,4 +63,8 @@
 
 .menulist a:hover {
   color: red;
+}
+
+.created_at {
+  font-size: 12px;
 }
