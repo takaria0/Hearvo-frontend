@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Button } from '@material-ui/core';
-import axios from './Api';
+import axios from '../Api';
 
-import * as styles from '../css/feed.module.css';
+import PostFeed from './PostFeed';
+import * as styles from '../../css/feed.module.css';
 
 
 const TOKEN = process.env.REACT_APP_BEARER_TOKEN_LOCAL;
@@ -60,8 +61,8 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
   constructor(props: any) {
     super(props);
     this.state = {
-      "vote_select_id": 0,
-      "user_id": 0,
+      vote_select_id: 0,
+      user_id: 0,
     };
   }
 
@@ -190,9 +191,8 @@ class FeedCategory extends React.Component<FeedCategoryProps, FeedCategoryState>
 
 
 type FeedProps = {
-  service: string;
-
 };
+
 type FeedState = {
   categoryData: Array<string>,
   postData: PostType[],
@@ -223,8 +223,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
   render() {
     return (
       <div className="feed">
-        <h1 className={styles.header}>{this.props.service}</h1>
         <FeedCategory data={categoryData}></FeedCategory>
+        <PostFeed></PostFeed>
         <FeedList data={this.state.postData}></FeedList>
       </div>
     );
