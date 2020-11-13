@@ -5,9 +5,8 @@ import axios from '../Api';
 
 import PostFeed from './PostFeed';
 import * as styles from '../../css/feed.module.css';
+import { getJwt } from '../../helpers/jwt';
 
-
-const TOKEN = process.env.REACT_APP_BEARER_TOKEN_LOCAL;
 
 /*
 *
@@ -24,35 +23,30 @@ const categoryData: Array<string> = [
   "politics",
 ]
 
-const voteSelectData: VoteSelectType[] = [
-  {
-    vote_select_id: 1,
-    post_id: 1,
-    content: "Good",
-  },
-  {
-    vote_select_id: 2,
-    post_id: 1,
-    content: "Bad",
-  },
-]
 
 
 type VoteSelectType = {
-  vote_select_id: number;
-  post_id: number,
+  id: number;
   content: string,
+}
+
+type voteCountObj = {
+
 }
 
 type VoteSelectListProps = {
   // using `interface` is also ok
+  postId: number;
   voteSelectArray: VoteSelectType[];
 };
 
 type VoteSelectListState = {
   // using `interface` is also ok
-  vote_select_id: number;
-  user_id: number;
+  id: number;
+  voted: boolean;
+  voteCountArray: voteCountObj[];
+  total_vote: number;
+  vote_selects_count: object;
 };
 
 // Feed posts
@@ -61,30 +55,63 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
   constructor(props: any) {
     super(props);
     this.state = {
-      vote_select_id: 0,
-      user_id: 0,
+      id: 0,
+      voted: false,
+      voteCountArray: [],
+      total_vote: 0,
+      vote_selects_count: {},
     };
   }
 
   handleSubmit(voteSelectId: number, event: any)  {
     event.preventDefault();
 
-    this.setState({ vote_select_id: voteSelectId });
 
-    const postObj = {
-      user_id: this.state.user_id,
-      vote_select_id: this.state.vote_select_id
+    this.setState({ id: voteSelectId });
+    console.log("voteSelectId", voteSelectId)
+
+    const jwt = getJwt();
+    // if (!jwt) {
+    //   this.props.history.push("/login");
+    // }
+    const voteSelectPostObj = {
+      vote_select_id: voteSelectId
+    };
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}` }
     };
 
-    axios.post("/vote_select_user", { postObj }, {headers: { 'Authorization': 'Bearer ' + TOKEN }})
-      .then(res => {
-        console.log(res);
-      })
+    console.log("voteSelectPostObj", voteSelectPostObj)
+
+    axios.post(
+      "/vote_select_users",
+      voteSelectPostObj,
+      config,
+    ).then(res => {
+      console.log(res);
+      this.setState({
+        voted: true
+      });
+    }).catch((err) => {
+      console.log(err);
+    })
+
+    const countVotePostObj = { post_id: this.props.postId }
+    console.log("countVotePostObj", countVotePostObj)
+    axios.post(
+      "/count_vote_selects",
+      countVotePostObj,
+      config,
+      ).then((res) => {
+      console.log(res);
+      this.setState({
+        total_vote: res.data.total_vote,
+        vote_selects_count: res.data.vote_selects_count,
+      });
+    })
   }
 
-
-
-  render() {
+  beforeVoteRender() {
     return (
       <div >
         <ul>
@@ -93,10 +120,10 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
               return (
                 <li className={styles.li}>
                   <div className={styles.content}>
-                    <Button variant="contained" color="primary" onClick={(e) => this.handleSubmit(da.vote_select_id, e)}>
+                    <Button variant="contained" color="primary" onClick={(e) => this.handleSubmit(da.id, e)}>
                       vote
                     </Button>
-                    {'   '}{da.content}{'   '}{this.state.vote_select_id}
+                    {'   '}{da.content}{'   '}{this.state.id}
                   </div>
                 </li>
               )
@@ -104,19 +131,61 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
           }
         </ul>
       </div>
-    );
+    )
   }
+
+  afterVoteRender() {
+    return (
+      <div >
+        <ul>
+          {
+            this.props.voteSelectArray.map((da, idx) => {
+
+              // const voteSelectId = da.id.toString();
+              // const voteCount = this.state.vote_selects_count;
+              // console.log("voteCount"); console.log(voteCount)
+              
+              return (
+                <li className={styles.li}>
+                  <div className={styles.content}>
+                    {da.content}{"  "}{22}
+                  </div>
+                </li>
+              )
+            })
+          }
+          total: {this.state.total_vote}
+        </ul>
+      </div>
+    )
+  }
+
+
+  render() {
+
+    if(this.state.voted === false) {
+      return (
+        this.beforeVoteRender() 
+      );
+    } else {
+      return (
+        this.afterVoteRender() 
+      );
+    }
+  }
+
 }
 
 
 type PostType = {
-  post_id: number;
+  id: number;
   title: string;
   content: string;
   start_at: string;
   end_at: string;
   created_at: string;
   updated_at: string;
+  vote_selects: VoteSelectType[];
 }
 
 
@@ -148,7 +217,7 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
                     {da.content}
                   </div>
                   <div className={styles.vote_section}>
-                    <VoteSelectList voteSelectArray={voteSelectData}></VoteSelectList>
+                    <VoteSelectList voteSelectArray={da.vote_selects} postId={da.id}></VoteSelectList>
                   </div>
                 </li>
               )
@@ -210,8 +279,10 @@ class Feed extends React.Component<FeedProps, FeedState> {
     }
   }
 
+
   componentDidMount() {
-    axios.get("/posts", { headers: { 'Authorization': 'Bearer ' + TOKEN } })
+    const jwt = getJwt();
+    axios.get("/posts", { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then(res => {
         const postData = res.data;
         this.setState({ postData });

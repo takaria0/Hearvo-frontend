@@ -2,6 +2,7 @@ import React from 'react';
 import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 
+import AddVoteSelect from './AddVoteSelect';
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 
@@ -29,22 +30,22 @@ class PostFeed extends React.Component<PostFeedProps, PostFeedState> {
     this.setState({
       [field]: e.target.value,
     } as unknown as PostFeedState)
-
+    console.log("PostFeed: this.state"); console.log(this.state);
   }
 
-  submit(e: any) {
-    e.preventDefault();
-    const jwt = getJwt();
-    axios.post("/posts", {
-      title: this.state.title,
-      content: this.state.content,
-    },{ headers: { Authorization: `Bearer ${jwt}` } })
-    .then((res: any) => {
-      this.props.history.push("/");
-    }).catch((res: any) => {
-      this.props.history.push("/");
-    })
-  };
+  // submit(e: any) {
+  //   e.preventDefault();
+  //   const jwt = getJwt();
+  //   axios.post("/posts", {
+  //     title: this.state.title,
+  //     content: this.state.content,
+  //   },{ headers: { Authorization: `Bearer ${jwt}` } })
+  //   .then((res: any) => {
+  //     this.props.history.push("/");
+  //   }).catch((res: any) => {
+  //     this.props.history.push("/");
+  //   })
+  // };
 
 
   componentDidMount() {
@@ -54,14 +55,15 @@ class PostFeed extends React.Component<PostFeedProps, PostFeedState> {
   render() {
     return (
       <div>
-        <form onSubmit={e => this.submit(e)}>
+        {/* <form> */}
           <input type="text" name="post" placeholder="title here" onChange={e => this.change(e, "title")} value={this.state.title}/>
           <input type="text" name="post" placeholder="content here" onChange={e => this.change(e, "content")} value={this.state.content}/>
 
-          <input type="submit" value="submit">
+          <div>
+            <AddVoteSelect title={this.state.title || ""} content={this.state.content || ""}></AddVoteSelect>
+          </div>
 
-          </input>
-        </form>
+        {/* </form> */}
       </div >
     )
   }
