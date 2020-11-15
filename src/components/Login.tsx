@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from './Api';
-import { RouteComponentProps } from 'react-router-dom'
-
+import { RouteComponentProps, Link } from 'react-router-dom'
+import { Button, TextField, Fab } from '@material-ui/core';
+import * as styles from '../css/Login.module.css';
 export interface LoginProps extends RouteComponentProps<{}>{
 }
 
@@ -23,7 +24,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     this.submit = this.submit.bind(this);
   }
 
-  change(e: React.ChangeEvent<HTMLInputElement>, field: string) {
+  change(e: any, field: string) {
 
     this.setState({
       [field]: e.target.value,
@@ -38,8 +39,16 @@ class Login extends React.Component<LoginProps, LoginState> {
       email: this.state.email,
       password: this.state.password,
     }).then((res: any) => {
+
       localStorage.setItem("jwt", res.data.token);
-      this.props.history.push("/");
+
+      axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}` } }).then((res: any) => {
+        localStorage.setItem("user", JSON.stringify(res.data));
+        this.props.history.push("/");
+      }).catch((err: any) => {
+        this.props.history.push("/login");
+      })
+      
     }).catch((res: any) => {
       this.props.history.push("/login");
     })
@@ -47,12 +56,26 @@ class Login extends React.Component<LoginProps, LoginState> {
 
   render() {
     return (
-      <div>
+      <div className={styles.body}>
+        <h1>Login</h1>
         <form onSubmit={e => this.submit(e)}>
-          <label>email</label><input type="email" name="email" onChange={e => this.change(e, "email")} value={this.state.email}/>
-          <label>password</label><input type="password" name="password" onChange={e => this.change(e, "password")} value={this.state.password}/>
-          <input type="submit" value="Submit" />
+          <div>
+            <TextField type="email" name="email" label="email" onChange={e => this.change(e, "email")} value={this.state.email} />
+          </div>
+          
+
+          <div>
+            <TextField type="password" label="password" onChange={e => this.change(e, "password")} value={this.state.password} />
+          </div>
+          
+
+          <div>
+            <Button type="submit" value="Submit" variant="contained" color="primary" >ログイン</Button>
+          </div>
         </form>
+        <div>
+          <Link to="/signup">Signup</Link>
+        </div>
       </div>
     );
   }

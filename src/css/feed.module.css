@@ -1,26 +1,26 @@
 .header {
-  color: black;
+  /* color: black;
   background-color: white;
   padding: 20px;
   font-size: 60px;
   font-family: Arial;
-  text-align: left;
+  text-align: left; */
 }
 
 .li {
-  text-align: center;
+  /* text-align: center; */
   display: block;
-  padding: 20px;
+  padding: 5px;
   /* padding-left: 80px; */
-  font-size: 28px;
-  color: #black;
-  background-color: EEEBEB;
-  margin: 20px;
+  /* font-size: 28px; */
+  /* color: #black; */
+  /* background-color: EEEBEB; */
+  /* margin: 20px; */
   position: relative;
 }
 
 .title {
-  font-size: 28px;
+  font-size: 20px;
   margin: 10px;
 }
 
@@ -28,17 +28,18 @@
 .content {
   font-size: 16px;
   margin: 10px;
-  border: 10px black;
+  /* border: 10px black; */
 }
 
 .vote_section {
   margin: 10px;
-  border: 10px black;
-  background-color: rgba(186, 247, 252, 0.411);
+  text-align: center;
+  /* border: 10px black; */
+  /* background-color: rgba(186, 247, 252, 0.411); */
 } 
 
 
-.menu {
+/* .menu {
   list-style-type: none;
   margin: 10;
   padding: 10;
@@ -54,7 +55,7 @@
   text-align: center;
   padding: 16px;
   text-decoration: none;
-}
+} */
 
 .menulist a {
   color: gray;
@@ -67,3 +68,27 @@
 .created_at {
   font-size: 12px;
 }
+
+.each_post {
+  background-color: rgb(237, 237, 237);
+  border-width: thin;
+  border-style: solid;
+  
+  text-decoration: none;
+}
+
+
+.each_post:visited{
+  text-decoration: none;
+}
+
+
+
+
+.feed {
+  /* background-color: #ffd49f; */
+  /* text-align: center; */
+  width: 50%;
+}
+
+

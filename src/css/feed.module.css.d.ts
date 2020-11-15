@@ -6,3 +6,5 @@ export const menu: string;
 export const menulist: string;
 export const created_at: string;
 export const vote_section: string;
+export const each_post: string;
+export const feed: string;

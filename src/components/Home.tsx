@@ -1,12 +1,14 @@
 import React from 'react';
 import Feed from './Feed/Feed';
-import Header from './Header';
+import PostContent from './Feed/PostContent';
+import * as styles from '../css/Home.module.css';
 
-const Home = () => {
+const Home = (props: any) => {
   return (
-    <div>
-      <Header></Header>
-      <Feed></Feed>
+    <div className={styles.body}>
+      
+      <PostContent></PostContent>
+      <Feed keyword={props.match.params.keyword}></Feed>
     </div>
   )
 }

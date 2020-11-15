@@ -1,6 +1,7 @@
 import React from 'react';
-
-
+import * as styles from '../css/Header.module.css';
+import { Button } from '@material-ui/core';
+import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
  
 
 
@@ -26,32 +27,33 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props);
 
+    const userObj: userObject = JSON.parse(localStorage.getItem("user") || "{}");
     this.state = {
-      user: {
-        id: "",
-        name: "",
-        email: "",
-        description: "",
-        string_id: "",
-        created_at: "",
-        updated_at: "",
-      } ,
+      user: userObj
     }
   }
 
   componentDidMount() {
-    const userObj: userObject = JSON.parse(localStorage.getItem("user") || "{}");
-    this.setState({
-      user: userObj,
-    });
+
   }
 
   render() {
+    const logout = (e: any) => {
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("user");
+      <Redirect to="/login" />
+      return;
+    };
+
     return (
-      <div>
-        {this.state.user?.name}
-        {this.state.user?.description}
-      </div >
+      <div style={{textAlign: "left"}}>
+        <Link to="/" ><b>Hearvo</b></Link>
+
+        <span style={{ float: "right"} }>
+        <Link to='/login' ><Button onClick={e => logout(e)} style={{ textTransform: "lowercase"}}>ログアウト</Button>
+        </Link><Link to="/profile">{this.state.user?.name}</Link></span>
+
+      </div>
     )
   }
 }

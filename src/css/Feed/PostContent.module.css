@@ -1,0 +1,44 @@
+.post_content {
+    /* background-color: #ffd49f; */
+    text-align: center;
+    display: block;
+    width: 50%;
+}
+
+.post_content_inside {
+    margin: 30px;
+}
+
+.title {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+}
+
+.content {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+    
+}
+
+.vote_select {
+    border: solid;
+    border-width: 2px;
+    padding: 10px 15px;
+    border-radius: 3px;
+    margin: 4px 0;
+}
+
+.submit_button {
+    text-align: right;
+}
+
+.date_button {
+    width: 5%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+}
