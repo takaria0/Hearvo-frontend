@@ -2,8 +2,8 @@ import { RouteProps, withRouter, RouteComponentProps } from 'react-router';
 import React from 'react';
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
-import * as styles from '../css/Feed.module.css';
-import EachFeed from './Feed/EachFeed';
+import * as styles from '../css/PostDetail.module.css';
+import NewEachPost from './Feed/NewEachPost';
 import Comment from './Comment';
 
 type VoteSelectType = {
@@ -23,7 +23,7 @@ type PostType = {
   user: {
     name: string;
   };
-  comments: [];
+  comments: []; num_vote: number;
 }
 
 interface Props {
@@ -32,8 +32,8 @@ interface Props {
 
 interface State {
   userName: string;
-  post_id: number;
-  postData?: PostType;
+  data: any,
+  isLoaded?: boolean;
 }
 
 interface Params {
@@ -53,21 +53,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
     this.state = {
       userName: "",
-      post_id: postId,
-      postData: {
-        id: 0,
-        title: "",
-        content: "",
-        start_at: "",
-        end_at: "",
-        created_at: "",
-        updated_at: "",
-        vote_selects: [],
-        user: {
-          name: ""
-        },
-        comments: []
-      },
+      data: {},
     }
     // console.log("POST DETAIL CONSTRUCTOOOOOOOOOOOO");
     // console.log("this.state");
@@ -75,36 +61,43 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
     axios.get(`/posts?id=${postId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then(res => {
-        const postData = res.data;
-        // console.log("postData aaaaaaaaaaaaaaaaaaaaaa"); // console.log(postData);
-        this.setState({ postData });
+        this.setState({
+          data: res.data,
+          isLoaded: true,
+        });
       }).catch((err) => {
         // // console.log(err.response.data);
       })
   }
 
 
-  // componentDidMount() {
 
-  // }
   
   render() {
-    // console.log("POST DETAIL renderrrrrrrrrrrrrrrrrrrrr");
-    // console.log("this.state");
-    const data = this.state.postData;
-    const postId = this.state.post_id;
-    return (
-      <div>
-        <h1>PostDetail</h1 >
+    const data = this.state.data;
+    document.title = data?.title ? data?.title : "";
 
-        <div>
-          <EachFeed eachPost={data!} postId={postId}></EachFeed>
+    if(this.state.isLoaded) {
+      return (
+        <div className={styles.body}>
+
+          <div>
+            <NewEachPost data={this.state.data!}></NewEachPost>
+          </div>
+          <div>
+            <Comment postId={this.state.data.id}></Comment>
+          </div>
         </div>
+      );
+    } else {
+      return (
         <div>
-          <Comment postId={postId}></Comment>
+          <div>
+          Loading ...
+          </div>
         </div>
-      </div>
-     );
+      )
+    }
   }
 }
 

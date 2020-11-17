@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@material-ui/core';
 import axios from '../Api';
 
@@ -29,7 +29,7 @@ type PostType = {
   user: {
     name: string;
   };
-  comments: [];
+  comments: []; num_vote: number;
 }
 
 
@@ -62,12 +62,12 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
   render() {
     return (
       <div >
-        <ul>
+        <ul className={styles.ul}>
           {this.props.data.map((da) => {
             // console.log("eachPost"); // console.log(da);
             return (
               <div>
-                <Link to={`${da?.user?.name}/posts/${da?.id}`} className={styles.each_post}>
+                <Link to={`${da?.user?.name}/posts/${da?.id}`} className={styles.each_post_link}>
                 <EachFeed eachPost={da} postId={da?.id}></EachFeed>
                 </Link>
               </div>
@@ -81,32 +81,6 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
 }
 
 
-// type FeedCategoryProps = {
-//   data: Array<string>;
-// };
-// type FeedCategoryState = {
-// };
-// // Category
-// class FeedCategory extends React.Component<FeedCategoryProps, FeedCategoryState> {
-
-//   render() {
-//     return (
-//       <div className="feed-category">
-//         <ul className={styles.menu}>
-//           {
-//           this.props.data.map((data)=> {
-//             return (
-//               <li className={styles.menulist}>
-//                 <a>{data}</a>
-//             </li>
-//             )
-//           })
-//           }
-//         </ul>
-//       </div>
-//     );
-//   }
-// }
 
 
 
@@ -117,6 +91,7 @@ type FeedProps = {
 type FeedState = {
   categoryData: Array<string>,
   postData: PostType[],
+  page: number;
 };
 
 
@@ -129,20 +104,109 @@ class Feed extends React.Component<FeedProps, FeedState> {
     this.state = {
       categoryData: [],
       postData: [],
+      page: 1,
+    }
+    document.title = "Hearvo"
+    
+  }
+
+  loader = React.createRef<HTMLInputElement>();
+
+  handleObserver = (entities: any) => {
+    const target = entities[0];
+    if (target.isIntersecting && this.state.page < 50) {
+        this.setState({
+          page: this.state.page + 1,
+        })
     }
   }
 
+  getData = (option: string) => {
+    const keyword = window.location.pathname.replace("/", "");
+
+    const jwt = getJwt();
+    const page = this.state.page;
+    console.log("page", page)
+    const keywordList = ["popular", "latest"]
+
+    if(option === "update") {
+      if (keywordList.includes(keyword)) {
+        axios.get(`/posts?keyword=${keyword}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            const postData = res.data;
+            const prevData = this.state.postData;
+            this.setState({ 
+              postData: [...prevData, ...postData]
+              });
+          }).catch((err) => {
+            // // console.log(err.response.data);
+          })
+      } else {
+        axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            const postData = res.data;
+            const prevData = this.state.postData;
+            this.setState({
+              postData: [...prevData, ...postData]
+            });
+          }).catch((err) => {
+            // // console.log(err.response.data);
+          })
+      }
+    } else {
+      if (keywordList.includes(keyword)) {
+        axios.get(`/posts?keyword=${keyword}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            const postData = res.data;
+            this.setState({ postData });
+          }).catch((err) => {
+            // // console.log(err.response.data);
+          })
+      } else {
+        axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            const postData = res.data;
+            this.setState({ postData });
+          }).catch((err) => {
+            // // console.log(err.response.data);
+          })
+      }
+    }
+  }
+  
 
   componentDidMount() {
-    const keyword = this.props.keyword;
-    const jwt = getJwt();
-    axios.get(`/posts?keyword=${keyword}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-      .then(res => {
-        const postData = res.data;
-        this.setState({ postData });
-      }).catch((err)=> {
-        // // console.log(err.response.data);
-      })
+    var options = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 1.0
+    };
+    // initialize IntersectionObserver
+    // and attaching to Load More div
+    const observer = new IntersectionObserver(this.handleObserver, options);
+    console.log("this.loader", this.loader)
+    console.log("observer", observer)
+    if (this.loader.current) {
+      observer.observe(this.loader.current)
+    }
+    this.getData("");
+  }
+
+  // shouldComponentUpdate(nextProps: any, nextState: any) {
+  //   if(nextState.page !== this.state.page) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  componentDidUpdate = (prevProps: any, prevState: any) => {
+    if (prevState.page !== this.state.page) {
+      this.getData("update");
+      return
+    } else {
+      return 
+    }
   }
 
   render() {
@@ -151,6 +215,10 @@ class Feed extends React.Component<FeedProps, FeedState> {
         {/* <FeedCategory data={categoryData}></FeedCategory> */}
         
         <FeedList data={this.state.postData}></FeedList>
+
+        <div className="loading" ref={this.loader}>
+          <h2>Loading ...</h2>
+        </div>
       </div>
     );
   }

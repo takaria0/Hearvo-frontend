@@ -85,6 +85,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
   inputField: boolean;
   commentContent: string;
   baseCommentContent: string;
+  isLoaded: boolean;
 }
  
 class Comment extends React.Component<CommentProps, CommentState> {
@@ -103,6 +104,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
       inputField: false,
       commentContent: "",
       baseCommentContent: "",
+      isLoaded: false,
     }
 
     // console.log("this state", this.state);
@@ -111,12 +113,13 @@ class Comment extends React.Component<CommentProps, CommentState> {
   componentDidMount() {
     const jwt = getJwt();
 
-    axios.get(`/comments?post_id=${this.state.postId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+    axios.get(`/comments?post_id=${this.props.postId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
         const commentData = res.data;
         this.setState({ commentData });
         this.setState({
-          nestedComments: nest(commentData)
+          nestedComments: nest(commentData),
+          isLoaded: true,
         })
         // console.log("コメント手に入りました！！！！！！！！！！！")
       }).catch((err) => {
@@ -137,7 +140,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
     // e.preventDefault();
     // console.log("コメント提出します！！！！！！！！！！")
     const postObj = {
-      post_id: this.state.postId,
+      post_id: this.props.postId,
       content: this.state.baseCommentContent,
       parent_id: this.state.commentId,
     }
@@ -165,7 +168,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         return (
           <li>
             <div className={styles.body}>
-              {props.content} by {props.user?.name}
+              {props.content} by {props.user?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
               <Button onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 
@@ -180,7 +183,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         return (
           <li>
             <div className={styles.body}>
-              {props.content} by {props.user?.name}
+              {props.content} by {props.user?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
               <Button onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 
@@ -200,21 +203,35 @@ class Comment extends React.Component<CommentProps, CommentState> {
     );
 
 
+      if(this.state.isLoaded) {
+        return (
+          <div>
+            <div>
+              <form onSubmit={e => this.baseSubmit(e)}>
+                <div><textarea rows={2} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
+                <div>
+                  <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
+                </div>
+              </form>
+            </div>
+            <ListComment comments={this.state.nestedComments} />
+          </div>
+        )
+      }
 
       return (
-
         <div>
           <div>
-
             <form onSubmit={e => this.baseSubmit(e)}>
             <div><textarea rows={2} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
             <div>
               <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
             </div>
             </form>
-
           </div>
-          <ListComment comments={this.state.nestedComments} />
+          <div>
+            Loading ...
+          </div>
         </div>
       );
 

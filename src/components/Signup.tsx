@@ -28,6 +28,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
     };
     this.change = this.change.bind(this);
     this.submit = this.submit.bind(this);
+    document.title = "Signup";
   }
 
   change(e: any, field: string) {
@@ -74,22 +75,22 @@ class Signup extends React.Component<SignupProps, SignupState> {
       <div className={styles.body}>
         <h1>Signup</h1>
         <form onSubmit={e => this.submit(e)}>
-          <div>
-            <TextField label="username" onChange={e => this.change(e, "userName")} value={this.state.userName} />
+          <div>ユーザーネーム
+            <input minLength={1} maxLength={32} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
           </div>
-          <div>
-            <TextField label="email" onChange={e => this.change(e, "email")} value={this.state.email} />
+          <div>メールアドレス
+            <input minLength={1} maxLength={300} type="email" onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
 
 
           {/* <label>email</label><input type="email" name="email" onChange={e => this.change(e, "email")} value={this.state.email}/>*/}
 
-          <div>
-            <TextField label="password" onChange={e => this.change(e, "password")} value={this.state.password} />
+          <div>パスワード
+            <input minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
 
-          <div>
-            <TextField label="password_verify" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
+          <div>パスワード確認
+            <input minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
           </div>
 
           {/* <label>password</label><input type="password" name="password" onChange={e => this.change(e, "password")} value={this.state.password}/>*/}

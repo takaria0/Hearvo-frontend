@@ -10,9 +10,12 @@ import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 const Header = () => {
 
   return (
+    <div>
     <div className={styles.header}>
-      
-      <Profile></Profile>
+      <div className={styles.header_inside}>
+        <Profile></Profile>
+      </div>
+    </div>
     </div>
   )
 }

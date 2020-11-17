@@ -4,7 +4,7 @@
     display: flexbox;
     width: 98%;
     /* margin-right: 2%; */
-    margin-left:  1%;
+    margin-left: 1%;
   }
 }
 
@@ -15,8 +15,8 @@
     display: flexbox;
     width: 75%;
     /* margin-right: 10%; */
-    /* margin-left: 20%; */
-  /* } 
+/* margin-left: 20%; */
+/* } 
 /* } */
 
 @media screen and (min-width:900px) {
@@ -41,3 +41,15 @@
 }
 
 
+.profile_body {
+  /* text-align: center; */
+}
+
+.li {
+  list-style-type: none;
+  padding: 10px;
+  border: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  margin-bottom: 5px;
+}

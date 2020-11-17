@@ -1,5 +1,5 @@
 import React from 'react';
-import Feed from './Feed/Feed';
+import NewFeed from './Feed/NewFeed';
 import PostContent from './Feed/PostContent';
 import * as styles from '../css/Home.module.css';
 
@@ -8,7 +8,7 @@ const Home = (props: any) => {
     <div className={styles.body}>
       
       <PostContent></PostContent>
-      <Feed keyword={props.match.params.keyword}></Feed>
+      <NewFeed keyword={props.match.params.keyword}></NewFeed>
     </div>
   )
 }

@@ -53,20 +53,21 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
     // console.log("VoteSelectList CONSTRUCTOOOOOOOOOOOO");
     // console.log("this.state");
     // console.log(this.state)
+    // this.updateVoteContent(this.props.postId);
   }
 
 
-  componentDidMount() {
-    this.updateVoteContent();
-  }
+  // componentDidMount() {
+  //   this.updateVoteContent(this.state.postId);
+  // }
 
   componentDidUpdate(prevProps: any) {
-    if (this.props.postId !== prevProps.postId) {
-      this.updateVoteContent();
+    if (this.props.postId !== prevProps.postId || this.props.postId !== this.state.postId) {
+      this.updateVoteContent(this.props.postId);
     }
   }
 
-  updateVoteContent() {
+  updateVoteContent(postId: number) {
     const jwt = getJwt();
     // if (!jwt) {
     //   this.props.history.push("/login");
@@ -78,17 +79,16 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
 
 
     axios.get(
-      `/vote_select_users?post_id=${this.state.postId}`,
+      `/vote_select_users?post_id=${postId}`,
       config,
     ).then((res) => {
 
       if (res.data.voted === true) {
 
         this.setState({
-          voted: true,
           end: res.data.end
         });
-        const countVotePostObj = { post_id: this.props.postId }
+        const countVotePostObj = { post_id: postId }
         axios.post(
           "/count_vote_selects",
           countVotePostObj,
@@ -97,6 +97,7 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
           this.setState({
             total_vote: res.data.total_vote,
             vote_selects_count: res.data.vote_selects_count,
+            voted: true,
           });
         })
 
@@ -129,9 +130,9 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
       config,
     ).then(res => {
       // // console.log(res);
-      this.setState({
-        voted: true,
-      })
+      // this.setState({
+      //   voted: true,
+      // })
       const countVotePostObj = { post_id: this.props.postId }
       axios.post(
         "/count_vote_selects",
@@ -142,6 +143,7 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
         this.setState({
           total_vote: res.data.total_vote,
           vote_selects_count: res.data.vote_selects_count,
+          voted: true,
         });
       })
     }).catch((err) => {
@@ -152,7 +154,7 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
   beforeVoteRender() {
     return (
       <div >
-        <ul>
+        <ul className={styles.vote_ul}>
           {
             this.props.voteSelectArray.map((da) => {
               return (
@@ -197,8 +199,8 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
     // })
     return (
       <div >
-        <div>
-          <Plot
+        <div >
+          <Plot className={styles.plotly}
             data={[
               {
                 type: 'bar',
@@ -207,7 +209,20 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
                 orientation: 'h'
               },
             ]}
-            layout={{ width: 700, height: 300, title: `合計票数: ${this.state.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true}, annotations: [] }}
+            layout={{
+              // width: "100%",
+              // height: "100%",
+              title: `合計票数: ${this.state.total_vote}`,
+              xaxis: { range: [0, 100], title: "%" },
+              yaxis: { automargin: true },
+              annotations: [],
+              autosize: true
+            }} //  width: 470, height: 300,
+            config={{
+              responsive: true,
+              useResizeHandler: true
+
+            }}
           />
         </div>
         {/* <ul>
@@ -235,9 +250,16 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
     // console.log("VoteSelectList renderrrrrrrrrrrrrrrrrrrrr");
     // console.log("this.state");
     if (this.state.voted === true || this.state.end === true) {
-      return (
-        this.afterVoteRender()
-      );
+      if (this.state.total_vote > 0) {
+        return (
+          this.afterVoteRender()
+        );
+      } else {
+        // this.updateVoteContent(this.state.postId);
+       return (
+         <div>Loading ...</div>
+       );
+      }
     } else {
       return (
         this.beforeVoteRender()
@@ -260,7 +282,7 @@ type PostType = {
   user: {
     name: string;
   };
-  comments: [];
+  comments: []; num_vote: number;
 }
 
 
@@ -301,18 +323,18 @@ class EachFeed extends React.Component<Props, State> {
     const eachPostData = this.props.eachPost;
     const hoursDiff = Math.round(Math.abs(new Date().getTime() - new Date(eachPostData?.end_at).getTime()) / 3600000)
 
-    const endDate = eachPostData?.end_at;
+    const endDate = eachPostData?.end_at?.slice(0, -3).replace("T", " ");
 
     if (hoursDiff <= 0 || hoursDiff >= 168) {
       return (
         <b>
-          終了
+          投票終了
         </b>
       )
     } else {
       return (
         <b>
-          終了日: {endDate}
+          終了: {endDate}
         </b>
       )
     }
@@ -326,8 +348,9 @@ class EachFeed extends React.Component<Props, State> {
       <div>
         
         {
-          <div className={styles.each_post}>
+          
             <li className={styles.li}>
+            <div className={styles.each_post}>
               <div className={styles.title}>
                 {eachPostData.title}
               </div>
@@ -337,13 +360,17 @@ class EachFeed extends React.Component<Props, State> {
               <div className={styles.vote_section}>
                 <VoteSelectList voteSelectArray={eachPostData.vote_selects} postId={this.state.postId} ></VoteSelectList>
               </div>
-              <div className={styles.created_at}>
-                created_at:<b> {eachPostData.created_at.slice(0, -7)}</b>, modified_at:<b>{eachPostData.updated_at.slice(0, -7)}</b>, by: <b>{eachPostData?.user?.name}</b>, コメント数: <b>{eachPostData?.comments.length}</b>, <this.endHour></this.endHour>
-                
-                
+              <div className={styles.footer}>
+                <this.endHour></this.endHour>
+                <div className={styles.created_at}>
+                  作成日:<b> {eachPostData.created_at.slice(0, -10).replace("T", " ")}</b>, by: <b>{eachPostData?.user?.name}</b>, コメント数: <b>{eachPostData?.comments.length}</b>, 投票数: <b>{eachPostData?.num_vote}</b>
+
+              </div>
+              </div>
+
               </div>
             </li>
-          </div>
+          
         }
       </div>
     )

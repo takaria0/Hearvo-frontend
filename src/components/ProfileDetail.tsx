@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from './Api';
-import * as styles from '../css/Header.module.css';
+import * as styles from '../css/ProfileDetail.module.css';
 import { Button, Input } from '@material-ui/core';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
@@ -47,6 +47,7 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
       editOccupation: "",
       editSuccess: false,
     }
+    document.title = "Profile";
   }
 
   componentDidMount() {
@@ -99,30 +100,48 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
       <div>
         <form onSubmit={e => this.submit(e)}>
         <ul>
-          <li>
+          <li className={styles.li}>
             ユーザーネーム: {this.state.user?.name}
           </li>
-          <li>
+          <li className={styles.li}>
             メールアドレス: {this.state.user?.email}
           </li>
-          <li>
-              説明: {this.state.user?.description}{"  "}<input type="string" placeholder={this.state.user?.description} onChange={e => this.change(e, "editDescription")}></input>
+          <li className={styles.li}>
+              説明: {this.state.user?.description}
+              <div>
+                <br></br>
+                <textarea  rows={3} style={{width: "90%"}}  maxLength={250} placeholder={this.state.user?.description} onChange={e => this.change(e, "editDescription")}></textarea >
+              </div>
           </li>
-          <li>
-              性別: {this.state.user?.gender}{"  "}<select onChange={e => this.change(e, "editGender")}>
-                <option value="女性">女性</option>
-                <option value="男性">男性</option>
-                <option value="どちらでもない">どちらでもない</option>
-              </select>
+
+          <li className={styles.li}>
+              性別: {this.state.user?.gender}
+              <div>
+                <br></br>
+                <select onChange={e => this.change(e, "editGender")}>
+                  <option value="女性">女性</option>
+                  <option value="男性">男性</option>
+                  <option value="どちらでもない">どちらでもない</option>
+                </select>
+              </div>
           </li>
-          <li>
-              年齢: {this.state.user?.age}{"  "}<input min="1" max="130" type="number" placeholder={this.state.user?.age} onChange={e => this.change(e, "editAge")}></input>
+          <li className={styles.li}>
+              年齢: {this.state.user?.age}
+              <div>
+                <br></br>
+                <input min="1" max="130" type="number" placeholder={this.state.user?.age} onChange={e => this.change(e, "editAge")}></input>
+              </div>
           </li>
-          <li>
-              職業: {this.state.user?.occupation}{"  "}<input type="string" placeholder={this.state.user?.occupation} onChange={e => this.change(e, "editOccupation")}></input>
+          <li className={styles.li}>
+              職業: {this.state.user?.occupation}
+              <div>
+                <br></br>
+                <input type="string" maxLength={30} placeholder={this.state.user?.occupation} onChange={e => this.change(e, "editOccupation")}></input>
+              </div>
+
           </li>
         </ul>
-          <Button type="submit" value="Submit" color="primary">保存</Button>
+          <Button type="submit" variant="contained" value="Submit" color="primary">保存</Button>
         </form>
       </div>
     );
@@ -134,7 +153,6 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
 
     const editAfterJSX = (
       <div>
-        Edit mode
         <h1>
           保存しました
         </h1>
@@ -162,22 +180,22 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
     return (
       <div>
         <ul>
-          <li>
+          <li className={styles.li}>
             ユーザーネーム: {this.state.user?.name}
           </li>
-          <li>
+          <li className={styles.li}>
             メールアドレス: {this.state.user?.email}
           </li>
-          <li>
+          <li className={styles.li}>
             説明: {this.state.user?.description}
           </li>
-          <li>
+          <li className={styles.li}>
             性別: {this.state.user?.gender}
           </li>
-          <li>
+          <li className={styles.li}>
             年齢: {this.state.user?.age}
           </li>
-          <li>
+          <li className={styles.li}>
             職業: {this.state.user?.occupation}
           </li>
         </ul>
@@ -189,7 +207,10 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
 
     if(this.state.edit === false) {
       return (
-        <div>
+        <div className={styles.body}>
+          <div className={styles.profile_body}>
+
+          
           <h1>プロフィール</h1>
           <div>
             <Button onClick={e => this.click(e, true)}>編集する</Button>
@@ -197,18 +218,21 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           <div>
             {this.viewRender()}
           </div>
+          </div>
         </div>
       )
     } else {
       return (
 
-        <div>
+        <div className={styles.body}>
+          <div className={styles.profile_body}>
           <h1>プロフィール</h1>
           <div>
             <Button onClick={e => this.click(e, false)}>表示する</Button>
           </div>
           <div>
             {this.editRender()}
+          </div>
           </div>
         </div >
       )

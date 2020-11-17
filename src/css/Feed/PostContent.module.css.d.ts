@@ -5,3 +5,5 @@ export const content: string;
 export const vote_select: string;
 export const submit_button: string;
 export const date_button: string;
+export const mini_header: string;
+export const mini_header_inside: string;

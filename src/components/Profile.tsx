@@ -1,6 +1,6 @@
 import React from 'react';
 import * as styles from '../css/Header.module.css';
-import { Button } from '@material-ui/core';
+import { Button, Menu, MenuItem } from '@material-ui/core';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
  
 
@@ -31,6 +31,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     this.state = {
       user: userObj
     }
+    
   }
 
   componentDidMount() {
@@ -47,12 +48,16 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
     return (
       <div style={{textAlign: "left"}}>
-        <Link to="/" ><b>Hearvo</b></Link>
+        <br></br>
+          {/* <MenuItem component={Link} to={'/'}>Hearbo</MenuItem> */}
 
-        <span style={{ float: "right"} }>
-        <Link to='/login' ><Button onClick={e => logout(e)} style={{ textTransform: "lowercase"}}>ログアウト</Button>
-        </Link><Link to="/profile">{this.state.user?.name}</Link></span>
+        <Link to="/" className={styles.hearvo} ><b style={{ fontSize: 20, marginLeft: 10, marginTop: 20 }}>Hearvo</b></Link><span>&nbsp;&nbsp;&nbsp;</span><small>your voice must be heard</small>
 
+        <span style={{ float: "right", marginRight: 20 }} >
+          <Link to="/profile" className={styles.profile} >{this.state.user?.name}<span>&nbsp;&nbsp;&nbsp;</span></Link><Link to='/login' className={styles.profile}><button className={styles.profile} onClick={e => logout(e)} style={{ textTransform: "lowercase" }}>ログアウト</button>
+          </Link></span>
+
+        <br></br><br></br>
       </div>
     )
   }

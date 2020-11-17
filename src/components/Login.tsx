@@ -22,6 +22,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     };
     this.change = this.change.bind(this);
     this.submit = this.submit.bind(this);
+    document.title = "Login";
   }
 
   change(e: any, field: string) {
@@ -60,12 +61,12 @@ class Login extends React.Component<LoginProps, LoginState> {
         <h1>Login</h1>
         <form onSubmit={e => this.submit(e)}>
           <div>
-            <TextField type="email" name="email" label="email" onChange={e => this.change(e, "email")} value={this.state.email} />
+            <input minLength={1} maxLength={300} type="email" name="email"  onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
           
 
           <div>
-            <TextField type="password" label="password" onChange={e => this.change(e, "password")} value={this.state.password} />
+            <input minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
           
 
