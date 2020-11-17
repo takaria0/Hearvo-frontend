@@ -55,9 +55,9 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
       userName: "",
       data: {},
     }
-    // console.log("POST DETAIL CONSTRUCTOOOOOOOOOOOO");
-    // console.log("this.state");
-    // console.log(this.state)
+    // // console.log("POST DETAIL CONSTRUCTOOOOOOOOOOOO");
+    // // console.log("this.state");
+    // // console.log(this.state)
 
     axios.get(`/posts?id=${postId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then(res => {
@@ -66,7 +66,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
           isLoaded: true,
         });
       }).catch((err) => {
-        // // console.log(err.response.data);
+        // // // console.log(err.response.data);
       })
   }
 

@@ -50,9 +50,9 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
       postId: this.props.postId,
       end: false,
     };
-    // console.log("VoteSelectList CONSTRUCTOOOOOOOOOOOO");
-    // console.log("this.state");
-    // console.log(this.state)
+    // // console.log("VoteSelectList CONSTRUCTOOOOOOOOOOOO");
+    // // console.log("this.state");
+    // // console.log(this.state)
     // this.updateVoteContent(this.props.postId);
   }
 
@@ -129,7 +129,7 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
       voteSelectPostObj,
       config,
     ).then(res => {
-      // // console.log(res);
+      // // // console.log(res);
       // this.setState({
       //   voted: true,
       // })
@@ -139,7 +139,7 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
         countVotePostObj,
         config,
       ).then((res) => {
-        // // console.log(res);
+        // // // console.log(res);
         this.setState({
           total_vote: res.data.total_vote,
           vote_selects_count: res.data.vote_selects_count,
@@ -147,7 +147,7 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
         });
       })
     }).catch((err) => {
-      // console.log(err);
+      // // console.log(err);
     })
   }
 
@@ -247,8 +247,8 @@ class VoteSelectList extends React.Component<VoteSelectListProps, VoteSelectList
 
 
   render() {
-    // console.log("VoteSelectList renderrrrrrrrrrrrrrrrrrrrr");
-    // console.log("this.state");
+    // // console.log("VoteSelectList renderrrrrrrrrrrrrrrrrrrrr");
+    // // console.log("this.state");
     if (this.state.voted === true || this.state.end === true) {
       if (this.state.total_vote > 0) {
         return (
@@ -305,9 +305,9 @@ class EachFeed extends React.Component<Props, State> {
       data: this.props.eachPost,
       postId: this.props.postId,
     }
-    // console.log("EACH FEED CONSTRUCTOOOOOOOOOOOO");
-    // console.log("this.state");
-    // console.log(this.state)
+    // // console.log("EACH FEED CONSTRUCTOOOOOOOOOOOO");
+    // // console.log("this.state");
+    // // console.log(this.state)
   }
 
   componentDidUpdate(prevProps: any) {
@@ -342,8 +342,8 @@ class EachFeed extends React.Component<Props, State> {
   
   render() { 
     const eachPostData = this.props.eachPost;
-    // console.log("EACH FEED renderrrrrrrrrrrrrrrrrrrrr");
-    // console.log("this.state");
+    // // console.log("EACH FEED renderrrrrrrrrrrrrrrrrrrrr");
+    // // console.log("this.state");
     return (
       <div>
         

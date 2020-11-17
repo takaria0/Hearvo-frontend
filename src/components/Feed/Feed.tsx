@@ -64,7 +64,7 @@ class FeedList extends React.Component<FeedListProps, FeedListState> {
       <div >
         <ul className={styles.ul}>
           {this.props.data.map((da) => {
-            // console.log("eachPost"); // console.log(da);
+            // // console.log("eachPost"); // // console.log(da);
             return (
               <div>
                 <Link to={`${da?.user?.name}/posts/${da?.id}`} className={styles.each_post_link}>
@@ -126,7 +126,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
     const jwt = getJwt();
     const page = this.state.page;
-    console.log("page", page)
+    // console.log("page", page)
     const keywordList = ["popular", "latest"]
 
     if(option === "update") {
@@ -139,7 +139,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
               postData: [...prevData, ...postData]
               });
           }).catch((err) => {
-            // // console.log(err.response.data);
+            // // // console.log(err.response.data);
           })
       } else {
         axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
@@ -150,7 +150,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
               postData: [...prevData, ...postData]
             });
           }).catch((err) => {
-            // // console.log(err.response.data);
+            // // // console.log(err.response.data);
           })
       }
     } else {
@@ -160,7 +160,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
             const postData = res.data;
             this.setState({ postData });
           }).catch((err) => {
-            // // console.log(err.response.data);
+            // // // console.log(err.response.data);
           })
       } else {
         axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
@@ -168,7 +168,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
             const postData = res.data;
             this.setState({ postData });
           }).catch((err) => {
-            // // console.log(err.response.data);
+            // // // console.log(err.response.data);
           })
       }
     }
@@ -184,8 +184,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
     // initialize IntersectionObserver
     // and attaching to Load More div
     const observer = new IntersectionObserver(this.handleObserver, options);
-    console.log("this.loader", this.loader)
-    console.log("observer", observer)
+    // console.log("this.loader", this.loader)
+    // console.log("observer", observer)
     if (this.loader.current) {
       observer.observe(this.loader.current)
     }

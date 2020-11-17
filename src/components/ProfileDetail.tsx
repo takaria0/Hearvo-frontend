@@ -63,22 +63,22 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
       occupation: this.state.editOccupation,
     }
     const jwt = getJwt();
-    console.log("postObj", postObj);
+    // console.log("postObj", postObj);
     axios.put("/users", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
       .then((res: any) => {
-        console.log("success res",res)
+        // console.log("success res",res)
         this.setState({
           user: res.data,
           editSuccess: true,
         })
       }).catch((res: any) => {
-        console.log("failed res", res)
+        // console.log("failed res", res)
       });
   }
 
   change(e: any, field: string) {
-    console.log("cnahge", this.state)
-    console.log("field", field)
+    // console.log("cnahge", this.state)
+    // console.log("field", field)
     e.preventDefault();
     this.setState({
       [field]: e.target.value,

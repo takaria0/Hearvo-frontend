@@ -41,7 +41,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
 
   handleObserver = (entities: any) => {
     const target = entities[0];
-    console.log("target", target)
+    // console.log("target", target)
     if (target.isIntersecting && this.state.page < 50) {
       this.setState({
         page: this.state.page + 1,
@@ -56,8 +56,8 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       threshold: 1.0
     };
     const observer = new IntersectionObserver(this.handleObserver, options);
-    console.log("this.loader", this.loader)
-    console.log("observer", observer)
+    // console.log("this.loader", this.loader)
+    // console.log("observer", observer)
     if (this.loader.current) {
       observer.observe(this.loader.current)
     }
@@ -69,7 +69,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     const keyword = window.location.pathname.replace("/", "");
     const jwt = getJwt();
     // const page = this.state.page;
-    console.log("page", this.state.page);
+    // console.log("page", this.state.page);
     const keywordList = ["popular", "latest"]
 
       if (keywordList.includes(keyword)) {
@@ -80,7 +80,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
               isLoaded: true,
             });
           }).catch((err) => {
-            console.log(err.response.data);
+            // console.log(err.response.data);
           })
       } else {
         axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
@@ -90,7 +90,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
               isLoaded: true,
             });
           }).catch((err) => {
-            console.log(err.response.data);
+            // console.log(err.response.data);
           })
       }
   }
