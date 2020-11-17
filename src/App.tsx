@@ -1,91 +1,39 @@
+
 import React from 'react';
-import './App.css';
-import Feed from './components/Feed';
+import { BrowserRouter, Switch, Route } from 'react-router-dom'; 
+import * as styles from './App.module.css';
 
-// import {
-//   BrowserRouter as Router,
-//   Switch,
-//   Route,
-//   Link
-// } from "react-router-dom";
-
-
+import Intro from './components/Intro';
+import Home from './components/Home';
+import Auth from './components/Auth';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import PostDetail from './components/PostDetail';
+import Header from './components/Header';
+import ProfileDetail from './components/ProfileDetail';
 
 function App() {
   return (
-    <div className="App">
-      {/* <Header></Header> */}
-      <Feed service="Hearvo"></Feed>
+    <div className={styles.body}>
+    <BrowserRouter>
+    <Switch>
+      <Route path="/signup" exact component={Signup} />
+      <Route path="/login" exact component={Login} />
+      <Route path="/intro" exact component={Intro} key="intro" />
+      <Auth>
+          <Header></Header>
+            
+          <Route path="/" exact component={Home} key="home-home"/>
+          <Route path="/latest" exact component={Home} key="popular-home"/>
+          <Route path="/popular" exact component={Home} key="latest-home" />
+          <Route path="/:user_name/posts/:post_id" component={PostDetail} />
+          <Route path="/profile" exact component={ProfileDetail} />
+          
+      </Auth>
+    </Switch>
+    </BrowserRouter>
     </div>
   );
 }
 
 export default App;
-
-/*
-
-
-export default function BasicExample() {
-  return (
-    <Router>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-        </ul>
-
-        <hr />
-
-        {}
-<Switch>
-  <Route exact path="/">
-    <Home />
-  </Route>
-  <Route path="/about">
-    <About />
-  </Route>
-  <Route path="/dashboard">
-    <Dashboard />
-  </Route>
-</Switch>
-      </div >
-    </Router >
-  );
-}
-
-// You can think of these components as "pages"
-// in your app.
-
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
-
-function About() {
-  return (
-    <div>
-      <h2>About</h2>
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
-    </div>
-  );
-}
-
-
-*/

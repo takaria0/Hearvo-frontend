@@ -1,0 +1,52 @@
+{
+        "num_vote": 2,
+        "start_at": "2020-11-16T13:37:29.435808",
+        "vote_selects": [
+            {
+                "content": "ああいう",
+                "id": 7,
+                "count": null,
+                "created_at": "2020-11-16T13:37:29.446277",
+                "updated_at": "2020-11-16T13:37:29.446325"
+            },
+            {
+                "content": "ええ",
+                "id": 8,
+                "count": null,
+                "created_at": "2020-11-16T13:37:29.446277",
+                "updated_at": "2020-11-16T13:37:29.446325"
+            }
+        ],
+        "id": 4,
+        "content": "プログラミング",
+        "user_info": 1,
+        "end_at": "2020-11-17T15:37:00",
+        "created_at": "2020-11-16T13:37:29.435876",
+        "title": "まじでむずいな",
+        "comments": [
+            1,
+            2,
+            3
+        ],
+        "updated_at": "2020-11-16T15:17:59.850265",
+        "num_comment": 0,
+        "vote_select_ids": [
+            7,
+            8
+        ],
+        "vote_selects_count": [
+            {
+                "vote_select_id": 7,
+                "count": 2,
+                "content": "ああいう"
+            },
+            {
+                "vote_select_id": 8,
+                "count": 0,
+                "content": "ええ"
+            }
+        ],
+        "already_voted": true,
+        "total_vote": 2,
+        "vote_period_end": false
+}

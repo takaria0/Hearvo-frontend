@@ -1,0 +1,17 @@
+.body {
+  color: black;
+  background-color: #d0d0d0;
+  border: solid;
+  border-width: thin;
+  margin: 5px;
+  /* text-align: center; */
+}
+
+
+.base {
+  width: 100%;
+}
+
+.reply {
+  width: 100%;
+}
