@@ -66,7 +66,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
           })
         })
       } else {
-        // console.log("Not Valid password")
+        // // console.log("Not Valid password")
       }
     }
 

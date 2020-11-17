@@ -30,7 +30,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
   }
 
   change(e: any) {
-    // console.log("コメンと変わってます！！！！！！！", e.target.value)
+    // // console.log("コメンと変わってます！！！！！！！", e.target.value)
     this.setState({
       commentContent: e.target.value,
     })
@@ -39,17 +39,17 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
 
   submit(e: any) {
     // e.preventDefault();
-    // console.log("コメント提出します！！！！！！！！！！")
+    // // console.log("コメント提出します！！！！！！！！！！")
     const postObj = {
       post_id: this.props.postId,
       content: this.state.commentContent,
       parent_id: this.props.commentId,
     }
     const jwt = getJwt();
-    // console.log("postObj", postObj)
+    // // console.log("postObj", postObj)
     axios.post("/comments", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
       .then((res: any) => {
-        // console.log("POST /comments", res)
+        // // console.log("POST /comments", res)
       }).catch((res: any) => {
       });
   }
@@ -92,7 +92,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
   constructor(props: any) {
     super(props);
-    // console.log("COMMENT CONSTRUCTORRRRRRRRRRRRRRRRR")
+    // // console.log("COMMENT CONSTRUCTORRRRRRRRRRRRRRRRR")
 
     const postId = this.props.postId;
 
@@ -107,7 +107,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
       isLoaded: false,
     }
 
-    // console.log("this state", this.state);
+    // // console.log("this state", this.state);
   }
 
   componentDidMount() {
@@ -121,7 +121,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
           nestedComments: nest(commentData),
           isLoaded: true,
         })
-        // console.log("コメント手に入りました！！！！！！！！！！！")
+        // // console.log("コメント手に入りました！！！！！！！！！！！")
       }).catch((err) => {
       })
   }
@@ -129,7 +129,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
 
   baseChange(e: any) {
-    // console.log("コメンと変わってます！！！！！！！", e.target.value)
+    // // console.log("コメンと変わってます！！！！！！！", e.target.value)
     this.setState({
       baseCommentContent: e.target.value,
     })
@@ -138,17 +138,17 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
   baseSubmit(e: any) {
     // e.preventDefault();
-    // console.log("コメント提出します！！！！！！！！！！")
+    // // console.log("コメント提出します！！！！！！！！！！")
     const postObj = {
       post_id: this.props.postId,
       content: this.state.baseCommentContent,
       parent_id: this.state.commentId,
     }
     const jwt = getJwt();
-    // console.log("postObj", postObj)
+    // // console.log("postObj", postObj)
     axios.post("/comments", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
       .then((res: any) => {
-        // console.log("POST /comments", res)
+        // // console.log("POST /comments", res)
       }).catch((res: any) => {
       });
   }
@@ -158,7 +158,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
     this.setState({
       commentId: id,
     })
-    // console.log("クリックしました！！！！！！！！！！")
+    // // console.log("クリックしました！！！！！！！！！！")
   }
 
 

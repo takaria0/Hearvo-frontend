@@ -88,7 +88,7 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
         });
       })
     }).catch((err) => {
-      // console.log(err);
+      // // console.log(err);
     })
   }
 

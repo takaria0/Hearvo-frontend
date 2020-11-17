@@ -37,13 +37,21 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
 
 
   createUI() {
-    return this.state.values.map((el, i) =>
-      <div key={i}>
-
-
-        <input required={true} minLength={1} className={styles.vote_select} placeholder="投票候補を入力"   onChange={this.handleChange.bind(this, i)} value={el || ''} /><Button style={{ padding: "1px" }} variant="contained" color="secondary" aria-label="delete" onClick={this.removeClick.bind(this, i)} >削除</Button>
-        
-      </div>
+    return this.state.values.map((el, i) => {
+      if(i < 2) {
+        return (
+          <div key={i}>
+            <input required={true} minLength={1} className={styles.vote_select} placeholder="投票候補を入力" onChange={this.handleChange.bind(this, i)} value={el || ''} />
+          </div>
+        )
+      } else {
+        return (
+          <div key={i}>
+            <input required={true} minLength={1} className={styles.vote_select} placeholder="投票候補を入力" onChange={this.handleChange.bind(this, i)} value={el || ''} /><Button style={{ padding: "1px" }} variant="contained" color="secondary" aria-label="delete" onClick={this.removeClick.bind(this, i)} >削除</Button>
+          </div>
+        )
+      }
+      }
     )
   }
 
@@ -51,10 +59,10 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
     let values = [...this.state.values];
     values[i] = event.target.value;
     this.setState({ values });
-    // console.log("this.props.end_at", this.props.end_at);
-    console.log("AddVoteSelect: this.state"); // console.log(this.state);
-    console.log("AddVoteSelect: this.props"); console.log(this.props);
-    // console.log("AddVoteSelect: this.props.content"); // console.log(this.props.content);
+    // // console.log("this.props.end_at", this.props.end_at);
+    // console.log("AddVoteSelect: this.state"); // // console.log(this.state);
+    // console.log("AddVoteSelect: this.props"); // console.log(this.props);
+    // // console.log("AddVoteSelect: this.props.content"); // // console.log(this.props.content);
   }
 
   addClick() {
@@ -64,9 +72,11 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
   }
 
   removeClick(i: number) {
-    let values = [...this.state.values];
-    values.splice(i, 1);
-    this.setState({ values });
+    if(this.state.values.length > 2) {
+      let values = [...this.state.values];
+      values.splice(i, 1);
+      this.setState({ values });
+    }
   }
 
   handleSubmit(event: any) {
@@ -84,7 +94,7 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
       vote_selects: voteSelectObj
     };
 
-    console.log("postObj", postObj);
+    // console.log("postObj", postObj);
 
     if(
       this.props.title.length < 1
@@ -102,7 +112,7 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
       }
 
 
-    console.log("postObj", postObj);
+    // console.log("postObj", postObj);
     axios.post("/posts", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
       .then((res: any) => {
         this.setState({
@@ -189,18 +199,18 @@ class PostFeed extends React.Component<PostFeedProps, PostFeedState> {
       [field]: e.target.value,
     } as unknown as PostFeedState)
 
-    console.log("this state", this.state);
+    // console.log("this state", this.state);
 
     if (field === "endhour") {
-      console.log("endhour field")
+      // console.log("endhour field")
       const dt = new Date();
       const endHour = e.target.value ? parseInt(e.target.value) : 0;
       if(endHour > 0 && endHour < 36000 ) {
-        console.log("endhour endHour endHour endHour")
+        // console.log("endhour endHour endHour endHour")
         const endDate = new Date(dt.setHours(dt.getHours() + endHour));
-        console.log("endDate", endDate);
+        // console.log("endDate", endDate);
         const endDateString = endDate.toISOString().slice(0, -8);
-        console.log("endDateString", endDateString)
+        // console.log("endDateString", endDateString)
         this.setState({
           end_at: endDateString,
         })
@@ -209,10 +219,6 @@ class PostFeed extends React.Component<PostFeedProps, PostFeedState> {
   }
 
   keywordChange(e:any, keyword: string) {
-    this.forceUpdate();
-    this.setState({
-      keyword: keyword
-    });
   }
 
   clickHandle(e: any, value: boolean) {
@@ -228,7 +234,7 @@ class PostFeed extends React.Component<PostFeedProps, PostFeedState> {
       <div>
         <div className={styles.mini_header}>
           <div className={styles.mini_header_inside}>
-            <Link to="/popular" onClick={e => this.keywordChange(e, "popular")}>人気順</Link> <Link to="/latest" onClick={e => this.keywordChange(e, "latest")}>最新</Link> 検索<Button onClick={e => this.clickHandle(e, false)}>キャンセル</Button>
+            <Link to="/popular">人気順</Link> <Link to="/latest">最新</Link> 検索<Button onClick={e => this.clickHandle(e, false)}>キャンセル</Button>
           </div>
         </div>
       
