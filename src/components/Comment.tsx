@@ -47,7 +47,11 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     }
     const jwt = getJwt();
     // // console.log("postObj", postObj)
-    axios.post("/comments", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.post(
+      "/comments",
+      postObj,
+      { headers: { Authorization: `Bearer ${jwt}` }}
+    )
       .then((res: any) => {
         // // console.log("POST /comments", res)
       }).catch((res: any) => {
@@ -146,7 +150,11 @@ class Comment extends React.Component<CommentProps, CommentState> {
     }
     const jwt = getJwt();
     // // console.log("postObj", postObj)
-    axios.post("/comments", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.post(
+      "/comments",
+      postObj,
+      { headers: { Authorization: `Bearer ${jwt}` }}
+      )
       .then((res: any) => {
         // // console.log("POST /comments", res)
       }).catch((res: any) => {

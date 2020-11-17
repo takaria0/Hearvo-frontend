@@ -7,7 +7,7 @@ import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 
-import EachFeed from './EachFeed';
+import EachFeed from './OldEachFeed';
 import Plot from 'react-plotly.js';
 import NewEachPost from './NewEachPost';
 
