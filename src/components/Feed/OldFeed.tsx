@@ -8,7 +8,7 @@ import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 
-import EachFeed from './EachFeed';
+import EachFeed from './OldEachFeed';
 
 
 type VoteSelectType = {

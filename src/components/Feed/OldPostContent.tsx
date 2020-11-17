@@ -7,7 +7,7 @@ import { Button, TextField, Fab, Input } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import BackspaceIcon from '@material-ui/icons/Backspace';
 
-import * as styles from '../../css//Feed/PostContent.module.css';
+import * as styles from '../../css/Feed/PostContent.module.css';
 
 
 interface AddVoteSelectProps {
@@ -59,10 +59,6 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
     let values = [...this.state.values];
     values[i] = event.target.value;
     this.setState({ values });
-    // // console.log("this.props.end_at", this.props.end_at);
-    // console.log("AddVoteSelect: this.state"); // // console.log(this.state);
-    // console.log("AddVoteSelect: this.props"); // console.log(this.props);
-    // // console.log("AddVoteSelect: this.props.content"); // // console.log(this.props.content);
   }
 
   addClick() {
@@ -80,21 +76,23 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
   }
 
   handleSubmit(event: any) {
-    // event.preventDefault();
+    console.log(1)
     const jwt = getJwt();
     const voteSelectObj = this.state.values.map((val) => {
       return {
         content: val
       }
     });
+    console.log(2)
     const postObj = {
       title: this.props.title,
       content: this.props.content,
       end_at: this.props.end_at,
       vote_selects: voteSelectObj
     };
+    console.log(3)
 
-    // console.log("postObj", postObj);
+    console.log("postObj", postObj);
 
     if(
       this.props.title.length < 1
@@ -104,32 +102,36 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
       || parseInt(this.props.endhour) > 10000
       || parseInt(this.props.endhour) < 24
       ) {
+        console.log("submission failed");
         this.setState({
           submitSuccess: false,
         })
-        // event.preventDefault();
+      console.log(4)
+
         return
       }
 
-
+    console.log(5)
     // console.log("postObj", postObj);
-    axios.post("/posts", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.post(
+      "/posts",
+      postObj,
+      { headers: { Authorization: `Bearer ${jwt}` } }
+      )
       .then((res: any) => {
         this.setState({
           submitSuccess: true,
         })
+        console.log(6)
+        console.log("then res", res)
       }).catch((res: any) => {
-        this.setState({
-          submitSuccess: false,
-        })
-        event.preventDefault();
+        console.log(7)
+        console.log("error res", res)
       });
-
+    console.log(8)
   }
 
   render() {
-
-    if(this.state.submitSuccess === false) {
       return (
         <form onSubmit={e => this.handleSubmit(e)}>
           {this.createUI()}
@@ -140,24 +142,10 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
             <Button style={{ padding: "1px" }} type="submit" value="Submit" variant="contained" color="primary" >投稿</Button>
           </div>
         <div>
-          送信に失敗しました。
+            {"送信に失敗しました。" ? !this.state.submitSuccess : ""}
         </div>
         </form>
       );
-    } else {
-      return (
-        <form onSubmit={e => this.handleSubmit(e)}>
-          {this.createUI()}
-          <small><Button style={{ padding: "1px" }} color="primary" variant="contained" aria-label="add" onClick={this.addClick.bind(this)} >
-            追加
-        </Button></small>
-          <div className={styles.submit_button}>
-            <Button style={{ padding: "1px" }} type="submit" value="Submit" variant="contained" color="primary" >投稿</Button>
-          </div>
-
-        </form>
-      );
-    }
   }
 }
 

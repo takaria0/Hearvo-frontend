@@ -7,7 +7,7 @@ import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 
-import EachFeed from './EachFeed';
+import EachFeed from './OldEachFeed';
 import Plot from 'react-plotly.js';
 
 const renderVoteResult = (data: any, layout: any) => {
@@ -184,8 +184,8 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         <div className={styles.title}>{data.title}</div>
         <div className={styles.content}>{data.content}</div>
         <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
-        <div className={styles.footer}><div>{data.created_at}</div >
-          <div>{data.comments.length}</div ></div>
+        <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
+          <div>コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}</div ></div>
 
       </li>
     )
@@ -202,11 +202,11 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     else {
       return (
         <li className={styles.li}>
-          {this.props.data.title}
-          {this.props.data.content}
-          {this.props.data.created_at}
-          {this.props.data.comments.length}
+          <div className={styles.title}>{this.props.data.title}</div>
+          <div className={styles.content}>{this.props.data.content}</div>
           <div className={styles.vote_section}><EachVoteSelect voteContent={this.props.data.vote_selects} postId={this.props.data.id}></EachVoteSelect></div>
+          <div className={styles.footer}><div>{this.props.data.created_at.slice(0, -7).replace("T", " ")}</div >
+      <div>コメント数: {this.props.data.comments.length}, 投票数: {this.props.data.total_vote}</div ></div>
         </li>
       )
     }
