@@ -236,7 +236,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           <div className={styles.content}>{data.content}</div>
           <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
           <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
-            <div>終了時間: <b>終了</b>, コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
+            <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
 
         </li>
       )
@@ -274,7 +274,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           
           <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
           <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
-            <div>終了時間: <b>終了</b>, コメント数: {data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div ></div>
+            <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div ></div>
 
         </li>
       )
