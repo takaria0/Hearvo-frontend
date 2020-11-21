@@ -91,11 +91,17 @@ class Signup extends React.Component<SignupProps, SignupState> {
       this.setState({
         signupSuccessMessage: "アカウントを作成しました",
       })
-      this.props.history.push("/login");
-    }).catch((res: any) => {
+      function timeout(delay: number) {
+        return new Promise(res => setTimeout(res, delay));
+      }
+      timeout(1000).then(() => { this.props.history.push("/login");})
+      
+    }).catch((err: any) => {
+      // console.log("err.response", err.response)
+      const resMessage = err.response.data.message;
       this.props.history.push("/signup");
       this.setState({
-        signupSuccessMessage: "アカウント作成に失敗しました",
+        signupSuccessMessage: `${resMessage}`,
       })
     })
     }

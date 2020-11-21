@@ -53,8 +53,15 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
         <Link to="/" className={styles.hearvo} ><b style={{ fontSize: 20, marginLeft: 10, marginTop: 20 }}>Hearvo</b></Link><span>&nbsp;&nbsp;&nbsp;</span><small>your voice must be heard</small>
 
-        <span style={{ float: "right", marginRight: 20 }} >
-          <Link to="/profile" className={styles.profile} >{this.state.user?.name}<span>&nbsp;&nbsp;&nbsp;</span></Link><Link to='/login' className={styles.profile}><button className={styles.profile} onClick={e => logout(e)} style={{ textTransform: "lowercase" }}>ログアウト</button>
+        <span style={{ float: "right", marginRight: 10, marginLeft: 10 }} >
+
+            <Link to="/profile" className={styles.profile} >{this.state.user?.name}<span>&nbsp;&nbsp;&nbsp;</span></Link>
+            <Link to="/profile/feed/myposts" className={styles.profile} >自分の投稿<span>&nbsp;&nbsp;&nbsp;</span></Link>
+            <Link to="/profile/feed/voted" className={styles.profile} >投票した投稿<span>&nbsp;&nbsp;&nbsp;</span></Link>
+            
+
+          
+          <Link to='/login' className={styles.profile}><button className={styles.profile} onClick={e => logout(e)} style={{ textTransform: "lowercase" }}>ログアウト</button>
           </Link></span>
 
         <br></br><br></br>

@@ -11,6 +11,7 @@ import Signup from './components/Signup';
 import PostDetail from './components/PostDetail';
 import Header from './components/Header';
 import ProfileDetail from './components/ProfileDetail';
+import MyPostHeader from './components/Feed/MyPostHeader';
 
 function App() {
   return (
@@ -26,8 +27,10 @@ function App() {
           <Route path="/" exact component={Home} key="home-home"/>
           <Route path="/latest" exact component={Home} key="popular-home"/>
           <Route path="/popular" exact component={Home} key="latest-home" />
-          <Route path="/:user_name/posts/:post_id" component={PostDetail} />
+          <Route path="/posts/:post_id" component={PostDetail} />
           <Route path="/profile" exact component={ProfileDetail} />
+          <Route path="/profile/feed/myposts" exact component={MyPostHeader} key="myposts-home" />
+          <Route path="/profile/feed/voted" exact component={MyPostHeader} key="voted-home" />
           
       </Auth>
     </Switch>
