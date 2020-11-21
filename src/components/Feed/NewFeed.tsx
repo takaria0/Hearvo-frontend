@@ -14,6 +14,8 @@ import NewEachPost from './NewEachPost';
 
 export interface NewFeedProps {
   keyword: string;
+  isPosted: boolean;
+  isPostedHandeler: any;
 }
  
 export interface NewFeedState {
@@ -64,6 +66,35 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     this.getData(this.state.page);
   };
 
+  updateData = () => {
+    const keyword = window.location.pathname.replace("/", "");
+    const jwt = getJwt();
+    const page = 1;
+    const keywordList = ["popular", "latest"]
+
+    if (keywordList.includes(keyword)) {
+      axios.get(`/posts?keyword=${keyword}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        .then(res => {
+          this.setState({
+            dataArray: res.data,
+            isLoaded: true,
+          });
+        }).catch((err) => {
+          // console.log(err.response.data);
+        })
+    } else {
+      axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        .then(res => {
+          this.setState({
+            dataArray: res.data,
+            isLoaded: true,
+          });
+        }).catch((err) => {
+          // console.log(err.response.data);
+        })
+    }
+  }
+ 
 
   getData = (page: number) => {
     const keyword = window.location.pathname.replace("/", "");
@@ -98,9 +129,12 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
   componentDidUpdate = (prevProps: any, prevState: any) => {
     if (prevState.page !== this.state.page) {
       this.getData(this.state.page);
-      return
     } else {
-      return
+    }
+
+    if (this.props.isPosted === true) {
+      this.updateData()
+      this.props.isPostedHandeler(false);
     }
   }
 
@@ -125,7 +159,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
           <ul className={styles.ul}>
             
             {
-              this.state.dataArray.map((data: any, idx: number) => { return <Link to={`/${data?.user?.name}/posts/${data?.id}`} className={styles.each_post_link}><NewEachPost data={data} ></NewEachPost></Link>})}            
+              this.state.dataArray.map((data: any, idx: number) => { return <Link to={`/${data?.user_info?.name}/posts/${data?.id}`} className={styles.each_post_link}><NewEachPost data={data} ></NewEachPost></Link>})}            
             
           </ul>
 

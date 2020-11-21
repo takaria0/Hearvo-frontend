@@ -13,6 +13,7 @@ const nest = (items: any, id = null) =>
 interface ReplyCommentProps {
   postId: number;
   commentId: number;
+  handleParentPosted: any;
 }
  
  interface ReplyCommentState {
@@ -30,7 +31,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
   }
 
   change(e: any) {
-    // // console.log("コメンと変わってます！！！！！！！", e.target.value)
+    // console.log("Reply this.state", this.state);
     this.setState({
       commentContent: e.target.value,
     })
@@ -38,24 +39,24 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
 
 
   submit(e: any) {
-    // e.preventDefault();
-    // // console.log("コメント提出します！！！！！！！！！！")
-    const postObj = {
-      post_id: this.props.postId,
-      content: this.state.commentContent,
-      parent_id: this.props.commentId,
-    }
     const jwt = getJwt();
-    // // console.log("postObj", postObj)
     axios.post(
       "/comments",
-      postObj,
-      { headers: { Authorization: `Bearer ${jwt}` }}
+      {
+        post_id: this.props.postId,
+        content: this.state.commentContent,
+        parent_id: this.props.commentId,
+      },
+      { headers: { 
+        'Authorization': `Bearer ${jwt}`,
+      }}
     )
       .then((res: any) => {
-        // // console.log("POST /comments", res)
+        this.props.handleParentPosted(e);
+        this.setState({ commentContent: "" })
       }).catch((res: any) => {
       });
+    e.preventDefault();
   }
 
 
@@ -90,6 +91,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
   commentContent: string;
   baseCommentContent: string;
   isLoaded: boolean;
+  isPosted: boolean;
 }
  
 class Comment extends React.Component<CommentProps, CommentState> {
@@ -109,14 +111,14 @@ class Comment extends React.Component<CommentProps, CommentState> {
       commentContent: "",
       baseCommentContent: "",
       isLoaded: false,
+      isPosted: false,
     }
 
     // // console.log("this state", this.state);
   }
 
-  componentDidMount() {
+  updateData = () => {
     const jwt = getJwt();
-
     axios.get(`/comments?post_id=${this.props.postId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
         const commentData = res.data;
@@ -125,9 +127,30 @@ class Comment extends React.Component<CommentProps, CommentState> {
           nestedComments: nest(commentData),
           isLoaded: true,
         })
-        // // console.log("コメント手に入りました！！！！！！！！！！！")
       }).catch((err) => {
       })
+  }
+ 
+  handlePosted = (e: any) => {
+    this.setState({
+      isPosted: true,
+    })
+    this.setState({
+      isPosted: false,
+    })
+    this.setState({
+      commentId: 0,
+    })
+  };
+
+  componentDidUpdate = () => {
+    if(this.state.isPosted === true) {
+      this.updateData();
+    }
+  }
+
+  componentDidMount() {
+    this.updateData();
   }
 
 
@@ -141,24 +164,29 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
 
   baseSubmit(e: any) {
-    // e.preventDefault();
+    
     // // console.log("コメント提出します！！！！！！！！！！")
-    const postObj = {
-      post_id: this.props.postId,
-      content: this.state.baseCommentContent,
-      parent_id: this.state.commentId,
-    }
     const jwt = getJwt();
     // // console.log("postObj", postObj)
     axios.post(
       "/comments",
-      postObj,
-      { headers: { Authorization: `Bearer ${jwt}` }}
+      {
+        post_id: this.props.postId,
+        content: this.state.baseCommentContent,
+        parent_id: this.state.commentId,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${jwt}`,
+        }
+      }
       )
       .then((res: any) => {
-        // // console.log("POST /comments", res)
+        this.handlePosted(e)
+        this.setState({ baseCommentContent: ""});
       }).catch((res: any) => {
       });
+      e.preventDefault();
   }
  
   click(e: any, id: any) {
@@ -176,11 +204,11 @@ class Comment extends React.Component<CommentProps, CommentState> {
         return (
           <li>
             <div className={styles.body}>
-              {props.content} by {props.user?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
+              {props.content} by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
               <Button onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 
-            <ReplyComment commentId={props.id} postId={this.state.postId}></ReplyComment>
+            <ReplyComment commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
 
             <ul>
               {props.children.map((child: any) => <CommentView {...child} />)}
@@ -191,7 +219,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         return (
           <li>
             <div className={styles.body}>
-              {props.content} by {props.user?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
+              {props.content} by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
               <Button onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 

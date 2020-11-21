@@ -185,7 +185,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         <div className={styles.content}>{data.content}</div>
         <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
         <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
-          <div>コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}</div ></div>
+          <div>コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
 
       </li>
     )
@@ -206,7 +206,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           <div className={styles.content}>{this.props.data.content}</div>
           <div className={styles.vote_section}><EachVoteSelect voteContent={this.props.data.vote_selects} postId={this.props.data.id}></EachVoteSelect></div>
           <div className={styles.footer}><div>{this.props.data.created_at.slice(0, -7).replace("T", " ")}</div >
-      <div>コメント数: {this.props.data.comments.length}, 投票数: {this.props.data.total_vote}</div ></div>
+            <div>コメント数: {this.props.data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
         </li>
       )
     }

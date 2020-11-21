@@ -1,5 +1,36 @@
 .body {
   color: black;
-  background-color: #d0d0d0;
+  background-color: white;
   text-align: center;
+}
+
+.body_inside {
+  border: solid;
+  border-radius: 10px;
+  border-width: 1px;
+  margin-right:auto;
+  margin-left:auto;
+  width: 400px;
+}
+
+.email {
+  color: black;
+  margin-bottom: 10px;
+}
+
+.password {
+  color: black;
+  margin-bottom: 10px;
+}
+
+.button {
+  color: black;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.footer {
+  color: black;
+  text-align: center;
+  margin-bottom: 10px;
 }
