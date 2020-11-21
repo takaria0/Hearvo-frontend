@@ -58,24 +58,29 @@ class Login extends React.Component<LoginProps, LoginState> {
   render() {
     return (
       <div className={styles.body}>
-        <h1>Login</h1>
+        <h1>Hearvo</h1>
+        <div className={styles.body_inside}>
+        <h2 >Login</h2>
         <form onSubmit={e => this.submit(e)}>
           <div>
-            <input minLength={1} maxLength={300} type="email" name="email"  onChange={e => this.change(e, "email")} value={this.state.email} />
+            <div>メールアドレス</div>
+            <input  className={styles.email} minLength={1} maxLength={300} type="email" name="email"  onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
           
 
           <div>
-            <input minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
+            <div>パスワード</div>
+            <input className={styles.password} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
           
 
-          <div>
-            <Button type="submit" value="Submit" variant="contained" color="primary" >ログイン</Button>
+          <div className={styles.button}>
+            <Button  type="submit" value="Submit" variant="contained" color="primary" >Login</Button>
           </div>
         </form>
-        <div>
+        <div className={styles.footer}>
           <Link to="/signup">Signup</Link>
+        </div>
         </div>
       </div>
     );

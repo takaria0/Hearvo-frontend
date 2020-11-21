@@ -9,11 +9,14 @@ import BackspaceIcon from '@material-ui/icons/Backspace';
 
 import * as styles from '../../css/Feed/PostContent.module.css';
 import { StringLiteral } from 'typescript';
-
+import { CropLandscapeOutlined, TransferWithinAStationSharp } from '@material-ui/icons';
+import NewFeed from './NewFeed';
 
 
 export interface NewPostContentProps {
   edit: boolean;
+  editParentHandle: any;
+  keyword: string;
 }
  
 export interface NewPostContentState {
@@ -92,6 +95,12 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       this.setState(prevState => ({ values: [...prevState.values, ''] }))
     }
   }
+
+  isPostedChange = (val: boolean) => {
+    this.setState({
+      posted: val
+    })
+  }
  
 
   createVoteSelect = () => {
@@ -115,24 +124,41 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
   }
 
   submit = (e: any) => {
+    
     const jwt = getJwt();
     const voteSelectObj = this.state.values.map((val) => {return {content: val}});
-    const data = {
-      title: this.state.title,
-      content: this.state.content,
-      end_at: this.state.end_at,
-      vote_selects: voteSelectObj
+    var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_selects": voteSelectObj});
+
+    const url = process.env.REACT_APP_API_HOST + '/posts';
+    const options = {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + jwt,
+      },
+      body: data
     };
-    const config = { headers: { Authorization: `Bearer ${jwt}` } };
-    console.log("data", data)
-    axios.post(
-      "/posts",
-      data,
-      config
-    ).then((res: any) => {
-      this.setState({success: true});
+
+    fetch(url, options)
+    .then((res: any) => {
+      // console.log("res", res);
+      this.setState({
+        success: true,
+        edit: false,
+      });
+      this.isPostedChange(true);
+      this.props.editParentHandle(e, false);
+
     }).catch((err: any) => {
+      // console.log("err", err);
+      this.setState({
+        success: true,
+        edit: false,
+      });
+      this.isPostedChange(false);
+
     })
+    e.preventDefault();
+    
   }
 
   editJSX = () => {
@@ -162,6 +188,9 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       <div>{this.state.edit ? this.editJSX() : ""}</div>
       <div>{this.state.success && this.state.posted ? "投稿しました" : ""}</div>
       <div>{!this.state.success && this.state.posted ? "投稿に失敗しました" : "" }</div>
+      <div>
+          <NewFeed keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></NewFeed>
+      </div>
       </div>
      );
   }
@@ -170,7 +199,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
 
 
 export interface BaseHeaderProps {
-  
+  keyword: string;
 }
  
 export interface BaseHeaderState {
@@ -198,6 +227,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     if (this.state.edit) {
       return (
         <div className={styles.mini_header}>
+          バグ取り感謝します。
           <div className={styles.mini_header_inside}>
             <Link to="/popular">人気順</Link> <Link to="/latest">最新</Link> 検索<span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, false)}>キャンセル</button></span>
           </div>
@@ -206,6 +236,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     } else {
       return (
         <div className={styles.mini_header}>
+          バグ取り感謝します。
           <div className={styles.mini_header_inside}>
             <Link to="/popular" >人気順</Link> <Link to="/latest">最新</Link> 検索<span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, true)}>投稿する</button></span>
           </div>
@@ -218,10 +249,10 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     return ( 
       <div>
         <div>{this.headerJSX()}</div>
-        <NewPostContent edit={this.state.edit}></NewPostContent>
+        <NewPostContent edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></NewPostContent>
       </div>
      );
   }
 }
- 
+
 export default BaseHeader;
