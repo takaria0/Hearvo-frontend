@@ -70,7 +70,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     const keyword = window.location.pathname.replace("/", "");
     const jwt = getJwt();
     const page = 1;
-    const keywordList = ["popular", "latest"]
+    const keywordList = ["popular", "latest", "myposts", "voted"]
 
     if (keywordList.includes(keyword)) {
       axios.get(`/posts?keyword=${keyword}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
@@ -97,11 +97,11 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
  
 
   getData = (page: number) => {
-    const keyword = window.location.pathname.replace("/", "");
+    const keyword = window.location.pathname.split("/").pop() || "";
     const jwt = getJwt();
     // const page = this.state.page;
     // console.log("page", this.state.page);
-    const keywordList = ["popular", "latest"]
+    const keywordList = ["popular", "latest", "myposts", "voted"];
 
       if (keywordList.includes(keyword)) {
         axios.get(`/posts?keyword=${keyword}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
@@ -159,7 +159,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
           <ul className={styles.ul}>
             
             {
-              this.state.dataArray.map((data: any, idx: number) => { return <Link to={`/${data?.user_info?.name}/posts/${data?.id}`} className={styles.each_post_link}><NewEachPost data={data} ></NewEachPost></Link>})}            
+              this.state.dataArray.map((data: any, idx: number) => { return <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><NewEachPost data={data} ></NewEachPost></Link>})}            
             
           </ul>
 

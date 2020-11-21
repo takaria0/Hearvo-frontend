@@ -151,7 +151,12 @@ export interface NewEachPostProps {
 }
 
 export interface NewEachPostState {
-
+  minAge: number;
+  maxAge: number;
+  genderSelect: string;
+  occupation: string;
+  data: any;
+  doFilter: boolean;
 }
 
 class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
@@ -160,53 +165,138 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
   constructor(props: any) {
     super(props);
 
+    this.state = {
+      minAge: 0,
+      maxAge: 130,
+      genderSelect: "",
+      occupation: "",
+      data: this.props.data,
+      doFilter: false,
+    }
+  }
+
+  change(e: any, field: string) {
+    this.setState({
+      [field]: e.target.value,
+    } as unknown as NewEachPostState)
   }
 
 
 
+  submit = (e: any) => {
+    e.preventDefault();
+    const jwt = getJwt();
+    axios.get(`/posts?id=${this.props.data.id}&do_filter=yes&gender=${this.state.genderSelect}&min_age=${this.state.minAge}&max_age=${this.state.maxAge}&occupation=${this.state.occupation}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+      .then((res: any) => {
+        const data = res.data;
+        this.setState({ data });
+      }).catch((err) => {
+      })
+  }
 
+  resetClick = (e: any) => {
+    e.preventDefault();
+    const jwt = getJwt();
+    axios.get(`/posts?id=${this.props.data.id}&do_filter=no`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+      .then((res: any) => {
+        const data = res.data;
+        this.setState({ data });
+        
+      }).catch((err) => {
+      })
+  }
 
+  filterClick = (e: any, val: boolean) => {
+    this.setState({doFilter: val});
+  }
+
+  
 
   renderEachData = (data: any) => {
+    let currentFirstURL = "";
+    try {
+      currentFirstURL = window.location.pathname.split("/")[1]
+    } catch {
+      currentFirstURL = "";
+    }
 
+    if(currentFirstURL !== "posts") {
+      const x = data.vote_selects_count.map((da: any) => {
+        return (da.count * 100) / data.total_vote
+      }).reverse();
+      const y = data.vote_selects_count.map((da: any) => {
+        return da.content
+      }).reverse();
+      let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
+      let layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
 
-    const x = data.vote_selects_count.map((da: any) => {
-      return (da.count * 100) / data.total_vote
-    }).reverse();
-    const y = data.vote_selects_count.map((da: any) => {
-      return da.content
-    }).reverse();
-    let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
-    let layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
+      return (
+        <li className={styles.li}>
+          <div className={styles.title}>{data.title}</div>
+          <div className={styles.content}>{data.content}</div>
+          <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
+          <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
+            <div>終了時間: <b>終了</b>, コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
 
-    return (
-      <li className={styles.li}>
-        <div className={styles.title}>{data.title}</div>
-        <div className={styles.content}>{data.content}</div>
-        <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
-        <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
-          <div>コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
+        </li>
+      )
+    } else {
+      const x = data.vote_selects_count.map((da: any) => {
+        return (da.count * 100) / data.total_vote
+      }).reverse();
+      const y = data.vote_selects_count.map((da: any) => {
+        return da.content
+      }).reverse();
+      let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
+      let layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
 
-      </li>
-    )
+      const renderCondition = () => 
+        (
+        <div>
+          <button onClick={e => this.filterClick(e, false)}>戻る</button>
+          <form onSubmit={e => this.submit(e)}>
+            最小年齢: <input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} /><br></br>
+              最大年齢: <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} /><br></br>
+              性別: <input type="text" onChange={e => this.change(e, "genderSelect")} value={this.state.genderSelect} /><br></br>
+              職業: <input type="text" onChange={e => this.change(e, "occupation")} value={this.state.occupation} /><br></br>
+            <button>更新</button>
+          </form>
+            <button onClick={e => this.resetClick(e)}>リセット</button>
+          </div>
+      )
+
+      return (
+        <li className={styles.li}>
+          <div className={styles.title}>{data.title}</div>
+          <div className={styles.content}>{data.content}</div>
+          {this.state.doFilter ? "" : <button onClick={e => this.filterClick(e, true)}>絞り込み</button>}
+          {this.state.doFilter ? renderCondition() : ""}
+          
+          <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
+          <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
+            <div>終了時間: <b>終了</b>, コメント数: {data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div ></div>
+
+        </li>
+      )
+    }
   }
 
   render() {
-    if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
+    if (this.state.data.already_voted === true || this.state.data.vote_period_end === true) {
       return (
         <div>
-          {this.renderEachData(this.props.data)}
+          {this.renderEachData(this.state.data)}
         </div>
       );
     }
     else {
       return (
         <li className={styles.li}>
-          <div className={styles.title}>{this.props.data.title}</div>
-          <div className={styles.content}>{this.props.data.content}</div>
-          <div className={styles.vote_section}><EachVoteSelect voteContent={this.props.data.vote_selects} postId={this.props.data.id}></EachVoteSelect></div>
-          <div className={styles.footer}><div>{this.props.data.created_at.slice(0, -7).replace("T", " ")}</div >
-            <div>コメント数: {this.props.data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
+          <div className={styles.title}>{this.state.data.title}</div>
+          <div className={styles.content}>{this.state.data.content}</div>
+          <div className={styles.vote_section}><EachVoteSelect voteContent={this.state.data.vote_selects} postId={this.state.data.id}></EachVoteSelect></div>
+          <div className={styles.footer}><div>{this.state.data.created_at.slice(0, -7).replace("T", " ")}</div >
+            <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {this.state.data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div ></div>
         </li>
       )
     }
