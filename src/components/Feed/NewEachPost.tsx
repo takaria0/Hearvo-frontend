@@ -10,11 +10,14 @@ import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import EachFeed from './OldEachFeed';
 import Plot from 'react-plotly.js';
 
-const renderVoteResult = (data: any, layout: any) => {
+const renderVoteSelectResult = (data: any, layout: any) => {
+  const x = data[0].x;
+  const y = data[0].y;
 
   return (
     <div>
-      <div >
+
+      {/* <div >
         <Plot className={styles.plotly}
           data={data}
           layout={layout} //  width: 470, height: 300,
@@ -23,8 +26,47 @@ const renderVoteResult = (data: any, layout: any) => {
             useResizeHandler: true
           }}
         />
+        </div> */}
+
+      <div>
+        <ul>
+          {y.map((label: string, idx: number) => {
+            return (<li>{label}: <progress id="file" value={x[idx]} max="100"> {x[idx]}% </progress> {!isNaN(x[idx]) ? x[idx] : 0}%</li>)
+          })}
+        </ul>
       </div>
+
     </div>
+  )
+}
+
+const renderVoteMjResult = (baseData: any) => {
+  return (
+  <table style={{ margin: "auto", border: "1px solid black", borderCollapse: "collapse" }}>
+
+
+      <tr><th style={{ border: "1px solid black", borderCollapse: "collapse" }}> 候補 </th>{baseData.mj_options.map((obj: any) => {
+      return (
+        <th style={{ border: "1px solid black", borderCollapse: "collapse" }}>{obj.content}</th>
+      )
+    })}</tr>
+
+
+      {baseData.vote_mjs.map((data: any, idx: number) => {
+      const countData = baseData.vote_mj_count[idx];
+      const content = data.content;
+      const countObj = countData?.count ? countData.count : [];
+      return (
+        <tr><td style={{ border: "1px solid black", borderCollapse: "collapse" }}>{content}</td>{baseData.mj_options.map((obj: any) => {
+          const mj_option_id = obj.id;
+          const mj_option_count = countObj.filter((el: any) => { return el.mj_option_id === mj_option_id })
+          return (
+            <td style={{ border: "1px solid black", borderCollapse: "collapse" }}>{mj_option_count.length > 0 ? mj_option_count[0].count : 0}</td>
+          )
+        })}</tr>
+      )
+    })}
+  </table>
   )
 }
 
@@ -41,7 +83,7 @@ export interface EachVoteMjState {
   mjCountResult: any;
   mjContent: any;
   totalVote: number;
-  resData: any,
+  data: any,
 }
  
 class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
@@ -54,7 +96,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       voteMjCount: [],
       mjCountResult: [],
       mjContent: [],
-      resData: [],
+      data: [],
       totalVote: 0,
     }
   }
@@ -89,7 +131,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       ).then((res) => {
 
         this.setState({
-          resData: res.data,
+          data: res.data,
           mjCountResult: res.data.vote_mj_count,
           mjContent: res.data.vote_mj_obj,
           totalVote: res.data.total_vote,
@@ -127,17 +169,42 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
     } 
     if (this.state.isClicked === true && this.state.isLoaded === true) {
       return (
-        <li className={styles.li}>
           <div>
-              < div >
-              {this.state.resData.vote_mj_obj.map((data: any, idx: number) => {
+            < div className={styles.vote_section}>
+            <table style={{ margin: "auto", border: "1px solid black", borderCollapse: "collapse" }}>
+
+
+              <tr><th style={{ border: "1px solid black", borderCollapse: "collapse" }}> 候補 </th>{this.state.data.mj_options.map((obj: any) => {
+                return (
+                  <th style={{ border: "1px solid black", borderCollapse: "collapse" }}>{obj.content}</th>
+                )
+              })}</tr>
+
+
+              {this.state.data.vote_mj_obj.map((data: any, idx: number) => {
+                const countData = this.state.data.vote_mj_count[idx];
+                const content = data.content;
+                const countObj = countData?.count ? countData.count : [];
+                return (
+                  <tr><td style={{ border: "1px solid black", borderCollapse: "collapse" }}>{content}</td>{this.state.data.mj_options.map((obj: any) => {
+                    const mj_option_id = obj.id;
+                    const mj_option_count = countObj.filter((el: any) => { return el.mj_option_id === mj_option_id })
+                    return (
+                      <td style={{ border: "1px solid black", borderCollapse: "collapse" }}>{mj_option_count.length > 0 ? mj_option_count[0].count : 0}</td>
+                    )
+                  })}</tr>
+                )
+              })}
+            </table>
+            </div>
+              {/* {this.state.resData.vote_mj_obj.map((data: any, idx: number) => {
                 const countData = this.state.resData.vote_mj_count[idx];
                 const content = data.content;
                 const vote_mj_id = countData.vote_mj_id;
                 const countObj = countData.count;
                 return (
                   <div>
-                    <div>{content}:</div>
+                    {content}: 
                     <table style={{ margin: "auto", border: "1px solid black", borderCollapse: "collapse" }}>
                       <tr>{this.state.resData.mj_options.map((obj: any) => {
                         const mj_option_id = obj.id;
@@ -156,32 +223,8 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                     </table>
                   </div>
                 )
-              })}
-              {/* {this.state.resData.vote_mj_obj.map((data: any, idx: number) => {
-                const countData = this.state.resData.vote_mj_count[idx];
-                const content = data.content;
-                const vote_mj_id = countData.vote_mj_id;
-                const countObj = countData.count;
-                return (
-                  <div>
-                    <div>{content}:</div>
-                    {this.state.resData.mj_options.map((obj: any) => {
-                      const mj_option_id = obj.id;
-                      const mj_option_count = countObj.filter((el: any) => { return el.mj_option_id === mj_option_id })
-                      return (
-                        <b>
-                          {obj.content}, 投票数:{mj_option_count.length > 0 ? mj_option_count[0].count : 0}
-                        </b>
-                      )
-                    })}
-                  </div>
-                )
               })} */}
-
-
-            </div>
           </div>
-        </li>
       )
     }
 
@@ -301,14 +344,14 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
 
       const x = this.state.voteSelectsCount.map((da: any) => {
         return (da.count * 100) / this.state.totalVote
-      }).reverse();
+      });
       const y = this.state.voteSelectsCount.map((da: any) => {
         return da.content
-      }).reverse();
+      });
       let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
       let layout = { title: `合計票数: ${this.state.totalVote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
       return (
-        < div className={styles.vote_section} > { renderVoteResult(plotData, layout)}</div>
+        < div className={styles.vote_section} > { renderVoteSelectResult(plotData, layout)}</div>
       )
 
     } else {
@@ -400,29 +443,34 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
   
 
-  renderEachData = (data: any) => {
+  renderEachData = (data: any, vote_type_id: number) => {
     let currentFirstURL = "";
     try {
       currentFirstURL = window.location.pathname.split("/")[1]
     } catch {
       currentFirstURL = "";
     }
-    const x = data.vote_selects_count.map((da: any) => {
-      return (da.count * 100) / data.total_vote
-    }).reverse();
-    const y = data.vote_selects_count.map((da: any) => {
-      return da.content
-    }).reverse();
-    let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
-    let layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
 
+    let x, y, plotData, layout;
+    if(vote_type_id === 1) {
+      x = data.vote_selects_count.map((da: any) => {
+        return (da.count * 100) / data.total_vote
+      });
+      y = data.vote_selects_count.map((da: any) => {
+        return da.content
+      });
+      plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
+      layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
+    }
 
     if(currentFirstURL !== "posts") {
       return (
         <li className={styles.li}>
           <div className={styles.title}>{data.title}</div>
           <div className={styles.content}>{data.content}</div>
-          <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
+          <div className={styles.vote_section}>
+            {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
+            </div>
           <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
             <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
 
@@ -453,7 +501,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           {this.state.doFilter ? "" : <button onClick={e => this.filterClick(e, true)}>絞り込み</button>}
           {this.state.doFilter ? renderCondition() : ""}
           
-          <div className={styles.vote_section}>{renderVoteResult(plotData, layout)}</div>
+          <div className={styles.vote_section}>
+            {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
+            </div>
           <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
             <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div ></div>
         </li>
@@ -466,48 +516,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       return (
         
         <div>
-          {this.state.voteTypeId === 1 ?
-            this.renderEachData(this.state.data)
-            :
-            <li className={styles.li}>
-              <div>
-                <div className={styles.title}>{this.state.data.title}</div>
-                <div className={styles.content}>{this.state.data.title}</div>
-              < div className={styles.vote_section}>
-                {this.state.data.vote_mjs.map((data: any, idx: number) => {
-                  const countData = this.state.data.vote_mj_count[idx];
-                  const content = data.content;
-                  const vote_mj_id = countData.vote_mj_id;
-                  const countObj = countData.count;
-                  return (
-                    <div>
-                      <div>{content}:</div>
-                      <table style={{ margin: "auto", border: "1px solid black", borderCollapse: "collapse" }}>
-                      <tr>{this.state.data.mj_options.map((obj: any) => {
-                        const mj_option_id = obj.id;
-                        const mj_option_count = countObj.filter((el: any) => { return el.mj_option_id === mj_option_id})
-                        return (
-                            <th style={{ border: "1px solid black", borderCollapse: "collapse" }}>{obj.content}</th>
-                        )
-                      })}</tr>
-                      <tr>{this.state.data.mj_options.map((obj: any) => {
-                        const mj_option_id = obj.id;
-                        const mj_option_count = countObj.filter((el: any) => { return el.mj_option_id === mj_option_id })
-                        return (
-                          <td style={{ border: "1px solid black", borderCollapse: "collapse" }}>{mj_option_count.length > 0 ? mj_option_count[0].count : 0}</td>
-                        )
-                      })}</tr>
-                    </table>
-                    </div>
-                  )
-                })}
-              </div>
-                <div className={styles.footer}><div>{this.state.data.created_at.slice(0, -7).replace("T", " ")}</div >
-                  <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {this.state.data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div ></div>
-            </div>
-            </li>
-          }
-          
+          {this.renderEachData(this.state.data, this.state.voteTypeId)}
         </div>
       );
     }
@@ -523,8 +532,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
              : 
               <EachVoteMj voteContent={this.state.data.vote_mjs} mjOptions={this.state.data.mj_options} postId={this.state.data.id}></EachVoteMj>
              }
-            
-            
+
             </div>
           <div className={styles.footer}><div>{this.state.data.created_at.slice(0, -7).replace("T", " ")}</div >
             <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {this.state.data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div >
