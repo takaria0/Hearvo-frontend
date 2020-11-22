@@ -26,6 +26,7 @@ export interface NewPostContentState {
   endhour?: string;
   values: Array<string>;
   end_at: string;
+  vote_type_id: string;
   success: boolean;
   posted: boolean;
 }
@@ -44,6 +45,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       content: "",
       endhour: "24",
       end_at: defaultEndAt,
+      vote_type_id: "1",
       values: ['', ''],
       posted: false,
       success: false,
@@ -126,8 +128,8 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
   submit = (e: any) => {
     
     const jwt = getJwt();
-    const voteSelectObj = this.state.values.map((val) => {return {content: val}});
-    var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_selects": voteSelectObj});
+    const voteObj = this.state.values.map((val) => {return {content: val}});
+    var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id});
 
     const url = process.env.REACT_APP_API_HOST + '/posts';
     const options = {
@@ -137,6 +139,8 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       },
       body: data
     };
+
+    console.log("data", data);
 
     fetch(url, options)
     .then((res: any) => {
@@ -170,6 +174,14 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
         <div><input placeholder="タイトルを入力" className={styles.title}　minLength={1} maxLength={150} type="text" onChange={e => this.change(e, "title")}></input><br></br></div>
               <div><textarea placeholder="本文を入力"  className={styles.content} rows={4} maxLength={5000} onChange={e => this.change(e, "content")}></textarea></div>
         終了: <input className={styles.date_button} value={this.state.endhour} min={24} max={168} type="number" onChange={e => this.change(e, "endhour")}></input> 時間後, 終了日時: {this.state.end_at}
+              
+              
+              <div>投票タイプ: <select onChange={e => this.change(e, "vote_type_id")}>
+                <option value="1">通常投票</option>
+                <option value="2">MJ法</option>
+              </select>
+              </div>
+
          投票候補: {this.createVoteSelect()} 
           <button type="button" onClick={e => this.addHandle(e)}>追加</button>
 
