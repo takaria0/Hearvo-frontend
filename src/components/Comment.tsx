@@ -202,28 +202,28 @@ class Comment extends React.Component<CommentProps, CommentState> {
     const CommentView = (props: any) => {
       if (this.state.commentId === props.id) {
         return (
-          <li>
+          <li className={styles.com_li}>
             <div className={styles.body}>
-              {props.content} by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
+              {props.content} <div style={{fontSize: "10px", textAlign:"right"}}>by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}</div>
               <Button onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 
             <ReplyComment commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
 
-            <ul>
+            <ul className={styles.com_ul}>
               {props.children.map((child: any) => <CommentView {...child} />)}
             </ul>
           </li>
         )
       } else {
         return (
-          <li>
+          <li className={styles.com_li}>
             <div className={styles.body}>
-              {props.content} by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}
+              {props.content} <div style={{ fontSize: "10px", textAlign:"right" }}>by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}</div>
               <Button onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 
-            <ul>
+            <ul className={styles.com_ul}>
               {props.children.map((child: any) => <CommentView {...child} />)}
             </ul>
           </li>
@@ -233,7 +233,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
 
     const ListComment = ({ comments }: any) => (
-      <ul>
+      <ul className={styles.com_ul}>
         {comments.map((comment: any) => <CommentView {...comment} />)}
       </ul>
     );
