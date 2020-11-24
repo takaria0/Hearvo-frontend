@@ -25,8 +25,9 @@ function App() {
           <Header></Header>
             
           <Route path="/" exact component={Home} key="home-home"/>
-          <Route path="/latest" exact component={Home} key="popular-home"/>
-          <Route path="/popular" exact component={Home} key="latest-home" />
+          <Route path="/latest" exact component={Home} key="latest-home"/>
+            <Route path="/popular" exact component={Home} key="popular-home" />
+          <Route path="/popular/:time" exact component={Home} key="popular-time-home" />
           <Route path="/posts/:post_id" component={PostDetail} />
           <Route path="/profile" exact component={ProfileDetail} />
           <Route path="/profile/feed/myposts" exact component={MyPostHeader} key="myposts-home" />

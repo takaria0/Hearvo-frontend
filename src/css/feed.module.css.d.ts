@@ -15,3 +15,6 @@ export const plotly: string;
 export const vote_ul: string;
 export const vote_li: string;
 export const each_post_link: string;
+export const radio: string;
+export const input: string;
+export const label: string;

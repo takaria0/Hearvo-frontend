@@ -1,7 +1,7 @@
 import React from 'react';
 import * as styles from '../css/Header.module.css';
 import { Button, Menu, MenuItem } from '@material-ui/core';
-import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
+import { withRouter, RouteComponentProps, Link, Redirect } from 'react-router-dom'
  
 
 
@@ -15,12 +15,13 @@ type userObject = {
   updated_at: string;
 } 
 
-interface ProfileProps {
+interface ProfileProps extends RouteComponentProps<{}> {
 
 }
 
 interface ProfileState {
   user?: userObject;
+  anchorEl: any;
 }
  
 class Profile extends React.Component<ProfileProps, ProfileState> {
@@ -29,14 +30,27 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
     const userObj: userObject = JSON.parse(localStorage.getItem("user") || "{}");
     this.state = {
-      user: userObj
+      user: userObj,
+      anchorEl: 0,
     }
     
   }
 
-  componentDidMount() {
+  handleClick = (event: any) => {
+    this.setState({
+      anchorEl: event.currentTarget
+    })
+  };
 
-  }
+  handleClose = (e: any, val: any) => {
+
+    this.setState({
+      anchorEl: 0
+    })
+    if (val !== "none") {
+      this.props.history.push(`${val}`);
+    }
+  };
 
   render() {
     const logout = (e: any) => {
@@ -55,10 +69,24 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
         <span style={{ float: "right", marginRight: 10, marginLeft: 10 }} >
 
-            <Link to="/profile" className={styles.profile} >{this.state.user?.name}<span>&nbsp;&nbsp;&nbsp;</span></Link>
+            {/* <Link to="/profile" className={styles.profile} >{this.state.user?.name}<span>&nbsp;&nbsp;&nbsp;</span></Link>
             <Link to="/profile/feed/myposts" className={styles.profile} >自分の投稿<span>&nbsp;&nbsp;&nbsp;</span></Link>
-            <Link to="/profile/feed/voted" className={styles.profile} >投票した投稿<span>&nbsp;&nbsp;&nbsp;</span></Link>
-            
+            <Link to="/profile/feed/voted" className={styles.profile} >投票した投稿<span>&nbsp;&nbsp;&nbsp;</span></Link> */}
+
+          <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+             プロフィール
+              </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={this.state.anchorEl}
+              keepMounted
+              open={Boolean(this.state.anchorEl)}
+              onClose={e => this.handleClose(e, "none")}
+            >
+              <MenuItem onClick={e => this.handleClose(e, "/profile")}>{this.state.user?.name}</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/profile/feed/myposts")}>自分の投稿</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/profile/feed/voted")}>投票した投稿</MenuItem>
+            </Menu></b>
 
           
           <Link to='/login' className={styles.profile}><button className={styles.profile} onClick={e => logout(e)} style={{ textTransform: "lowercase" }}>ログアウト</button>
@@ -73,4 +101,4 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
  
 
 
-export default Profile;
+export default withRouter(Profile);

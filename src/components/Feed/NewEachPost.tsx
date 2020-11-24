@@ -219,7 +219,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                     return (
                     <b>
 
-                        <input type="radio" name={voteMjId} value={mjOptionId}></input><label htmlFor={mjOptionId}>{option.content}</label>
+                        <label className={styles.label} htmlFor={mjOptionId}><input className={styles.input} type="radio" name={voteMjId} value={mjOptionId}></input>{option.content}</label>
                       </b>
                     )
                   })}
@@ -374,6 +374,30 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     }
   }
 
+  getDiffTime = (datetime: string) => {
+    var from = new Date(datetime);
+    // 現在時刻との差分＝経過時間
+    var diff = new Date().getTime() - from.getTime() - (9) * 60 * 60 * 1000;
+    // 経過時間をDateに変換
+    var elapsed = new Date(diff);
+    // 大きい単位から順に表示
+    let data;
+    if (elapsed.getUTCFullYear() - 1970) {
+      data = elapsed.getUTCFullYear() - 1970 + '年前';
+    } else if (elapsed.getUTCMonth()) {
+      data = elapsed.getUTCMonth() + 'ヶ月前';
+    } else if (elapsed.getUTCDate() - 1) {
+      data = elapsed.getUTCDate() - 1 + '日前';
+    } else if (elapsed.getUTCHours()) {
+      data = elapsed.getUTCHours() + '時間前';
+    } else if (elapsed.getUTCMinutes()) {
+      data = elapsed.getUTCMinutes() + '分前';
+    } else {
+      data = elapsed.getUTCSeconds() + 'たった今';
+    }
+    return data
+  } 
+
   change(e: any, field: string) {
     this.setState({
       [field]: e.target.value,
@@ -439,7 +463,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           <div className={styles.vote_section}>
             {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
-          <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
+          <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
             <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {data.comments.length}, 投票数: {this.props.data.total_vote}, by: {this.props.data.user_info.name}</div ></div>
 
         </li>
@@ -472,7 +496,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           <div className={styles.vote_section}>
             {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
-          <div className={styles.footer}><div>{data.created_at.slice(0, -7).replace("T", " ")}</div >
+          <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
             <div>終了時間: {this.state.data.end_at.slice(0, -3).replace("T", " ")}, コメント数: {data.comments.length}, 投票数: {this.state.data.total_vote}, by: {this.state.data.user_info.name}</div ></div>
         </li>
       )
