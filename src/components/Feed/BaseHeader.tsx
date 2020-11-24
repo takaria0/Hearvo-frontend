@@ -3,7 +3,7 @@ import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
-import { Button, TextField, Fab, Input } from '@material-ui/core';
+import { Button, TextField, Fab, Input, Menu, MenuItem } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import BackspaceIcon from '@material-ui/icons/Backspace';
 
@@ -93,7 +93,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
   }
 
   addHandle = (e: any) => {
-    if (this.state.values.length < 10) {
+    if (this.state.values.length < 7) {
       this.setState(prevState => ({ values: [...prevState.values, ''] }))
     }
   }
@@ -210,12 +210,13 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
 
 
 
-export interface BaseHeaderProps {
+export interface BaseHeaderProps extends RouteComponentProps<{}> {
   keyword: string;
 }
  
 export interface BaseHeaderState {
   edit: boolean;
+  anchorEl: any;
 }
  
 class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
@@ -225,8 +226,25 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
 
     this.state = {
       edit: false,
+      anchorEl: 0,
     }
   }
+
+
+  handleClick = (event: any) => {
+    this.setState({
+      anchorEl: event.currentTarget
+    })
+  };
+
+  handleClose = (e: any, val: any) => {
+
+    this.setState({
+      anchorEl: 0
+    })
+    this.props.history.push(`/popular/${val}`);
+  };
+
 
   editHandle = (e: any, edit: boolean) => {
     e.preventDefault();
@@ -239,18 +257,60 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     if (this.state.edit) {
       return (
         <div className={styles.mini_header}>
-          バグ取り感謝します。
+          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>はじめに</Link>
           <div className={styles.mini_header_inside}>
-            <Link to="/popular">人気順</Link> <Link to="/latest">最新</Link> 検索<span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, false)}>キャンセル</button></span>
+            <Link to="/popular">人気順</Link> <Link to="/latest">最新</Link> 検索
+
+
+            {(window.location.pathname.split("/")[1] === "popular"|| window.location.pathname === "/") ?
+              <b><Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+                期間
+              </Button>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={this.state.anchorEl}
+                  keepMounted
+                  open={Boolean(this.state.anchorEl)}
+                  onClose={e => this.handleClose(e, "")}
+                >
+                  <MenuItem onClick={e => this.handleClose(e, "now")}>今</MenuItem>
+                  <MenuItem onClick={e => this.handleClose(e, "today")}>今日</MenuItem>
+                  <MenuItem onClick={e => this.handleClose(e, "week")}>今週</MenuItem>
+                  <MenuItem onClick={e => this.handleClose(e, "month")}>今月</MenuItem>
+                </Menu></b>
+            : ""}
+            
+            <span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, false)}>キャンセル</button></span>
           </div>
         </div>
       )
     } else {
       return (
         <div className={styles.mini_header}>
-          バグ取り感謝します。
+          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>はじめに</Link>
           <div className={styles.mini_header_inside}>
-            <Link to="/popular" >人気順</Link> <Link to="/latest">最新</Link> 検索<span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, true)}>投稿する</button></span>
+            <Link to="/popular" >人気順</Link> <Link to="/latest">最新</Link> 検索
+      
+
+            {(window.location.pathname.split("/")[1] === "popular" || window.location.pathname === "/") ? 
+              <b><Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+                期間
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={this.state.anchorEl}
+                keepMounted
+                open={Boolean(this.state.anchorEl)}
+                onClose={e => this.handleClose(e, "")}
+              >
+                <MenuItem onClick={e => this.handleClose(e, "now")}>今</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "today")}>今日</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "week")}>今週</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "month")}>今月</MenuItem>
+                </Menu></b>
+            : ""}
+            
+            <span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, true)}>投稿する</button></span>
           </div>
         </div>
       )
@@ -267,4 +327,4 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
   }
 }
 
-export default BaseHeader;
+export default withRouter(BaseHeader);

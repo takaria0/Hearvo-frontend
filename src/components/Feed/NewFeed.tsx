@@ -23,6 +23,7 @@ export interface NewFeedState {
   voteLoading: boolean,
   page: number,
   dataArray: any[],
+  location: string;
 }
  
 class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
@@ -35,6 +36,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       voteLoading: false,
       page: 1,
       dataArray: [],
+      location: window.location.pathname,
     };
     document.title = "Hearvo"
   };
@@ -58,82 +60,115 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       threshold: 1.0
     };
     const observer = new IntersectionObserver(this.handleObserver, options);
-    // console.log("this.loader", this.loader)
-    // console.log("observer", observer)
     if (this.loader.current) {
       observer.observe(this.loader.current)
     }
     this.getData(this.state.page);
   };
 
-  updateData = () => {
-    const keyword = window.location.pathname.replace("/", "");
-    const jwt = getJwt();
-    const page = 1;
-    const keywordList = ["popular", "latest", "myposts", "voted"]
+  // getData 0= () => {
+  //   const keywordArray = window.location.pathname.split("/");
+  //   const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
+  //   const jwt = getJwt();
+  //   const page = 1;
+  //   const keywordList = ["popular", "latest", "myposts", "voted"]
 
-    if (keywordList.includes(keyword)) {
-      axios.get(`/posts?keyword=${keyword}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-        .then(res => {
-          this.setState({
-            dataArray: res.data,
-            isLoaded: true,
-          });
-        }).catch((err) => {
-          // console.log(err.response.data);
-        })
-    } else {
-      axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-        .then(res => {
-          this.setState({
-            dataArray: res.data,
-            isLoaded: true,
-          });
-        }).catch((err) => {
-          // console.log(err.response.data);
-        })
-    }
-  }
+  //   if (keywordList.includes(keyword)) {
+  //     const time = keyword === "popular" ? keywordArray.pop() : "";
+  //     axios.get(`/posts?keyword=${keyword}&page=${page}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+  //       .then(res => {
+  //         this.setState({
+  //           dataArray: res.data,
+  //           isLoaded: true,
+  //         });
+  //       }).catch((err) => {
+  //         // console.log(err.response.data);
+  //       })
+  //   } else {
+  //     axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+  //       .then(res => {
+  //         this.setState({
+  //           dataArray: res.data,
+  //           isLoaded: true,
+  //         });
+  //       }).catch((err) => {
+  //         // console.log(err.response.data);
+  //       })
+  //   }
+  // }
  
 
   getData = (page: number) => {
-    const keyword = window.location.pathname.split("/").pop() || "";
+    const keywordArray = window.location.pathname.split("/");
+    const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
     const jwt = getJwt();
-    // const page = this.state.page;
-    // console.log("page", this.state.page);
+
+
     const keywordList = ["popular", "latest", "myposts", "voted"];
 
+    let newpage;
+    if(page === 0) {
+      newpage = 1;
       if (keywordList.includes(keyword)) {
-        axios.get(`/posts?keyword=${keyword}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        const time = keyword === "popular" ? keywordArray.pop() : "";
+        axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
           .then(res => {
             this.setState({
-              dataArray: [...this.state.dataArray, ...res.data],
+              dataArray: res.data,
               isLoaded: true,
             });
           }).catch((err) => {
-            // console.log(err.response.data);
           })
       } else {
-        axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({
+              dataArray: res.data,
+              isLoaded: true,
+            });
+          }).catch((err) => {
+          })
+      }
+    } else {
+      newpage = page;
+      if (keywordList.includes(keyword)) {
+        const time = keyword === "popular" ? keywordArray.pop() : "";
+        axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
           .then(res => {
             this.setState({
               dataArray: [...this.state.dataArray, ...res.data],
               isLoaded: true,
             });
           }).catch((err) => {
-            // console.log(err.response.data);
+          })
+      } else {
+        axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({
+              dataArray: [...this.state.dataArray, ...res.data],
+              isLoaded: true,
+            });
+          }).catch((err) => {
           })
       }
+    }
   }
 
   componentDidUpdate = (prevProps: any, prevState: any) => {
     if (prevState.page !== this.state.page) {
       this.getData(this.state.page);
-    } else {
+    }
+
+    if (prevState.location !== window.location.pathname) {
+      this.setState({
+        location: window.location.pathname,
+        dataArray: [],
+      })
+      this.getData(0);
     }
 
     if (this.props.isPosted === true) {
-      this.updateData()
+      this.getData(0)
       this.props.isPostedHandeler(false);
     }
   }

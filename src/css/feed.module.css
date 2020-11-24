@@ -42,8 +42,30 @@
 .footer {
   margin: 2px;
   text-align: right;
-  font-size: 8px;
+  font-size: 10px;
 }
+
+.radio {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+/* label {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  background-color: #454545;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+} */
+
+.radio:checked+label {
+  background-color: #58ba83;
+}
+
 }
 
 
@@ -94,6 +116,29 @@
   text-align: right;
   font-size: 10px;
 }
+
+.radio {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+.radio:checked {
+  background-color: #58ba83;
+}
+
+/* label {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  background-color: #454545;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+} */
+
+
 }
 
 
@@ -141,6 +186,27 @@
 .footer {
   margin: 2px;
   text-align: right;
+}
+
+.radio {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+/* label {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  background-color: #454545;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+} */
+
+.radio:checked+label {
+  background-color: #58ba83;
 }
 }
 
