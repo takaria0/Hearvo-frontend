@@ -224,7 +224,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     super(props);
 
     this.state = {
-      edit: false
+      edit: false,
     }
   }
 

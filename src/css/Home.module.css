@@ -1,4 +1,4 @@
-@media screen and (min-width:0px) {
+@media screen and (max-width: 700px) and (min-width: 0px) {
   .body {
     background-color: rgb(237, 237, 237);
     display: flexbox;
@@ -19,7 +19,7 @@
   /* } 
 /* } */
 
-@media screen and (min-width:900px) {
+@media screen and (max-width: 1000px) and (min-width: 700px) {
   .body {
     background-color: rgb(237, 237, 237);
     display: flexbox;

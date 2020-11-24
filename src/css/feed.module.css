@@ -1,20 +1,55 @@
-.header {
-  /* color: black;
+@media screen and (max-width: 700px) and (min-width: 0px) {
+.li {
+  /* float: left; */
+  /* text-align: center; */
+  display: block;
+  list-style-type: none;
   background-color: white;
-  padding: 20px;
-  font-size: 60px;
-  font-family: Arial;
-  text-align: left; */
+  border: solid;
+  border-width: 2px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+  font-size: 12px;
 }
 
-.ul {
+.title {
+  font-size: 16px;
+  margin: 5px;
+  margin-bottom: -5px;
+}
+
+
+.content {
+  font-size: 12px;
+  margin: 5px;
+  /* border: 10px black; */
+}
+
+.vote_section {
+  margin: 5px;
+  text-align: center;
+  /* border: 10px black; */
+  /* background-color: rgba(186, 247, 252, 0.411); */
+}
+
+.vote_ul {
   padding: 0;
 }
 
-.ui_left {
-  padding: 0;
+.vote_li {
+  list-style-type: none;
+}
+.footer {
+  margin: 2px;
+  text-align: right;
+  font-size: 8px;
+}
 }
 
+
+
+
+@media screen and (max-width: 1000px) and (min-width: 700px) {
 .li {
   /* float: left; */
   /* text-align: center; */
@@ -44,16 +79,96 @@
   text-align: center;
   /* border: 10px black; */
   /* background-color: rgba(186, 247, 252, 0.411); */
-} 
+}
 
 .vote_ul {
   padding: 0;
 }
 
+.vote_li {
+  list-style-type: none;
+}
+
 .footer {
+  margin: 2px;
+  text-align: right;
+  font-size: 10px;
+}
+}
+
+
+@media screen and (min-width: 1000px) {
+.li {
+  /* float: left; */
+  /* text-align: center; */
+  display: block;
+  list-style-type: none;
+  background-color: white;
+  border: solid;
+  border-width: 2px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+
+.title {
+  font-size: 20px;
   margin: 10px;
+}
+
+
+.content {
+  font-size: 16px;
+  margin: 10px;
+  /* border: 10px black; */
+}
+
+.vote_section {
+  margin: 10px;
+  text-align: center;
+  /* border: 10px black; */
+  /* background-color: rgba(186, 247, 252, 0.411); */
+}
+
+.vote_ul {
+  padding: 0;
+}
+
+.vote_li {
+  list-style-type: none;
+}
+
+.footer {
+  margin: 2px;
   text-align: right;
 }
+}
+
+
+
+
+
+
+.header {
+  /* color: black;
+  background-color: white;
+  padding: 20px;
+  font-size: 60px;
+  font-family: Arial;
+  text-align: left; */
+}
+
+.ul {
+  padding: 0;
+}
+
+.ui_left {
+  padding: 0;
+}
+
+
+
+
 
 
 /* .menu {

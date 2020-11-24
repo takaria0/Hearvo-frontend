@@ -19,7 +19,7 @@
 /* } 
 /* } */
 
-@media screen and (min-width:900px) {
+@media screen and (min-width:700px) {
   .body {
     background-color: rgb(237, 237, 237);
     display: flexbox;

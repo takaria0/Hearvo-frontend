@@ -29,9 +29,9 @@ const renderVoteSelectResult = (data: any, layout: any) => {
         </div> */}
 
       <div>
-        <ul>
+        <ul className={styles.vote_ul}>
           {y.map((label: string, idx: number) => {
-            return (<li>{label}: <progress id="file" value={x[idx]} max="100"> {x[idx]}% </progress> {!isNaN(x[idx]) ? x[idx] : 0}%</li>)
+            return (<li className={styles.vote_li}>{label}: <progress id="file" value={x[idx]} max="100"> {x[idx]}% </progress> {!isNaN(x[idx]) ? x[idx] : 0}%</li>)
           })}
         </ul>
       </div>
@@ -197,33 +197,6 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
               })}
             </table>
             </div>
-              {/* {this.state.resData.vote_mj_obj.map((data: any, idx: number) => {
-                const countData = this.state.resData.vote_mj_count[idx];
-                const content = data.content;
-                const vote_mj_id = countData.vote_mj_id;
-                const countObj = countData.count;
-                return (
-                  <div>
-                    {content}: 
-                    <table style={{ margin: "auto", border: "1px solid black", borderCollapse: "collapse" }}>
-                      <tr>{this.state.resData.mj_options.map((obj: any) => {
-                        const mj_option_id = obj.id;
-                        const mj_option_count = countObj.filter((el: any) => { return el.mj_option_id === mj_option_id })
-                        return (
-                          <th style={{ border: "1px solid black", borderCollapse: "collapse" }}>{obj.content}</th>
-                        )
-                      })}</tr>
-                      <tr>{this.state.resData.mj_options.map((obj: any) => {
-                        const mj_option_id = obj.id;
-                        const mj_option_count = countObj.filter((el: any) => { return el.mj_option_id === mj_option_id })
-                        return (
-                          <td style={{ border: "1px solid black", borderCollapse: "collapse" }}>{mj_option_count.length > 0 ? mj_option_count[0].count : 0}</td>
-                        )
-                      })}</tr>
-                    </table>
-                  </div>
-                )
-              })} */}
           </div>
       )
     }
@@ -239,18 +212,13 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
               return (
                 <div>
                   { data.content}: 
-                  {/* <button onClick={e => this.change(e, data.id)}>Vote</button>
-                  */}
-                  
+
                   <div onChange={e => this.change(e, voteMjId)}>
                   {this.props.mjOptions.map((option: any) => {
                     const mjOptionId = option.id;
                     return (
                     <b>
-                      {/* <input type="radio" name={mjOptionId}><label>{option.content}</label></input> */}
-                        {/* <input type="radio" id="male" name="gender" value="male">
-                          <label htmlFor="male">Male</label>
-                        </input> */}
+
                         <input type="radio" name={voteMjId} value={mjOptionId}></input><label htmlFor={mjOptionId}>{option.content}</label>
                       </b>
                     )

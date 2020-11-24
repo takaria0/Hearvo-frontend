@@ -110,7 +110,9 @@ class Signup extends React.Component<SignupProps, SignupState> {
     return (
       <div className={styles.body}>
         <h1>Hearvo</h1>
+        <Link to="/intro">はじめに</Link>
         <div className={styles.body_inside}>
+          
         <h2>Signup</h2>
         <form onSubmit={e => this.submit(e)}>
           <div>

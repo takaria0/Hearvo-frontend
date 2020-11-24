@@ -1,12 +1,51 @@
 
 
 
-@media screen and (min-width:0px) {
+@media screen and (max-width: 700px) and (min-width: 0px) {
 .header {
   color: black;
   background-color: hsl(116, 49%, 45%);
-  margin-bottom: 100px;
+  margin-bottom: 10px;
   padding-bottom: 10px;
+}
+
+.hearvo {
+  color: black;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.hearvo:active {
+  color: blue;
+
+}
+
+.hearvo:hover {
+  color: orange;
+}
+
+.hearvo:visited {
+  color: red,
+}
+
+
+.profile {
+  color: black;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.profile:active {
+  color: blue;
+
+}
+
+.profile:hover {
+  color: orange;
+}
+
+.profile:visited {
+  color: red,
 }
 }
 
@@ -21,48 +60,31 @@
 /* } 
 /* } */
 
-@media screen and (min-width:900px) {
+@media screen and (max-width: 1000px) and (min-width: 700px) {
 .header {
   color: black;
   background-color: hsl(116, 49%, 45%);
   margin-bottom: 100px;
   padding-bottom: 0px;
 }
-}
-
-
-@media screen and (min-width:1000px) {
-.header {
-  color: black;
-  background-color: hsl(116, 49%, 45%);
-  margin-bottom: 100px;
-  padding-bottom: 0px;
-}
-}
-
-/* .header_inside { */
-
-/* } */
 
 
 .hearvo {
   color: black;
   text-decoration: none;
 }
+
 .hearvo:active {
   color: blue;
-  
+
 }
+
 .hearvo:hover {
   color: orange;
 }
-.hearvo:visited
-{
+
+.hearvo:visited {
   color: red,
-}
-.profile_span {
-  float: "right";
-  margin-right: 20;
 }
 
 
@@ -84,8 +106,59 @@
 .profile:visited {
   color: red,
 }
+}
 
 
-/* .profile {
-  
-} */
+@media screen and (min-width:1000px) {
+.header {
+  color: black;
+  background-color: hsl(116, 49%, 45%);
+  margin-bottom: 100px;
+  padding-bottom: 0px;
+}
+
+.hearvo {
+  color: black;
+  text-decoration: none;
+}
+
+.hearvo:active {
+  color: blue;
+
+}
+
+.hearvo:hover {
+  color: orange;
+}
+
+.hearvo:visited {
+  color: red,
+}
+
+.profile {
+  color: black;
+  text-decoration: none;
+  /* text-align: right; */
+}
+
+.profile:active {
+  color: blue;
+
+}
+
+.profile:hover {
+  color: orange;
+}
+
+.profile:visited {
+  color: red,
+}
+}
+
+
+.profile_span {
+  float: "right";
+  margin-right: 20;
+}
+
+
