@@ -41,6 +41,11 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
       this.props.history.push("/login");
       return
     }
+
+    if (this.state.commentContent.replace(/\s+/g, '').length === 0) {
+      return
+    }
+
     const jwt = getJwt();
     axios.post(
       "/comments",

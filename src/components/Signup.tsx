@@ -113,7 +113,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
         <Link to="/intro">はじめに</Link>
         <div className={styles.body_inside}>
           
-        <h2>Signup</h2>
+        <h2>アカウント作成</h2>
         <form onSubmit={e => this.submit(e)}>
           <div>
             <div>ユーザーネーム</div>
@@ -133,7 +133,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
             <input className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
           </div>
           <div className={styles.button} >
-            <Button type="submit" value="Submit" variant="contained" color="primary" >Signup</Button>
+            <Button type="submit" value="Submit" variant="contained" color="primary" >アカウント作成</Button>
           </div>
 
         </form>
@@ -144,7 +144,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
           {this.state.signupSuccessMessage}
         </div>
           <div className={styles.footer}>
-          <Link to="/login">Login</Link>
+          <Link to="/login">ログイン</Link>
       </div>
         </div>
       </div>

@@ -152,6 +152,12 @@ class Comment extends React.Component<CommentProps, CommentState> {
       this.props.history.push("/login");
       return
     }
+
+    if (this.state.baseCommentContent.replace(/\s+/g, '').length === 0) {
+      return
+    }
+
+
     const jwt = getJwt();
     // // console.log("postObj", postObj)
     axios.post(

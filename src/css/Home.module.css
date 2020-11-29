@@ -9,16 +9,6 @@
 }
 
 
-/* @media screen and (min-width:750px) {
-  .body {
-    background-color: rgb(237, 237, 237);
-    display: flexbox;
-    width: 75%;
-    /* margin-right: 10%; */
-    /* margin-left: 20%; */
-  /* } 
-/* } */
-
 @media screen and (max-width: 1000px) and (min-width: 700px) {
   .body {
     background-color: rgb(237, 237, 237);
