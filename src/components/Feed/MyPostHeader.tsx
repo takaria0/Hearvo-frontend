@@ -167,7 +167,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
   render() {
     return (
       <div>
-          <NewFeed keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></NewFeed>
+          <NewFeed isLogin={true} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></NewFeed>
       </div>
     );
   }
@@ -205,18 +205,12 @@ class MyPostHeader extends React.Component<MyPostHeaderProps, MyPostHeaderState>
       return (
         <div className={styles.mini_header}>
           バグ取り感謝します。
-          {/* <div className={styles.mini_header_inside}>
-            <Link to="/popular">人気順</Link> <Link to="/latest">最新</Link> 検索<span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, false)}>キャンセル</button></span>
-          </div> */}
         </div>
       )
     } else {
       return (
         <div className={styles.mini_header}>
           バグ取り感謝します。
-          {/* <div className={styles.mini_header_inside}>
-            <Link to="/popular" >人気順</Link> <Link to="/latest">最新</Link> 検索<span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, true)}>投稿する</button></span>
-          </div> */}
         </div>
       )
     }

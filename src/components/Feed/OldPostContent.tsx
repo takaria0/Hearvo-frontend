@@ -238,7 +238,7 @@ class PostFeed extends React.Component<PostFeedProps, PostFeedState> {
             <textarea required className={styles.content} id="post-content" placeholder="内容を入力" onChange={e => this.change(e, "content")} value={this.state.content} rows={4} />
           </div>
           <div style={{textAlign: "left"}}>
-    終了: <input required={true} value={this.state.endhour} className={styles.date_button} type="number" min={24} max={168} id="post-end" placeholder="24" onChange={e => this.change(e, "endhour")} /> {this.state.endhour}時間後, 終了日時: {this.state.end_at}
+    終了: <input required={true} value={this.state.endhour} className={styles.date_button} type="number" min={24} max={168} id="post-end" placeholder="24" onChange={e => this.change(e, "endhour")} /> {this.state.endhour}時間後
           </div>
           <div>
             <AddVoteSelect title={this.state.title || ""} content={this.state.content || ""} end_at={this.state.end_at || ""} endhour={this.state.endhour || ""}></AddVoteSelect>

@@ -10,6 +10,7 @@ export const each_post: string;
 export const feed: string;
 export const ul: string;
 export const footer: string;
+export const footer_icon: string;
 export const plotly: string;
 // export const vote_ul: string;
 export const vote_ul: string;

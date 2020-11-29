@@ -60,6 +60,12 @@
     margin-bottom: 10px;
     font-size: 16px;
 }
+
+
+.search_bar {
+    width: 50%
+}
+
 }
 
 
@@ -132,6 +138,11 @@
     margin-bottom: 10px;
     font-size: 16px;
 }
+
+.search_bar {
+    width: 60%
+}
+
 }
 
 
@@ -187,6 +198,7 @@
 }
 
 .mini_header_inside {
+    white-space:nowrap;
     border: solid;
     border-width: 2px;
     padding: 5px;
@@ -194,6 +206,11 @@
     margin-bottom: 10px;
     font-size: 16px;
 }
+
+.search_bar {
+    width: 70%
+}
+
 }
 
 

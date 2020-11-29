@@ -2,7 +2,15 @@ import React from 'react';
 import { getJwt } from '../helpers/jwt';
 import axios from './Api';
 import { Button, TextField, Fab } from '@material-ui/core';
+import { RouteProps, withRouter, RouteComponentProps } from 'react-router';
 import * as styles from '../css/Comment.module.css';
+import ReplyComment from './ReplyComment';
+
+const moment = require('moment-timezone');
+moment.locale('ja');
+moment.tz.setDefault('UTC');
+
+
 
 const nest = (items: any, id = null) =>
   items
@@ -10,76 +18,14 @@ const nest = (items: any, id = null) =>
     .map((item: any) => ({ ...item, children: nest(items, item.id) }));
 
 
-interface ReplyCommentProps {
+
+ 
+
+
+
+interface CommentProps extends RouteComponentProps<{}> {
   postId: number;
-  commentId: number;
-  handleParentPosted: any;
-}
- 
- interface ReplyCommentState {
-   commentContent: string;
-}
- 
-class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState> {
-
-  constructor(props: any) {
-    super(props);
-
-    this.state = {
-      commentContent: "",
-    }
-  }
-
-  change(e: any) {
-    // console.log("Reply this.state", this.state);
-    this.setState({
-      commentContent: e.target.value,
-    })
-  }
-
-
-  submit(e: any) {
-    const jwt = getJwt();
-    axios.post(
-      "/comments",
-      {
-        post_id: this.props.postId,
-        content: this.state.commentContent,
-        parent_id: this.props.commentId,
-      },
-      { headers: { 
-        'Authorization': `Bearer ${jwt}`,
-      }}
-    )
-      .then((res: any) => {
-        this.props.handleParentPosted(e);
-        this.setState({ commentContent: "" })
-      }).catch((res: any) => {
-      });
-    e.preventDefault();
-  }
-
-
-
-  render() { 
-    return ( 
-    <div>
-        <form onSubmit={e => this.submit(e)}>
-          <div><textarea rows={2} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea></div>
-          <div>
-            <Button type="submit" value="Submit" variant="contained" color="primary">返信する</Button>
-          </div>
-        </form>
-    </div> 
-    );
-  }
-}
- 
-
-
-
- interface CommentProps {
-  postId: number;
+   isLogin: boolean;
 }
  
  interface CommentState {
@@ -116,6 +62,42 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
     // // console.log("this state", this.state);
   }
+
+  getDiffTime = (datetime: string) => {
+    // console.log("記事の時間", datetime);
+    // console.log("moment()の時間", moment().format("YYYY-MM-DD HH:mm:ss"));
+    const diff = moment(moment(moment().format("YYYY-MM-DD HH:mm:ss"))).diff(datetime);
+    const duration = moment.duration(diff);
+
+    // 日・時・分・秒を取得
+    const years = duration.years();
+    const months = duration.months();
+    const weeks = duration.weeks();
+    const days = duration.days();
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+    const seconds = duration.seconds();
+    // console.log("days", days)
+    // console.log("hours", hours)
+    // console.log("minutes", minutes)
+    // console.log("seconds", seconds)
+    if (years > 0) {
+      return `${years}年前`
+    } else if (months > 0) {
+      return `${months}ヶ月前`
+    } else if (weeks > 0) {
+      return `${weeks}週間前`
+    } else if (days > 0) {
+      return `${days}日前`
+    } else if (hours > 0) {
+      return `${hours}時間前`
+    } else if (minutes > 0) {
+      return `${minutes}分前`
+    } else {
+      return `${seconds}秒前`
+    }
+    // return moment(datetime).fromNow()
+  } 
 
   updateData = () => {
     const jwt = getJwt();
@@ -166,6 +148,10 @@ class Comment extends React.Component<CommentProps, CommentState> {
   baseSubmit(e: any) {
     
     // // console.log("コメント提出します！！！！！！！！！！")
+    if (this.props.isLogin === false) {
+      this.props.history.push("/login");
+      return
+    }
     const jwt = getJwt();
     // // console.log("postObj", postObj)
     axios.post(
@@ -203,12 +189,14 @@ class Comment extends React.Component<CommentProps, CommentState> {
       if (this.state.commentId === props.id) {
         return (
           <li className={styles.com_li}>
-            <div className={styles.body}>
-              {props.content} <div style={{fontSize: "10px", textAlign:"right"}}>by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}</div>
-              <Button onClick={e => this.click(e, props.id)}>返信する</Button>
+            <div className={styles.body} style={{ wordWrap: "break-word" }}>
+              {props.content} {"    "}
+              <b style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</b>
+
+              <Button style={{ fontSize: 12 }}  onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 
-            <ReplyComment commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
+            <ReplyComment isLogin={this.props.isLogin} commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
 
             <ul className={styles.com_ul}>
               {props.children.map((child: any) => <CommentView {...child} />)}
@@ -218,9 +206,11 @@ class Comment extends React.Component<CommentProps, CommentState> {
       } else {
         return (
           <li className={styles.com_li}>
-            <div className={styles.body}>
-              {props.content} <div style={{ fontSize: "10px", textAlign:"right" }}>by {props.user_info?.name}, {props.updated_at.slice(0, -7).replace("T", " ")}</div>
-              <Button onClick={e => this.click(e, props.id)}>返信する</Button>
+            <div className={styles.body} style={{wordWrap: "break-word"}}>
+              {props.content}{"    "}
+              <b style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</b>
+
+              <Button style={{fontSize: 12}} onClick={e => this.click(e, props.id)}>返信する</Button>
             </div>
 
             <ul className={styles.com_ul}>
@@ -274,5 +264,5 @@ class Comment extends React.Component<CommentProps, CommentState> {
   }
 }
  
-export default Comment;
+export default withRouter(Comment);
 

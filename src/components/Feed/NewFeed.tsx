@@ -16,6 +16,7 @@ export interface NewFeedProps {
   keyword: string;
   isPosted: boolean;
   isPostedHandeler: any;
+  isLogin: boolean;
 }
  
 export interface NewFeedState {
@@ -24,6 +25,7 @@ export interface NewFeedState {
   page: number,
   dataArray: any[],
   location: string;
+  searchQuery: string;
 }
  
 class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
@@ -36,7 +38,8 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       voteLoading: false,
       page: 1,
       dataArray: [],
-      location: window.location.pathname,
+      location: window.location.href,
+      searchQuery: "",
     };
     document.title = "Hearvo"
   };
@@ -66,49 +69,34 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     this.getData(this.state.page);
   };
 
-  // getData 0= () => {
-  //   const keywordArray = window.location.pathname.split("/");
-  //   const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
-  //   const jwt = getJwt();
-  //   const page = 1;
-  //   const keywordList = ["popular", "latest", "myposts", "voted"]
-
-  //   if (keywordList.includes(keyword)) {
-  //     const time = keyword === "popular" ? keywordArray.pop() : "";
-  //     axios.get(`/posts?keyword=${keyword}&page=${page}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-  //       .then(res => {
-  //         this.setState({
-  //           dataArray: res.data,
-  //           isLoaded: true,
-  //         });
-  //       }).catch((err) => {
-  //         // console.log(err.response.data);
-  //       })
-  //   } else {
-  //     axios.get(`/posts?keyword=popular&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-  //       .then(res => {
-  //         this.setState({
-  //           dataArray: res.data,
-  //           isLoaded: true,
-  //         });
-  //       }).catch((err) => {
-  //         // console.log(err.response.data);
-  //       })
-  //   }
-  // }
  
 
   getData = (page: number) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchWord = urlParams.get('q');
     const keywordArray = window.location.pathname.split("/");
     const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
     const jwt = getJwt();
-
-
-    const keywordList = ["popular", "latest", "myposts", "voted"];
+    const keywordList = ["popular", "latest", "myposts", "voted", "search"];
 
     let newpage;
     if(page === 0) {
       newpage = 1;
+
+      if (searchWord !== null) {
+        axios.get(`/posts?search=${searchWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({
+              dataArray: res.data,
+              isLoaded: true,
+              searchQuery: window.location.search,
+            });
+          }).catch((err) => {
+          })
+        return
+      }
+
+
       if (keywordList.includes(keyword)) {
         const time = keyword === "popular" ? keywordArray.pop() : "";
         axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
@@ -125,12 +113,28 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
             this.setState({
               dataArray: res.data,
               isLoaded: true,
+              
             });
           }).catch((err) => {
           })
       }
     } else {
       newpage = page;
+      
+      if (searchWord !== null) {
+        axios.get(`/posts?search=${searchWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({
+              dataArray: res.data,
+              isLoaded: true,
+              searchQuery: window.location.search,
+            });
+          }).catch((err) => {
+          })
+        return
+      }
+
+
       if (keywordList.includes(keyword)) {
         const time = keyword === "popular" ? keywordArray.pop() : "";
         axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
@@ -159,15 +163,20 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       this.getData(this.state.page);
     }
 
-    if (prevState.location !== window.location.pathname) {
+    // console.log("prevState.location", prevState.location)
+    // console.log("window.location.pathname", window.location.pathname)
+    if (prevState.location !== window.location.href) {
+      // console.log("location changes before", prevState.location);
+      // console.log("after", window.location.href);
       this.setState({
-        location: window.location.pathname,
+        location: window.location.href,
         dataArray: [],
       })
       this.getData(0);
     }
 
-    if (this.props.isPosted === true) {
+
+    if (prevProps.isPosted !== this.props.isPosted || this.props.isPosted === true ) {
       this.getData(0)
       this.props.isPostedHandeler(false);
     }
@@ -193,8 +202,11 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
         <div>
           <ul className={styles.ul}>
             
-            {
-              this.state.dataArray.map((data: any, idx: number) => { return <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><NewEachPost data={data} ></NewEachPost></Link>})}            
+            { this.state.dataArray.length > 0 ?
+              this.state.dataArray.map((data: any, idx: number) => { return <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost></Link>})
+            : 
+            "該当なし"
+            }            
             
           </ul>
 

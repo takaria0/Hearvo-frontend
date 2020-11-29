@@ -6,6 +6,7 @@
   border-width: thin;
   margin: 5px;
   /* text-align: center; */
+  word-wrap: break-word;
 }
 
 .com_li {
@@ -19,11 +20,14 @@
 .base {
   width: 95%;
   margin: auto;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .reply {
-  width: 100%;
+  width: 80%;
   margin-left: 15px;
+  margin-right: 2px;
 }
 }
 
