@@ -2,7 +2,19 @@
 
 
 @media screen and (max-width: 700px) and (min-width: 0px) {
+
+.search_bar {
+  border-radius: 2px;
+  /* display: inline; */
+  /* width: 70%; */
+}
+
+.remark {
+  display: none;
+}
+
 .header {
+
   color: black;
   background-color: hsl(116, 49%, 45%);
   margin-bottom: 10px;
@@ -61,6 +73,12 @@
 /* } */
 
 @media screen and (max-width: 1000px) and (min-width: 700px) {
+
+.search_bar {
+  border-radius: 2px
+}
+
+
 .header {
   color: black;
   background-color: hsl(116, 49%, 45%);
@@ -68,6 +86,9 @@
   padding-bottom: 0px;
 }
 
+.remark {
+  /* display: none; */
+}
 
 .hearvo {
   color: black;
@@ -110,11 +131,19 @@
 
 
 @media screen and (min-width:1000px) {
+.search_bar {
+  border-radius: 2px
+}
+
 .header {
   color: black;
   background-color: hsl(116, 49%, 45%);
   margin-bottom: 100px;
   padding-bottom: 0px;
+}
+
+.remark {
+  /* display: none; */
 }
 
 .hearvo {

@@ -5,6 +5,7 @@ import { getJwt } from '../helpers/jwt';
 import * as styles from '../css/PostDetail.module.css';
 import NewEachPost from './Feed/NewEachPost';
 import Comment from './Comment';
+import Header from './Header';
 
 type VoteSelectType = {
   id: number;
@@ -34,6 +35,8 @@ interface State {
   userName: string;
   data: any,
   isLoaded?: boolean;
+  isLogin: boolean;
+  isLoginLoaded: boolean;
 }
 
 interface Params {
@@ -54,6 +57,9 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
     this.state = {
       userName: "",
       data: {},
+      isLoaded: false,
+      isLogin: false,
+      isLoginLoaded: false,
     }
     // // console.log("POST DETAIL CONSTRUCTOOOOOOOOOOOO");
     // // console.log("this.state");
@@ -66,8 +72,23 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
           isLoaded: true,
         });
       }).catch((err) => {
-        // // // console.log(err.response.data);
+        console.log(err.response.data);
       })
+  }
+
+  componentDidMount = () => {
+    const jwt = getJwt();
+    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}` } }).then((res: any) => {
+      this.setState({
+        isLogin: true,
+        isLoginLoaded: true,
+      });
+    }).catch((err: any) => {
+      this.setState({
+        isLogin: false,
+        isLoginLoaded: true,
+      });
+    })
   }
 
 
@@ -79,19 +100,25 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
     if(this.state.isLoaded) {
       return (
+        <div>
+          <Header></Header>
+        
         <div className={styles.body}>
 
           <div>
-            <NewEachPost data={this.state.data!}></NewEachPost>
+            <NewEachPost isLogin={this.state.isLogin} data={this.state.data!}></NewEachPost>
           </div>
           <div>
-            <Comment postId={this.state.data.id}></Comment>
+            <Comment isLogin={this.state.isLogin} postId={this.state.data.id}></Comment>
           </div>
         </div>
+        </div>
       );
+
     } else {
       return (
         <div>
+          <Header></Header>
           <div>
           Loading ...
           </div>

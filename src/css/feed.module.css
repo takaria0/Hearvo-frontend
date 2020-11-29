@@ -5,28 +5,30 @@
   display: block;
   list-style-type: none;
   background-color: white;
-  border: solid;
+  /* border: solid; */
   border-width: 2px;
   border-radius: 3px;
-  margin-bottom: 2px;
+  margin-bottom: 10px;
   font-size: 12px;
 }
 
 .title {
-  font-size: 16px;
+  font-size: 20px;
   margin: 5px;
   margin-bottom: -5px;
 }
 
 
 .content {
-  font-size: 12px;
+  font-size: 16px;
   margin: 5px;
-  /* border: 10px black; */
+  margin-left: 10px;
+  /* color: gray; */
 }
 
 .vote_section {
   margin: 5px;
+  font-size: 12px;
   text-align: center;
   /* border: 10px black; */
   /* background-color: rgba(186, 247, 252, 0.411); */
@@ -42,6 +44,10 @@
 .footer {
   margin: 2px;
   text-align: right;
+  font-size: 12px;
+}
+
+.footer_icon {
   font-size: 10px;
 }
 
@@ -78,7 +84,7 @@
   display: block;
   list-style-type: none;
   background-color: white;
-  border: solid;
+  /* border: solid; */
   border-width: 2px;
   border-radius: 3px;
   margin-bottom: 10px;
@@ -93,6 +99,7 @@
 .content {
   font-size: 16px;
   margin: 10px;
+  margin-left: 20px;
   /* border: 10px black; */
 }
 
@@ -114,6 +121,10 @@
 .footer {
   margin: 2px;
   text-align: right;
+  font-size: 10px;
+}
+
+.footer_icon {
   font-size: 10px;
 }
 
@@ -149,7 +160,7 @@
   display: block;
   list-style-type: none;
   background-color: white;
-  border: solid;
+  /* border: solid; */
   border-width: 2px;
   border-radius: 3px;
   margin-bottom: 10px;
@@ -165,6 +176,7 @@
 .content {
   font-size: 16px;
   margin: 10px;
+  margin-left: 20px;
   /* border: 10px black; */
 }
 
@@ -186,6 +198,10 @@
 .footer {
   margin: 2px;
   text-align: right;
+}
+
+.footer_icon {
+  font-size: 10px;
 }
 
 .radio {
