@@ -132,6 +132,9 @@ class Signup extends React.Component<SignupProps, SignupState> {
             <div>パスワード確認</div>
             <input className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
           </div>
+          <div style={{ fontSize: 14, marginBottom: 10}}>
+              アカウントを作成することによって、<br></br><Link to="/" target="_blank">利用規約</Link>と<Link to="" target="_blank">プライバシーポリシー</Link>に同意します。<br></br>
+          </div>
           <div className={styles.button} >
             <Button type="submit" value="Submit" variant="contained" color="primary" >アカウント作成</Button>
           </div>

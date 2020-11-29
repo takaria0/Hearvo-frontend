@@ -17,10 +17,30 @@ import Plot from 'react-plotly.js';
 import EachVoteSelect from './EachVoteSelect';
 import EachVoteMj from './EachVoteMj';
 import CheckIcon from '@material-ui/icons/Check';
+// import Linkify from 'react-linkify';
+// import * as linkify from 'linkifyjs';
+// import hashtag from 'linkifyjs/plugins/hashtag';
+
+
+// hashtag(linkify);
 
 const moment = require('moment-timezone');
 moment.locale('ja');
 moment.tz.setDefault('UTC');
+
+
+const toHashTag = (content: string) => {
+  const baseURL = window.location.origin;
+  const splitedContent = content.replace(/　/g, " ").split(" ").map((str) => {
+    if (str.startsWith("#")) {
+      return <a href={`${baseURL}/search?q=${str.replace("#", "")}&type=hash_tag`} className="text-blue-500">{str}</a>;
+    }
+    return str + " ";
+  })
+  return splitedContent;
+}
+
+
 
 
 const renderVoteMjResult = (baseData: any) => {
@@ -288,8 +308,8 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     if(currentFirstURL !== "posts") {
       return (
         <li className={styles.li}>
-          <div className={styles.title}>{data.title}</div>
-          <div className={styles.content}>{data.content}</div>
+          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div></Link>
+          <div className={styles.content}>{toHashTag(data.content)}</div>
           <div className={styles.vote_section}>
             {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
@@ -318,8 +338,8 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       )
       return (
         <li className={styles.li}>
-          <div className={styles.title}>{data.title}</div>
-          <div className={styles.content}>{data.content}</div>
+          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div></Link>
+          <div className={styles.content}>{toHashTag(data.content)}</div>
           {this.state.doFilter ? "" : <button onClick={e => this.filterClick(e, true)}>絞り込み</button>}
           {this.state.doFilter ? renderCondition() : ""}
           
@@ -345,8 +365,8 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     else {
       return (
         <li className={styles.li}>
-          <div className={styles.title}>{this.state.data.title}</div>
-          <div className={styles.content}>{this.state.data.content}</div>
+          <Link to={`/posts/${this.state.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.state.data.title}</div></Link>
+          <div className={styles.content}>{toHashTag(this.state.data.content)}</div>
           <div className={styles.vote_section}>
             
             {this.state.voteTypeId === 1 ? 

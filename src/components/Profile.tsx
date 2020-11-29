@@ -154,6 +154,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/voted")}>投票した投稿</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/")}>利用規約</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/")}>プライバシーポリシー</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/settings")}>設定</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/login")}>ログアウト</MenuItem>
             </Menu>
           </b>

@@ -81,7 +81,7 @@ class Login extends React.Component<LoginProps, LoginState> {
           </div>
         </form>
         <div className={styles.footer}>
-          <Link to="/signup">Signup</Link>
+          <Link to="/signup">アカウント作成</Link>
         </div>
         </div>
       </div>
