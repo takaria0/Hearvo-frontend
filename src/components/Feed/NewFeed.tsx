@@ -74,6 +74,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
   getData = (page: number) => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchWord = urlParams.get('q');
+    const type = urlParams.get('type') || "";
     const keywordArray = window.location.pathname.split("/");
     const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
     const jwt = getJwt();
@@ -84,7 +85,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       newpage = 1;
 
       if (searchWord !== null) {
-        axios.get(`/posts?search=${searchWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(`/posts?search=${searchWord}&type=${type}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
           .then(res => {
             this.setState({
               dataArray: res.data,
@@ -122,7 +123,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       newpage = page;
       
       if (searchWord !== null) {
-        axios.get(`/posts?search=${searchWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(`/posts?search=${searchWord}&type=${type}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
           .then(res => {
             this.setState({
               dataArray: res.data,
@@ -203,7 +204,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
           <ul className={styles.ul}>
             
             { this.state.dataArray.length > 0 ?
-              this.state.dataArray.map((data: any, idx: number) => { return <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost></Link>})
+              this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost>})
             : 
             "該当なし"
             }            

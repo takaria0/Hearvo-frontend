@@ -152,12 +152,30 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               <MenuItem onClick={e => this.handleClose(e, "/profile")}>{this.state.user?.name}</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/myposts")}>自分の投稿</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/voted")}>投票した投稿</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/")}>利用規約</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/")}>プライバシーポリシー</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/settings")}>設定</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/login")}>ログアウト</MenuItem>
             </Menu>
           </b>
           :
-          <Link to='/login' className={styles.profile}>ログイン
-            </Link>
+            <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+            <ListIcon ></ListIcon>
+          </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={this.state.anchorEl}
+              keepMounted
+              open={Boolean(this.state.anchorEl)}
+              onClose={e => this.handleClose(e, "none")}
+            >
+              <MenuItem onClick={e => this.handleClose(e, "/")}>利用規約</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/")}>プライバシーポリシー</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/login")}>ログイン</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/signup")}>アカウント作成</MenuItem>
+            </Menu>
+          </b>
+          // <Link to='/login' className={styles.profile}>ログイン</Link>
       }
       </b>
     )

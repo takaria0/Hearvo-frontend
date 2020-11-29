@@ -171,11 +171,11 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
     const voteObj = this.state.values.map((val) => { return { content: val } });
     var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id });
 
-    if(this.state.title.length < 1) {
+    if (this.state.title.replace(/\s+/g, '').length < 1) {
       return
     }
-    const voteCheck = this.state.values.filter((val) => val !== '');
-    if (voteCheck.length < 2) {
+    const voteCheck = this.state.values.filter((val) => val.replace(/\s+/g, '') === '');
+    if (voteCheck.length > 0) {
       return
     }
 

@@ -96,9 +96,9 @@ class AddVoteSelect extends React.Component<AddVoteSelectProps, AddVoteSelectSta
 
     if(
       this.props.title.length < 1
-      || this.props.title.replace(" ", "").length < 1
+      || this.props.title.replace(/\s+/g, '').length < 1
       || this.props.content.length < 1
-      || this.props.content.replace(" ", "").length < 1
+        || this.props.content.replace(/\s+/g, '').length < 1
       || parseInt(this.props.endhour) > 10000
       || parseInt(this.props.endhour) < 24
       ) {

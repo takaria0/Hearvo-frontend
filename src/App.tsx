@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import PostDetail from './components/PostDetail';
 import Header from './components/Header';
+import Settings from './components/Settings';
 import ProfileDetail from './components/ProfileDetail';
 import MyPostHeader from './components/Feed/MyPostHeader';
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/profile" exact component={ProfileDetail} />
           <Route path="/profile/feed/myposts" exact component={MyPostHeader} key="myposts-home" />
           <Route path="/profile/feed/voted" exact component={MyPostHeader} key="voted-home" />
+          <Route path="/settings" exact component={Settings} key="settings" />
           
       </Auth>
     </Switch>
