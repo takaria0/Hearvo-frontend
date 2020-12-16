@@ -110,7 +110,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
     return (
       <div className={styles.body}>
         <h1>Hearvo</h1>
-        <Link to="/intro">はじめに</Link>
+        <Link to="/intro">開発状況</Link>
         <div className={styles.body_inside}>
           
         <h2>アカウント作成</h2>
