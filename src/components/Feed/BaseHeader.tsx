@@ -87,7 +87,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     if (this.state.edit) {
       return (
         <div className={styles.mini_header}>
-          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>はじめに</Link>
+          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link>
           <div className={styles.mini_header_inside}>
             <Link to="/popular">人気</Link> <Link to="/latest">最新</Link>{"    "} 
 
@@ -118,7 +118,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     } else {
       return (
         <div className={styles.mini_header}>
-          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>はじめに</Link>
+          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link>
           <div className={styles.mini_header_inside}>
 
             <Link to="/popular" >人気</Link> <Link to="/latest">最新</Link>{"    "} {(window.location.pathname.split("/")[1] === "popular" || window.location.pathname === "/") ? 
