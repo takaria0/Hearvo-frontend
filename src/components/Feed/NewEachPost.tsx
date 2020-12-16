@@ -12,7 +12,6 @@ import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import HowToVote from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
-import EachFeed from './OldEachFeed';
 import Plot from 'react-plotly.js';
 import EachVoteSelect from './EachVoteSelect';
 import EachVoteMj from './EachVoteMj';
@@ -123,10 +122,16 @@ const renderVoteSelectResult = (data: any, layout: any) => {
               y.map((label: string, idx: number) => {
                 x[idx] = Math.round(x[idx]);
                 return (
-                  <div>
+                  <div style={{ border: '1px solid black', borderRadius: '5px', margin: 2, }}>
+                    <div style={{ backgroundColor: 'rgba(0, 0, 255, 0.1)', width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }}>
+                      <div style={{ whiteSpace: 'nowrap', padding: 2 }}>
 
-                    {label} {isNaN(x[idx]) ? 0 : x[idx]}%
+                        <div style={{ textAlign: 'left' }}>
+                          {label} {isNaN(x[idx]) ? 0 : x[idx]}%
+                        </div>
 
+                      </div>
+                    </div>
                   </div>
                 )
               })
