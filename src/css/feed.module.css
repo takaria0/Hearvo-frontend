@@ -28,11 +28,25 @@
 
 .vote_section {
   margin: 5px;
-  font-size: 12px;
+  font-size: 16px;
   text-align: center;
   /* border: 10px black; */
   /* background-color: rgba(186, 247, 252, 0.411); */
 }
+
+
+
+.vote_button {
+  /* border: 1px solid black; */
+  text-align: left;
+  margin: 1px;
+}
+
+.vote_button:hover {
+  background-color: rgba(0, 0, 255, 0.1);
+  /* color: white; */
+}
+
 
 .vote_ul {
   padding: 0;
@@ -110,6 +124,16 @@
   /* background-color: rgba(186, 247, 252, 0.411); */
 }
 
+.vote_button {
+  /* border: 1px solid black; */
+  text-align: left;
+  margin: 1px;
+}
+
+.vote_button:hover {
+  background-color: rgba(0, 0, 255, 0.1);
+  /* color: white; */
+}
 .vote_ul {
   padding: 0;
 }
@@ -185,6 +209,16 @@
   text-align: center;
   /* border: 10px black; */
   /* background-color: rgba(186, 247, 252, 0.411); */
+}
+.vote_button {
+  /* border: 1px solid black; */
+  text-align: left;
+  margin: 1px;
+}
+
+.vote_button:hover {
+  background-color: rgba(0, 0, 255, 0.1);
+  /* color: white; */
 }
 
 .vote_ul {

@@ -192,9 +192,12 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
             return (
               <div>
               <div >
-              <div style={{margin: 1}}>
-                { data.content}:
-                <button style={{ backgroundColor: '#4CAF50', border: '1px solid black' }} onClick={e => this.change(e, data.id)}>投票</button>
+                  <div className={styles.vote_button}>
+                    <button style={{width: "100%"}} onClick={e => this.change(e, data.id)}>
+                      <div>
+                      {data.content}
+                      </div>
+                      </button>
               </div>
               </div>
               </div>

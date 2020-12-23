@@ -19,3 +19,4 @@ export const each_post_link: string;
 export const radio: string;
 export const input: string;
 export const label: string;
+export const vote_button: string;
