@@ -288,6 +288,18 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     this.setState({doFilter: val});
   }
 
+  renderTopic = (data: any) => (
+    <div style={{ color: 'black' }}>
+      &nbsp;&nbsp;{data.topics.map((elem: any) => {
+        return (
+          <span style={{ }}>
+            <small style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem.topic.topic}</small>{'  '}
+          </span>
+        )
+      })}
+    </div>
+  )
+
   
 
   renderEachData = (data: any, vote_type_id: number) => {
@@ -313,7 +325,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     if(currentFirstURL !== "posts") {
       return (
         <li className={styles.li}>
-          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div></Link>
+          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div>
+            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : ''}
+          </Link>
           <div className={styles.content}>{toHashTag(data.content)}</div>
           <div className={styles.vote_section}>
             {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
@@ -343,7 +357,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       )
       return (
         <li className={styles.li}>
-          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div></Link>
+          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div>
+            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : ''}
+          </Link>
           <div className={styles.content}>{toHashTag(data.content)}</div>
           {this.state.doFilter ? "" : <button onClick={e => this.filterClick(e, true)}>絞り込み</button>}
           {this.state.doFilter ? renderCondition() : ""}
@@ -370,7 +386,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     else {
       return (
         <li className={styles.li}>
-          <Link to={`/posts/${this.state.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.state.data.title}</div></Link>
+          <Link to={`/posts/${this.state.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.state.data.title}</div>
+            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : ''}
+          </Link>
           <div className={styles.content}>{toHashTag(this.state.data.content)}</div>
           <div className={styles.vote_section}>
             
