@@ -244,13 +244,16 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                 const voteMjId = data.id;
                 return (
                   <div>
-                    { data.content}
+                    <div style={{ textAlign: 'left', backgroundColor: '#F3F3F3', padding: '5px', margin: '1px', border: 'solid 1px', borderRadius: '3px'}}>
+                      {data.content}
+                    </div>
+                    
 
-                    <div onChange={e => this.change(e, voteMjId)}>
+                    <div style={{ padding: '1px', margin: '1px' }} onChange={e => this.change(e, voteMjId)}>
                       {this.props.mjOptions.map((option: any) => {
                         const mjOptionId = option.id;
                         return (
-                          <span style={{  padding: '1px', margin: '1px', border: 'solid 1px', borderRadius: '3px'}}>
+                          <span style={{  padding: '1px', margin: '1px'}}>
                             
                             <label className={styles.label}  htmlFor={mjOptionId}><input  type="radio" name={voteMjId} value={mjOptionId}></input>{option.content}</label>
                           </span>
