@@ -244,7 +244,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                 const voteMjId = data.id;
                 return (
                   <div>
-                    <div style={{ textAlign: 'left', backgroundColor: '#F3F3F3', padding: '5px', margin: '1px', border: 'solid 1px', borderRadius: '3px'}}>
+                    <div style={{ textAlign: 'left', backgroundColor: '#F3F3F3', padding: '2px', margin: '1px', border: 'solid 1px', borderRadius: '3px'}}>
                       {data.content}
                     </div>
                     
@@ -264,7 +264,8 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                   </div>
                 )
               })}
-              <button type="submit" >投票</button>
+
+              <button  style={{ marginTop: '10px' }} type="submit" >投票</button>
             </form>
             <div style={{ color : 'red'}}>
               {this.state.errorMessage ? this.state.errorMessage : ''}
