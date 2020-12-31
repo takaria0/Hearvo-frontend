@@ -68,6 +68,13 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     this.getData(this.state.page);
   };
 
+  getTimeQuery = (keyword: string, keywordArray: string[]) => {
+    let time = keyword === "popular" ? keywordArray.pop() : "";
+    if(time === "popular") {
+      time = "";
+    }
+    return time;
+  };
  
 
   getData = (page: number) => {
@@ -98,7 +105,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
 
 
       if (keywordList.includes(keyword)) {
-        const time = keyword === "popular" ? keywordArray.pop() : "";
+        const time = this.getTimeQuery(keyword, keywordArray);
         axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
           .then(res => {
             this.setState({
@@ -136,7 +143,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
 
 
       if (keywordList.includes(keyword)) {
-        const time = keyword === "popular" ? keywordArray.pop() : "";
+        const time = this.getTimeQuery(keyword, keywordArray);
         axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
           .then(res => {
             this.setState({

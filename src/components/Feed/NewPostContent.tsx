@@ -37,6 +37,12 @@ export interface NewPostContentState {
   vote_type_id: string;
   success: boolean;
   posted: boolean;
+  topicString: any;
+  topicForApi: Array<string>;
+  maxTopicNum: number;
+  mjNums: number;
+  mjCandidates: Array<string>;
+  errorMessage: string;
 }
 
 class NewPostContent extends React.Component<NewPostContentProps, NewPostContentState> {
@@ -48,6 +54,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
     const defaultEndAt = new Date(currentDate.setHours(currentDate.getHours() + 24)).toISOString().slice(0, -8);
 
     this.state = {
+      mjNums: 2,
       edit: false,
       title: "",
       content: "",
@@ -55,8 +62,13 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       end_at: defaultEndAt,
       vote_type_id: "1",
       values: ['', ''],
+      mjCandidates: ['', ''],
       posted: false,
       success: false,
+      topicString: '',
+      topicForApi: [],
+      maxTopicNum: 10,
+      errorMessage: '',
     }
   }
 
@@ -71,46 +83,156 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
     
     return (
       <div>
-        <Dialog fullScreen={maxWidth.matches ? true : false} fullWidth={true} open={this.props.edit} onClose={e => this.props.editParentHandle(e, false)} aria-labelledby="form-dialog-title">
+        <Dialog disableBackdropClick={true} fullScreen={maxWidth.matches ? true : false} fullWidth={true} open={this.props.edit} onClose={e => this.props.editParentHandle(e, false)} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">投稿</DialogTitle>
           <DialogContent>
-            <div><button onClick={e => this.props.editParentHandle(e, false)}>戻る</button></div><br></br>
-            <form onSubmit={e => this.submit(e)}>
+            <div style={{ textAlign: 'left' }}>
+              <button  style={{width: '15%' }} onClick={e => this.props.editParentHandle(e, false)}>戻る</button>
+            </div>
+            <br></br>
+            <form onSubmit={e => this.submit(e)} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}>
               <div><input placeholder="タイトルを入力" className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => this.change(e, "title")}></input><br></br></div>
-              <div><textarea placeholder="本文を入力" className={styles.content} rows={4} maxLength={5000} onChange={e => this.change(e, "content")}></textarea></div>
+              <div><textarea placeholder="本文を入力" className={styles.content} rows={6} maxLength={5000} onChange={e => this.change(e, "content")}></textarea></div>
         終了: <input className={styles.date_button} value={this.state.endhour} min={24} max={168} type="number" onChange={e => this.change(e, "endhour")}></input> 時間後
-
 
               <div>投票タイプ: <select onChange={e => this.change(e, "vote_type_id")}>
                 <option value="1">通常投票</option>
                 <option value="2">MJ法</option>
               </select>
               </div>
-
-         投票候補: {this.createVoteSelect()}
-              <button type="button" onClick={e => this.addHandle(e)}><AddIcon style={{ fontSize: 16 }}></AddIcon></button>
-
-              <div className={styles.submit_button}><button>投稿</button></div>
+              {this.state.vote_type_id === '2' ? this.renderMJcandidates() : ''} 
+              <div style={{ textAlign: 'center'}}>
+              投票候補
+                {this.createVoteSelect()}
+                <button type="button" onClick={e => this.addHandle(e)}><AddIcon style={{ fontSize: 16 }}></AddIcon></button>
+              </div>
+              <div>
+                トピック 読点で区切って入力
+                <input placeholder='トピック1、トピック2、・・・' style={{ padding: '5px', width: '100%', marginBottom: '10px'}} value={this.state.topicString} type="text" onChange={e => this.change(e, "topicString")}></input>
+                <span>
+                  {this.renderTopic()}
+                </span>
+              </div>
+              <div className={styles.submit_button}><button style={{ width: '20%'}}>投稿</button></div>
             </form>
+            <div style={{color: 'red'}}>
+              {this.state.errorMessage ? this.state.errorMessage : ''}
+            </div>
           </DialogContent>
         </Dialog>
       </div>
     )
   }
 
+  mjNumChange = (e: any) => {
+    e.preventDefault();
+    this.setState({
+      mjNums: parseInt(e.target.value),
+      // mjCandidates: Array(e.target.value).join(".").split("."),
+    } as unknown as NewPostContentState)
+  }
+
+  mjCandidatesChange = (e: any, idx: number) => {
+    e.preventDefault();
+    let mjCandidates = [...this.state.mjCandidates];
+    mjCandidates[idx] = e.target.value;
+    this.setState({
+      mjCandidates: mjCandidates,
+    })
+  }
+
+  renderMJcandidates = () => {
+
+    let JSX = [];
+    for (let idx = 0; idx < this.state.mjNums; idx++) {
+      JSX.push(
+        (<span>
+            <span key={idx}>
+              <input style={{width: '90px', marginRight: '10px', marginTop: '10px'}} placeholder={`回答 ${idx+1}`} onChange={e => this.mjCandidatesChange(e, idx)}></input>
+            </span>
+        </span>)
+      )
+    }
+
+    return (
+      <div>
+        回答の種類<select name="mj-nums" id="mj-nums" onChange={e => this.mjNumChange(e)}> 
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <div>
+          {JSX}
+        </div>
+      </div>
+    )
+  };
+
+  doContainDelim = (topics: string) => {
+    const delims = [',', '，', '、'];
+    let count = 0;
+    delims.map((elem) => {
+      if(topics.includes(elem)) {
+        count = count + 1;
+      }
+    })
+    return count > 0 ? true : false;
+  }
+
+  renderTopic = () => {
+    const topics = this.state.topicString;
+    const pattern = (/,|，|、/g);
+    if (this.doContainDelim(topics)) {
+      let topicList = topics.split(pattern);
+      topicList = topicList.slice(0, this.state.maxTopicNum);
+      topicList = topicList.map((tp: string) => (tp.trim())).filter((el: string) => (el.length > 0));
+      return (
+        <div style={{ color: 'black' }}>
+          {topicList.map((elem: string) => {
+            if (elem.length > 0) {
+              return (
+                <span><b style={{ fontSize: '14px', padding: '1px', backgroundColor: '#E9FEFD' }}>{elem}{'   '}</b>&nbsp;&nbsp;</span>
+              );
+            }
+          })}
+        </div>
+      )
+
+    }
+  }
+
+  editTopic = (topics: string) => {
+    const pattern = (/,|，|、/g);
+    if(this.doContainDelim(topics)) {
+      let topicList = topics.split(pattern);
+      topicList = topicList.slice(0, this.state.maxTopicNum);
+      topicList = topicList.map((tp: string) => (tp.trim())).filter((el: string) => (el.length  > 0));
+      this.setState({
+        topicForApi: topicList
+      });
+    }
+  };
+
   change(e: any, field: string) {
     e.preventDefault();
     this.setState({
       [field]: e.target.value,
     } as unknown as NewPostContentState)
-    if (field === "endhour") {
-      const dt = new Date();
-      const endHour = e.target.value ? parseInt(e.target.value) : 0;
-      if (endHour > 0 && endHour < 36000) {
-        const endDate = new Date(dt.setHours(dt.getHours() + endHour));
-        const endDateString = endDate.toISOString().slice(0, -8);
-        this.setState({ end_at: endDateString })
-      }
+
+    switch (field) {
+      case 'endhour':
+        const dt = new Date();
+        const endHour = e.target.value ? parseInt(e.target.value) : 0;
+        if (endHour > 0 && endHour < 36000) {
+          const endDate = new Date(dt.setHours(dt.getHours() + endHour));
+          const endDateString = endDate.toISOString().slice(0, -8);
+          this.setState({ end_at: endDateString })
+        }
+      break
+      case 'topicString':
+        this.editTopic(e.target.value);
+      break
     }
   }
 
@@ -169,13 +291,36 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
     e.preventDefault();
     const jwt = getJwt();
     const voteObj = this.state.values.map((val) => { return { content: val } });
-    var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id });
+    var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id, "topic": this.state.topicForApi, "mj_option_list": this.state.mjCandidates });
+    console.log('this.state.mjNums', this.state.mjNums)
+    console.log("data", data);
 
     if (this.state.title.replace(/\s+/g, '').length < 1) {
+      this.setState({errorMessage: 'タイトルを入力してください'});
       return
     }
+
+    let mjCheckcount = 0;
+    this.state.mjCandidates.map((elem: any) => {
+      if(elem.length === 0) {
+        mjCheckcount = mjCheckcount + 1;
+      }
+    });
+
+
+    if (this.state.vote_type_id === '2' && this.state.mjNums !== this.state.mjCandidates.length) {
+      this.setState({ errorMessage: '回答候補を埋めてください' })
+      return
+    }
+
+    if (this.state.vote_type_id === '2' &&  mjCheckcount > 0) {
+      this.setState({ errorMessage: '回答候補を埋めてください' })
+      return
+    }
+
     const voteCheck = this.state.values.filter((val) => val.replace(/\s+/g, '') === '');
     if (voteCheck.length > 0) {
+      this.setState({ errorMessage: '投票候補を埋めてください' })
       return
     }
 
@@ -190,7 +335,6 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       body: data
     };
 
-    console.log("data", data);
 
     fetch(url, options)
       .then((res: any) => {
@@ -198,6 +342,8 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
         this.setState({
           success: true,
           edit: false,
+          topicString: '',
+          topicForApi: [],
         });
         this.isPostedChange(true);
         this.props.editParentHandle(e, false);
@@ -216,41 +362,10 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
 
   }
 
-  editJSX = () => {
-    return (
-      <div>
-        <div className={styles.post_content}>
-          <div className={styles.post_content_inside}>
-            <form onSubmit={e => this.submit(e)}>
-              <div><input placeholder="タイトルを入力" className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => this.change(e, "title")}></input><br></br></div>
-              <div><textarea placeholder="本文を入力" className={styles.content} rows={4} maxLength={5000} onChange={e => this.change(e, "content")}></textarea></div>
-        終了: <input className={styles.date_button} value={this.state.endhour} min={24} max={168} type="number" onChange={e => this.change(e, "endhour")}></input> 時間後
-
-
-              <div>投票タイプ: <select onChange={e => this.change(e, "vote_type_id")}>
-                <option value="1">通常投票</option>
-                <option value="2">MJ法</option>
-              </select>
-              </div>
-
-         投票候補: {this.createVoteSelect()}
-              <button type="button" onClick={e => this.addHandle(e)}><AddIcon style={{ fontSize: 16 }}></AddIcon></button>
-
-              <div className={styles.submit_button}><button>投稿</button></div>
-            </form>
-          </div></div>
-      </div>
-    )
-  }
-
-
 
   render() {
     return (
       <div>
-        {/* <div>{this.state.edit ? this.editJSX() : ""}</div> */}
-        {/* <div>{this.state.success && this.state.posted ? "投稿しました" : ""}</div>
-        <div>{!this.state.success && this.state.posted ? "投稿に失敗しました" : ""}</div> */}
         <div>{this.createForm()}</div>
         <div>
           <NewFeed isLogin={this.props.isLogin} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></NewFeed>
