@@ -42,6 +42,7 @@ export interface NewPostContentState {
   maxTopicNum: number;
   mjNums: number;
   mjCandidates: Array<string>;
+  errorMessage: string;
 }
 
 class NewPostContent extends React.Component<NewPostContentProps, NewPostContentState> {
@@ -67,6 +68,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       topicString: '',
       topicForApi: [],
       maxTopicNum: 10,
+      errorMessage: '',
     }
   }
 
@@ -106,13 +108,16 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
               </div>
               <div>
                 トピック 読点で区切って入力
-                <input style={{width: '100%', marginBottom: '10px'}} value={this.state.topicString} type="text" onChange={e => this.change(e, "topicString")}></input>
-                <div>
+                <input placeholder='トピック1、トピック2、・・・' style={{ padding: '5px', width: '100%', marginBottom: '10px'}} value={this.state.topicString} type="text" onChange={e => this.change(e, "topicString")}></input>
+                <span>
                   {this.renderTopic()}
-                </div>
+                </span>
               </div>
               <div className={styles.submit_button}><button style={{ width: '20%'}}>投稿</button></div>
             </form>
+            <div style={{color: 'red'}}>
+              {this.state.errorMessage ? this.state.errorMessage : ''}
+            </div>
           </DialogContent>
         </Dialog>
       </div>
@@ -122,8 +127,8 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
   mjNumChange = (e: any) => {
     e.preventDefault();
     this.setState({
-      mjNums: e.target.value,
-      mjCandidates: Array(e.target.value).join(".").split("."),
+      mjNums: parseInt(e.target.value),
+      // mjCandidates: Array(e.target.value).join(".").split("."),
     } as unknown as NewPostContentState)
   }
 
@@ -142,16 +147,16 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
     for (let idx = 0; idx < this.state.mjNums; idx++) {
       JSX.push(
         (<span>
-            <div key={idx}>
-              <input placeholder="選択肢" onChange={e => this.mjCandidatesChange(e, idx)}></input>
-            </div>
+            <span key={idx}>
+              <input style={{width: '90px', marginRight: '10px', marginTop: '10px'}} placeholder={`回答 ${idx+1}`} onChange={e => this.mjCandidatesChange(e, idx)}></input>
+            </span>
         </span>)
       )
     }
 
     return (
       <div>
-        候補数<select name="mj-nums" id="mj-nums" onChange={e => this.mjNumChange(e)}> 
+        回答の種類<select name="mj-nums" id="mj-nums" onChange={e => this.mjNumChange(e)}> 
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
@@ -187,7 +192,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
           {topicList.map((elem: string) => {
             if (elem.length > 0) {
               return (
-                <div><b style={{ fontSize: '14px', padding: '1px', backgroundColor: '#E9FEFD' }}>{elem}{'   '}</b></div>
+                <span><b style={{ fontSize: '14px', padding: '1px', backgroundColor: '#E9FEFD' }}>{elem}{'   '}</b>&nbsp;&nbsp;</span>
               );
             }
           })}
@@ -287,17 +292,35 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
     const jwt = getJwt();
     const voteObj = this.state.values.map((val) => { return { content: val } });
     var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id, "topic": this.state.topicForApi, "mj_option_list": this.state.mjCandidates });
+    console.log('this.state.mjNums', this.state.mjNums)
+    console.log("data", data);
 
     if (this.state.title.replace(/\s+/g, '').length < 1) {
+      this.setState({errorMessage: 'タイトルを入力してください'});
       return
     }
 
-    if (this.state.mjCandidates.length < 2) {
+    let mjCheckcount = 0;
+    this.state.mjCandidates.map((elem: any) => {
+      if(elem.length === 0) {
+        mjCheckcount = mjCheckcount + 1;
+      }
+    });
+
+
+    if (this.state.vote_type_id === '2' && this.state.mjNums !== this.state.mjCandidates.length) {
+      this.setState({ errorMessage: '回答候補を埋めてください' })
+      return
+    }
+
+    if (this.state.vote_type_id === '2' &&  mjCheckcount > 0) {
+      this.setState({ errorMessage: '回答候補を埋めてください' })
       return
     }
 
     const voteCheck = this.state.values.filter((val) => val.replace(/\s+/g, '') === '');
     if (voteCheck.length > 0) {
+      this.setState({ errorMessage: '投票候補を埋めてください' })
       return
     }
 
@@ -312,7 +335,6 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       body: data
     };
 
-    console.log("data", data);
 
     fetch(url, options)
       .then((res: any) => {
