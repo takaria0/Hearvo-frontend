@@ -143,7 +143,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       JSX.push(
         (<span>
             <div key={idx}>
-              <input placeholder="選択肢" onChange={e => this.mjCandidatesChange(e, idx)}></input>
+              <input placeholder={`回答 ${idx+1}`} onChange={e => this.mjCandidatesChange(e, idx)}></input>
             </div>
         </span>)
       )
@@ -151,7 +151,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
 
     return (
       <div>
-        候補数<select name="mj-nums" id="mj-nums" onChange={e => this.mjNumChange(e)}> 
+        回答の種類<select name="mj-nums" id="mj-nums" onChange={e => this.mjNumChange(e)}> 
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>

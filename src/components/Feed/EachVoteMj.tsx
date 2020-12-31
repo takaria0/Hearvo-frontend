@@ -66,12 +66,15 @@ export interface EachVoteMjState {
   mjCountResult: any;
   mjContent: any;
   totalVote: number;
-  data: any,
+  data: any;
+  errorMessage: string;
+  // buttonColor: any;
 }
 
 class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
   constructor(props: any) {
     super(props);
+
 
     this.state = {
       isClicked: false,
@@ -81,8 +84,23 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       mjContent: [],
       data: [],
       totalVote: 0,
+      errorMessage: '',
+      // buttonColor: this.generateButtonColor(),
     }
   }
+  // generateButtonColor = () => {
+  //   let buttonColor = new Map();
+  //   this.props.voteContent.map((vo: any) => {
+  //     this.props.mjOptions.map((elem: any) => {
+  //       let mjColor = new Map();
+  //       mjColor.set(elem.id, 'none');
+  //       buttonColor.set(vo.id, mjColor);
+  //     })
+  //   })
+  //   console.log('Generate Button Color:', buttonColor);
+
+  //   return buttonColor;
+  // }
 
   submit = (e: any) => {
     e.preventDefault();
@@ -90,6 +108,12 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       this.props.history.push("/login");
       return
     }
+
+    if (this.props.voteContent.length !== this.state.voteMjCount.length) {
+      this.setState({errorMessage: '全ての候補に投票して下さい'})
+      return
+    }
+
     this.setState({
       isClicked: true,
     });
@@ -134,17 +158,39 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
     })
   };
 
+  // updateButtonColor = (voteMjId: number, mjOptionId: number) => {
+  //   let currentButtonColor = this.state.buttonColor;
+
+  //   console.log('BeforeButtonColor', currentButtonColor)
+  //   // Init button Color
+  //   // for (let insideKey of currentButtonColor.get(voteMjId).keys()) {
+  //   //   let color = currentButtonColor.get(voteMjId);
+  //   //   color.set(insideKey, 'pink')
+  //   //   currentButtonColor.set(voteMjId, color);
+  //   // };
+  //   currentButtonColor = this.generateButtonColor();
+  //   console.log('InitButtonColor', currentButtonColor)
+
+  //   // Update Button Color
+  //   let currentMjColor = currentButtonColor.get(voteMjId);
+  //   currentMjColor.set(mjOptionId, 'blue');
+  //   currentButtonColor.set(voteMjId, currentMjColor)
+  //   console.log('AfterButtonColor', currentButtonColor)
+  //   return currentButtonColor
+  // }
+
   change(e: any, voteMjId: number) {
-    console.log("this.state.voteMjCount", this.state.voteMjCount);
-    console.log("voteMjId", voteMjId);
-    console.log("e.target.value", e.target.value);
+
+    console.log('this.state.voteMjCount', this.state.voteMjCount);
     const filteredArray = this.state.voteMjCount.filter((el: any) => { return el.vote_mj_id != voteMjId; });
     filteredArray.push({
       vote_mj_id: voteMjId,
       mj_option_id: parseInt(e.target.value),
     });
 
+    // const currentButtonColor = this.updateButtonColor(voteMjId, parseInt(e.target.value));
     this.setState({
+      // buttonColor: currentButtonColor,
       voteMjCount: filteredArray,
     })
   }
@@ -198,16 +244,16 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                 const voteMjId = data.id;
                 return (
                   <div>
-                    { data.content}:
+                    { data.content}
 
                     <div onChange={e => this.change(e, voteMjId)}>
                       {this.props.mjOptions.map((option: any) => {
                         const mjOptionId = option.id;
                         return (
-                          <b>
-
-                            <label className={styles.label} htmlFor={mjOptionId}><input className={styles.input} type="radio" name={voteMjId} value={mjOptionId}></input>{option.content}</label>
-                          </b>
+                          <span style={{  padding: '1px', margin: '1px', border: 'solid 1px', borderRadius: '3px'}}>
+                            
+                            <label className={styles.label}  htmlFor={mjOptionId}><input  type="radio" name={voteMjId} value={mjOptionId}></input>{option.content}</label>
+                          </span>
                         )
                       })}
                     </div>
@@ -215,8 +261,11 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                   </div>
                 )
               })}
-              <button type="submit" >提出</button>
+              <button type="submit" >投票</button>
             </form>
+            <div style={{ color : 'red'}}>
+              {this.state.errorMessage ? this.state.errorMessage : ''}
+            </div>
           </div>
         </div>
       );
