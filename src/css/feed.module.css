@@ -15,15 +15,12 @@
 .title {
   font-size: 20px;
   margin: 5px;
-  margin-bottom: -5px;
+  margin-bottom: 2px;
 }
 
 
 .content {
   font-size: 16px;
-  margin: 5px;
-  margin-left: 10px;
-  /* color: gray; */
 }
 
 .vote_section {
@@ -112,13 +109,11 @@
 
 .content {
   font-size: 16px;
-  margin: 10px;
-  margin-left: 20px;
-  /* border: 10px black; */
 }
 
 .vote_section {
-  margin: 10px;
+  margin: 5px;
+  padding: 2px;
   text-align: center;
   /* border: 10px black; */
   /* background-color: rgba(186, 247, 252, 0.411); */
@@ -199,9 +194,6 @@
 
 .content {
   font-size: 16px;
-  margin: 10px;
-  margin-left: 20px;
-  /* border: 10px black; */
 }
 
 .vote_section {

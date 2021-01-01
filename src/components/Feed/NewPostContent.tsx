@@ -93,14 +93,15 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
             <form onSubmit={e => this.submit(e)} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}>
               <div><input placeholder="タイトルを入力" className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => this.change(e, "title")}></input><br></br></div>
               <div><textarea placeholder="本文を入力" className={styles.content} rows={6} maxLength={5000} onChange={e => this.change(e, "content")}></textarea></div>
-        終了: <input className={styles.date_button} value={this.state.endhour} min={24} max={168} type="number" onChange={e => this.change(e, "endhour")}></input> 時間後
+        終了 <input className={styles.date_button} value={this.state.endhour} min={24} max={168} type="number" onChange={e => this.change(e, "endhour")}></input> 時間後
 
-              <div>投票タイプ: <select onChange={e => this.change(e, "vote_type_id")}>
+              <div>投票タイプ <select style={{ padding: '3px' }} onChange={e => this.change(e, "vote_type_id")}>
                 <option value="1">通常投票</option>
                 <option value="2">MJ法</option>
               </select>
+                &nbsp;&nbsp;{this.state.vote_type_id === '2' ? this.renderMJcandidates() : ''} 
               </div>
-              {this.state.vote_type_id === '2' ? this.renderMJcandidates() : ''} 
+              
               <div style={{ textAlign: 'center'}}>
               投票候補
                 {this.createVoteSelect()}
@@ -148,15 +149,15 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       JSX.push(
         (<span>
             <span key={idx}>
-              <input style={{width: '90px', marginRight: '10px', marginTop: '10px'}} placeholder={`回答 ${idx+1}`} onChange={e => this.mjCandidatesChange(e, idx)}></input>
+              <input style={{　padding: '3px',　width: '90px', marginRight: '10px', marginTop: '10px'}} placeholder={`回答 ${idx+1}`} onChange={e => this.mjCandidatesChange(e, idx)}></input>
             </span>
         </span>)
       )
     }
 
     return (
-      <div>
-        回答の種類<select name="mj-nums" id="mj-nums" onChange={e => this.mjNumChange(e)}> 
+      <span>
+        回答の種類&nbsp;<select name="mj-nums" id="mj-nums" onChange={e => this.mjNumChange(e)}> 
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
@@ -165,7 +166,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
         <div>
           {JSX}
         </div>
-      </div>
+      </span>
     )
   };
 
@@ -192,7 +193,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
           {topicList.map((elem: string) => {
             if (elem.length > 0) {
               return (
-                <span><b style={{ fontSize: '14px', padding: '1px', backgroundColor: '#E9FEFD' }}>{elem}{'   '}</b>&nbsp;&nbsp;</span>
+                <span><b style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem}{'   '}</b>&nbsp;&nbsp;</span>
               );
             }
           })}
@@ -268,19 +269,20 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
 
 
   createVoteSelect = () => {
+    const voteStyle = { padding: '3px', marginBottom: '5px' }
     return this.state.values.map((val: any, idx: number) => {
       if (idx > 1) {
         return (
           <div>
             <div key={idx}>
-              <input placeholder="投票候補の入力" onChange={e => this.voteSelectChange(e, idx)}></input><button type="button" onClick={e => this.deleteHandle(e, idx)}><RemoveIcon style={{ fontSize: 16 }}></RemoveIcon></button>
+              <input style={voteStyle} placeholder={`投票候補 ${idx + 1}`} onChange={e => this.voteSelectChange(e, idx)}></input><button type="button" onClick={e => this.deleteHandle(e, idx)}><RemoveIcon style={{ fontSize: 16 }}></RemoveIcon></button>
             </div>
           </div>
         )
       } else {
         return (
           <div key={idx}>
-            <input placeholder="投票候補の入力" onChange={e => this.voteSelectChange(e, idx)}></input>
+            <input style={voteStyle} placeholder={`投票候補 ${idx + 1}`} onChange={e => this.voteSelectChange(e, idx)}></input>
           </div>
         )
       }

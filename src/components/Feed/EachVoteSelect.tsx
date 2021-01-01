@@ -22,73 +22,30 @@ moment.tz.setDefault('Etc/UTC');
 const renderVoteSelectResult = (data: any, layout: any) => {
   const x = data[0].x;
   const y = data[0].y;
-  // function roundToTwo(num: any) {
-  //   return (Math.round(num + "e+2") + "e-2");
-  // }
-  // const dataPoints = y.map((label: string, idx: number) => {
-  //   x[idx] = Math.round(x[idx]);
-  //   return { y: x[idx], label: label }
-  // });
-  // const baseHeight = dataPoints.length * 30;
-  // const options = {
-  //   animationEnabled: true,
-  //   barPercentage: 1,
-  //   theme: "light2",
-  //   // height: baseHeight,
-  //   dataPointWidth: 100/dataPoints.length,
-  //   title: {
-  //     // text: "Most Popular Social Networking Sites"
-  //   },
-  //   axisX: {
-  //     // title: "Social Network",
-  //     reversed: true,
-  //   },
-  //   axisY: {
-  //     // title: "Monthly Active Users",
-  //     includeZero: true,
-  //     maximum: 101,
-
-  //     // labelFormatter: this.addSymbols
-  //   },
-  //   data: [{
-  //     type: "bar",
-  //     dataPoints: dataPoints
-  //   }]
-  // }
-
   return (
     <div>
-
-
       <div>
         <ul className={styles.vote_ul}>
           <div>
-            {/* <CanvasJSChart options={options} />
-                   */}
             {
               y.map((label: string, idx: number) => {
                 x[idx] = Math.round(x[idx]);
                 return (
-                  <div style={{ border: '1px solid black', borderRadius: '5px', margin: 2, }}>
-                    <div style={{ backgroundColor: 'rgba(0, 0, 255, 0.1)', width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }}>
+                  <div style={{ border: 'solid 1px', borderRadius: '5px', marginBottom: '5px'}}>
+                    <div style={{ paddingLeft: '2px', paddingTop: '3px', paddingBottom: '3px', backgroundColor: 'rgba(0, 0, 255, 0.1)', width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }}>
                       <div style={{ whiteSpace: 'nowrap', padding: 2 }}>
-
                         <div style={{ textAlign: 'left' }}>
                           {label} {isNaN(x[idx]) ? 0 : x[idx]}%
                         </div>
-
                       </div>
                     </div>
                   </div>
                 )
               })
             }
-
           </div>
-
         </ul>
       </div>
-
     </div>
   )
 }
@@ -182,22 +139,22 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
       let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
       let layout = { title: `合計票数: ${this.state.totalVote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
       return (
-        < div className={styles.vote_section} > { renderVoteSelectResult(plotData, layout)}</div>
+        <div className={styles.vote_section} > { renderVoteSelectResult(plotData, layout)}</div>
       )
 
     } else {
       return (
-        <div className={styles.content}>
+        <div style={{ width: "100%" }} className={styles.content}>
           {this.props.voteContent.map((data: any) => {
             return (
-              <div>
               <div >
-                  <div className={styles.vote_button}>
-                    <button style={{width: "100%"}} onClick={e => this.change(e, data.id)}>
+                <div>
+                  <div style={{ border: 'solid 1px', borderRadius: '5px', margin: '5px', padding: '5px'}}  className={styles.vote_button}>
+                    <div  onClick={e => this.change(e, data.id)}>
                       <div>
                       {data.content}
                       </div>
-                      </button>
+                      </div>
               </div>
               </div>
               </div>

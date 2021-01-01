@@ -95,13 +95,12 @@ class Signup extends React.Component<SignupProps, SignupState> {
         return new Promise(res => setTimeout(res, delay));
       }
       timeout(1000).then(() => { this.props.history.push("/login");})
-      
     }).catch((err: any) => {
-      // console.log("err.response", err.response)
+      console.log("err.response", err.response)
       const resMessage = err.response.data.message;
-      this.props.history.push("/signup");
+      console.log('resMessage', resMessage);
       this.setState({
-        signupSuccessMessage: `${resMessage}`,
+        errorMessage: resMessage,
       })
     })
     }
@@ -133,15 +132,15 @@ class Signup extends React.Component<SignupProps, SignupState> {
             <input className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
           </div>
           <div style={{ fontSize: 14, marginBottom: 10}}>
-              アカウントを作成することによって、<br></br><Link to="/" target="_blank">利用規約</Link>と<Link to="" target="_blank">プライバシーポリシー</Link>に同意します。<br></br>
+              アカウントを作成することによって、<br></br><Link to="/tos" target="_blank">利用規約</Link>と<Link to="/privacy" target="_blank">プライバシーポリシー</Link>に同意します。<br></br>
           </div>
           <div className={styles.button} >
             <Button type="submit" value="Submit" variant="contained" color="primary" >アカウント作成</Button>
           </div>
 
         </form>
-        <div className={styles.email}>
-          {this.state.errorMessage}
+        <div style={{ color: 'red', textAlign: 'center' }}>
+          {this.state.errorMessage ? this.state.errorMessage : ''}
         </div>
         <div>
           {this.state.signupSuccessMessage}
