@@ -57,6 +57,7 @@ export interface EachVoteMjProps extends RouteComponentProps<{}> {
   mjOptions: any;
   postId: number;
   isLogin: boolean;
+  hasVoted: boolean;
 }
 
 export interface EachVoteMjState {
@@ -200,7 +201,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
     if ((this.state.isClicked === true && this.state.isLoaded === false)) {
       return (<div>Loading ...</div>)
     }
-    if (this.state.isClicked === true && this.state.isLoaded === true) {
+    if ((this.state.isClicked || this.props.hasVoted === true) && this.state.isLoaded === true) {
       return (
         <div>
           < div className={styles.vote_section}>
