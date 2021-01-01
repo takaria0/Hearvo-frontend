@@ -54,6 +54,7 @@ export interface EachVoteSelectProps extends RouteComponentProps<{}> {
   voteContent: any;
   postId: number;
   isLogin: boolean;
+  hasVoted: boolean;
 }
 
 export interface EachVoteSelectState {
@@ -97,14 +98,11 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
       headers: { Authorization: `Bearer ${jwt}` }
     };
 
-    console.log("voteSelectPostObj", voteSelectPostObj)
-    console.log("config", config)
     axios.post(
       "/vote_select_users",
       voteSelectPostObj,
       config,
     ).then(res => {
-      console.log("res", res);
       const countVotePostObj = { post_id: this.props.postId }
       axios.post(
         "/count_vote_selects",
@@ -128,7 +126,7 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
       return (<div>Loading ...</div>)
     }
 
-    if (this.state.isClicked === true && this.state.isLoaded === true) {
+    if ((this.state.isClicked || this.props.hasVoted === true) && this.state.isLoaded === true) {
 
       const x = this.state.voteSelectsCount.map((da: any) => {
         return (da.count * 100) / this.state.totalVote

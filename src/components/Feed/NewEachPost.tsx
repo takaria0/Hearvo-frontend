@@ -343,9 +343,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           <div className={styles.vote_section}>
             
             {this.state.voteTypeId === 1 ? 
-              <EachVoteSelect isLogin={this.props.isLogin} voteContent={this.state.data.vote_selects} postId={this.state.data.id}></EachVoteSelect>
+              <EachVoteSelect hasVoted={this.state.data.already_voted} isLogin={this.props.isLogin} voteContent={this.state.data.vote_selects} postId={this.state.data.id}></EachVoteSelect>
              : 
-              <EachVoteMj isLogin={this.props.isLogin} voteContent={this.state.data.vote_mjs} mjOptions={this.state.data.mj_options} postId={this.state.data.id}></EachVoteMj>
+              <EachVoteMj hasVoted={this.state.data.already_voted} isLogin={this.props.isLogin} voteContent={this.state.data.vote_mjs} mjOptions={this.state.data.mj_options} postId={this.state.data.id}></EachVoteMj>
              }
 
             </div>
