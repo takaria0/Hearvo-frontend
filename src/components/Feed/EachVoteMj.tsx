@@ -255,7 +255,10 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                         return (
                           <span style={{  padding: '1px', margin: '1px'}}>
                             
-                            <label className={styles.label}  htmlFor={mjOptionId}><input  type="radio" name={voteMjId} value={mjOptionId}></input>{option.content}</label>
+                            <label htmlFor={mjOptionId}>
+                              <input  type="radio" name={voteMjId} value={mjOptionId}></input>
+                              {option.content}
+                            </label>
                           </span>
                         )
                       })}

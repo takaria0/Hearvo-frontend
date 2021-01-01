@@ -9,6 +9,8 @@ export interface LoginProps extends RouteComponentProps<{}>{
 export interface LoginState {
   email: string;
   password: string;
+  errorMessage: string;
+  successMessage: string;
 }
 
 class Login extends React.Component<LoginProps, LoginState> {
@@ -19,6 +21,8 @@ class Login extends React.Component<LoginProps, LoginState> {
     this.state = {
       email: "",
       password: "",
+      errorMessage: '',
+      successMessage: '',
     };
     this.change = this.change.bind(this);
     this.submit = this.submit.bind(this);
@@ -40,18 +44,25 @@ class Login extends React.Component<LoginProps, LoginState> {
       email: this.state.email,
       password: this.state.password,
     }).then((res: any) => {
+      const resMessage = res.data.message;
+      this.setState({
+        successMessage: resMessage,
+      })
 
       localStorage.setItem("jwt", res.data.token);
-
       axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}` } }).then((res: any) => {
         localStorage.setItem("user", JSON.stringify(res.data));
+
         this.props.history.push("/");
       }).catch((err: any) => {
         this.props.history.push("/login");
       })
       
-    }).catch((res: any) => {
-      this.props.history.push("/login");
+    }).catch((err: any) => {
+      const resMessage = err.response.data.message;
+      this.setState({
+        errorMessage: resMessage,
+      })
     })
   };
 
@@ -82,6 +93,12 @@ class Login extends React.Component<LoginProps, LoginState> {
         </form>
         <div className={styles.footer}>
           <Link to="/signup">アカウント作成</Link>
+        </div>
+        <div style={{ color: 'red', textAlign: 'center', margin: '5px' }}>
+            {this.state.errorMessage ? this.state.errorMessage : ''}
+        </div>
+        <div style={{ color: 'blue', textAlign: 'center', margin: '5px' }}>
+          {this.state.successMessage ? this.state.successMessage : ''}
         </div>
         </div>
       </div>

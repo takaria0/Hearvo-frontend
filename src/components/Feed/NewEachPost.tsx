@@ -1,12 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@material-ui/core';
 import axios from '../Api';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import CanvasJSReact from '../canvasjs.react';
-
 
 import ProgressBar from 'react-bootstrap/ProgressBar'
-// import { withRouter, RouteComponentProps } from 'react-router-dom'
 import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
@@ -16,12 +12,6 @@ import Plot from 'react-plotly.js';
 import EachVoteSelect from './EachVoteSelect';
 import EachVoteMj from './EachVoteMj';
 import CheckIcon from '@material-ui/icons/Check';
-// import Linkify from 'react-linkify';
-// import * as linkify from 'linkifyjs';
-// import hashtag from 'linkifyjs/plugins/hashtag';
-
-
-// hashtag(linkify);
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -40,7 +30,38 @@ const toHashTag = (content: string) => {
 }
 
 
+const renderVoteSelectResult = (data: any, layout: any) => {
+  const x = data[0].x;
+  const y = data[0].y;
+  return (
+    <div>
+      <div>
+        <ul className={styles.vote_ul}>
+          <div>
+            {
+              y.map((label: string, idx: number) => {
+                x[idx] = Math.round(x[idx]);
+                return (
+                  <div style={{  border: 'solid 1px', borderRadius: '5px', marginBottom: '5px' }}>
+                    <div style={{ paddingLeft:'2px', paddingTop: '3px', paddingBottom: '3px', backgroundColor: 'rgba(0, 0, 255, 0.1)', width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }}>
+                      <div style={{ whiteSpace: 'nowrap', padding: 2 }}>
 
+                        <div style={{ textAlign: 'left' }}>
+                          {label} {isNaN(x[idx]) ? 0 : x[idx]}%
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </div>
+        </ul>
+      </div>
+    </div>
+  )
+}
 
 const renderVoteMjResult = (baseData: any) => {
   return (
@@ -72,79 +93,6 @@ const renderVoteMjResult = (baseData: any) => {
   )
 }
 
-const renderVoteSelectResult = (data: any, layout: any) => {
-  const x = data[0].x;
-  const y = data[0].y;
-  // function roundToTwo(num: any) {
-  //   return (Math.round(num + "e+2") + "e-2");
-  // }
-  // const dataPoints = y.map((label: string, idx: number) => {
-  //   x[idx] = Math.round(x[idx]);
-  //   return { y: x[idx], label: label }
-  // });
-  // const baseHeight = dataPoints.length * 30;
-  // const options = {
-  //   animationEnabled: true,
-  //   barPercentage: 1,
-  //   theme: "light2",
-  //   // height: baseHeight,
-  //   dataPointWidth: 100/dataPoints.length,
-  //   title: {
-  //     // text: "Most Popular Social Networking Sites"
-  //   },
-  //   axisX: {
-  //     // title: "Social Network",
-  //     reversed: true,
-  //   },
-  //   axisY: {
-  //     // title: "Monthly Active Users",
-  //     includeZero: true,
-  //     maximum: 101,
-
-  //     // labelFormatter: this.addSymbols
-  //   },
-  //   data: [{
-  //     type: "bar",
-  //     dataPoints: dataPoints
-  //   }]
-  // }
-
-  return (
-    <div>
-
-
-      <div>
-        <ul className={styles.vote_ul}>
-          <div>
-            {/* <CanvasJSChart options={options} />
-                   */}
-            {
-              y.map((label: string, idx: number) => {
-                x[idx] = Math.round(x[idx]);
-                return (
-                  <div style={{ border: '1px solid black', borderRadius: '5px', margin: 2, }}>
-                    <div style={{ backgroundColor: 'rgba(0, 0, 255, 0.1)', width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }}>
-                      <div style={{ whiteSpace: 'nowrap', padding: 2 }}>
-
-                        <div style={{ textAlign: 'left' }}>
-                          {label} {isNaN(x[idx]) ? 0 : x[idx]}%
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                )
-              })
-            }
-
-          </div>
-
-        </ul>
-      </div>
-
-    </div>
-  )
-}
 
 export interface NewEachPostProps {
   data: any;
@@ -326,9 +274,10 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       return (
         <li className={styles.li}>
           <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div>
-            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : ''}
+            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : <div></div>}
           </Link>
-          <div className={styles.content}>{toHashTag(data.content)}</div>
+          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(data.content)}</div>
+          
           <div className={styles.vote_section}>
             {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
@@ -358,9 +307,10 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       return (
         <li className={styles.li}>
           <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div>
-            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : ''}
+            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : <div></div>}
           </Link>
-          <div className={styles.content}>{toHashTag(data.content)}</div>
+          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(data.content)}</div>
+          
           {this.state.doFilter ? "" : <button onClick={e => this.filterClick(e, true)}>絞り込み</button>}
           {this.state.doFilter ? renderCondition() : ""}
           
@@ -387,9 +337,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       return (
         <li className={styles.li}>
           <Link to={`/posts/${this.state.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.state.data.title}</div>
-            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : ''}
+            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : <div></div>}
           </Link>
-          <div className={styles.content}>{toHashTag(this.state.data.content)}</div>
+          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.state.data.content)}</div>
           <div className={styles.vote_section}>
             
             {this.state.voteTypeId === 1 ? 

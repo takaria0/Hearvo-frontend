@@ -105,19 +105,20 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
 
 
   createVoteSelect = () => {
+    const voteStyle = { padding: '3px', marginBottom: '5px' }
     return this.state.values.map((val: any, idx: number) => {
       if (idx > 1) {
         return (
           <div>
             <div key={idx}>
-              <input placeholder="投票候補の入力" onChange={e => this.voteSelectChange(e, idx)}></input><button type="button" onClick={e => this.deleteHandle(e, idx)}>削除</button>
+              <input style={voteStyle} placeholder="投票候補の入力" onChange={e => this.voteSelectChange(e, idx)}></input><button type="button" onClick={e => this.deleteHandle(e, idx)}>削除</button>
             </div>
           </div>
         )
       } else {
         return (
           <div key={idx}>
-            <input placeholder="投票候補の入力" onChange={e => this.voteSelectChange(e, idx)}></input>
+            <input style={voteStyle} placeholder="投票候補の入力" onChange={e => this.voteSelectChange(e, idx)}></input>
           </div>
         )
       }

@@ -120,14 +120,11 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
   searchBar = () => {
     return (
-      <form style={{ display: "inline" }} onSubmit={e => this.searchSubmit(e)}>
-
-        <input type="text" className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder="検索"
+      <form style={{ display: "inline", width: '100%' }} onSubmit={e => this.searchSubmit(e)}>
+        <input type="text" style={{ width: '60%', padding: '2px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder="検索"
         ></input>
-        <IconButton type="submit">
-          <SearchIcon style={{ fontSize: 16, display: "none" }}></SearchIcon>
-        </IconButton>
-
+        {/* <IconButton type="submit"> */}
+        {/* </IconButton> */}
       </form>
     )
   }
@@ -147,13 +144,12 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               anchorEl={this.state.anchorEl}
               keepMounted
               open={Boolean(this.state.anchorEl)}
-              onClose={e => this.handleClose(e, "none")}
-            >
+              onClose={e => this.handleClose(e, "none")}>
               <MenuItem onClick={e => this.handleClose(e, "/profile")}>{this.state.user?.name}</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/myposts")}>自分の投稿</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/voted")}>投票した投稿</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/")}>利用規約</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/")}>プライバシーポリシー</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/tos")}>利用規約</MenuItem>
+              <MenuItem onClick={e => this.handleClose(e, "/privacy")}>プライバシーポリシー</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/settings")}>設定</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/login")}>ログアウト</MenuItem>
             </Menu>
@@ -167,8 +163,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               anchorEl={this.state.anchorEl}
               keepMounted
               open={Boolean(this.state.anchorEl)}
-              onClose={e => this.handleClose(e, "none")}
-            >
+              onClose={e => this.handleClose(e, "none")}>
               <MenuItem onClick={e => this.handleClose(e, "/")}>利用規約</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/")}>プライバシーポリシー</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/login")}>ログイン</MenuItem>
@@ -185,15 +180,13 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     return (
       <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
         <ListIcon ></ListIcon>
-        {/* プロフィール */}
       </Button>
         <Menu
           id="simple-menu"
           anchorEl={this.state.anchorEl}
           keepMounted
           open={Boolean(this.state.anchorEl)}
-          onClose={e => this.handleClose(e, "none")}
-        >
+          onClose={e => this.handleClose(e, "none")}>
         </Menu>
       </b>
     )
@@ -202,18 +195,13 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   render() {
 
     return (
-      <div style={{textAlign: "left"}}>
+      <div style={{textAlign: "left", display: 'inline', width: '100%'}}>
         <br></br>
-          {/* <MenuItem component={Link} to={'/'}>Hearbo</MenuItem> */}
+        <Link to="/" className={styles.hearvo}><b style={{ fontSize: 20, marginLeft: 10, marginTop: 20 }}>Hearvo</b></Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >your voice must be heard</small>
 
-        <Link to="/" className={styles.hearvo} ><b style={{ fontSize: 20, marginLeft: 10, marginTop: 20 }}>Hearvo</b></Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >your voice must be heard</small>
-
-        <span style={{ float: "right", marginRight: 10, marginLeft: 10 }} >
-          {this.searchBar()}
+        <span style={{ float: "right", textAlign: 'right' }} >
+          <span style={{width: '100%'}}>{this.searchBar()}</span>
           {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar() }
-          <b>
-            </b>  
-
         </span>
 
 
