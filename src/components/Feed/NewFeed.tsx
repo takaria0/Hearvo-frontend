@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Dialog } from '@material-ui/core';
 import axios from '../Api';
 
 // import { withRouter, RouteComponentProps } from 'react-router-dom'
@@ -7,7 +7,6 @@ import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 
-import Plot from 'react-plotly.js';
 import NewEachPost from './NewEachPost';
 
 
@@ -25,6 +24,14 @@ export interface NewFeedState {
   dataArray: any[],
   location: string;
   searchQuery: string;
+  userObj: any;
+  editInitialUserInfoForm: boolean;
+  editGender: string;
+  editAge: string;
+  editOccupation?: string;
+  editYear: string;
+  editMonth: string;
+  initialSettingMessage: string;
 }
  
 class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
@@ -36,9 +43,18 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       isLoaded: false,
       voteLoading: false,
       page: 1,
+      userObj: JSON.parse(localStorage.getItem("user") || "{}"),
+      editInitialUserInfoForm: true,
       dataArray: [],
       location: window.location.href,
       searchQuery: "",
+      editGender: "",
+      editAge: "",
+      editOccupation: "",
+      editYear: '',
+      editMonth: '',
+      initialSettingMessage: '',
+
     };
     document.title = "Hearvo"
   };
@@ -75,6 +91,138 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     }
     return time;
   };
+
+  birthDayForm = () => {
+    const currentYear = new Date().getUTCFullYear();
+    let yearOption = [];
+    let monthOption = [];
+    for (let year = currentYear - 120; year < currentYear; year++) {
+      yearOption.push(
+        (<option value={year}>{year}</option>)
+      )
+    }
+    for (let month = 1; month <= 12; month++) {
+      monthOption.push(
+        (<option value={month}>{month}</option>)
+      )
+    }
+    yearOption = yearOption.reverse();
+    return (
+      <div>
+          <label htmlFor="dob-day" >生年</label>
+          <div>
+          <select name="dob-year" id="dob-year" onChange={e => this.change(e, "editYear")}>
+              <option value="">年</option>
+              {yearOption}
+            </select>
+          {/* <select name="dob-month" id="dob-month" onChange={e => this.change(e, "editMonth")}>
+              <option value="">月</option>
+              {monthOption}
+            </select> */}
+        </div>
+      </div>
+    )
+  }
+
+  closeDialog = (e: any) => {
+    e.preventDefault();
+
+    this.state.userObj.login_count = this.state.userObj.login_count + 1;
+    localStorage.setItem("user", JSON.stringify(this.state.userObj));
+    const jwt = getJwt();
+    axios.put(`/users?login_count=${this.state.userObj.login_count}`,{}, { headers: { Authorization: `Bearer ${jwt}` } })
+    .then((res) => {
+    }).catch((err) => {
+    })
+    this.setState({
+      editInitialUserInfoForm: false,
+    })
+  }
+
+  submit(e: any) {
+    e.preventDefault();
+
+    // ADD ERROR HANDLING
+    if(this.state.editGender.length === 0) {
+      this.setState({
+        initialSettingMessage: '性別を入力してください'
+      })
+      return
+    }
+
+    if (this.state.editYear.length === 0 || this.state.editYear === '年') {
+      this.setState({
+        initialSettingMessage: '年齢を入力してください'
+      })
+      return
+    }
+
+    const postObj = {
+      gender: this.state.editGender,
+      birth_year: this.state.editYear,
+      // birth_month: this.state.editMonth,
+      occupation: this.state.editOccupation,
+    }
+    const jwt = getJwt();
+    axios.put("/users?initial_setting=true", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
+      .then((res: any) => {
+        this.closeDialog(e);
+      }).catch((res: any) => {
+        this.setState({
+          initialSettingMessage: '内容を確認してください'
+        })
+      });
+  }
+
+  change(e: any, field: string) {
+    e.preventDefault();
+    this.setState({
+      [field]: e.target.value,
+    } as unknown as NewFeedState)
+  }
+
+  renderInitialUserInfoForm = () => {
+    // console.log('this.state.userObj', this.state.userObj)
+    // console.log('this.state.userObj.login_count', this.state.userObj.login_count)
+    // console.log('this.state.editInitialUserInfoForm', this.state.editInitialUserInfoForm)
+    return (
+      <div>
+        <Dialog open={parseInt(this.state.userObj.login_count) === 1 && this.state.editInitialUserInfoForm}>
+          <div style={{ padding: '10px', margin: '10px'}}>
+            <h1>ユーザー情報の入力</h1>
+            <form onSubmit={e => this.submit(e)}>
+              <div style={{paddingTop: '20px'}}>
+                性別 {this.state.userObj.gender}
+                <div>
+                  <select onChange={e => this.change(e, "editGender")}>
+                    <option value="女性">女性</option>
+                    <option value="男性">男性</option>
+                    <option value="どちらでもない">どちらでもない</option>
+                  </select>
+                </div>
+              </div >
+                {/* {this.state.userObj.age} */}
+              <div style={{ paddingTop: '20px' }}>
+                  {this.birthDayForm()}
+                </div>
+
+              <div style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+                職業 {this.state.userObj.occupation}
+                <div>
+                  <input type="string" maxLength={30} placeholder={this.state.userObj.occupation} onChange={e => this.change(e, "editOccupation")}></input>
+                </div>
+              </div>
+            <button>完了</button>
+            </form>
+            <div style={{color: 'red', textAlign: 'center'}}>
+              {this.state.initialSettingMessage ? this.state.initialSettingMessage : ''}
+            </div>
+          {/* <div style={{ fontSize: '12px' }} onClick={e => this.closeDialog(e)}>あとで入力する</div> */}
+          </div>
+        </Dialog>
+      </div>
+    )
+  }
  
 
   getData = (page: number) => {
@@ -170,11 +318,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       this.getData(this.state.page);
     }
 
-    // console.log("prevState.location", prevState.location)
-    // console.log("window.location.pathname", window.location.pathname)
     if (prevState.location !== window.location.href) {
-      // console.log("location changes before", prevState.location);
-      // console.log("after", window.location.href);
       this.setState({
         location: window.location.href,
         dataArray: [],
@@ -207,6 +351,9 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     } else {
       return (
         <div>
+          <div>
+            {this.renderInitialUserInfoForm()}
+          </div>
           <ul className={styles.ul}>
             
             { this.state.dataArray.length > 0 ?

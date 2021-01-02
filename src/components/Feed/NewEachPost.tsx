@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button } from '@material-ui/core';
+import { Dialog } from '@material-ui/core';
 import axios from '../Api';
 
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
-import HowToVote from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
-import Plot from 'react-plotly.js';
 import EachVoteSelect from './EachVoteSelect';
 import EachVoteMj from './EachVoteMj';
 import CheckIcon from '@material-ui/icons/Check';
@@ -124,6 +122,25 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       voteTypeId: this.props.data.vote_type.id,
       doFilter: false,
     }
+  }
+
+  occupationForm = () => {
+    return (
+      <div>
+        <select name="job" onChange={e => this.change(e, "occupation")}>
+          <option value="">選択してください</option>
+          <option value="公務員">公務員</option>
+          <option value="経営者・役員">経営者・役員</option>
+          <option value="会社員">会社員</option>
+          <option value="自営業">自営業</option>
+          <option value="自由業">自由業</option>
+          <option value="専業主婦">専業主婦</option>
+          <option value="パート・アルバイト">パート・アルバイト</option>
+          <option value="学生">学生</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+    )
   }
 
   getDiffTime = (datetime: string) => {
@@ -290,19 +307,51 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     
     // only show detail query mode in /posts/:post_id
     if(currentFirstURL === "posts") {
+      const mobStyle = {paddingBottom: '10px'}
       const renderCondition = () => 
         (
-        <div>
+        <Dialog open={this.state.doFilter}>
+        <div style={{margin: '50px'}}>
           <button onClick={e => this.filterClick(e, false)}>戻る</button>
           <form onSubmit={e => this.submit(e)}>
-            最小年齢: <input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} /><br></br>
-              最大年齢: <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} /><br></br>
-              性別: <input type="text" onChange={e => this.change(e, "genderSelect")} value={this.state.genderSelect} /><br></br>
-              職業: <input type="text" onChange={e => this.change(e, "occupation")} value={this.state.occupation} /><br></br>
-            <button>更新</button>
+              <div>
+                最小年齢
+            </div>
+              <div style={mobStyle}>
+                <input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} />
+            </div>
+            <div>
+                最大年齢
+            </div>
+              <div style={mobStyle}>
+            <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} />
+              </div>
+              <div>
+                性別
+            </div>
+              <div style={mobStyle}>
+            <select onChange={e => this.change(e, "genderSelect")}>
+              <option value="">性別</option>
+              <option value="女性">女性</option>
+              <option value="男性">男性</option>
+              <option value="どちらでもない">どちらでもない</option>
+            </select>
+              </div>
+              <div>
+                職業
+            </div>
+              <div style={mobStyle}>
+                {this.occupationForm()}
+            </div>
+            
+              <div style={mobStyle}>
+                <button >更新</button>
+            </div>
+            
           </form>
             <button onClick={e => this.resetClick(e)}>リセット</button>
           </div>
+          </Dialog>
       )
       return (
         <li className={styles.li}>

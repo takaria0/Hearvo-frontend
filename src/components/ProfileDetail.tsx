@@ -17,6 +17,7 @@ type userObject = {
   created_at: string;
   updated_at: string;
   occupation: string;
+  birth_year: string;
 }
 
 interface ProfileDetailProps {
@@ -26,11 +27,13 @@ interface ProfileDetailProps {
 interface ProfileDetailState {
   edit?: boolean;
   user?: userObject;
-  editDescription?: string;
-  editGender?: string;
-  editAge?: string;
-  editOccupation?: string;
-  editSuccess?: boolean;
+  editDescription: string;
+  editGender: string;
+  editAge: string;
+  editOccupation: string;
+  editSuccess: boolean;
+  editBirthYear: string;
+  handleMessage: string;
 }
 
 class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailState> {
@@ -44,8 +47,10 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
       editDescription: "",
       editGender: "",
       editAge: "",
+      editBirthYear: "",
       editOccupation: "",
       editSuccess: false,
+      handleMessage: "",
     }
     document.title = "Profile";
   }
@@ -54,31 +59,94 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
 
   }
 
+  occupationForm = () => {
+    return (
+      <div>
+        <select name="job" onChange={e => this.change(e, "editOccupation")}> 
+          <option value="">選択してください</option>
+          <option value="公務員">公務員</option>
+          <option value="経営者・役員">経営者・役員</option>
+          <option value="会社員">会社員</option>
+          <option value="自営業">自営業</option>
+          <option value="自由業">自由業</option>
+          <option value="専業主婦">専業主婦</option>
+          <option value="パート・アルバイト">パート・アルバイト</option>
+          <option value="学生">学生</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+    )
+  }
+
+  birthDayForm = () => {
+    const currentYear = new Date().getUTCFullYear();
+    let yearOption = [];
+    for (let year = currentYear - 120; year < currentYear; year++) {
+      yearOption.push(
+        (<option value={year}>{year}</option>)
+      )
+    }
+    yearOption = yearOption.reverse();
+    return (
+      <div>
+        {/* <label htmlFor="dob-day" >生年</label> */}
+        <div>
+          <select name="dob-year" id="dob-year" onChange={e => this.change(e, "editBirthYear")}>
+            <option value="">年</option>
+            {yearOption}
+          </select>
+        </div>
+      </div>
+    )
+  }
+
   submit(e: any) {
     e.preventDefault();
+
+    if(this.state.editGender.length === 0) {
+      this.setState({
+        handleMessage: '性別を選択してください'
+      })
+      return
+    }
+
+    if (this.state.editBirthYear.length === 0) {
+      this.setState({
+        handleMessage: '生年を選択してください'
+      })
+      return
+    }
+
+    if (this.state.editOccupation.length === 0) {
+      this.setState({
+        handleMessage: '職業を選択してください'
+      })
+      return
+    }
+
+
     const postObj = {
       description: this.state.editDescription,
       gender: this.state.editGender,
-      age: this.state.editAge,
+      birth_year: this.state.editBirthYear,
       occupation: this.state.editOccupation,
     }
     const jwt = getJwt();
-    // console.log("postObj", postObj);
+
     axios.put("/users", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
       .then((res: any) => {
-        // console.log("success res",res)
+
         this.setState({
           user: res.data,
           editSuccess: true,
         })
+        localStorage.setItem('user', JSON.stringify(res.data))
       }).catch((res: any) => {
-        // console.log("failed res", res)
+
       });
   }
 
   change(e: any, field: string) {
-    // console.log("cnahge", this.state)
-    // console.log("field", field)
     e.preventDefault();
     this.setState({
       [field]: e.target.value,
@@ -119,6 +187,7 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
               <div>
                 <br></br>
                 <select onChange={e => this.change(e, "editGender")}>
+                  <option value="">性別</option>
                   <option value="女性">女性</option>
                   <option value="男性">男性</option>
                   <option value="どちらでもない">どちらでもない</option>
@@ -126,23 +195,28 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
               </div>
           </li>
           <li className={styles.li}>
-              年齢: {this.state.user?.age}
+              生年: {this.state.user?.birth_year}年生まれ
               <div>
                 <br></br>
-                <input min="1" max="130" type="number" placeholder={this.state.user?.age} onChange={e => this.change(e, "editAge")}></input>
+                {this.birthDayForm()}
+                {/* <input min="1" max="130" type="number" placeholder={this.state.user?.birth_year} onChange={e => this.change(e, "editAge")}></input> */}
               </div>
           </li>
           <li className={styles.li}>
               職業: {this.state.user?.occupation}
               <div>
                 <br></br>
-                <input type="string" maxLength={30} placeholder={this.state.user?.occupation} onChange={e => this.change(e, "editOccupation")}></input>
+                {this.occupationForm()}
+                {/* <input type="string" maxLength={30} placeholder={this.state.user?.occupation} onChange={e => this.change(e, "editOccupation")}></input> */}
               </div>
 
           </li>
         </ul>
           <Button type="submit" variant="contained" value="Submit" color="primary">保存</Button>
         </form>
+        <div style={{color: 'red'}}>
+          {this.state.handleMessage ? this.state.handleMessage : ''}
+        </div>
       </div>
     );
 
@@ -193,7 +267,7 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
             性別: {this.state.user?.gender}
           </li>
           <li className={styles.li}>
-            年齢: {this.state.user?.age}
+            年齢: {this.state.user?.birth_year}年生まれ
           </li>
           <li className={styles.li}>
             職業: {this.state.user?.occupation}
