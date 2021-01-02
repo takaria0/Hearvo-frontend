@@ -20,3 +20,4 @@ export const radio: string;
 export const input: string;
 export const label: string;
 export const vote_button: string;
+export const topic_link: string;

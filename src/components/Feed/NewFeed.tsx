@@ -32,6 +32,7 @@ export interface NewFeedState {
   editYear: string;
   editMonth: string;
   initialSettingMessage: string;
+  topicTitle: string;
 }
  
 class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
@@ -54,6 +55,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       editYear: '',
       editMonth: '',
       initialSettingMessage: '',
+      topicTitle: '',
 
     };
     document.title = "Hearvo"
@@ -195,6 +197,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
                 性別 {this.state.userObj.gender}
                 <div>
                   <select onChange={e => this.change(e, "editGender")}>
+                    <option value="">性別</option>
                     <option value="女性">女性</option>
                     <option value="男性">男性</option>
                     <option value="どちらでもない">どちらでもない</option>
@@ -223,100 +226,141 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       </div>
     )
   }
+
+  getSearchedResult = async (query: string, type: string, page: number, jwt: string | null) => {
+    axios.get(`/posts?search=${query}&type=${type}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+      .then(res => {
+        this.setState({
+          dataArray: res.data,
+          isLoaded: true,
+          searchQuery: window.location.search
+        });
+      })
+      .catch((err) => { })
+    return
+  }
  
 
   getData = (page: number) => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchWord = urlParams.get('q');
+    const topicWord = urlParams.get('tp') || null;
     const type = urlParams.get('type') || "";
     const keywordArray = window.location.pathname.split("/");
     const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
     const jwt = getJwt();
     const keywordList = ["popular", "latest", "myposts", "voted", "search"];
 
+
+    console.log('topicWord', topicWord)
+    console.log('keywordArray', keywordArray)
+    console.log('keyword', keyword)
+    console.log('page', page)
+
+
     let newpage;
-    if(page === 0) {
-      newpage = 1;
+    switch(page) {
+      // First page
+      case 0:
+        newpage = 1;
+        if (searchWord !== null) {
+          this.getSearchedResult(searchWord, type, newpage, jwt);
+        }
 
-      if (searchWord !== null) {
-        axios.get(`/posts?search=${searchWord}&type=${type}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-          .then(res => {
-            this.setState({
-              dataArray: res.data,
-              isLoaded: true,
-              searchQuery: window.location.search,
-            });
-          }).catch((err) => {
-          })
-        return
-      }
+        if(topicWord !== null) {
+          axios.get(`/posts?topic=${topicWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+            .then(res => {
+              this.setState({ 
+                dataArray: res.data, 
+                isLoaded: true, 
+                topicTitle: topicWord,
+              });
+              console.log('--------------------------------')
+              console.log('root page 0') 
+              console.log('res.data', res.data)
+              console.log('--------------------------------')
+            })
+            .catch((err) => {
+            })
+        }
+
+        if (keywordList.includes(keyword)) {
+          const time = this.getTimeQuery(keyword, keywordArray);
+          axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+            .then(res => { this.setState({ dataArray: res.data, isLoaded: true, }); })
+            .catch((err) => {
+            })
+        } else {
+          axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+            .then(res => {
+              this.setState({ dataArray: res.data, isLoaded: true, });
+            })
+            .catch((err) => {
+            })
+        }
+      break;
+
+      default:
+        newpage = page;
+
+        if (searchWord !== null) {
+          axios.get(`/posts?search=${searchWord}&type=${type}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+            .then(res => {
+              this.setState({
+                dataArray: [...this.state.dataArray, ...res.data],
+                isLoaded: true,
+                searchQuery: window.location.search,
+              });
+            }).catch((err) => {
+            })
+          return
+        }
+
+        if (topicWord !== null) {
+          axios.get(`/posts?topic=${topicWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+            .then(res => {
+
+              this.setState({
+                dataArray: res.data,
+                isLoaded: true,
+                topicTitle: topicWord,
+              });
+
+              console.log('--------------------------------')
+              console.log('root default')
+              console.log('res.data', res.data)
+              console.log('--------------------------------')
+            })
+            .catch((err) => {
+            })
+        }
 
 
-      if (keywordList.includes(keyword)) {
-        const time = this.getTimeQuery(keyword, keywordArray);
-        axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-          .then(res => {
-            this.setState({
-              dataArray: res.data,
-              isLoaded: true,
-            });
-          }).catch((err) => {
-          })
-      } else {
-        axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-          .then(res => {
-            this.setState({
-              dataArray: res.data,
-              isLoaded: true,
-              
-            });
-          }).catch((err) => {
-          })
-      }
-    } else {
-      newpage = page;
-      
-      if (searchWord !== null) {
-        axios.get(`/posts?search=${searchWord}&type=${type}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-          .then(res => {
-            this.setState({
-              dataArray: res.data,
-              isLoaded: true,
-              searchQuery: window.location.search,
-            });
-          }).catch((err) => {
-          })
-        return
-      }
-
-
-      if (keywordList.includes(keyword)) {
-        const time = this.getTimeQuery(keyword, keywordArray);
-        axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-          .then(res => {
-            this.setState({
-              dataArray: [...this.state.dataArray, ...res.data],
-              isLoaded: true,
-            });
-          }).catch((err) => {
-          })
-      } else {
-        axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-          .then(res => {
-            this.setState({
-              dataArray: [...this.state.dataArray, ...res.data],
-              isLoaded: true,
-            });
-          }).catch((err) => {
-          })
-      }
+        if (keywordList.includes(keyword)) {
+          const time = this.getTimeQuery(keyword, keywordArray);
+          axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+            .then(res => {
+              this.setState({
+                dataArray: [...this.state.dataArray, ...res.data],
+                isLoaded: true,
+              });
+            }).catch((err) => {
+            })
+        } else {
+          axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+            .then(res => {
+              this.setState({
+                dataArray: [...this.state.dataArray, ...res.data],
+                isLoaded: true,
+              });
+            }).catch((err) => {
+            })
+        }
+      break;
     }
   }
 
   componentDidUpdate = (prevProps: any, prevState: any) => {
-    if (prevState.page !== this.state.page) {
-      this.getData(this.state.page);
-    }
 
     if (prevState.location !== window.location.href) {
       this.setState({
@@ -326,11 +370,18 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       this.getData(0);
     }
 
-
-    if (prevProps.isPosted !== this.props.isPosted || this.props.isPosted === true ) {
+    if (prevProps.isPosted !== this.props.isPosted || this.props.isPosted === true) {
       this.getData(0)
       this.props.isPostedHandeler(false);
     }
+    
+    if (prevState.page !== this.state.page) {
+      this.getData(this.state.page);
+    }
+
+
+
+
   }
 
   click = (e: any) => {
@@ -353,6 +404,8 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
         <div>
           <div>
             {this.renderInitialUserInfoForm()}
+            {this.state.topicTitle ? <h3>トピック {this.state.topicTitle}</h3> : ''}
+            {/* <small>{JSON.stringify(this.state.dataArray, null, 2)}</small> */}
           </div>
           <ul className={styles.ul}>
             

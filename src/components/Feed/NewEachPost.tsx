@@ -20,7 +20,7 @@ const toHashTag = (content: string) => {
   const baseURL = window.location.origin;
   const splitedContent = content.replace(/　/g, " ").split(" ").map((str) => {
     if (str.startsWith("#")) {
-      return <a href={`${baseURL}/search?q=${str.replace("#", "")}&type=hash_tag`} className="text-blue-500">{str}</a>;
+      return <Link style={{color: 'blue'}} className={styles.topic_link} to={`/search?q=${str.replace("#", "")}&type=hash_tag`}>{str}</Link>;
     }
     return str + " ";
   })
@@ -105,6 +105,8 @@ export interface NewEachPostState {
   data: any;
   doFilter: boolean;
   voteTypeId: number;
+  dataArray: any;
+  filterArray: any;
 }
 
 class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
@@ -121,7 +123,23 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       data: this.props.data,
       voteTypeId: this.props.data.vote_type.id,
       doFilter: false,
+      dataArray: [this.props.data],
+      filterArray: [{
+        doFilter: false,
+        minAge: 0,
+        maxAge: 130,
+        genderSelect: "",
+        occupation: "",
+      }],
     }
+  }
+
+  componentDidUpdate = (prevProps: any, prevState: any) => {
+    
+    if(prevProps.data !== this.props.data) {
+      return true;
+    }
+
   }
 
   occupationForm = () => {
@@ -157,10 +175,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     const hours = duration.hours();
     const minutes = duration.minutes();
     const seconds = duration.seconds();
-    // console.log("days", days)
-    // console.log("hours", hours)
-    // console.log("minutes", minutes)
-    // console.log("seconds", seconds)
+
     if(years > 0) {
       return `${years}年前`
     } else if (months > 0) {
@@ -191,10 +206,6 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     const hours = duration.hours();
     const minutes = duration.minutes();
     const seconds = duration.seconds();
-    // console.log("days", days)
-    // console.log("hours", hours)
-    // console.log("minutes", minutes)
-    // console.log("seconds", seconds)
 
     const signCheck = duration.asSeconds();
     if(signCheck < 0) {
@@ -232,7 +243,10 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     axios.get(`/posts?id=${this.props.data.id}&do_filter=yes&gender=${this.state.genderSelect}&min_age=${this.state.minAge}&max_age=${this.state.maxAge}&occupation=${this.state.occupation}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
         const data = res.data;
-        this.setState({ data });
+        this.setState({ 
+          data: data,
+          doFilter: false,
+         });
       }).catch((err) => {
       })
   }
@@ -258,7 +272,10 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       &nbsp;&nbsp;{data.topics.map((elem: any) => {
         return (
           <span style={{ }}>
-            <small style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem.topic.topic}</small>{'  '}
+            <Link className={styles.topic_link}  to={`/topic?tp=${elem.topic.topic}`}>
+            <small style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem.topic.topic}</small>
+            </Link>
+            {'  '}
           </span>
         )
       })}
@@ -290,16 +307,16 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     if(currentFirstURL !== "posts") {
       return (
         <li className={styles.li}>
-          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div>
-            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : <div></div>}
-          </Link>
-          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(data.content)}</div>
+          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+            {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
           
+            <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
+          </Link>
           <div className={styles.vote_section}>
             {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
           <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
-            <div>{this.getEndTime(this.state.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} by {this.props.data.user_info.name}</div ></div>
+            <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} by {this.props.data.user_info.name}</div ></div>
 
         </li>
       )
@@ -311,95 +328,81 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       const renderCondition = () => 
         (
         <Dialog open={this.state.doFilter}>
-        <div style={{margin: '50px'}}>
+        <div style={{margin: '30px'}}>
           <button onClick={e => this.filterClick(e, false)}>戻る</button>
+          <div>以下の条件で絞り込みをした結果を表示します。</div>
           <form onSubmit={e => this.submit(e)}>
-              <div>
-                最小年齢
-            </div>
+              <div>最小年齢</div>
+              <div style={mobStyle}><input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} /></div>
+            <div>最大年齢</div>
               <div style={mobStyle}>
-                <input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} />
-            </div>
-            <div>
-                最大年齢
-            </div>
-              <div style={mobStyle}>
-            <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} />
-              </div>
-              <div>
-                性別
-            </div>
+            <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} /></div>
+              <div>性別</div>
               <div style={mobStyle}>
             <select onChange={e => this.change(e, "genderSelect")}>
               <option value="">性別</option>
               <option value="女性">女性</option>
               <option value="男性">男性</option>
               <option value="どちらでもない">どちらでもない</option>
-            </select>
-              </div>
-              <div>
-                職業
-            </div>
-              <div style={mobStyle}>
-                {this.occupationForm()}
-            </div>
-            
-              <div style={mobStyle}>
-                <button >更新</button>
-            </div>
-            
+            </select></div>
+              <div> 職業</div>
+              <div style={mobStyle}>{this.occupationForm()}</div>
+              <div style={mobStyle}><button >更新</button></div>
           </form>
             <button onClick={e => this.resetClick(e)}>リセット</button>
           </div>
           </Dialog>
       )
-      return (
+      const baseItem = (<div>
+        <div style={{ textAlign: 'right' }}><button style={{ fontSize: '16px', border: 'solid 1px', borderRadius: '5px', backgroundColor: 'silver', color: 'black' }} onClick={e => this.filterClick(e, true)}>絞り込み検索</button>&nbsp;&nbsp;</div>
         <li className={styles.li}>
-          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{data.title}</div>
-            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : <div></div>}
+          <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+            {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+          
+          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
           </Link>
-          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(data.content)}</div>
-          
-          {this.state.doFilter ? "" : <button onClick={e => this.filterClick(e, true)}>絞り込み</button>}
+
           {this.state.doFilter ? renderCondition() : ""}
-          
           <div className={styles.vote_section}>
-            {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
-            </div>
-          <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
-            <div>{this.getEndTime(this.state.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.state.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}  by {this.state.data.user_info.name}</div ></div>
+            {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
+          </div>
+          <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div ><div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}  by {this.props.data.user_info.name}</div ></div>
         </li>
+      </div>)
+
+      let itemArray = [];
+      itemArray.push(baseItem);
+      return (
+        <div>
+          {itemArray.map((item: any) => (item))}
+        </div>
       )
     }
   }
 
   render() {
-    if (this.state.data.already_voted === true || this.state.data.vote_period_end === true) {
+    if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
       return (
-        
-        <div>
-          {this.renderEachData(this.state.data, this.state.voteTypeId)}
-        </div>
+        <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id)}</div>
       );
     }
     else {
       return (
         <li className={styles.li}>
-          <Link to={`/posts/${this.state.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.state.data.title}</div>
-            {this.state.data.topics.length > 0 ? this.renderTopic(this.state.data) : <div></div>}
+          <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+            {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+          
+          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
           </Link>
-          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.state.data.content)}</div>
           <div className={styles.vote_section}>
-            
             {this.state.voteTypeId === 1 ? 
-              <EachVoteSelect hasVoted={this.state.data.already_voted} isLogin={this.props.isLogin} voteContent={this.state.data.vote_selects} postId={this.state.data.id}></EachVoteSelect>
+              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id}></EachVoteSelect>
              : 
-              <EachVoteMj hasVoted={this.state.data.already_voted} isLogin={this.props.isLogin} voteContent={this.state.data.vote_mjs} mjOptions={this.state.data.mj_options} postId={this.state.data.id}></EachVoteMj>
+              <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
              }
-
             </div>
-          <div className={styles.footer}><div>{this.getDiffTime(this.state.data.created_at.slice(0, -7).replace("T", " "))}</div >
-            <div>{this.getEndTime(this.state.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.state.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.state.data.comments.length} by {this.state.data.user_info.name}</div >
+          <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+            <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length} by {this.props.data.user_info.name}</div >
             </div>
         </li>
       )
