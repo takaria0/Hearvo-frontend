@@ -74,7 +74,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     return (
       <div>
         <form onSubmit={e => this.submit(e)}>
-          <div><textarea rows={2} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea></div>
+          <div><textarea rows={7} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea></div>
           <div>
             <Button type="submit" value="Submit" variant="contained" color="primary">返信する</Button>
           </div>

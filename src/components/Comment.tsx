@@ -240,7 +240,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
           <div>
             <div>
               <form onSubmit={e => this.baseSubmit(e)}>
-                <div><textarea rows={2} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
+                <div><textarea rows={7} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
                 <div>
                   <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
                 </div>
@@ -255,7 +255,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         <div>
           <div>
             <form onSubmit={e => this.baseSubmit(e)}>
-            <div><textarea rows={2} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
+            <div><textarea rows={7} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
             <div>
               <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
             </div>
