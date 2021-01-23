@@ -12,7 +12,6 @@ import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-dom'
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
-import Plot from 'react-plotly.js';
 
 const moment = require('moment-timezone');
 // moment.locale('ja');

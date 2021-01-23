@@ -28,6 +28,7 @@ function App() {
       <Route path="/privacy" exact component={PrivacyPolicy} key="privacypolicy" />
       <Route path="/" exact component={Home} key="home-home" />
       <Route path="/latest" exact component={Home} key="latest-home" />
+      <Route path="/topic" exact component={Home} key="topic-home" />
       <Route path="/popular" exact component={Home} key="popular-home" />
       <Route path="/popular/:time" exact component={Home} key="popular-time-home" />
       <Route path="/search" exact component={Home} key="search-home" />

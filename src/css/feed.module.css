@@ -83,6 +83,24 @@
   background-color: #58ba83;
 }
 
+.topic_link {
+  color: black;
+  text-decoration: none;
+}
+
+.topic_link:active {
+  color: blue;
+
+}
+
+.topic_link:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.topic_link:visited {
+  color: red,
+}
 }
 
 
@@ -167,7 +185,24 @@
   padding: 5px 10px;
   border-radius: 3px;
 } */
+.topic_link {
+  color: black;
+  text-decoration: none;
+}
 
+.topic_link:active {
+  color: blue;
+
+}
+
+.topic_link:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.topic_link:visited {
+  color: red,
+}
 
 }
 
@@ -334,9 +369,28 @@
 }
 
 .each_post_link:hover {
-  color: orange;
+  color: dimgray;
 }
 
 .each_post_link:visited {
+  color: red,
+}
+
+.topic_link {
+  color: black;
+  text-decoration: none;
+}
+
+.topic_link:active {
+  color: blue;
+
+}
+
+.topic_link:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.topic_link:visited {
   color: red,
 }

@@ -202,19 +202,13 @@ class MyPostHeader extends React.Component<MyPostHeaderProps, MyPostHeaderState>
   }
 
   headerJSX = () => {
-    if (this.state.edit) {
-      return (
-        <div className={styles.mini_header}>
-          バグ取り感謝します。
-        </div>
-      )
-    } else {
-      return (
-        <div className={styles.mini_header}>
-          バグ取り感謝します。
-        </div>
-      )
-    }
+    const lastPath = window.location.pathname.split('/').pop();
+    return (
+      <div className={styles.mini_header}>
+        <h1>{lastPath === 'myposts' ? '自分の投稿' : '投票した投稿'}</h1>
+      </div>
+    )
+
   }
 
   render() {
