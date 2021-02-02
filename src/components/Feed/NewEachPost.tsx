@@ -341,9 +341,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
               <div style={mobStyle}>
             <select onChange={e => this.change(e, "genderSelect")}>
               <option value="">性別</option>
-              <option value="女性">女性</option>
-              <option value="男性">男性</option>
-              <option value="どちらでもない">どちらでもない</option>
+              <option value="1">女性</option>
+              <option value="0">男性</option>
+              <option value="2">どちらでもない</option>
             </select></div>
               <div> 職業</div>
               <div style={mobStyle}>{this.occupationForm()}</div>

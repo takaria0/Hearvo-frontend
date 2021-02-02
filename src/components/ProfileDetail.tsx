@@ -188,9 +188,9 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
                 <br></br>
                 <select onChange={e => this.change(e, "editGender")}>
                   <option value="">性別</option>
-                  <option value="女性">女性</option>
-                  <option value="男性">男性</option>
-                  <option value="どちらでもない">どちらでもない</option>
+                  <option value="1">女性</option>
+                  <option value="0">男性</option>
+                  <option value="2">どちらでもない</option>
                 </select>
               </div>
           </li>
