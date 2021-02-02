@@ -5,6 +5,8 @@ import { Button, TextField, Fab } from '@material-ui/core';
 import { RouteProps, withRouter, RouteComponentProps } from 'react-router';
 import * as styles from '../css/Comment.module.css';
 import ReplyComment from './ReplyComment';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -38,6 +40,7 @@ interface CommentProps extends RouteComponentProps<{}> {
   baseCommentContent: string;
   isLoaded: boolean;
   isPosted: boolean;
+  goodOrBad: number; // 0 nothing, 1 good, 2 bad
 }
  
 class Comment extends React.Component<CommentProps, CommentState> {
@@ -58,6 +61,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
       baseCommentContent: "",
       isLoaded: false,
       isPosted: false,
+      goodOrBad: 0,
     }
 
     // // console.log("this state", this.state);
@@ -189,18 +193,32 @@ class Comment extends React.Component<CommentProps, CommentState> {
     // // console.log("クリックしました！！！！！！！！！！")
   }
 
+  commentItem = (props: any) => {
+    return (
+      <div className={styles.body} style={{ wordWrap: "break-word" }}>
+        &nbsp;{props.content} {"    "}
+        <div>
+          <span>&nbsp;&nbsp;
+            <ThumbUpIcon style={{ margin: 0, padding: 0, fontSize: 12 }}></ThumbUpIcon>
+            &nbsp;{props.num_of_good}&nbsp;&nbsp;
+            <ThumbDownIcon style={{ margin: 0, padding: 0, fontSize: 12 }}></ThumbDownIcon>&nbsp;&nbsp;
+            </span>
+
+        <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span> 
+
+          <span style={{textAlign: 'right'}}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, props.id)}>返信する</Button></span>
+        </div>
+      </div>
+      )
+  }
+
 
   render() { 
     const CommentView = (props: any) => {
       if (this.state.commentId === props.id) {
         return (
           <li className={styles.com_li}>
-            <div className={styles.body} style={{ wordWrap: "break-word" }}>
-              {props.content} {"    "}
-              <b style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</b>
-
-              <Button style={{ fontSize: 12 }}  onClick={e => this.click(e, props.id)}>返信する</Button>
-            </div>
+            {this.commentItem(props)}
 
             <ReplyComment isLogin={this.props.isLogin} commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
 
@@ -212,12 +230,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
       } else {
         return (
           <li className={styles.com_li}>
-            <div className={styles.body} style={{wordWrap: "break-word"}}>
-              {props.content}{"    "}
-              <b style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</b>
-
-              <Button style={{fontSize: 12}} onClick={e => this.click(e, props.id)}>返信する</Button>
-            </div>
+            {this.commentItem(props)}
 
             <ul className={styles.com_ul}>
               {props.children.map((child: any) => <CommentView {...child} />)}

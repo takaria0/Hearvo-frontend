@@ -4,7 +4,7 @@ import * as styles from '../css/ProfileDetail.module.css';
 import { Button, Input } from '@material-ui/core';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
-
+import Header from './Header';
 
 type userObject = {
   id: string;
@@ -281,6 +281,8 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
 
     if(this.state.edit === false) {
       return (
+        <div>
+          <Header></Header>
         <div className={styles.body}>
           <div className={styles.profile_body}>
 
@@ -293,11 +295,12 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
             {this.viewRender()}
           </div>
           </div>
-        </div>
+          </div></div>
       )
     } else {
       return (
-
+        <div>
+          <Header></Header>
         <div className={styles.body}>
           <div className={styles.profile_body}>
           <h1>プロフィール</h1>
@@ -309,6 +312,7 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           </div>
           </div>
         </div >
+        </div>
       )
     }
 

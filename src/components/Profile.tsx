@@ -148,6 +148,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               <MenuItem onClick={e => this.handleClose(e, "/profile")}>{this.state.user?.name}</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/myposts")}>自分の投稿</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/voted")}>投票した投稿</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/group/list")}>グループ一覧</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/group/create")}>グループ作成</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/tos")}>利用規約</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/privacy")}>プライバシーポリシー</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/settings")}>設定</MenuItem>

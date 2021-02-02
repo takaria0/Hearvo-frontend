@@ -33,9 +33,14 @@ export interface NewFeedState {
   editMonth: string;
   initialSettingMessage: string;
   topicTitle: string;
+  groupTitle: string;
+}
+
+interface Params {
+  group_id: string;
 }
  
-class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
+class Feed extends React.Component<NewFeedProps, NewFeedState> {
 
   constructor(props: any) {
     super(props);
@@ -56,6 +61,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       editMonth: '',
       initialSettingMessage: '',
       topicTitle: '',
+      groupTitle: "",
 
     };
     document.title = "Hearvo"
@@ -87,9 +93,9 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
   };
 
   getTimeQuery = (keyword: string, keywordArray: string[]) => {
-    let time = keyword === "popular" ? keywordArray.pop() : "";
+    let time = keyword === "popular" ? keywordArray.pop() : "today";
     if(time === "popular") {
-      time = "";
+      time = "today";
     }
     return time;
   };
@@ -227,141 +233,109 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
     )
   }
 
-  getSearchedResult = async (query: string, type: string, page: number, jwt: string | null) => {
-    axios.get(`/posts?search=${query}&type=${type}&page=${page}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-      .then(res => {
-        this.setState({
-          dataArray: res.data,
-          isLoaded: true,
-          searchQuery: window.location.search
-        });
-      })
-      .catch((err) => { })
-    return
-  }
- 
 
   getData = (page: number) => {
     const urlParams = new URLSearchParams(window.location.search);
-    const searchWord = urlParams.get('q');
-    const topicWord = urlParams.get('tp') || null;
-    const type = urlParams.get('type') || "";
     const keywordArray = window.location.pathname.split("/");
+
+    let feedType = ""; let orderType = "";
+    if (keywordArray.includes("topic")) {
+      feedType = "topic";
+    }
+    if (keywordArray.includes("search")) {
+      feedType = "search";
+    }
+    if (keywordArray.includes("group")) {
+      feedType = "group";
+    }
+    if (keywordArray.includes("popular")) {
+      feedType = "popular";
+    }
+    if (keywordArray.includes("latest")) {
+      feedType = "latest";
+    }
+    if (urlParams.has("order_by") && urlParams.get("order_by") === "popular") {
+      orderType = "popular";
+    }
+    if (urlParams.has("order_by") && urlParams.get("order_by") === "latest") {
+      orderType = "latest";
+    }
+    if (window.location.pathname === "/") {
+      feedType = "popular";
+    }
+
+
     const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
+    const time = this.getTimeQuery(keyword, keywordArray);
     const jwt = getJwt();
-    const keywordList = ["popular", "latest", "myposts", "voted", "search"];
 
 
-    console.log('topicWord', topicWord)
-    console.log('keywordArray', keywordArray)
-    console.log('keyword', keyword)
-    console.log('page', page)
 
+    let newpage; let queryUrl = ""; 
+    newpage = page === 0 ? 1 : page;
 
-    let newpage;
-    switch(page) {
-      // First page
-      case 0:
-        newpage = 1;
-        if (searchWord !== null) {
-          this.getSearchedResult(searchWord, type, newpage, jwt);
-        }
+    switch (feedType) {
+      case "search":
+        const searchWord = urlParams.get('q') || "";
+        const type = urlParams.get('type') || "";
+        queryUrl = orderType ? `/posts?search=${searchWord}&type=${type}&page=${page}&keyword=${orderType}` : `/posts?search=${searchWord}&type=${type}&page=${page}`;
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({dataArray: res.data,isLoaded: true,searchQuery: window.location.search});
+          }).catch((err) => { })
+        break;
 
-        if(topicWord !== null) {
-          axios.get(`/posts?topic=${topicWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-            .then(res => {
-              this.setState({ 
-                dataArray: res.data, 
-                isLoaded: true, 
-                topicTitle: topicWord,
-              });
-              console.log('--------------------------------')
-              console.log('root page 0') 
-              console.log('res.data', res.data)
-              console.log('--------------------------------')
-            })
-            .catch((err) => {
-            })
-        }
+      case "topic":
+        const topicWord = urlParams.get('tp') || "";
+        queryUrl = orderType ? `/posts?topic=${topicWord}&page=${newpage}&keyword=${orderType}` : `/posts?topic=${topicWord}&page=${newpage}`;
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data],isLoaded: true, topicTitle: topicWord})})
+          .catch((err) => { })
+        break;
 
-        if (keywordList.includes(keyword)) {
-          const time = this.getTimeQuery(keyword, keywordArray);
-          axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-            .then(res => { this.setState({ dataArray: res.data, isLoaded: true, }); })
-            .catch((err) => {
-            })
-        } else {
-          axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-            .then(res => {
-              this.setState({ dataArray: res.data, isLoaded: true, });
-            })
-            .catch((err) => {
-            })
-        }
-      break;
+      case "group":
+        const tempArray = window.location.pathname.split("/");
+        const groupId = tempArray[tempArray.length - 2];
+        queryUrl = orderType ? `/posts?group_id=${groupId}&page=${newpage}&keyword=${orderType}` : `/posts?group_id=${groupId}&page=${newpage}`;
+        axios.get(`/groups?id=${groupId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({ groupTitle: res.data.already_joined ? res.data.title : "<このグループは存在しません>"})
+            // show the content if the user has joined the group
+            if (res.data.already_joined) {
+              axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+                .then(res => {
+                  this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true  })
+
+                })
+                .catch((err) => { this.setState({isLoaded: true}) })
+            }
+          }).catch((err) => { this.setState({ isLoaded: true }) });
+
+        break;
+      
+      case "popular":
+        axios.get(`/posts?keyword=popular&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true,});})
+          .catch((err) => { })
+        break;
+
+      case "latest":
+        axios.get(`/posts?keyword=latest&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, });
+          })
+          .catch((err) => { })
+        break;
 
       default:
-        newpage = page;
-
-        if (searchWord !== null) {
-          axios.get(`/posts?search=${searchWord}&type=${type}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-            .then(res => {
-              this.setState({
-                dataArray: [...this.state.dataArray, ...res.data],
-                isLoaded: true,
-                searchQuery: window.location.search,
-              });
-            }).catch((err) => {
-            })
-          return
-        }
-
-        if (topicWord !== null) {
-          axios.get(`/posts?topic=${topicWord}&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-            .then(res => {
-
-              this.setState({
-                dataArray: res.data,
-                isLoaded: true,
-                topicTitle: topicWord,
-              });
-
-              console.log('--------------------------------')
-              console.log('root default')
-              console.log('res.data', res.data)
-              console.log('--------------------------------')
-            })
-            .catch((err) => {
-            })
-        }
-
-
-        if (keywordList.includes(keyword)) {
-          const time = this.getTimeQuery(keyword, keywordArray);
-          axios.get(`/posts?keyword=${keyword}&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-            .then(res => {
-              this.setState({
-                dataArray: [...this.state.dataArray, ...res.data],
-                isLoaded: true,
-              });
-            }).catch((err) => {
-            })
-        } else {
-          axios.get(`/posts?keyword=popular&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
-            .then(res => {
-              this.setState({
-                dataArray: [...this.state.dataArray, ...res.data],
-                isLoaded: true,
-              });
-            }).catch((err) => {
-            })
-        }
-      break;
+        break;
     }
+
   }
 
   componentDidUpdate = (prevProps: any, prevState: any) => {
-
     if (prevState.location !== window.location.href) {
       this.setState({
         location: window.location.href,
@@ -369,19 +343,13 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
       })
       this.getData(0);
     }
-
     if (prevProps.isPosted !== this.props.isPosted || this.props.isPosted === true) {
       this.getData(0)
       this.props.isPostedHandeler(false);
     }
-    
     if (prevState.page !== this.state.page) {
       this.getData(this.state.page);
     }
-
-
-
-
   }
 
   click = (e: any) => {
@@ -405,6 +373,7 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
           <div>
             {this.renderInitialUserInfoForm()}
             {this.state.topicTitle ? <h3>トピック {this.state.topicTitle}</h3> : ''}
+            {this.state.groupTitle ? <h3>{this.state.groupTitle}</h3> : ''}
             {/* <small>{JSON.stringify(this.state.dataArray, null, 2)}</small> */}
           </div>
           <ul className={styles.ul}>
@@ -426,4 +395,4 @@ class NewFeed extends React.Component<NewFeedProps, NewFeedState> {
   }
 }
  
-export default NewFeed;
+export default Feed;

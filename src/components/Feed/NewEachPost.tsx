@@ -354,7 +354,8 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           </Dialog>
       )
       const baseItem = (<div>
-        <div style={{ textAlign: 'right' }}><button style={{ fontSize: '16px', border: 'solid 1px', borderRadius: '5px', backgroundColor: 'silver', color: 'black' }} onClick={e => this.filterClick(e, true)}>絞り込み検索</button>&nbsp;&nbsp;</div>
+        {/* <div style={{ textAlign: 'right' }}><button style={{ fontSize: '16px', border: 'solid 1px', borderRadius: '5px', backgroundColor: 'silver', color: 'black' }} onClick={e => this.filterClick(e, true)}>絞り込み検索</button>&nbsp;&nbsp;</div> */}
+
         <li className={styles.li}>
           <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
             {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}

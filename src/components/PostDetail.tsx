@@ -102,7 +102,6 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
       return (
         <div>
           <Header></Header>
-        
         <div className={styles.body}>
 
           <div>

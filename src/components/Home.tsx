@@ -1,6 +1,6 @@
 import React from 'react';
 
-// import NewPostContent from './Feed/NewPostContent';
+// import PostContent from './Feed/PostContent';
 import * as styles from '../css/Home.module.css';
 import BaseHeader from './Feed/BaseHeader';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom'

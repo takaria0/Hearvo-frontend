@@ -8,7 +8,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import * as styles from '../../css/Feed/PostContent.module.css';
 import { StringLiteral } from 'typescript';
 import { CropLandscapeOutlined, TransferWithinAStationSharp } from '@material-ui/icons';
-import NewFeed from './NewFeed';
+import Feed from './Feed';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -18,7 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
+import NativeSelect from '@material-ui/core/NativeSelect';
 
 export interface NewPostContentProps extends RouteComponentProps<{}> {
   edit: boolean;
@@ -43,9 +43,11 @@ export interface NewPostContentState {
   mjNums: number;
   mjCandidates: Array<string>;
   errorMessage: string;
+  groupList: any;
+  targetGroupId: string;
 }
 
-class NewPostContent extends React.Component<NewPostContentProps, NewPostContentState> {
+class PostContent extends React.Component<NewPostContentProps, NewPostContentState> {
 
   constructor(props: any) {
     super(props);
@@ -69,7 +71,17 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       topicForApi: [],
       maxTopicNum: 10,
       errorMessage: '',
+      groupList: [],
+      targetGroupId: "",
     }
+  }
+
+  componentDidMount = () => {
+    const jwt = getJwt();
+    axios.get(`/groups`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+      .then((res: any) => {
+        this.setState({groupList: res.data})
+      }).catch((res: any) => {});
   }
 
   componentDidUpdate = (prevProps: any) => {
@@ -91,6 +103,22 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
             </div>
             <br></br>
             <form onSubmit={e => this.submit(e)} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}>
+              <div>
+                投稿先&nbsp;&nbsp;
+
+                <NativeSelect value={this.state.targetGroupId} onChange={e => this.change(e, "targetGroupId")}>
+                  <option value="">Hearvo</option>
+                  <option value="">-------------</option>
+                  {this.state.groupList.map((elem: any) => { return (
+                  <option value={elem.id}>{elem.title}</option>
+                  ) })}
+                  {/* <option value={10}>Ten</option>
+                  <option value={20}>Twenty</option>
+                  <option value={30}>Thirty</option> */}
+                </NativeSelect><hr></hr><br></br>
+
+                
+              </div>
               <div><input placeholder="タイトルを入力" className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => this.change(e, "title")}></input><br></br></div>
               <div><textarea placeholder="本文を入力" className={styles.content} rows={6} maxLength={5000} onChange={e => this.change(e, "content")}></textarea></div>
         終了 <input className={styles.date_button} value={this.state.endhour} min={24} max={168} type="number" onChange={e => this.change(e, "endhour")}></input> 時間後
@@ -293,7 +321,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
     e.preventDefault();
     const jwt = getJwt();
     const voteObj = this.state.values.map((val) => { return { content: val } });
-    var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id, "topic": this.state.topicForApi, "mj_option_list": this.state.mjCandidates });
+    var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "group_id": this.state.targetGroupId, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id, "topic": this.state.topicForApi, "mj_option_list": this.state.mjCandidates });
     console.log('this.state.mjNums', this.state.mjNums)
     console.log("data", data);
 
@@ -349,7 +377,17 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
         });
         this.isPostedChange(true);
         this.props.editParentHandle(e, false);
-        this.props.history.push("/latest");
+
+        switch (this.state.targetGroupId) {
+          case "":
+            this.props.history.push("/latest");
+            break;
+
+          default:
+            this.props.history.push(`/group/${this.state.targetGroupId}/feed`);
+            break;
+        }
+        
 
       }).catch((err: any) => {
         // console.log("err", err);
@@ -370,7 +408,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
       <div>
         <div>{this.createForm()}</div>
         <div>
-          <NewFeed isLogin={this.props.isLogin} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></NewFeed>
+          <Feed isLogin={this.props.isLogin} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></Feed>
         </div>
       </div>
     );
@@ -378,4 +416,4 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
 }
 
 
-export default withRouter(NewPostContent);
+export default withRouter(PostContent);

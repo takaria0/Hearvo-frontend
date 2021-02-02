@@ -6,7 +6,7 @@ import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import { Button, TextField, Fab, Input, Menu, MenuItem } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import * as styles from '../../css/Feed/PostContent.module.css';
-import NewPostContent from './NewPostContent';
+import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';
 
@@ -159,7 +159,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     return ( 
       <div>
         <div>{this.headerJSX()}</div>
-        <NewPostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></NewPostContent>
+        <PostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></PostContent>
       </div>
      );
   }
