@@ -70,7 +70,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     return (
       <div className={styles.body}>
         <h1>Hearvo</h1>
-        <Link to="/intro">開発状況</Link>
+        {/* <Link to="/intro">開発状況</Link> */}
         <div className={styles.body_inside}>
           
         <h2 >Login</h2>

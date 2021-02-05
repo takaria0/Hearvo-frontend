@@ -14,13 +14,28 @@ interface GroupCreateProps {
 
 }
 
-const CreatedMessage = (groupLink: string) => {
+
+
+const CreatedMessage = (props: any) => {
+  const groupLink = props.groupLink;
+  const groupName = props.groupName;
+
+  const [isOpen, setOpen] = useState(true);
+
+  const copy = (e: any, value: string) => {
+    navigator.clipboard.writeText(value);
+    setOpen(false);
+  };
+
 
   return (
-    <Dialog open={true}>
+    <Dialog open={isOpen}>
       {/* <form onSubmit={e => submit(e)}><button>戻る</button></form> */}
-      <div style={{ margin: '10px', textAlign: 'center' }}>
-        <div>招待リンク <div>{groupLink}</div></div>
+      <div style={{ margin: '10px',　padding: 30 }}>
+        <h1>新たなグループ、「{groupName}」を作成しました！</h1>
+        グループに参加した人だけが投票を見ることができ、グループ内だけでの投票が出来るようになります。
+        以下の招待リンクをコピーして、友達を誘ってみましょう！
+        <div style={{marginTop: 10, wordWrap: "break-word"}}> {groupLink}<div><button style={{marginTop: 10, textAlign: 'center'}} onClick={e => copy(e, groupLink)}>招待リンクをコピー</button></div></div>
       </div>
     </Dialog>
   )
@@ -68,14 +83,20 @@ const GroupCreate = (props: GroupCreateProps) => {
   return (
     <div>
       <Header></Header>
+      <div style={{ paddingLeft: 0, wordWrap: "break-word", textAlign: 'center' }}>
       <h1>グループ作成</h1>
+      <div style={{border: 'none'}}>グループを作成すると、グループに参加した人だけが閲覧・投票出来る機能が利用できます。<br></br>
+      グループを作成すると招待リンクが発行され、メンバーを招待することが可能になります。招待リンクは、グループ一覧ページからも確認できます。</div>
       <form onSubmit={e => submit(e)}>
-        <input onChange={e => onChangeGroupName(e)}></input>
-        <button>作成</button>
+        <input style={{padding: 5, width: 200}} onChange={e => onChangeGroupName(e)}></input>
+          <div style={{marginTop : 10}}>
+            <button>作成</button>
+            </div>
       </form>
       <div style={{color: "red"}}>{error ? error : ""}</div>
       <div style={{ color: "black" }}>{message ? message : ""}</div>
-      <div>{success ? CreatedMessage(groupLink) : ""}</div>
+      <div>{success ? <CreatedMessage groupLink={groupLink} groupName={groupName}></CreatedMessage> : ""}</div>
+      </div>
     </div>
   )
 

@@ -18,6 +18,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import GroupCreate from './components/GroupCreate';
 import GroupInvite from './components/GroupInvite';
 import GroupList from './components/GroupList';
+import { HomeOutlined } from '@material-ui/icons';
 
 function App() {
   return (
@@ -40,8 +41,8 @@ function App() {
       <Route path="/posts/:post_id" component={PostDetail} />
       <Auth>
           <Route path="/profile" exact component={ProfileDetail} />
-          <Route path="/profile/feed/myposts" exact component={MyPostHeader} key="myposts-home" />
-          <Route path="/profile/feed/voted" exact component={MyPostHeader} key="voted-home" />
+          <Route path="/profile/feed/myposts" exact component={Home} key="myposts-home" />
+          <Route path="/profile/feed/voted" exact component={Home} key="voted-home" />
           <Route path="/group/:group_id/feed" exact component={Home} />
           <Route path="/group/list" exact component={GroupList} />
           <Route path="/group/create" exact component={GroupCreate} />

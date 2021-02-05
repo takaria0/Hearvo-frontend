@@ -10,6 +10,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import EachVoteSelect from './EachVoteSelect';
 import EachVoteMj from './EachVoteMj';
 import CheckIcon from '@material-ui/icons/Check';
+import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -27,39 +28,6 @@ const toHashTag = (content: string) => {
   return splitedContent;
 }
 
-
-const renderVoteSelectResult = (data: any, layout: any) => {
-  const x = data[0].x;
-  const y = data[0].y;
-  return (
-    <div>
-      <div>
-        <ul className={styles.vote_ul}>
-          <div>
-            {
-              y.map((label: string, idx: number) => {
-                x[idx] = Math.round(x[idx]);
-                return (
-                  <div style={{  border: 'solid 1px', borderRadius: '5px', marginBottom: '5px' }}>
-                    <div style={{ paddingLeft:'2px', paddingTop: '3px', paddingBottom: '3px', backgroundColor: 'rgba(0, 0, 255, 0.1)', width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }}>
-                      <div style={{ whiteSpace: 'nowrap', padding: 2 }}>
-
-                        <div style={{ textAlign: 'left' }}>
-                          {label} {isNaN(x[idx]) ? 0 : x[idx]}%
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                )
-              })
-            }
-          </div>
-        </ul>
-      </div>
-    </div>
-  )
-}
 
 const renderVoteMjResult = (baseData: any) => {
   return (
@@ -300,7 +268,8 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       y = data.vote_selects_count.map((da: any) => {
         return da.content
       });
-      plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
+      const voteIdList = data.vote_selects_count.map((da: any) => { return da.vote_select_id });
+      plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: this.props.data.my_vote, voteIdList: voteIdList }];
       layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
     }
 
@@ -397,7 +366,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           </Link>
           <div className={styles.vote_section}>
             {this.state.voteTypeId === 1 ? 
-              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id}></EachVoteSelect>
+              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
              : 
               <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
              }

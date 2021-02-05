@@ -34,6 +34,8 @@ export interface NewFeedState {
   initialSettingMessage: string;
   topicTitle: string;
   groupTitle: string;
+  searchWord: string;
+  miniTitle: string;
 }
 
 interface Params {
@@ -62,6 +64,8 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
       initialSettingMessage: '',
       topicTitle: '',
       groupTitle: "",
+      searchWord: "",
+      miniTitle: "",
 
     };
     document.title = "Hearvo"
@@ -254,6 +258,12 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
     if (keywordArray.includes("latest")) {
       feedType = "latest";
     }
+    if (keywordArray.includes("myposts")) {
+      feedType = "myposts";
+    }
+    if (keywordArray.includes("voted")) {
+      feedType = "voted";
+    }
     if (urlParams.has("order_by") && urlParams.get("order_by") === "popular") {
       orderType = "popular";
     }
@@ -281,7 +291,7 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
         queryUrl = orderType ? `/posts?search=${searchWord}&type=${type}&page=${page}&keyword=${orderType}` : `/posts?search=${searchWord}&type=${type}&page=${page}`;
         axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
           .then(res => {
-            this.setState({dataArray: res.data,isLoaded: true,searchQuery: window.location.search});
+            this.setState({ dataArray: res.data, isLoaded: true, searchQuery: window.location.search, searchWord: searchWord});
           }).catch((err) => { })
         break;
 
@@ -329,6 +339,24 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
           .catch((err) => { })
         break;
 
+      case "myposts":
+        queryUrl = `/posts?keyword=myposts&page=${newpage}`;
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "自分の投稿" })
+          })
+          .catch((err) => { })
+        break;
+
+      case "voted":
+        queryUrl = `/posts?keyword=voted&page=${newpage}`;
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+          .then(res => {
+            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "投票済み" })
+          })
+          .catch((err) => { })
+        break;
+
       default:
         break;
     }
@@ -372,8 +400,10 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
         <div>
           <div>
             {this.renderInitialUserInfoForm()}
+            {this.state.miniTitle ? <h3>{this.state.miniTitle}</h3> : ''}
             {this.state.topicTitle ? <h3>トピック {this.state.topicTitle}</h3> : ''}
-            {this.state.groupTitle ? <h3>{this.state.groupTitle}</h3> : ''}
+            {this.state.groupTitle ? <h3>グループ「{this.state.groupTitle}」</h3> : ''}
+            {this.state.searchWord ? <h3>「{this.state.searchWord}」の検索結果</h3> : ''}
             {/* <small>{JSON.stringify(this.state.dataArray, null, 2)}</small> */}
           </div>
           <ul className={styles.ul}>

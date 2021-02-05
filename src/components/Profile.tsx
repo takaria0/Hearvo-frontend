@@ -121,7 +121,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   searchBar = () => {
     return (
       <form style={{ display: "inline", width: '100%' }} onSubmit={e => this.searchSubmit(e)}>
-        <input type="text" style={{ width: '60%', padding: '2px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder="検索"
+        {/* <SearchIcon></SearchIcon> */}
+        <input type="text" style={{ width: '60%', padding: '3px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={"検索"}
         ></input>
         {/* <IconButton type="submit"> */}
         {/* </IconButton> */}

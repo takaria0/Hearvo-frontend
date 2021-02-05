@@ -65,13 +65,15 @@ const GroupInvite = (props: GroupInviteProps) => {
     return (
       <div>
         <Header></Header>
+        <div style={{textAlign: 'center'}}>
         <h1>グループに参加する</h1>
         <form onSubmit={e => submit(e)}>
-          {groupName}
+            <h2>グループ「{groupName}」</h2>
           <div>{alreadyJoined ? "既にこのグループに参加しています" : <button>参加する</button>}</div>
         </form>
         <div style={{ color: "red" }}>{error ? error : ""}</div>
         <div style={{ color: "black" }}>{message ? message : ""}</div>
+        </div>
       </div>
     )
   }

@@ -36,8 +36,13 @@ const GroupList = (props: GroupListProps) => {
 
   };
 
+  const copy = (e: any, value: string) => {
+    navigator.clipboard.writeText(value);
+  };
+  
+
   useEffect(() => {
-    axios.get(`/groups`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+    axios.get(`/groups?order_by=latest`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
       .then((res: any) => {
         const groupList = res.data;
         setGroupList(groupList);
@@ -50,12 +55,26 @@ const GroupList = (props: GroupListProps) => {
   } else {
     return (
       <div><Header></Header>
+      <div style={{ paddingLeft: 20, wordWrap: "break-word"}}>
+
+      
         <h1>グループ一覧</h1>
         {groupList.map((elem: any) => {
           const baseLink = window.location.hostname === "localhost" ?
             window.location.protocol + "//" + window.location.hostname + ":3000" + "/group/invite/" : window.location.protocol + "//" + window.location.hostname + "/group/invite/"
-          return (<div><Link to={`/group/${elem.id}/feed`}>{elem.title}</Link> ユーザー数 {elem.num_of_users} 投稿数 {elem.num_of_posts} <button onSubmit={e => submit(e, elem.id)}>退出する</button><div>招待リンク {baseLink + elem.link}</div> </div>)
+          return (
+            <div style={{ padding: 10,marginBottom: 5,borderStyle: "solid", borderRadius: 5, borderWidth: 1}}>
+              <Link to={`/group/${elem.id}/feed`}><b>{elem.title}</b></Link> 
+              <div><span>ユーザー数 {elem.num_of_users} 投稿数 {elem.num_of_posts}&nbsp;&nbsp;</span>
+                <span style={{ float: "right", textAlign: "right" }}>
+              <button onClick={e => copy(e, baseLink + elem.link)}>招待リンクをコピー</button>&nbsp;&nbsp;
+               <button onSubmit={e => submit(e, elem.id)}>退出する</button>
+              </span>
+              </div>
+               </div>
+          )
         })}
+        </div>
       </div>
     )
   }

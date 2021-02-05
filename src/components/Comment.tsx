@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { getJwt } from '../helpers/jwt';
 import axios from './Api';
 import { Button, TextField, Fab } from '@material-ui/core';
@@ -12,6 +12,96 @@ const moment = require('moment-timezone');
 moment.locale('ja');
 moment.tz.setDefault('UTC');
 
+
+
+const CommentItem = (data: any) => {
+
+  const initClicked = data.data.comment_favs.length > 0 ? data.data.comment_favs[0].good_or_bad : null; // 0 or 1 or null, bad, good, not yet
+  const initGoodClicked = initClicked === 1 ? true : false;
+  const initBadClicked = initClicked === 0 ? true : false; 
+
+  const [isGoodClicked, setGoodClicked] = useState(initGoodClicked);
+  const [isBadClicked, setBadClicked] = useState(initBadClicked);
+  const [numOfGood, setNumOfGood] = useState(data.data.num_of_good);
+
+
+
+  const likeSubmit = (data: any, value: number) => {
+    const comment_id = data.id;
+    const good_or_bad = value;
+    const jwt = getJwt();
+    axios.post("/comments/fav", { comment_id, good_or_bad }, { headers: { 'Authorization': `Bearer ${jwt}` } })
+      .then(res => { }).catch(err => { })
+  };
+
+  const likeDelete = (data: any) => {
+    const comment_id = data.id;
+    const jwt = getJwt();
+    axios.delete("/comments/fav", { data: { comment_id }, headers: { 'Authorization': `Bearer ${jwt}` } })
+      .then(res => { }).catch(err => { })
+  }
+
+  const onGoodClick = (e: any) => {
+    e.preventDefault();
+
+    if(isBadClicked) {
+      setBadClicked(false);
+      likeDelete(data.data);
+    }
+
+    switch (isGoodClicked) {
+      case true:
+        setNumOfGood(numOfGood - 1);
+        likeDelete(data.data);
+        setGoodClicked(false);
+        break;
+      case false:
+        setNumOfGood(numOfGood + 1);
+        setGoodClicked(true);
+        likeSubmit(data.data, 1);
+        break;
+    }
+  }
+
+  const onBadClick = (e: any) => {
+    e.preventDefault();
+
+    if (isGoodClicked) {
+      setNumOfGood(numOfGood - 1);
+      setGoodClicked(false);
+      likeDelete(data.data);
+    }
+
+    switch (isBadClicked) {
+      case true:
+        likeDelete(data.data);
+        setBadClicked(false);
+        break;
+      case false:
+        setBadClicked(true);
+        likeSubmit(data.data, 0);
+        break;
+    }
+  }
+
+
+  const goodStyle = isGoodClicked ? { margin: 0, padding: 0, fontSize: 12, color: "#004DBF" } : { margin: 0, padding: 0, fontSize: 12, color: "gray" };
+  const badStyle = isBadClicked ? { margin: 0, padding: 0, fontSize: 12, color: "#004DBF" } : { margin: 0, padding: 0, fontSize: 12, color: "gray" };
+
+
+  return (
+    <span style={{ wordWrap: "break-word" }}>
+      <div>&nbsp;{data.data.content}</div>
+      <span>
+        <span>&nbsp;&nbsp;
+            <ThumbUpIcon onClick={e => onGoodClick(e)} style={goodStyle}></ThumbUpIcon>
+            &nbsp;{numOfGood}&nbsp;&nbsp;
+            <ThumbDownIcon onClick={e => onBadClick(e)} style={badStyle}></ThumbDownIcon>&nbsp;&nbsp;
+            </span>
+      </span>
+    </span>
+  )
+}
 
 
 const nest = (items: any, id = null) =>
@@ -42,6 +132,7 @@ interface CommentProps extends RouteComponentProps<{}> {
   isPosted: boolean;
   goodOrBad: number; // 0 nothing, 1 good, 2 bad
 }
+
  
 class Comment extends React.Component<CommentProps, CommentState> {
 
@@ -61,7 +152,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
       baseCommentContent: "",
       isLoaded: false,
       isPosted: false,
-      goodOrBad: 0,
+      goodOrBad: 0
     }
 
     // // console.log("this state", this.state);
@@ -105,7 +196,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
   updateData = () => {
     const jwt = getJwt();
-    axios.get(`/comments?post_id=${this.props.postId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+    axios.get(`/comments?post_id=${this.props.postId}&order_by=popular`, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
         const commentData = res.data;
         this.setState({ commentData });
@@ -148,6 +239,33 @@ class Comment extends React.Component<CommentProps, CommentState> {
     })
   }
 
+  goodSubmit = (e: any, data: any) => {
+    const comment_id = data.id;
+    const good_or_bad = 1;
+    e.preventDefault();
+    const jwt = getJwt();
+    axios.post("/comments/fav", { comment_id, good_or_bad}, { headers: { 'Authorization': `Bearer ${jwt}` } })
+    .then(res => {
+      
+    }).catch(err => {
+
+    })
+  };
+
+  badSubmit = (e: any, data: any) => {
+    const comment_id = data.id;
+    const good_or_bad = 1;
+    e.preventDefault();
+    const jwt = getJwt();
+    axios.post("/comments/fav", { comment_id }, { headers: { 'Authorization': `Bearer ${jwt}` } })
+      .then(res => {
+
+      }).catch(err => {
+
+      })
+  };
+
+
 
   baseSubmit(e: any) {
     
@@ -166,17 +284,8 @@ class Comment extends React.Component<CommentProps, CommentState> {
     // // console.log("postObj", postObj)
     axios.post(
       "/comments",
-      {
-        post_id: this.props.postId,
-        content: this.state.baseCommentContent,
-        parent_id: this.state.commentId,
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${jwt}`,
-        }
-      }
-      )
+      {post_id: this.props.postId,content: this.state.baseCommentContent,parent_id: this.state.commentId},
+      {headers: {'Authorization': `Bearer ${jwt}`}})
       .then((res: any) => {
         this.handlePosted(e)
         this.setState({ baseCommentContent: ""});
@@ -190,27 +299,8 @@ class Comment extends React.Component<CommentProps, CommentState> {
     this.setState({
       commentId: id,
     })
-    // // console.log("クリックしました！！！！！！！！！！")
   }
 
-  commentItem = (props: any) => {
-    return (
-      <div className={styles.body} style={{ wordWrap: "break-word" }}>
-        &nbsp;{props.content} {"    "}
-        <div>
-          <span>&nbsp;&nbsp;
-            <ThumbUpIcon style={{ margin: 0, padding: 0, fontSize: 12 }}></ThumbUpIcon>
-            &nbsp;{props.num_of_good}&nbsp;&nbsp;
-            <ThumbDownIcon style={{ margin: 0, padding: 0, fontSize: 12 }}></ThumbDownIcon>&nbsp;&nbsp;
-            </span>
-
-        <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span> 
-
-          <span style={{textAlign: 'right'}}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, props.id)}>返信する</Button></span>
-        </div>
-      </div>
-      )
-  }
 
 
   render() { 
@@ -218,10 +308,13 @@ class Comment extends React.Component<CommentProps, CommentState> {
       if (this.state.commentId === props.id) {
         return (
           <li className={styles.com_li}>
-            {this.commentItem(props)}
+            <div className={styles.body}>
+              <CommentItem data={props}></CommentItem>
+              <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
-            <ReplyComment isLogin={this.props.isLogin} commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
-
+              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, 0)}>キャンセル</Button></span>
+              <ReplyComment isLogin={this.props.isLogin} commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
+            </div>
             <ul className={styles.com_ul}>
               {props.children.map((child: any) => <CommentView {...child} />)}
             </ul>
@@ -230,7 +323,12 @@ class Comment extends React.Component<CommentProps, CommentState> {
       } else {
         return (
           <li className={styles.com_li}>
-            {this.commentItem(props)}
+            <div className={styles.body}>
+              <CommentItem data={props}></CommentItem>
+              <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
+
+              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, props.id)}>返信する</Button></span>
+            </div>
 
             <ul className={styles.com_ul}>
               {props.children.map((child: any) => <CommentView {...child} />)}
@@ -253,7 +351,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
           <div>
             <div>
               <form onSubmit={e => this.baseSubmit(e)}>
-                <div><textarea rows={2} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
+                <div><textarea rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
                 <div>
                   <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
                 </div>
@@ -268,7 +366,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         <div>
           <div>
             <form onSubmit={e => this.baseSubmit(e)}>
-            <div><textarea rows={2} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
+            <div><textarea rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
             <div>
               <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
             </div>

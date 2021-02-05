@@ -5,6 +5,7 @@ import { Button, Input } from '@material-ui/core';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
+import Header from './Header';
 
 
 
@@ -163,6 +164,8 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 
   render() {
     return (
+      <div>
+        <Header></Header>
       <div style={{ textAlign: 'center' }}>
         <ul style={{ margin: '10px', padding: 0, textDecoration: "none"}}>
 
@@ -174,6 +177,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
         <div>
           {/* {this.state.isAccountDelete ? this.renderAccountDelete() : ''} */}
         </div>
+      </div>
       </div>
     )
   }

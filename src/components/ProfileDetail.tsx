@@ -6,13 +6,36 @@ import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import Header from './Header';
 
+// 0 -> male
+// 1 -> female
+// 2 -> others
+const genderIntToString = (num: number | undefined) => {
+  switch(num) {
+    case 0:
+      return "男性"
+      break;
+    case 1:
+      return "女性"
+      break;
+    case 2:
+      return "その他"
+      break;
+    
+    default:
+      return ""
+      break;
+  }
+}
+
+
+
 type userObject = {
   id: string;
   name: string;
   email: string;
   description: string;
   string_id: string;
-  gender: string;
+  gender: number;
   age: string;
   created_at: string;
   updated_at: string;
@@ -183,7 +206,7 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           </li>
 
           <li className={styles.li}>
-              性別: {this.state.user?.gender}
+              性別: {genderIntToString(this.state.user?.gender)}
               <div>
                 <br></br>
                 <select onChange={e => this.change(e, "editGender")}>
@@ -264,7 +287,7 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
             説明: {this.state.user?.description}
           </li>
           <li className={styles.li}>
-            性別: {this.state.user?.gender}
+            性別: {genderIntToString(this.state.user?.gender)}
           </li>
           <li className={styles.li}>
             年齢: {this.state.user?.birth_year}年生まれ

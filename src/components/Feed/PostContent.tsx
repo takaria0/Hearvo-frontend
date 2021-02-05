@@ -19,6 +19,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import NativeSelect from '@material-ui/core/NativeSelect';
+import { AxiosInterceptorManager } from 'axios';
 
 export interface NewPostContentProps extends RouteComponentProps<{}> {
   edit: boolean;
@@ -45,6 +46,7 @@ export interface NewPostContentState {
   errorMessage: string;
   groupList: any;
   targetGroupId: string;
+  allowPost: boolean;
 }
 
 class PostContent extends React.Component<NewPostContentProps, NewPostContentState> {
@@ -73,7 +75,18 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
       errorMessage: '',
       groupList: [],
       targetGroupId: "",
+      allowPost: true,
     }
+  }
+
+  checkContent = () => {
+    if(this.state.title.length > 0
+      && this.state.content.length > 0
+      && this.state.topicForApi.length > 0
+      // && this.state.values.filter((elem) => {elem !== ""}).length > 0
+      ) {
+        this.setState({allowPost: true})
+    };
   }
 
   componentDidMount = () => {
@@ -142,7 +155,8 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
                   {this.renderTopic()}
                 </span>
               </div>
-              <div className={styles.submit_button}><button style={{ width: '20%'}}>投稿</button></div>
+              {this.state.allowPost ? <div className={styles.submit_button}><button style={{ width: '20%', color: "blue" }}>投稿</button></div> : <div style={{ width: '20%', color: "gray"}}>投稿</div>}
+              
             </form>
             <div style={{color: 'red'}}>
               {this.state.errorMessage ? this.state.errorMessage : ''}
@@ -212,6 +226,9 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
   renderTopic = () => {
     const topics = this.state.topicString;
     const pattern = (/,|，|、/g);
+
+    if(topics.length === 0) {return};
+
     if (this.doContainDelim(topics)) {
       let topicList = topics.split(pattern);
       topicList = topicList.slice(0, this.state.maxTopicNum);
@@ -227,7 +244,8 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
           })}
         </div>
       )
-
+    } else {
+      return (<span><b style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{topics}{'   '}</b>&nbsp;&nbsp;</span>)
     }
   }
 
@@ -240,10 +258,16 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
       this.setState({
         topicForApi: topicList
       });
+    } else {
+      if (topics.length === 0) { return };
+      this.setState({
+        topicForApi: [topics]
+      });
     }
   };
 
   change(e: any, field: string) {
+    // this.checkContent();
     e.preventDefault();
     this.setState({
       [field]: e.target.value,
@@ -267,6 +291,7 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
 
   voteSelectChange(e: any, idx: number) {
     e.preventDefault();
+    // this.checkContent();
     let values = [...this.state.values];
     values[idx] = e.target.value;
     this.setState({
@@ -319,6 +344,9 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
 
   submit = (e: any) => {
     e.preventDefault();
+    // this.checkContent();
+    // if(!this.state.allowPost) {return};
+
     const jwt = getJwt();
     const voteObj = this.state.values.map((val) => { return { content: val } });
     var data = JSON.stringify({ "title": this.state.title, "content": this.state.content, "group_id": this.state.targetGroupId, "end_at": this.state.end_at, "vote_obj": voteObj, "vote_type_id": this.state.vote_type_id, "topic": this.state.topicForApi, "mj_option_list": this.state.mjCandidates });
@@ -351,6 +379,11 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
     const voteCheck = this.state.values.filter((val) => val.replace(/\s+/g, '') === '');
     if (voteCheck.length > 0) {
       this.setState({ errorMessage: '投票候補を埋めてください' })
+      return
+    }
+
+    if (this.state.topicForApi.length < 1) {
+      this.setState({ errorMessage: 'トピックを最低一つ入力してください' })
       return
     }
 
