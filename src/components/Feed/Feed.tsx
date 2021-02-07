@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Dialog } from '@material-ui/core';
+import { Button, Dialog, Checkbox } from '@material-ui/core';
 import axios from '../Api';
 
 // import { withRouter, RouteComponentProps } from 'react-router-dom'
@@ -10,14 +10,272 @@ import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import NewEachPost from './NewEachPost';
 
 
-export interface NewFeedProps {
+const INITIAL_TOPICS_JP = ['IT',
+  'テクノロジー',
+  '科学',
+  '映画',
+  '料理',
+  'グルメ',
+  '音楽',
+  '本',
+  '旅行',
+  'ビジネス',
+  '心理学',
+  '歴史',
+  '健康',
+  '写真',
+  'スポーツ',
+  'ゲーム',
+  'ファッション',
+  '美容',
+  '運動',
+  '勉強',
+  '学校',
+  '経済',
+  '政治',
+  'ファイナンス',
+  '金融',
+  'テレビ',
+  '芸能',
+  '教育',
+  '報道',
+  '文学',
+  'アート',
+  '芸術',
+  '数学',
+  '哲学',
+  '物理',
+  '医療',
+  '化学',
+  '日常生活',
+  'エンタメ',
+  'お笑い',
+  '漫画',
+  'アニメ',
+  'ペット',
+  '動物',
+  '経営',
+  '起業',
+  '就活',
+  '恋愛',
+  '育児',
+  '人間関係']
+
+
+const InitialTopicForm = (props: any) => {
+
+  const [topicList, setTopicList] = useState<any>([]);
+  const [saveTopicList, setSaveTopicList] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<any>(true);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const jwt = getJwt();
+  useEffect(() => {
+    axios.get(`/topics?initial_topics=${JSON.stringify(INITIAL_TOPICS_JP)}`, { headers: { Authorization: `Bearer ${jwt}` } })
+    .then(res => {
+      const addChecked = res.data.map((elem: any) => {return {...elem, checked: false}});
+      setTopicList(addChecked);
+      setIsLoading(false);
+    })
+    .catch(err => {
+      setIsLoading(false);
+    });
+
+  }, [])
+  
+  const change = (e: any, topic_id: number, topic: string, idx: number) => {
+
+    switch(e.target.checked) {
+      case false:
+        // delete topic
+        let newSaveTopicList = saveTopicList.filter((elem: any) => (elem.id !== topic_id));
+        setSaveTopicList(newSaveTopicList);
+        return
+      
+      case true:
+        // add topic
+        setSaveTopicList([...saveTopicList, { id: topic_id, topic: topic, checked: e.target.checked }]);
+    }
+  }
+
+  const submit = (e: any) => {
+    e.preventDefault();
+    console.log(topicList);
+    const topic_id_list = saveTopicList.map((elem: any) => (elem.id));
+
+    if(topic_id_list.length < 3) {
+      setErrorMessage('3つ以上のトピックを選択してください');
+      return
+    }
+
+    const jwt = getJwt();
+    axios.post("/topics/users", { topic_id_list }, { headers: { Authorization: `Bearer ${jwt}` } })
+      .then((res: any) => {
+        props.setFinish(true);
+      }).catch((res: any) => {
+        setErrorMessage('内容を確認してください');
+      });
+  }
+
+  if(isLoading) {return (<div></div>)}
+
+  return (
+  <div>
+    <Dialog open={true}>
+        <form onSubmit={e => submit(e)}>
+        {topicList.map((topic: any, idx: number) => {
+          return (
+          <div>
+              <input type="checkbox" id="" onChange={e => change(e, topic.id, topic.topic, idx)} name={topic.topic} value={topic.id}></input>
+            <label htmlFor="subscribeNews">{topic.topic}</label>
+          </div>
+          )
+          })}
+          <button>保存</button>
+        </form>
+        <div style={{color: 'red'}}>{errorMessage ? errorMessage : ''}</div>
+    </Dialog>
+
+  </div>
+  )
+};
+
+const InitialUserInfoForm = (props: any) => {
+
+  const [gender, setGender] = useState<string>("");
+  const [year, setYear] = useState<string>("");
+  const [initialSettingMessage, setInitialSettingMessage] = useState("");
+
+  const submit = (e:any) => {
+    e.preventDefault();
+
+    // ADD ERROR HANDLING
+    if (gender.length === 0) {
+      setInitialSettingMessage('性別を入力してください');
+      return
+    }
+
+    if (year.length === 0 || props.data.editYear === '年') {
+      setInitialSettingMessage('年齢を入力してください');
+      return
+    }
+
+    const postObj = { gender: gender, birth_year: year };
+    const jwt = getJwt();
+    axios.put("/users?initial_setting=true", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
+      .then((res: any) => {
+        props.setFinish(true);
+      }).catch((res: any) => {
+        setInitialSettingMessage('内容を確認してください');
+      });
+  }
+
+  const birthDayForm = () => {
+    const currentYear = new Date().getUTCFullYear();
+    let yearOption = [];
+    let monthOption = [];
+    for (let year = currentYear - 120; year < currentYear; year++) {
+      yearOption.push(
+        (<option value={year}>{year}</option>)
+      )
+    }
+    for (let month = 1; month <= 12; month++) {
+      monthOption.push(
+        (<option value={month}>{month}</option>)
+      )
+    }
+    yearOption = yearOption.reverse();
+    return (
+      <div>
+        <label htmlFor="dob-day" >生年</label>
+        <div>
+          <select name="dob-year" id="dob-year" onChange={e => setYear(e.target.value)}>
+            <option value="">年</option>
+            {yearOption}
+          </select>
+          {/* <select name="dob-month" id="dob-month" onChange={e => this.change(e, "editMonth")}>
+              <option value="">月</option>
+              {monthOption}
+            </select> */}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <Dialog open={parseInt(props.data.userObj.login_count) === 1 && props.data.editInitialUserInfoForm}>
+        <div style={{ padding: '10px', margin: '10px' }}>
+          <h1>ユーザー情報の入力</h1>
+          <form onSubmit={e => submit(e)}>
+            <div style={{ paddingTop: '20px' }}>
+              性別 {props.data.userObj.gender}
+              <div>
+                <select onChange={e => setGender(e.target.value)}>
+                  <option value="">性別</option>
+                  <option value="1">女性</option>
+                  <option value="0">男性</option>
+                  <option value="2">どちらでもない</option>
+                </select>
+              </div>
+            </div >
+            {/* {props.data.userObj.age} */}
+            <div style={{ paddingTop: '20px' }}>
+              {birthDayForm()}
+            </div>
+            <button>完了</button>
+          </form>
+          <div style={{ color: 'red', textAlign: 'center' }}>
+            {initialSettingMessage ? initialSettingMessage : ''}
+          </div>
+          {/* <div style={{ fontSize: '12px' }} onClick={e => this.closeDialog(e)}>あとで入力する</div> */}
+        </div>
+      </Dialog>
+    </div>
+  )
+}
+
+
+const InitialForm = (props: any) => {
+
+  const [isUserInfoFinished, setIsUserInfoFinished] = useState(false);
+  const [isTopicFormFinished, setIsTopicFormFinished] = useState(false);
+
+  const closeDialog = () => {
+
+    props.data.userObj.login_count = props.data.userObj.login_count + 1;
+    localStorage.setItem("user", JSON.stringify(props.data.userObj));
+    const jwt = getJwt();
+    axios.put(`/users?login_count=${props.data.userObj.login_count}`, {}, { headers: { Authorization: `Bearer ${jwt}` } })
+    .then((res) => {
+    }).catch((err) => {
+    })
+    // this.setState({
+    //   editInitialUserInfoForm: false,
+    // })
+  }
+  
+  if (isUserInfoFinished && isTopicFormFinished) {
+    closeDialog();
+    return (<span></span>);
+  }
+
+  if (isUserInfoFinished && !isTopicFormFinished) {
+    return (<InitialTopicForm data={props.data} setFinish={setIsTopicFormFinished}></InitialTopicForm>);
+  }
+
+  return (<InitialUserInfoForm data={props.data} setFinish={setIsUserInfoFinished}></InitialUserInfoForm>);
+}
+
+
+export interface FeedProps {
   keyword: string;
   isPosted: boolean;
   isPostedHandeler: any;
   isLogin: boolean;
 }
  
-export interface NewFeedState {
+export interface FeedState {
   isLoaded: boolean,
   voteLoading: boolean,
   page: number,
@@ -42,7 +300,7 @@ interface Params {
   group_id: string;
 }
  
-class Feed extends React.Component<NewFeedProps, NewFeedState> {
+class Feed extends React.Component<FeedProps, FeedState> {
 
   constructor(props: any) {
     super(props);
@@ -66,7 +324,6 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
       groupTitle: "",
       searchWord: "",
       miniTitle: "",
-
     };
     document.title = "Hearvo"
   };
@@ -104,137 +361,12 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
     return time;
   };
 
-  birthDayForm = () => {
-    const currentYear = new Date().getUTCFullYear();
-    let yearOption = [];
-    let monthOption = [];
-    for (let year = currentYear - 120; year < currentYear; year++) {
-      yearOption.push(
-        (<option value={year}>{year}</option>)
-      )
-    }
-    for (let month = 1; month <= 12; month++) {
-      monthOption.push(
-        (<option value={month}>{month}</option>)
-      )
-    }
-    yearOption = yearOption.reverse();
-    return (
-      <div>
-          <label htmlFor="dob-day" >生年</label>
-          <div>
-          <select name="dob-year" id="dob-year" onChange={e => this.change(e, "editYear")}>
-              <option value="">年</option>
-              {yearOption}
-            </select>
-          {/* <select name="dob-month" id="dob-month" onChange={e => this.change(e, "editMonth")}>
-              <option value="">月</option>
-              {monthOption}
-            </select> */}
-        </div>
-      </div>
-    )
-  }
-
-  closeDialog = (e: any) => {
-    e.preventDefault();
-
-    this.state.userObj.login_count = this.state.userObj.login_count + 1;
-    localStorage.setItem("user", JSON.stringify(this.state.userObj));
-    const jwt = getJwt();
-    axios.put(`/users?login_count=${this.state.userObj.login_count}`,{}, { headers: { Authorization: `Bearer ${jwt}` } })
-    .then((res) => {
-    }).catch((err) => {
-    })
-    this.setState({
-      editInitialUserInfoForm: false,
-    })
-  }
-
-  submit(e: any) {
-    e.preventDefault();
-
-    // ADD ERROR HANDLING
-    if(this.state.editGender.length === 0) {
-      this.setState({
-        initialSettingMessage: '性別を入力してください'
-      })
-      return
-    }
-
-    if (this.state.editYear.length === 0 || this.state.editYear === '年') {
-      this.setState({
-        initialSettingMessage: '年齢を入力してください'
-      })
-      return
-    }
-
-    const postObj = {
-      gender: this.state.editGender,
-      birth_year: this.state.editYear,
-      // birth_month: this.state.editMonth,
-      occupation: this.state.editOccupation,
-    }
-    const jwt = getJwt();
-    axios.put("/users?initial_setting=true", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
-      .then((res: any) => {
-        this.closeDialog(e);
-      }).catch((res: any) => {
-        this.setState({
-          initialSettingMessage: '内容を確認してください'
-        })
-      });
-  }
 
   change(e: any, field: string) {
     e.preventDefault();
     this.setState({
       [field]: e.target.value,
-    } as unknown as NewFeedState)
-  }
-
-  renderInitialUserInfoForm = () => {
-    // console.log('this.state.userObj', this.state.userObj)
-    // console.log('this.state.userObj.login_count', this.state.userObj.login_count)
-    // console.log('this.state.editInitialUserInfoForm', this.state.editInitialUserInfoForm)
-    return (
-      <div>
-        <Dialog open={parseInt(this.state.userObj.login_count) === 1 && this.state.editInitialUserInfoForm}>
-          <div style={{ padding: '10px', margin: '10px'}}>
-            <h1>ユーザー情報の入力</h1>
-            <form onSubmit={e => this.submit(e)}>
-              <div style={{paddingTop: '20px'}}>
-                性別 {this.state.userObj.gender}
-                <div>
-                  <select onChange={e => this.change(e, "editGender")}>
-                    <option value="">性別</option>
-                    <option value="1">女性</option>
-                    <option value="0">男性</option>
-                    <option value="2">どちらでもない</option>
-                  </select>
-                </div>
-              </div >
-                {/* {this.state.userObj.age} */}
-              <div style={{ paddingTop: '20px' }}>
-                  {this.birthDayForm()}
-                </div>
-
-              <div style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                職業 {this.state.userObj.occupation}
-                <div>
-                  <input type="string" maxLength={30} placeholder={this.state.userObj.occupation} onChange={e => this.change(e, "editOccupation")}></input>
-                </div>
-              </div>
-            <button>完了</button>
-            </form>
-            <div style={{color: 'red', textAlign: 'center'}}>
-              {this.state.initialSettingMessage ? this.state.initialSettingMessage : ''}
-            </div>
-          {/* <div style={{ fontSize: '12px' }} onClick={e => this.closeDialog(e)}>あとで入力する</div> */}
-          </div>
-        </Dialog>
-      </div>
-    )
+    } as unknown as FeedState)
   }
 
 
@@ -399,7 +531,7 @@ class Feed extends React.Component<NewFeedProps, NewFeedState> {
       return (
         <div>
           <div>
-            {this.renderInitialUserInfoForm()}
+            <InitialForm data={this.state}></InitialForm>
             {this.state.miniTitle ? <h3>{this.state.miniTitle}</h3> : ''}
             {this.state.topicTitle ? <h3>トピック {this.state.topicTitle}</h3> : ''}
             {this.state.groupTitle ? <h3>グループ「{this.state.groupTitle}」</h3> : ''}
