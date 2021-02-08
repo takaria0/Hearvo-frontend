@@ -31,7 +31,6 @@ function App() {
       <Route path="/tos" exact component={TermsOfService} key="terms" />
       <Route path="/privacy" exact component={PrivacyPolicy} key="privacypolicy" />
       
-      
       <Route path="/" exact component={Home} key="home-home" />
       <Route path="/latest" exact component={Home} key="latest-home" />
       <Route path="/topic" exact component={Home} key="topic-home" />

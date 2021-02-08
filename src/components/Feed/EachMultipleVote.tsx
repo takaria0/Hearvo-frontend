@@ -82,8 +82,9 @@ const EachMultipleVote = (props: any) => {
   const voteSelectInput = () => {
     const currentData = data[dataIdx];
     return (
-    <div style={{ width: "100%" }} className={styles.content}>
-          <div style={{ margin: 50 }}>
+      <div className={styles.content}>
+          <div style={{ padding: 50, }}>
+            <h2>連続投票 {dataIdx+1}</h2>
           <div>{currentData.title}</div>
           <div>{currentData.content}</div>
             {currentData.vote_selects.map((each: any) => { return (
@@ -145,7 +146,7 @@ const EachMultipleVote = (props: any) => {
   if (!doesVoteStart) { return (
     <div>
       <h2><NoteIcon style={{ marginBottom: -5,  padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-  <button style={{ border: 'solid', borderWidth: 1, borderRadius: 5, padding: 10 }} onClick={e => startClick(e)}>連続投票を開始</button>
+      <button style={{ border: 'solid', backgroundColor: '#60D4FF', color: 'white', borderWidth: 1, borderRadius: 5, padding: 10 }} onClick={e => startClick(e)}><b>連続投票を開始</b></button>
   </div>
   ) }
 

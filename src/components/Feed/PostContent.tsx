@@ -23,7 +23,45 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import { AxiosInterceptorManager } from 'axios';
 
 
-const hasIncorrectInputMultiple = () => {
+const hasIncorrectInputMultiple = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, children: any ) => {
+  // const parentTitle = props.title;
+  // const parentContent = props.content;
+  // const children = titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } }) } });
+  // const postObj = { title: parentTitle, content: parentContent, end_at: props.endAt, group_id: props.targetGroupId, vote_type_id: "3", topic: props.topicList, children: children }
+
+  // console.log('title', title)
+  // console.log('topic', topic)
+  
+  // // console.log('children', children)
+  // const childrenTitle = children.filter((elem: any) => (elem.title.length === 0))
+  // console.log('childrenTitle', childrenTitle)
+  // if (childrenTitle.length > 0) {
+  //   return true;
+  // }
+
+  if (title.length === 0) {
+    return true;
+  }
+
+  if (topic.length === 0) {
+    return true;
+  }
+
+
+
+  // const childrenVoteObj = children.filter((elem: any) => {
+  //   const voteCheck = elem.vote_obj.filter((obj: any) => (obj.content.length !== 0))
+  //   if(voteCheck.length === 0) {
+  //     return true
+  //   }
+  //   return false;
+  // })
+
+  // if (childrenVoteObj.length === 0) {
+  //   return true;
+  // }
+
+  return false;
 
 };
 
@@ -212,7 +250,7 @@ const MultipleVoteForm = (props: any) => {
     setTitleList(Array(multipleVoteNum).fill(''));
     setContentList(Array(multipleVoteNum).fill(''));
     setVoteDataList(Array(multipleVoteNum).fill([]));
-  }, [props.multipleVoteNum]);
+  }, [props.multipleVoteNum, setTitleList, setContentList, titleList, contentList]);
 
   const submit = (e: any) => {
     const parentTitle = props.title;
@@ -220,7 +258,11 @@ const MultipleVoteForm = (props: any) => {
     const children = titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } })}});
     const postObj = { title: parentTitle, content: parentContent, end_at: props.endAt, group_id: props.targetGroupId, vote_type_id: "3", topic: props.topicList, children: children }
 
-    console.log("postObj 3 submission", postObj);
+
+    if (children.filter((elem: any) => (elem.title.length === 0)).length > 0) {return}
+
+    if (children.filter((elem: any) => (elem.vote_obj.filiter((obj: any) => (obj.content.length === 0)).length === 0)).length > 0) { return }
+
     const jwt = getJwt();
     axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
@@ -240,6 +282,16 @@ const MultipleVoteForm = (props: any) => {
       })
   };
 
+  const submitButton = () => {
+    const invalid = hasIncorrectInputMultiple(props.title, props.content, props.topicList, 3, props.endAt, props.targetGroupId, titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } }) } }))
+
+    switch (invalid) {
+      case true:
+        return (<div><br></br><div style={{ border: 'none', color: 'gray', backgroundColor: "white" }}  >投稿</div></div>)
+      case false:
+        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)}>投稿</button></div>)
+    }
+  }
 
   return (
   <div>
@@ -253,11 +305,10 @@ const MultipleVoteForm = (props: any) => {
     setVoteDataList={setVoteDataList}
     topicList={props.topicList}
     ></MultipleVoteFormEach>)})}
-    {
-        hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteDataList) ?
-        '' :
-          <div style={{ textAlign: 'center' }}><br></br><button onClick={e => submit(e)}>投稿</button></div> 
-    }
+    <div style={{textAlign: 'center'}}>
+        {submitButton()}
+    </div>
+      
     
     </div>
   )
@@ -339,10 +390,10 @@ const TopicCandidates = (props: any) => {
 
   }, [props.topic])
 
-  console.log('props.topic', props.topic);
-  console.log('props.cursor', props.cursor);
-  console.log('props.topicList', props.topicList);
-  console.log('topicCandidateList', topicCandidateList);
+  // console.log('props.topic', props.topic);
+  // console.log('props.cursor', props.cursor);
+  // console.log('props.topicList', props.topicList);
+  // console.log('topicCandidateList', topicCandidateList);
 
   // get current topic index
 
@@ -394,16 +445,11 @@ const VoteForm = (props: any) => {
   }, []);
 
 
-  const submit = (e: any) => {
-    e.preventDefault();
-    const jwt = getJwt();
-    // axios.post("/posts", );
-  }
-
 
   const changeEndAt = (e: any) => {
     const dt = new Date();
     const endHour = e.target.value ? parseInt(e.target.value) : 0;
+    setEndAt(endHour);
     if (endHour > 0 && endHour < 36000) {
       const endDate = new Date(dt.setHours(dt.getHours() + endHour));
       const endDateString = endDate.toISOString().slice(0, -8);
@@ -538,7 +584,7 @@ const VoteForm = (props: any) => {
         <br></br>
 
         <div>
-        終了 <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(parseInt(e.target.value))}></input> 時間後
+        終了 <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(e)}></input> 時間後
       </div><br></br>
 
         <div>
