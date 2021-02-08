@@ -9,7 +9,9 @@ import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import CommentIcon from '@material-ui/icons/Comment';
 import EachVoteSelect from './EachVoteSelect';
 import EachVoteMj from './EachVoteMj';
+import EachMultipleVote from './EachMultipleVote';
 import CheckIcon from '@material-ui/icons/Check';
+import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -27,39 +29,6 @@ const toHashTag = (content: string) => {
   return splitedContent;
 }
 
-
-const renderVoteSelectResult = (data: any, layout: any) => {
-  const x = data[0].x;
-  const y = data[0].y;
-  return (
-    <div>
-      <div>
-        <ul className={styles.vote_ul}>
-          <div>
-            {
-              y.map((label: string, idx: number) => {
-                x[idx] = Math.round(x[idx]);
-                return (
-                  <div style={{  border: 'solid 1px', borderRadius: '5px', marginBottom: '5px' }}>
-                    <div style={{ paddingLeft:'2px', paddingTop: '3px', paddingBottom: '3px', backgroundColor: 'rgba(0, 0, 255, 0.1)', width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }}>
-                      <div style={{ whiteSpace: 'nowrap', padding: 2 }}>
-
-                        <div style={{ textAlign: 'left' }}>
-                          {label} {isNaN(x[idx]) ? 0 : x[idx]}%
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                )
-              })
-            }
-          </div>
-        </ul>
-      </div>
-    </div>
-  )
-}
 
 const renderVoteMjResult = (baseData: any) => {
   return (
@@ -284,14 +253,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
   
 
-  renderEachData = (data: any, vote_type_id: number) => {
-    let currentFirstURL = "";
-    try {
-      currentFirstURL = window.location.pathname.split("/")[1]
-    } catch {
-      currentFirstURL = "";
-    }
+  renderEachData = (data: any, vote_type_id: number, currentFirstURL: string) => {
 
+    // plot result data
     let x, y, plotData, layout;
     if(vote_type_id === 1) {
       x = data.vote_selects_count.map((da: any) => {
@@ -300,114 +264,163 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       y = data.vote_selects_count.map((da: any) => {
         return da.content
       });
-      plotData = [{ type: 'bar', x: x, y: y, orientation: 'h' }];
+      const voteIdList = data.vote_selects_count.map((da: any) => { return da.vote_select_id });
+      plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: this.props.data.my_vote, voteIdList: voteIdList }];
       layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
     }
 
-    if(currentFirstURL !== "posts") {
-      return (
-        <li className={styles.li}>
-          <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-            {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
-          
-            <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-          </Link>
-          <div className={styles.vote_section}>
-            {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
-            </div>
-          <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
-            <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} by {this.props.data.user_info.name}</div ></div>
+    // plot gender data
 
-        </li>
-      )
-    } 
-    
-    // only show detail query mode in /posts/:post_id
-    if(currentFirstURL === "posts") {
-      const mobStyle = {paddingBottom: '10px'}
-      const renderCondition = () => 
+    switch(currentFirstURL) {
+      // post detail page. posts/id 
+      case "posts":
+        const mobStyle = { paddingBottom: '10px' }
+        const renderCondition = () =>
         (
-        <Dialog open={this.state.doFilter}>
-        <div style={{margin: '30px'}}>
-          <button onClick={e => this.filterClick(e, false)}>戻る</button>
-          <div>以下の条件で絞り込みをした結果を表示します。</div>
-          <form onSubmit={e => this.submit(e)}>
-              <div>最小年齢</div>
-              <div style={mobStyle}><input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} /></div>
-            <div>最大年齢</div>
-              <div style={mobStyle}>
-            <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} /></div>
-              <div>性別</div>
-              <div style={mobStyle}>
-            <select onChange={e => this.change(e, "genderSelect")}>
-              <option value="">性別</option>
-              <option value="女性">女性</option>
-              <option value="男性">男性</option>
-              <option value="どちらでもない">どちらでもない</option>
-            </select></div>
-              <div> 職業</div>
-              <div style={mobStyle}>{this.occupationForm()}</div>
-              <div style={mobStyle}><button >更新</button></div>
-          </form>
-            <button onClick={e => this.resetClick(e)}>リセット</button>
-          </div>
+          <Dialog open={this.state.doFilter}>
+            <div style={{ margin: '30px' }}>
+              <button onClick={e => this.filterClick(e, false)}>戻る</button>
+              <div>以下の条件で絞り込みをした結果を表示します。</div>
+              <form onSubmit={e => this.submit(e)}>
+                <div>最小年齢</div>
+                <div style={mobStyle}><input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} /></div>
+                <div>最大年齢</div>
+                <div style={mobStyle}>
+                  <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} /></div>
+                <div>性別</div>
+                <div style={mobStyle}>
+                  <select onChange={e => this.change(e, "genderSelect")}>
+                    <option value="">性別</option>
+                    <option value="1">女性</option>
+                    <option value="0">男性</option>
+                    <option value="2">どちらでもない</option>
+                  </select></div>
+                <div> 職業</div>
+                <div style={mobStyle}>{this.occupationForm()}</div>
+                <div style={mobStyle}><button >更新</button></div>
+              </form>
+              <button onClick={e => this.resetClick(e)}>リセット</button>
+            </div>
           </Dialog>
-      )
-      const baseItem = (<div>
-        <div style={{ textAlign: 'right' }}><button style={{ fontSize: '16px', border: 'solid 1px', borderRadius: '5px', backgroundColor: 'silver', color: 'black' }} onClick={e => this.filterClick(e, true)}>絞り込み検索</button>&nbsp;&nbsp;</div>
-        <li className={styles.li}>
-          <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-            {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
-          
-          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-          </Link>
+        )
 
-          {this.state.doFilter ? renderCondition() : ""}
-          <div className={styles.vote_section}>
-            {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
-          </div>
-          <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div ><div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}  by {this.props.data.user_info.name}</div ></div>
-        </li>
-      </div>)
-
-      let itemArray = [];
-      itemArray.push(baseItem);
-      return (
+        const baseItem = (
         <div>
-          {itemArray.map((item: any) => (item))}
+          <li className={styles.li}>
+            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+
+              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
+            </Link>
+
+            {this.state.doFilter ? renderCondition() : ""}
+            <div className={styles.vote_section}>
+              {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
+            </div>
+
+              
+              {JSON.stringify(this.props.data.gender_distribution)}
+
+            <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div ><div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}  by {this.props.data.user_info.name}</div ></div>
+          </li>
         </div>
-      )
+        )
+
+        let itemArray = [];
+        itemArray.push(baseItem);
+        return (<div>{itemArray.map((item: any) => (item))}</div>)
+
+      // default feed
+      default:
+        return (
+          <li className={styles.li}>
+            <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
+            </Link>
+            <div className={styles.vote_section}>
+              {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
+            </div>
+
+            <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} by {this.props.data.user_info.name}</div ></div>
+
+          </li>
+        )
     }
   }
 
-  render() {
-    if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
-      return (
-        <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id)}</div>
-      );
-    }
-    else {
-      return (
-        <li className={styles.li}>
-          <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-            {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
-          
-          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-          </Link>
-          <div className={styles.vote_section}>
-            {this.state.voteTypeId === 1 ? 
-              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id}></EachVoteSelect>
-             : 
-              <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
-             }
-            </div>
-          <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
-            <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length} by {this.props.data.user_info.name}</div >
-            </div>
-        </li>
-      )
-    }
 
+
+  render() {
+    const currentFirstURL = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
+
+    switch(this.state.voteTypeId) {
+
+      case 1:
+        if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
+          return (
+            <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id, currentFirstURL)}</div>
+          );
+        }
+
+        return (
+          <li className={styles.li}>
+            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}>
+              <div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
+            </Link>
+            <div className={styles.vote_section}>
+              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
+            </div>
+            <div className={styles.footer}>
+              <div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length} by {this.props.data.user_info.name}</div >
+            </div>
+          </li>
+        )
+
+
+      case 2:
+        if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
+          return (
+            <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id, currentFirstURL)}</div>
+          );
+        }
+
+        return (
+          <li className={styles.li}>
+            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
+            </Link>
+            <div className={styles.vote_section}>
+              <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
+            </div>
+            <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length} by {this.props.data.user_info.name}</div >
+            </div>
+          </li>
+        )
+
+
+      case 3:
+        return (
+          <li className={styles.li}>
+            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
+            </Link>
+            <div className={styles.vote_section}>
+              <EachMultipleVote hasVoted={this.props.data.already_voted}　postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
+            </div>
+            <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length} by {this.props.data.user_info.name}</div >
+            </div>
+          </li>
+        )
+    }
   }
 }
 

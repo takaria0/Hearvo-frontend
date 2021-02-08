@@ -15,6 +15,10 @@ import ProfileDetail from './components/ProfileDetail';
 import MyPostHeader from './components/Feed/MyPostHeader';
 import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import GroupCreate from './components/GroupCreate';
+import GroupInvite from './components/GroupInvite';
+import GroupList from './components/GroupList';
+import { HomeOutlined } from '@material-ui/icons';
 
 function App() {
   return (
@@ -26,6 +30,7 @@ function App() {
       <Route path="/intro" exact component={Intro} key="intro" />
       <Route path="/tos" exact component={TermsOfService} key="terms" />
       <Route path="/privacy" exact component={PrivacyPolicy} key="privacypolicy" />
+      
       <Route path="/" exact component={Home} key="home-home" />
       <Route path="/latest" exact component={Home} key="latest-home" />
       <Route path="/topic" exact component={Home} key="topic-home" />
@@ -34,10 +39,13 @@ function App() {
       <Route path="/search" exact component={Home} key="search-home" />
       <Route path="/posts/:post_id" component={PostDetail} />
       <Auth>
-          <Header></Header>
           <Route path="/profile" exact component={ProfileDetail} />
-          <Route path="/profile/feed/myposts" exact component={MyPostHeader} key="myposts-home" />
-          <Route path="/profile/feed/voted" exact component={MyPostHeader} key="voted-home" />
+          <Route path="/profile/feed/myposts" exact component={Home} key="myposts-home" />
+          <Route path="/profile/feed/voted" exact component={Home} key="voted-home" />
+          <Route path="/group/:group_id/feed" exact component={Home} />
+          <Route path="/group/list" exact component={GroupList} />
+          <Route path="/group/create" exact component={GroupCreate} />
+          <Route path="/group/invite/:link" exact component={GroupInvite} />
           <Route path="/settings" exact component={Settings} key="settings" />
       </Auth>
     </Switch>

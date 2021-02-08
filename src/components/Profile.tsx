@@ -121,7 +121,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   searchBar = () => {
     return (
       <form style={{ display: "inline", width: '100%' }} onSubmit={e => this.searchSubmit(e)}>
-        <input type="text" style={{ width: '60%', padding: '2px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder="検索"
+        {/* <SearchIcon></SearchIcon> */}
+        <input type="text" style={{ width: '60%', padding: '3px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={"検索"}
         ></input>
         {/* <IconButton type="submit"> */}
         {/* </IconButton> */}
@@ -148,6 +149,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               <MenuItem onClick={e => this.handleClose(e, "/profile")}>{this.state.user?.name}</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/myposts")}>自分の投稿</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/profile/feed/voted")}>投票した投稿</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/group/list")}>グループ一覧</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/group/create")}>グループ作成</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/tos")}>利用規約</MenuItem>
               <MenuItem onClick={e => this.handleClose(e, "/privacy")}>プライバシーポリシー</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/settings")}>設定</MenuItem>

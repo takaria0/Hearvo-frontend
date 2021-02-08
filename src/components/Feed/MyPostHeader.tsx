@@ -11,8 +11,8 @@ import * as styles from '../../css/Feed/PostContent.module.css';
 import * as homeStyles from '../../css/Home.module.css';
 import { StringLiteral } from 'typescript';
 import { CropLandscapeOutlined, TransferWithinAStationSharp } from '@material-ui/icons';
-import NewFeed from './NewFeed';
-
+import Feed from './Feed';
+import Header from '../Header';
 
 export interface NewPostContentProps {
   edit: boolean;
@@ -31,7 +31,7 @@ export interface NewPostContentState {
   posted: boolean;
 }
 
-class NewPostContent extends React.Component<NewPostContentProps, NewPostContentState> {
+class PostContent extends React.Component<NewPostContentProps, NewPostContentState> {
 
   constructor(props: any) {
     super(props);
@@ -168,7 +168,7 @@ class NewPostContent extends React.Component<NewPostContentProps, NewPostContent
   render() {
     return (
       <div>
-          <NewFeed isLogin={true} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></NewFeed>
+          <Feed isLogin={true} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></Feed>
       </div>
     );
   }
@@ -213,9 +213,13 @@ class MyPostHeader extends React.Component<MyPostHeaderProps, MyPostHeaderState>
 
   render() {
     return (
+      <div>
+        <Header></Header>
+      
       <div className={homeStyles.body}>
         <div>{this.headerJSX()}</div>
-        <NewPostContent edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></NewPostContent>
+        <PostContent edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></PostContent>
+      </div>
       </div>
     );
   }
