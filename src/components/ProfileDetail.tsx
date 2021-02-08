@@ -140,19 +140,19 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
       return
     }
 
-    if (this.state.editOccupation.length === 0) {
-      this.setState({
-        handleMessage: '職業を選択してください'
-      })
-      return
-    }
+    // if (this.state.editOccupation.length === 0) {
+    //   this.setState({
+    //     handleMessage: '職業を選択してください'
+    //   })
+    //   return
+    // }
 
 
     const postObj = {
-      description: this.state.editDescription,
+      // description: this.state.editDescription,
       gender: this.state.editGender,
       birth_year: this.state.editBirthYear,
-      occupation: this.state.editOccupation,
+      // occupation: this.state.editOccupation,
     }
     const jwt = getJwt();
 
@@ -197,13 +197,13 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           <li className={styles.li}>
             メールアドレス: {this.state.user?.email}
           </li>
-          <li className={styles.li}>
+          {/* <li className={styles.li}>
               説明: {this.state.user?.description}
               <div>
                 <br></br>
                 <textarea  rows={3} style={{width: "90%"}}  maxLength={250} placeholder={this.state.user?.description} onChange={e => this.change(e, "editDescription")}></textarea >
               </div>
-          </li>
+          </li> */}
 
           <li className={styles.li}>
               性別: {genderIntToString(this.state.user?.gender)}
@@ -222,18 +222,17 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
               <div>
                 <br></br>
                 {this.birthDayForm()}
-                {/* <input min="1" max="130" type="number" placeholder={this.state.user?.birth_year} onChange={e => this.change(e, "editAge")}></input> */}
               </div>
           </li>
+{/* 
           <li className={styles.li}>
               職業: {this.state.user?.occupation}
               <div>
                 <br></br>
                 {this.occupationForm()}
-                {/* <input type="string" maxLength={30} placeholder={this.state.user?.occupation} onChange={e => this.change(e, "editOccupation")}></input> */}
               </div>
-
-          </li>
+          </li> */}
+          
         </ul>
           <Button type="submit" variant="contained" value="Submit" color="primary">保存</Button>
         </form>
@@ -283,18 +282,18 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           <li className={styles.li}>
             メールアドレス: {this.state.user?.email}
           </li>
-          <li className={styles.li}>
+          {/* <li className={styles.li}>
             説明: {this.state.user?.description}
-          </li>
+          </li> */}
           <li className={styles.li}>
             性別: {genderIntToString(this.state.user?.gender)}
           </li>
           <li className={styles.li}>
             年齢: {this.state.user?.birth_year}年生まれ
           </li>
-          <li className={styles.li}>
+          {/* <li className={styles.li}>
             職業: {this.state.user?.occupation}
-          </li>
+          </li> */}
         </ul>
       </div>
     )

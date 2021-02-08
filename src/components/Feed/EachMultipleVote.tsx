@@ -14,7 +14,8 @@ import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-do
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
-import { AnyNsRecord } from 'dns';
+import NoteIcon from '@material-ui/icons/Note';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const moment = require('moment-timezone');
 // moment.locale('ja');
@@ -121,6 +122,7 @@ const EachMultipleVote = (props: any) => {
     return resultJSX;
   }
 
+  if (isLoading) { return (<div>...</div>) }
 
   const currentFirstURL = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
 
@@ -129,13 +131,23 @@ const EachMultipleVote = (props: any) => {
       case "posts":
         return (<div>{voteSelectResult()}</div>);
       default:
-        return (<div><Link to={`/posts/${props.postId}`}>結果を見る</Link></div>)
+        return (
+        <div>
+            <h2><NoteIcon style={{ marginBottom: -5, padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
+          <Link to={`/posts/${props.postId}`}><button style={{ border: 'solid', borderWidth: 1, borderRadius: 5, padding: 10 }}>結果を見る</button></Link>
+          </div>
+          )
     }
   }
 
-  if (!doesVoteStart) { return (<div onClick={e => startClick(e)}>投票を開始</div>)}
+  
 
-  if (isLoading) { return (<div>...</div>) }
+  if (!doesVoteStart) { return (
+    <div>
+      <h2><NoteIcon style={{ marginBottom: -5,  padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
+  <button style={{ border: 'solid', borderWidth: 1, borderRadius: 5, padding: 10 }} onClick={e => startClick(e)}>連続投票を開始</button>
+  </div>
+  ) }
 
   if (doesVoteEnd) { history.push(`/posts/${props.postId}`); }
 

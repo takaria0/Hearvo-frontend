@@ -23,7 +23,30 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import { AxiosInterceptorManager } from 'axios';
 
 
-const submitCheck = () => {
+const hasIncorrectInputMultiple = () => {
+
+};
+
+const hasIncorrectInput = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, vote_obj: [] ) => {
+
+
+  if (title.length === 0) {
+    return true;
+  }
+
+  if (topic.length === 0) {
+    return true;
+  }
+
+
+  if(vote_type_id === 1) {
+    const result = vote_obj.filter((elem: any) => (elem.length === 0))
+    return result.length === 0 ?  false : true;
+  }
+
+  
+
+  return false;
 
 };
 
@@ -54,6 +77,7 @@ const VoteCandidateForm = (props: any) => {
     }
   }
   const callAxios = (e: any, postObj: any) => {
+
     const jwt = getJwt();
     axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
@@ -111,6 +135,17 @@ const VoteCandidateForm = (props: any) => {
   }
 
   const voteStyle = { padding: '3px', marginBottom: '5px' }
+
+  const submitButton = () => {
+    const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData);
+
+    switch(invalid) {
+      case true:
+        return (<div><br></br><div style={{  border: 'none' , color:'gray', backgroundColor: "white" }}  >投稿</div></div>)
+      case false:
+        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF"}} onClick={e => submit(e)}>投稿</button></div>)
+    }
+  }
   
   return (
     <div style={{ textAlign: 'center'}}>
@@ -124,7 +159,7 @@ const VoteCandidateForm = (props: any) => {
         )
       })}
       <button type="button" onClick={e => addHandle(e)}><AddIcon style={{ fontSize: 16 }}></AddIcon></button>
-      {props.voteTypeId === 3 ? "" : <div><br></br><div onClick={e => submit(e)}>投稿</div></div>}
+      {props.voteTypeId === 3 ? '' : submitButton() }
     </div>
   )
 
@@ -218,7 +253,12 @@ const MultipleVoteForm = (props: any) => {
     setVoteDataList={setVoteDataList}
     topicList={props.topicList}
     ></MultipleVoteFormEach>)})}
-    <div style={{textAlign: 'center'}}><br></br><div onClick={e => submit(e)}>投稿</div></div>
+    {
+        hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteDataList) ?
+        '' :
+          <div style={{ textAlign: 'center' }}><br></br><button onClick={e => submit(e)}>投稿</button></div> 
+    }
+    
     </div>
   )
 }
@@ -282,6 +322,50 @@ const MatrixVoteForm = (props: any) => {
   return (<div>{renderMJcandidates()}</div>)
 }
 
+const TopicCandidates = (props: any) => {
+  const [topicCandidateList, setTopicCandidateList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const jwt = getJwt();
+    axios.get(`/topics?startswith=${props.topic}`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+    .then(res => {
+      setTopicCandidateList(res.data);
+      setIsLoading(false);
+    })
+    .catch(err => {
+
+    });
+
+  }, [props.topic])
+
+  console.log('props.topic', props.topic);
+  console.log('props.cursor', props.cursor);
+  console.log('props.topicList', props.topicList);
+  console.log('topicCandidateList', topicCandidateList);
+
+  // get current topic index
+
+
+  // get current editing topic
+
+  // get topic list 
+
+  // on push, update topic
+
+  if(isLoading) {return (<span></span>)}
+
+  if(topicCandidateList.length === 0) {return (<span></span>)}
+
+  return (
+  <div>
+    {topicCandidateList.map((topic: any) => {
+      return (<div>{topic.topic}, {topic.num_of_posts}</div>)
+    })}
+  </div>)
+}
+
+
 
 const VoteForm = (props: any) => {
   const currentDate = new Date();
@@ -295,13 +379,11 @@ const VoteForm = (props: any) => {
   const [maxTopicNum, setMaxTopicNum] = useState(10);
   const [topicString, setTopicString] = useState("");
   const [topicList, setTopicList] = useState<any>([]);
+  const [currentTopicCursor, setCurrentTopicCursor] = useState('');
   const [groupList, setGroupList] = useState<any>([]);
   const [targetGroupId, setTargetGroupId] = useState("");
   const [multipleVoteNum, setMultipleVoteNum] = useState(2);
-  // const [parentVoteData, setParentVoteData] = useState<any>([]);
 
-  // childrenでsubmitした方が良い気がしてきた・・・。親で必要な情報はすべてpropsで渡して、子供で投稿する。
-  // 
   useEffect(() => {
     // get group list
     const jwt = getJwt();
@@ -366,7 +448,12 @@ const VoteForm = (props: any) => {
     }
   }
 
-  const editTopic = (rawTopicString: string) => {
+
+
+  const editTopic = (e: any) => {
+    const rawTopicString = e.target.value;
+    const currentCursor = e.target.selectionStart;
+    setCurrentTopicCursor(currentCursor);
     const pattern = (/,|，|、/g);
     setTopicString(rawTopicString)
     if (doContainDelim(rawTopicString)) {
@@ -376,7 +463,10 @@ const VoteForm = (props: any) => {
       setTopicList(topicList);
       return 
     }
-    if (rawTopicString.length === 0) { return };
+    if (rawTopicString.length === 0) { 
+      setTopicList([]);
+      return
+    };
 
     setTopicList([rawTopicString]);
   };
@@ -414,6 +504,9 @@ const VoteForm = (props: any) => {
           topicList={topicList}
           editParentHandle={props.editParentHandle}
           ></MultipleVoteForm>)
+
+      default:
+        return (<span></span>)
     }
   }
 
@@ -445,14 +538,15 @@ const VoteForm = (props: any) => {
         <br></br>
 
         <div>
-        終了 <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => setEndAt(parseInt(e.target.value))}></input> 時間後
+        終了 <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(parseInt(e.target.value))}></input> 時間後
       </div><br></br>
 
         <div>
-          トピック 読点で区切って入力
-        <input placeholder='トピック1、トピック2、・・・' style={{ padding: '5px', width: '100%', marginBottom: '10px' }} value={topicString} type="text" onChange={e => editTopic(e.target.value)}></input>
+          トピック 一つ以上、読点で区切って入力 
+        <input placeholder='トピック1、トピック2、・・・' style={{ padding: '5px', width: '100%', marginBottom: '10px' }} value={topicString} type="text" onChange={e => editTopic(e)}></input>
           {renderTopic()}
         </div>
+        <div><TopicCandidates topic={topicString} cursor={currentTopicCursor} topicList={topicList}></TopicCandidates></div>
 
       <hr></hr><br></br>
         {voteTypeId === 3 ? <h2>表題</h2> : <h2>投票</h2>}

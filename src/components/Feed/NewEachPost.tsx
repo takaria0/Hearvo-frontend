@@ -255,6 +255,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
   renderEachData = (data: any, vote_type_id: number, currentFirstURL: string) => {
 
+    // plot result data
     let x, y, plotData, layout;
     if(vote_type_id === 1) {
       x = data.vote_selects_count.map((da: any) => {
@@ -267,6 +268,8 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: this.props.data.my_vote, voteIdList: voteIdList }];
       layout = { title: `合計票数: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
     }
+
+    // plot gender data
 
     switch(currentFirstURL) {
       // post detail page. posts/id 
@@ -300,7 +303,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
             </div>
           </Dialog>
         )
-        const baseItem = (<div>
+
+        const baseItem = (
+        <div>
           <li className={styles.li}>
             <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
               {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
@@ -312,9 +317,14 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
             </div>
+
+              
+              {JSON.stringify(this.props.data.gender_distribution)}
+
             <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div ><div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}  by {this.props.data.user_info.name}</div ></div>
           </li>
-        </div>)
+        </div>
+        )
 
         let itemArray = [];
         itemArray.push(baseItem);
@@ -331,6 +341,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
+
             <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
               <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} by {this.props.data.user_info.name}</div ></div>
 
