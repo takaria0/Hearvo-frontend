@@ -4,6 +4,29 @@ import * as styles from '../css/ProfileDetail.module.css';
 import { Button, Input } from '@material-ui/core';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
+import Header from './Header';
+
+// 0 -> male
+// 1 -> female
+// 2 -> others
+const genderIntToString = (num: number | undefined) => {
+  switch(num) {
+    case 0:
+      return "男性"
+      break;
+    case 1:
+      return "女性"
+      break;
+    case 2:
+      return "その他"
+      break;
+    
+    default:
+      return ""
+      break;
+  }
+}
+
 
 
 type userObject = {
@@ -12,7 +35,7 @@ type userObject = {
   email: string;
   description: string;
   string_id: string;
-  gender: string;
+  gender: number;
   age: string;
   created_at: string;
   updated_at: string;
@@ -117,19 +140,19 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
       return
     }
 
-    if (this.state.editOccupation.length === 0) {
-      this.setState({
-        handleMessage: '職業を選択してください'
-      })
-      return
-    }
+    // if (this.state.editOccupation.length === 0) {
+    //   this.setState({
+    //     handleMessage: '職業を選択してください'
+    //   })
+    //   return
+    // }
 
 
     const postObj = {
-      description: this.state.editDescription,
+      // description: this.state.editDescription,
       gender: this.state.editGender,
       birth_year: this.state.editBirthYear,
-      occupation: this.state.editOccupation,
+      // occupation: this.state.editOccupation,
     }
     const jwt = getJwt();
 
@@ -174,23 +197,23 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           <li className={styles.li}>
             メールアドレス: {this.state.user?.email}
           </li>
-          <li className={styles.li}>
+          {/* <li className={styles.li}>
               説明: {this.state.user?.description}
               <div>
                 <br></br>
                 <textarea  rows={3} style={{width: "90%"}}  maxLength={250} placeholder={this.state.user?.description} onChange={e => this.change(e, "editDescription")}></textarea >
               </div>
-          </li>
+          </li> */}
 
           <li className={styles.li}>
-              性別: {this.state.user?.gender}
+              性別: {genderIntToString(this.state.user?.gender)}
               <div>
                 <br></br>
                 <select onChange={e => this.change(e, "editGender")}>
                   <option value="">性別</option>
-                  <option value="女性">女性</option>
-                  <option value="男性">男性</option>
-                  <option value="どちらでもない">どちらでもない</option>
+                  <option value="1">女性</option>
+                  <option value="0">男性</option>
+                  <option value="2">どちらでもない</option>
                 </select>
               </div>
           </li>
@@ -199,18 +222,17 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
               <div>
                 <br></br>
                 {this.birthDayForm()}
-                {/* <input min="1" max="130" type="number" placeholder={this.state.user?.birth_year} onChange={e => this.change(e, "editAge")}></input> */}
               </div>
           </li>
+{/* 
           <li className={styles.li}>
               職業: {this.state.user?.occupation}
               <div>
                 <br></br>
                 {this.occupationForm()}
-                {/* <input type="string" maxLength={30} placeholder={this.state.user?.occupation} onChange={e => this.change(e, "editOccupation")}></input> */}
               </div>
-
-          </li>
+          </li> */}
+          
         </ul>
           <Button type="submit" variant="contained" value="Submit" color="primary">保存</Button>
         </form>
@@ -260,18 +282,18 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           <li className={styles.li}>
             メールアドレス: {this.state.user?.email}
           </li>
-          <li className={styles.li}>
+          {/* <li className={styles.li}>
             説明: {this.state.user?.description}
-          </li>
+          </li> */}
           <li className={styles.li}>
-            性別: {this.state.user?.gender}
+            性別: {genderIntToString(this.state.user?.gender)}
           </li>
           <li className={styles.li}>
             年齢: {this.state.user?.birth_year}年生まれ
           </li>
-          <li className={styles.li}>
+          {/* <li className={styles.li}>
             職業: {this.state.user?.occupation}
-          </li>
+          </li> */}
         </ul>
       </div>
     )
@@ -281,6 +303,8 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
 
     if(this.state.edit === false) {
       return (
+        <div>
+          <Header></Header>
         <div className={styles.body}>
           <div className={styles.profile_body}>
 
@@ -293,11 +317,12 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
             {this.viewRender()}
           </div>
           </div>
-        </div>
+          </div></div>
       )
     } else {
       return (
-
+        <div>
+          <Header></Header>
         <div className={styles.body}>
           <div className={styles.profile_body}>
           <h1>プロフィール</h1>
@@ -309,6 +334,7 @@ class ProfileDetail extends React.Component<ProfileDetailProps, ProfileDetailSta
           </div>
           </div>
         </div >
+        </div>
       )
     }
 

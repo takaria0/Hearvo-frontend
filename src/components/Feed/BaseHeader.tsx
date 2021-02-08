@@ -6,7 +6,7 @@ import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import { Button, TextField, Fab, Input, Menu, MenuItem } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import * as styles from '../../css/Feed/PostContent.module.css';
-import NewPostContent from './NewPostContent';
+import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';
 
@@ -87,7 +87,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     if (this.state.edit) {
       return (
         <div className={styles.mini_header}>
-          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link>
+          {/* <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link> */}
           <div className={styles.mini_header_inside}>
             <Link to="/popular">人気</Link> <Link to="/latest">最新</Link>{"    "} 
 
@@ -118,7 +118,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     } else {
       return (
         <div className={styles.mini_header}>
-          <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link>
+          {/* <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link> */}
           <div className={styles.mini_header_inside}>
 
             <Link to="/popular" >人気</Link> <Link to="/latest">最新</Link>{"    "} {(window.location.pathname.split("/")[1] === "popular" || window.location.pathname === "/") ? 
@@ -159,7 +159,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     return ( 
       <div>
         <div>{this.headerJSX()}</div>
-        <NewPostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></NewPostContent>
+        <PostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></PostContent>
       </div>
      );
   }
