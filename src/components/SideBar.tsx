@@ -25,7 +25,7 @@ const SideBar = (props: any) => {
     
   }, []);
 
-  if(isLoading) {return (<span></span>)}
+  if (isLoading) {return (<div><h3>人気のトピック</h3></div>)}
 
   return (
     <div>

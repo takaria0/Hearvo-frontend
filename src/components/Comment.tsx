@@ -14,15 +14,36 @@ moment.tz.setDefault('UTC');
 
 
 
-const CommentItem = (data: any) => {
+const CommentItem = (props: any) => {
+  // console.log('props.userObj', props.userObj);
+  const commentFavs = props.data.comment_favs;
+  // console.log('commentFavs', commentFavs);
+  let myOwnCommentFavs;
+  try {
+    myOwnCommentFavs = props.data.comment_favs.filter((elem: any) => (elem.user_info_id === props.userObj.id))
+  } catch (error) {
+    myOwnCommentFavs = [];
+  }
+  // console.log('content', props.data.content);
+  // console.log('myOwnCommentFavs', myOwnCommentFavs);
+  const initClicked = myOwnCommentFavs.length > 0 ? true : false; // 0 or 1 or null, bad, good, not yet
+  let initGoodClicked, initBadClicked;
 
-  const initClicked = data.data.comment_favs.length > 0 ? data.data.comment_favs[0].good_or_bad : null; // 0 or 1 or null, bad, good, not yet
-  const initGoodClicked = initClicked === 1 ? true : false;
-  const initBadClicked = initClicked === 0 ? true : false; 
+
+  if (!initClicked ) {
+    initGoodClicked = false;
+    initBadClicked = false;
+  } else {
+    const myOwnFav = myOwnCommentFavs[0].good_or_bad;
+    initGoodClicked = myOwnFav === 1 ? true : false;
+    initBadClicked = myOwnFav === 0 ? true : false; 
+  }
+
+
 
   const [isGoodClicked, setGoodClicked] = useState(initGoodClicked);
   const [isBadClicked, setBadClicked] = useState(initBadClicked);
-  const [numOfGood, setNumOfGood] = useState(data.data.num_of_good);
+  const [numOfGood, setNumOfGood] = useState(props.data.num_of_good);
 
 
 
@@ -46,19 +67,19 @@ const CommentItem = (data: any) => {
 
     if(isBadClicked) {
       setBadClicked(false);
-      likeDelete(data.data);
+      likeDelete(props.data);
     }
 
     switch (isGoodClicked) {
       case true:
         setNumOfGood(numOfGood - 1);
-        likeDelete(data.data);
+        likeDelete(props.data);
         setGoodClicked(false);
         break;
       case false:
         setNumOfGood(numOfGood + 1);
         setGoodClicked(true);
-        likeSubmit(data.data, 1);
+        likeSubmit(props.data, 1);
         break;
     }
   }
@@ -69,17 +90,17 @@ const CommentItem = (data: any) => {
     if (isGoodClicked) {
       setNumOfGood(numOfGood - 1);
       setGoodClicked(false);
-      likeDelete(data.data);
+      likeDelete(props.data);
     }
 
     switch (isBadClicked) {
       case true:
-        likeDelete(data.data);
+        likeDelete(props.data);
         setBadClicked(false);
         break;
       case false:
         setBadClicked(true);
-        likeSubmit(data.data, 0);
+        likeSubmit(props.data, 0);
         break;
     }
   }
@@ -91,7 +112,7 @@ const CommentItem = (data: any) => {
 
   return (
     <span style={{ wordWrap: "break-word" }}>
-      <div>&nbsp;{data.data.content}</div>
+      <div>&nbsp;{props.data.content}</div>
       <span>
         <span>&nbsp;&nbsp;
             <ThumbUpIcon onClick={e => onGoodClick(e)} style={goodStyle}></ThumbUpIcon>
@@ -118,6 +139,7 @@ const nest = (items: any, id = null) =>
 interface CommentProps extends RouteComponentProps<{}> {
   postId: number;
    isLogin: boolean;
+   userObj: any;
 }
  
  interface CommentState {
@@ -309,7 +331,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         return (
           <li className={styles.com_li}>
             <div className={styles.body}>
-              <CommentItem data={props}></CommentItem>
+              <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
               <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, 0)}>キャンセル</Button></span>
@@ -324,7 +346,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         return (
           <li className={styles.com_li}>
             <div className={styles.body}>
-              <CommentItem data={props}></CommentItem>
+              <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
               <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, props.id)}>返信する</Button></span>
