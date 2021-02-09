@@ -38,6 +38,7 @@ interface State {
   isLoaded?: boolean;
   isLogin: boolean;
   isLoginLoaded: boolean;
+  userObj: any;
 }
 
 interface Params {
@@ -61,6 +62,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
       isLoaded: false,
       isLogin: false,
       isLoginLoaded: false,
+      userObj: {},
     }
     // // console.log("POST DETAIL CONSTRUCTOOOOOOOOOOOO");
     // // console.log("this.state");
@@ -83,6 +85,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
       this.setState({
         isLogin: true,
         isLoginLoaded: true,
+        userObj: res.data,
       });
     }).catch((err: any) => {
       this.setState({
@@ -112,7 +115,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
                 <NewEachPost isLogin={this.state.isLogin} data={this.state.data!}></NewEachPost>
               </div>
               <div>
-                <Comment isLogin={this.state.isLogin} postId={this.state.data.id}></Comment>
+                <Comment userObj={this.state.userObj} isLogin={this.state.isLogin} postId={this.state.data.id}></Comment>
               </div>
             </div>
 

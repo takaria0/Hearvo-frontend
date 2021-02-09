@@ -245,7 +245,7 @@ const MultipleVoteFormEach = (props: any) => {
 const MultipleVoteForm = (props: any) => {
   const multipleVoteNum = props.multipleVoteNum;
   const history = useHistory();
-  console.log('props.multipleVoteNum', props.multipleVoteNum);
+  // console.log('props.multipleVoteNum', props.multipleVoteNum);
 
   const [titleList, setTitleList] = useState(Array(multipleVoteNum).fill(''));
   const [contentList, setContentList] = useState(Array(multipleVoteNum).fill(''));
@@ -253,9 +253,35 @@ const MultipleVoteForm = (props: any) => {
   const [errorMessage, setErrorMessage] = useState("");
   
   useEffect(() => {
-    setTitleList(Array(multipleVoteNum).fill(''));
-    setContentList(Array(multipleVoteNum).fill(''));
-    setVoteDataList(Array(multipleVoteNum).fill([]));
+
+    if (titleList.length < multipleVoteNum) {
+      setTitleList([ ...titleList, '' ]);
+    }
+
+    if (titleList.length > multipleVoteNum) {
+      setTitleList(titleList.slice(0, titleList.length - 1));
+    }
+
+    if (contentList.length < multipleVoteNum) {
+      setContentList([...contentList, '']);
+    }
+
+    if (contentList.length > multipleVoteNum) {
+      setContentList(contentList.slice(0, contentList.length - 1));
+    }
+
+    if (voteDataList.length < multipleVoteNum) {
+      setVoteDataList([...voteDataList, []]);
+    }
+
+    if (voteDataList.length > multipleVoteNum) {
+      setVoteDataList(voteDataList.slice(0, voteDataList.length - 1));
+    }
+
+    // setTitleList(Array(multipleVoteNum).fill(''));
+    // setContentList(Array(multipleVoteNum).fill(''));
+    // setVoteDataList(Array(multipleVoteNum).fill([]));
+
   }, [props.multipleVoteNum]);
 
   const submit = (e: any) => {
