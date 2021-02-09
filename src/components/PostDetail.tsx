@@ -2,10 +2,11 @@ import { RouteProps, withRouter, RouteComponentProps } from 'react-router';
 import React from 'react';
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
-import * as styles from '../css/PostDetail.module.css';
+import * as styles from '../css/Home.module.css';
 import NewEachPost from './Feed/NewEachPost';
 import Comment from './Comment';
 import Header from './Header';
+import SideBar from './SideBar';
 
 type VoteSelectType = {
   id: number;
@@ -98,18 +99,27 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
     const data = this.state.data;
     document.title = data?.title ? data?.title : "";
 
+
+
     if(this.state.isLoaded) {
       return (
         <div>
           <Header></Header>
         <div className={styles.body}>
 
-          <div>
-            <NewEachPost isLogin={this.state.isLogin} data={this.state.data!}></NewEachPost>
-          </div>
-          <div>
-            <Comment isLogin={this.state.isLogin} postId={this.state.data.id}></Comment>
-          </div>
+            <div className={styles.feed}>
+              <div>
+                <NewEachPost isLogin={this.state.isLogin} data={this.state.data!}></NewEachPost>
+              </div>
+              <div>
+                <Comment isLogin={this.state.isLogin} postId={this.state.data.id}></Comment>
+              </div>
+            </div>
+
+            <div className={styles.side_bar}>
+              <SideBar></SideBar>
+            </div>
+
         </div>
         </div>
       );
@@ -119,7 +129,6 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
         <div>
           <Header></Header>
           <div>
-          Loading ...
           </div>
         </div>
       )
