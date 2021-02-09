@@ -8,7 +8,7 @@ import { Button, TextField, Fab, Input, Menu, MenuItem } from '@material-ui/core
 import CreateIcon from '@material-ui/icons/Create';
 import * as styles from '../../css/Feed/PostContent.module.css';
 import { idText, StringLiteral } from 'typescript';
-import { CropLandscapeOutlined, TransferWithinAStationSharp } from '@material-ui/icons';
+import { CollectionsBookmarkOutlined, CropLandscapeOutlined, TransferWithinAStationSharp } from '@material-ui/icons';
 import Feed from './Feed';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
@@ -23,7 +23,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import { AxiosInterceptorManager } from 'axios';
 
 
-const hasIncorrectInputMultiple = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, children: any ) => {
+const hasIncorrectInputMultiple = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, titleList: any, voteDataList: any ) => {
   // const parentTitle = props.title;
   // const parentContent = props.content;
   // const children = titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } }) } });
@@ -32,12 +32,7 @@ const hasIncorrectInputMultiple = (title: string, content: string, topic: [], vo
   // console.log('title', title)
   // console.log('topic', topic)
   
-  // // console.log('children', children)
-  // const childrenTitle = children.filter((elem: any) => (elem.title.length === 0))
-  // console.log('childrenTitle', childrenTitle)
-  // if (childrenTitle.length > 0) {
-  //   return true;
-  // }
+
 
   if (title.length === 0) {
     return true;
@@ -93,6 +88,7 @@ const hasIncorrectInput = (title: string, content: string, topic: [], vote_type_
 const VoteCandidateForm = (props: any) => {
 
   const [voteData, setVoteData] = useState<any>(['', '']);
+  const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
 
   const voteSelectChange = (e: any, idx: number) => {
@@ -115,30 +111,38 @@ const VoteCandidateForm = (props: any) => {
     }
   }
   const callAxios = (e: any, postObj: any) => {
-
+    e.preventDefault();
     const jwt = getJwt();
+
     axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
+        console.log(1);
         // this.isPostedChange(true);
         props.editParentHandle(e, false);
+        console.log(2);
         switch (props.targetGroupId) {
           case "":
+            console.log(3);
             history.push("/latest");
             break;
           default:
+            console.log(4);
             history.push(`/group/${props.targetGroupId}/feed`);
             break;
         }
 
       }).catch((err: any) => {
+        console.log(5);
         // props.isPostedChange(false);
+        setErrorMessage("投稿に失敗しました")
       })
-
+    console.log(6);
   }
 
   const submit = (e: any) => {
     // e.preventDeafult();
-
+    if(e.key === "Enter") {return};
+    
     let postObj;
     switch (props.voteTypeId) {
       case 1:
@@ -179,9 +183,9 @@ const VoteCandidateForm = (props: any) => {
 
     switch(invalid) {
       case true:
-        return (<div><br></br><div style={{  border: 'none' , color:'gray', backgroundColor: "white" }}  >投稿</div></div>)
+        return (<div><br></br><div style={{  border: 'none' , color:'gray', backgroundColor: "white" }}>投稿</div></div>)
       case false:
-        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF"}} onClick={e => submit(e)}>投稿</button></div>)
+        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}>投稿</button></div>)
     }
   }
   
@@ -198,6 +202,7 @@ const VoteCandidateForm = (props: any) => {
       })}
       <button type="button" onClick={e => addHandle(e)}><AddIcon style={{ fontSize: 16 }}></AddIcon></button>
       {props.voteTypeId === 3 ? '' : submitButton() }
+      <div style={{color : 'red'}}>{errorMessage ? errorMessage: ''}</div>
     </div>
   )
 
@@ -245,51 +250,79 @@ const MultipleVoteForm = (props: any) => {
   const [titleList, setTitleList] = useState(Array(multipleVoteNum).fill(''));
   const [contentList, setContentList] = useState(Array(multipleVoteNum).fill(''));
   const [voteDataList, setVoteDataList] = useState<any>(Array(multipleVoteNum).fill([]));
+  const [errorMessage, setErrorMessage] = useState("");
   
   useEffect(() => {
     setTitleList(Array(multipleVoteNum).fill(''));
     setContentList(Array(multipleVoteNum).fill(''));
     setVoteDataList(Array(multipleVoteNum).fill([]));
-  }, [props.multipleVoteNum, setTitleList, setContentList, titleList, contentList]);
+  }, [props.multipleVoteNum]);
 
   const submit = (e: any) => {
+    console.log(0);
     const parentTitle = props.title;
     const parentContent = props.content;
     const children = titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } })}});
     const postObj = { title: parentTitle, content: parentContent, end_at: props.endAt, group_id: props.targetGroupId, vote_type_id: "3", topic: props.topicList, children: children }
 
 
-    if (children.filter((elem: any) => (elem.title.length === 0)).length > 0) {return}
+    /*
+    Input Validation
+    */
+    if (titleList.filter((elem: any) => (elem.length === 0)).length > 0) {
+      return true
+    }
 
-    if (children.filter((elem: any) => (elem.vote_obj.filiter((obj: any) => (obj.content.length === 0)).length === 0)).length > 0) { return }
+    let voteDataCheck = true;
+    for (let i = 0; i < voteDataList.length; i++) {
+      for (let j = 0; j < voteDataList[i].length; j++) {
+        if (voteDataList[i][j].length === 0) {
+          voteDataCheck = false
+        }
+      }
+      if (voteDataList[i].length === 0) {
+        voteDataCheck = false
+      }
+    }
+
+    if (!voteDataCheck) {
+      return true
+    }
 
     const jwt = getJwt();
+    console.log(1);
     axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt } })
       .then((res: any) => {
         // this.isPostedChange(true);
+        console.log(2);
         props.editParentHandle(e, false);
         switch (props.targetGroupId) {
           case "":
+            console.log(3);
             history.push("/latest");
             break;
           default:
+            console.log(4);
             history.push(`/group/${props.targetGroupId}/feed`);
             break;
         }
 
       }).catch((err: any) => {
+        console.log(5);
         // props.isPostedChange(false);
       })
+    e.preventDefault();
+    console.log(6);  
   };
 
   const submitButton = () => {
-    const invalid = hasIncorrectInputMultiple(props.title, props.content, props.topicList, 3, props.endAt, props.targetGroupId, titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } }) } }))
+    const invalid = hasIncorrectInputMultiple(props.title, props.content, props.topicList, 3, props.endAt, props.targetGroupId, titleList, voteDataList)
 
     switch (invalid) {
       case true:
         return (<div><br></br><div style={{ border: 'none', color: 'gray', backgroundColor: "white" }}  >投稿</div></div>)
       case false:
-        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)}>投稿</button></div>)
+        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} >投稿</button></div>)
     }
   }
 
@@ -309,7 +342,7 @@ const MultipleVoteForm = (props: any) => {
         {submitButton()}
     </div>
       
-    
+    <div>{errorMessage ? errorMessage : ''}</div>
     </div>
   )
 }

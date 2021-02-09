@@ -3,12 +3,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@material-ui/core';
 import axios from './Api';
 
-import * as styles from '../../css/Feed.module.css';
+import * as styles from '../css/Home.module.css';
 import { getJwt } from '../helpers/jwt';
 import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import { submit_button } from "../css/Feed/PostContent.module.css";
 import Header from './Header';
+import SideBar from './SideBar';
 
 interface GroupCreateProps {
 
@@ -83,20 +84,33 @@ const GroupCreate = (props: GroupCreateProps) => {
   return (
     <div>
       <Header></Header>
-      <div style={{ paddingLeft: 0, wordWrap: "break-word", textAlign: 'center' }}>
-      <h1>グループ作成</h1>
-      <div style={{border: 'none'}}>グループを作成すると、グループに参加した人だけが閲覧・投票出来る機能が利用できます。<br></br>
-      グループを作成すると招待リンクが発行され、メンバーを招待することが可能になります。招待リンクは、グループ一覧ページからも確認できます。</div>
-      <form onSubmit={e => submit(e)}>
-        <input style={{padding: 5, width: 200}} onChange={e => onChangeGroupName(e)}></input>
-          <div style={{marginTop : 10}}>
-            <button>作成</button>
-            </div>
-      </form>
-      <div style={{color: "red"}}>{error ? error : ""}</div>
-      <div style={{ color: "black" }}>{message ? message : ""}</div>
-      <div>{success ? <CreatedMessage groupLink={groupLink} groupName={groupName}></CreatedMessage> : ""}</div>
+
+      <div className={styles.body}>
+        <div className={styles.feed}>
+
+          <div style={{ paddingLeft: 0, wordWrap: "break-word", textAlign: 'left' }}>
+            <h1>グループ作成</h1>
+            <div style={{ border: 'none' }}>グループを作成すると、グループに参加した人だけが閲覧・投票出来る機能が利用できます。グループを作成すると招待リンクが発行され、メンバーを招待することが可能になります。招待リンクは、グループ一覧ページからも確認できます。</div>
+            <form onSubmit={e => submit(e)} style={{textAlign: 'center'}}><br></br>
+              <input style={{ padding: 5, width: 200 }} onChange={e => onChangeGroupName(e)}></input>
+              <div style={{ marginTop: 10 }}>
+                <button>作成</button>
+              </div>
+            </form>
+            <div style={{ color: "red" }}>{error ? error : ""}</div>
+            <div style={{ color: "black" }}>{message ? message : ""}</div>
+            <div>{success ? <CreatedMessage groupLink={groupLink} groupName={groupName}></CreatedMessage> : ""}</div>
+          </div>
+
+
+        </div>
+        <div className={styles.side_bar}>
+          <SideBar></SideBar>
+        </div>
       </div>
+
+  
+
     </div>
   )
 

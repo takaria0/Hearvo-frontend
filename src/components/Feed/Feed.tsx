@@ -122,18 +122,26 @@ const InitialTopicForm = (props: any) => {
   return (
   <div>
     <Dialog open={true}>
-        <form onSubmit={e => submit(e)}>
-        {topicList.map((topic: any, idx: number) => {
-          return (
-          <div>
-              <input type="checkbox" id="" onChange={e => change(e, topic.id, topic.topic, idx)} name={topic.topic} value={topic.id}></input>
-            <label htmlFor="subscribeNews">{topic.topic}</label>
-          </div>
-          )
-          })}
-          <button>保存</button>
-        </form>
-        <div style={{color: 'red'}}>{errorMessage ? errorMessage : ''}</div>
+        <div style={{ paddingLeft: 20}}>
+          <h2>トピックの選択</h2>
+            <form onSubmit={e => submit(e)} style={{ width: '50ch'}}>
+            <ul style={{ columnCount: 3}}>
+            {topicList.map((topic: any, idx: number) => {
+              return (
+              <div>
+                  <input type="checkbox" id="" onChange={e => change(e, topic.id, topic.topic, idx)} name={topic.topic} value={topic.id}></input>
+                <label htmlFor="subscribeNews">{topic.topic}</label>
+              </div>
+              )
+              })}
+            </ul>
+              <div style={{ float: 'right', textAlign: 'right', marginRight: 20, marginBottom: 30, marginTop: 20}}>
+              <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }} >保存</button>
+              </div>
+              
+            </form>
+            <div style={{color: 'red'}}>{errorMessage ? errorMessage : ''}</div>
+      </div>
     </Dialog>
 
   </div>
@@ -223,7 +231,9 @@ const InitialUserInfoForm = (props: any) => {
             <div style={{ paddingTop: '20px' }}>
               {birthDayForm()}
             </div>
-            <button>完了</button>
+            <br></br><br></br>
+            <span style={{ float: 'right', textAlign: 'right', padding: 10}}><button style={{paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5}}>完了</button></span>
+            
           </form>
           <div style={{ color: 'red', textAlign: 'center' }}>
             {initialSettingMessage ? initialSettingMessage : ''}
