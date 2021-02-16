@@ -3,6 +3,7 @@ import axios from './Api';
 import { RouteComponentProps, Link } from 'react-router-dom'
 import { Button, TextField, Fab } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
+import i18n from '../helpers/i18n';
 export interface SignupProps extends RouteComponentProps<{}> {
 }
 
@@ -47,14 +48,14 @@ class Signup extends React.Component<SignupProps, SignupState> {
     // need more elavorate password verification this.state.password === this.state.passwordVerify
     if(this.state.password.length < 8) {
       this.setState({
-        errorMessage: "パスワードは8文字以上に設定してください"
+        errorMessage: i18n.t("signup.passwordLength"),
       });
       return
     }
 
     if (this.state.passwordVerify.length < 8) {
       this.setState({
-        errorMessage: "パスワードは8文字以上に設定してください"
+        errorMessage: i18n.t("signup.passwordLength")
       });
       return
     }
@@ -62,7 +63,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
     if (this.state.password !== this.state.passwordVerify) {
       this.setState({
-        errorMessage: "パスワードが異なっています"
+        errorMessage: i18n.t("signup.passwordDiffer")
       });
       return
     }
@@ -70,14 +71,14 @@ class Signup extends React.Component<SignupProps, SignupState> {
     const letters = /^[0-9a-zA-Z]+$/;
     if (!this.state.userName.match(letters)) {
       this.setState({
-        errorMessage: "ユーザーネームには英数字を使用してください"
+        errorMessage: i18n.t("signup.useAlphabet")
       });
       return
     }
 
     if (this.state.userName.length < 1){
       this.setState({
-        errorMessage: "ユーザーネームを入力してください"
+        errorMessage: i18n.t("signup.enterUserName")
       });
       return
     }
@@ -89,16 +90,14 @@ class Signup extends React.Component<SignupProps, SignupState> {
     }).then((res: any) => {
       localStorage.setItem("jwt", res.data.token);
       this.setState({
-        signupSuccessMessage: "アカウントを作成しました",
+        signupSuccessMessage: i18n.t("signup.createdAccount"),
       })
       function timeout(delay: number) {
         return new Promise(res => setTimeout(res, delay));
       }
       timeout(1000).then(() => { this.props.history.push("/login");})
     }).catch((err: any) => {
-      console.log("err.response", err.response)
       const resMessage = err.response.data.message;
-      console.log('resMessage', resMessage);
       this.setState({
         errorMessage: resMessage,
       })
@@ -108,34 +107,33 @@ class Signup extends React.Component<SignupProps, SignupState> {
   render() {
     return (
       <div className={styles.body}>
-        <h1>Hearvo</h1>
-        {/* <Link to="/intro">開発状況</Link> */}
+        <h1>{i18n.t("header.title")}</h1>
         <div className={styles.body_inside}>
           
-        <h2>アカウント作成</h2>
+          <h2>{i18n.t("signup.createAccount")}</h2>
         <form onSubmit={e => this.submit(e)}>
           <div>
-            <div>ユーザーネーム</div>
+              <div>{i18n.t("signup.userName")}</div>
             <input className={styles.email} minLength={1} maxLength={32} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
           </div>
           <div>
-            <div>メールアドレス</div>
+              <div>{i18n.t("signup.email")}</div>
             <input className={styles.email} minLength={1} maxLength={300} type="email" onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
           <div>
-          <div>パスワード</div>
+              <div>{i18n.t("signup.password")}</div>
             <input className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
 
           <div>
-            <div>パスワード確認</div>
+              <div>{i18n.t("signup.confirmPassword")}</div>
             <input className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
           </div>
           <div style={{ fontSize: 14, marginBottom: 10}}>
-              アカウントを作成することによって、<br></br><Link to="/tos" target="_blank">利用規約</Link>と<Link to="/privacy" target="_blank">プライバシーポリシー</Link>に同意します。<br></br>
+              {i18n.t("signup.confirmText1")}<br></br><Link to="/tos" target="_blank">{i18n.t("signup.confirmText2")}</Link>{i18n.t("signup.confirmText3")}<Link to="/privacy" target="_blank">{i18n.t("signup.confirmText4")}</Link>{i18n.t("signup.confirmText5")}<br></br>
           </div>
           <div className={styles.button} >
-            <Button type="submit" value="Submit" variant="contained" color="primary" >アカウント作成</Button>
+              <Button type="submit" value="Submit" variant="contained" color="primary" >{i18n.t("signup.createAccount")}</Button>
           </div>
 
         </form>
@@ -146,7 +144,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
           {this.state.signupSuccessMessage}
         </div>
           <div className={styles.footer}>
-          <Link to="/login">ログイン</Link>
+          <Link to="/login">{i18n.t("signup.login")}</Link>
       </div>
         </div>
       </div>

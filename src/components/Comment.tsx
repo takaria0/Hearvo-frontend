@@ -7,6 +7,7 @@ import * as styles from '../css/Comment.module.css';
 import ReplyComment from './ReplyComment';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import i18n from "../helpers/i18n";
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -51,14 +52,14 @@ const CommentItem = (props: any) => {
     const comment_id = data.id;
     const good_or_bad = value;
     const jwt = getJwt();
-    axios.post("/comments/fav", { comment_id, good_or_bad }, { headers: { 'Authorization': `Bearer ${jwt}` } })
+    axios.post("/comments/fav", { comment_id, good_or_bad }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => { }).catch(err => { })
   };
 
   const likeDelete = (data: any) => {
     const comment_id = data.id;
     const jwt = getJwt();
-    axios.delete("/comments/fav", { data: { comment_id }, headers: { 'Authorization': `Bearer ${jwt}` } })
+    axios.delete("/comments/fav", { data: { comment_id }, headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => { }).catch(err => { })
   }
 
@@ -199,26 +200,26 @@ class Comment extends React.Component<CommentProps, CommentState> {
     // console.log("minutes", minutes)
     // console.log("seconds", seconds)
     if (years > 0) {
-      return `${years}年前`
+      return `${years}${i18n.t("eachPost.yearBefore")}`
     } else if (months > 0) {
-      return `${months}ヶ月前`
+      return `${months}${i18n.t("eachPost.monthBefore")}`
     } else if (weeks > 0) {
-      return `${weeks}週間前`
+      return `${weeks}${i18n.t("eachPost.weekBefore")}`
     } else if (days > 0) {
-      return `${days}日前`
+      return `${days}${i18n.t("eachPost.dayBefore")}`
     } else if (hours > 0) {
-      return `${hours}時間前`
+      return `${hours}${i18n.t("eachPost.hourBefore")}`
     } else if (minutes > 0) {
-      return `${minutes}分前`
+      return `${minutes}${i18n.t("eachPost.minuteBefore")}`
     } else {
-      return `${seconds}秒前`
+      return `${seconds}${i18n.t("eachPost.secondBefore")}`
     }
     // return moment(datetime).fromNow()
   } 
 
   updateData = () => {
     const jwt = getJwt();
-    axios.get(`/comments?post_id=${this.props.postId}&order_by=popular`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+    axios.get(`/comments?post_id=${this.props.postId}&order_by=popular`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
         const commentData = res.data;
         this.setState({ commentData });
@@ -255,7 +256,6 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
 
   baseChange(e: any) {
-    // // console.log("コメンと変わってます！！！！！！！", e.target.value)
     this.setState({
       baseCommentContent: e.target.value,
     })
@@ -266,7 +266,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
     const good_or_bad = 1;
     e.preventDefault();
     const jwt = getJwt();
-    axios.post("/comments/fav", { comment_id, good_or_bad}, { headers: { 'Authorization': `Bearer ${jwt}` } })
+    axios.post("/comments/fav", { comment_id, good_or_bad}, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
     .then(res => {
       
     }).catch(err => {
@@ -279,7 +279,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
     const good_or_bad = 1;
     e.preventDefault();
     const jwt = getJwt();
-    axios.post("/comments/fav", { comment_id }, { headers: { 'Authorization': `Bearer ${jwt}` } })
+    axios.post("/comments/fav", { comment_id }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
 
       }).catch(err => {
@@ -291,7 +291,6 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
   baseSubmit(e: any) {
     
-    // // console.log("コメント提出します！！！！！！！！！！")
     if (this.props.isLogin === false) {
       this.props.history.push("/login");
       return
@@ -307,7 +306,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
     axios.post(
       "/comments",
       {post_id: this.props.postId,content: this.state.baseCommentContent,parent_id: this.state.commentId},
-      {headers: {'Authorization': `Bearer ${jwt}`}})
+      {headers: {'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY}})
       .then((res: any) => {
         this.handlePosted(e)
         this.setState({ baseCommentContent: ""});
@@ -334,7 +333,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
-              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, 0)}>キャンセル</Button></span>
+              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, 0)}>{i18n.t("eachPost.cancel")}</Button></span>
               <ReplyComment isLogin={this.props.isLogin} commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
             </div>
             <ul className={styles.com_ul}>
@@ -349,7 +348,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
-              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, props.id)}>返信する</Button></span>
+              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, props.id)}>{i18n.t("eachPost.reply")}</Button></span>
             </div>
 
             <ul className={styles.com_ul}>
@@ -375,7 +374,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
               <form onSubmit={e => this.baseSubmit(e)}>
                 <div><textarea rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
                 <div>
-                  <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
+                  <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.commentButton")}</Button>
                 </div>
               </form>
             </div>
@@ -390,12 +389,12 @@ class Comment extends React.Component<CommentProps, CommentState> {
             <form onSubmit={e => this.baseSubmit(e)}>
             <div><textarea rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
             <div>
-              <Button type="submit" value="Submit" variant="contained" color="primary">コメントする</Button>
+              <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.commentButton")}</Button>
             </div>
             </form>
           </div>
           <div>
-            Loading ...
+            {/* Loading ... */}
           </div>
         </div>
       );

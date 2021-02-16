@@ -5,10 +5,8 @@ import { withRouter, RouteComponentProps, Link, Redirect } from 'react-router-do
 import { getJwt } from '../helpers/jwt';
 import axios from './Api';
 import ListIcon from '@material-ui/icons/List';
-import CloseIcon from '@material-ui/icons/Close';
-import RemoveIcon from '@material-ui/icons/Remove';
-import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
+// import { useTranslation } from "react-i18next";
+import i18n from "../helpers/i18n";
 
 type userObject = {
   id: string;
@@ -46,13 +44,12 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     }
     
   }
+  
+
   searchSubmit = (e: any) => {
     e.preventDefault();
-    // console.log("SEARCH: window.location.pathname", window.location.pathname)
     if (this.state.searchValue !== "" && window.location.pathname !== "/search") {
-      // console.log("this.state.searchValue", this.state.searchValue)
       const searchWord = this.state.searchValue;
-      // console.log("searchWord Submit", searchWord)
       this.props.history.push({
         pathname: '/search',
         search: `?q=${searchWord}`
@@ -61,9 +58,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     }
 
     if (window.location.pathname === "/search") {
-      // console.log("SEARCH: matches");
       const searchWord = this.state.searchValue;
-      // console.log("searchWord Submit", searchWord)
       this.props.history.push({
         pathname: '/search',
         search: `?q=${searchWord}`
@@ -80,7 +75,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
   componentDidMount = () => {
     const jwt = getJwt();
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}` } }).then((res: any) => {
+    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
       this.setState({
         isLogin: true,
         isLoaded: true
@@ -121,11 +116,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   searchBar = () => {
     return (
       <form style={{ display: "inline", width: '100%' }} onSubmit={e => this.searchSubmit(e)}>
-        {/* <SearchIcon></SearchIcon> */}
-        <input type="text" style={{ width: '60%', padding: '3px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={"検索"}
+        <input type="text" style={{ width: '60%', padding: '3px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
         ></input>
-        {/* <IconButton type="submit"> */}
-        {/* </IconButton> */}
       </form>
     )
   }
@@ -137,8 +129,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         this.state.isLogin
           ?
           <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-            <ListIcon ></ListIcon>
-            {/* プロフィール */}
+              <ListIcon style={{ padding: 0 }} ></ListIcon>
           </Button>
             <Menu
               id="simple-menu"
@@ -146,15 +137,13 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               keepMounted
               open={Boolean(this.state.anchorEl)}
               onClose={e => this.handleClose(e, "none")}>
-              <MenuItem onClick={e => this.handleClose(e, "/profile")}>{this.state.user?.name}</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/profile/feed/myposts")}>自分の投稿</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/profile/feed/voted")}>投票した投稿</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/group/list")}>グループ一覧</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/group/create")}>グループ作成</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/tos")}>利用規約</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/privacy")}>プライバシーポリシー</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/settings")}>設定</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/login")}>ログアウト</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/profile/myposts")}>{i18n.t('settingBar.profile')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/group/list")}>{i18n.t('settingBar.groupList')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/group/create")}>{i18n.t('settingBar.groupCreate')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/tos")}>{i18n.t('settingBar.tos')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/privacy")}>{i18n.t('settingBar.privacy')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/settings")}>{i18n.t('settingBar.settings')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/login")}>{i18n.t('settingBar.logout')}</MenuItem>
             </Menu>
           </b>
           :
@@ -167,10 +156,10 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               keepMounted
               open={Boolean(this.state.anchorEl)}
               onClose={e => this.handleClose(e, "none")}>
-              <MenuItem onClick={e => this.handleClose(e, "/")}>利用規約</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/")}>プライバシーポリシー</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/login")}>ログイン</MenuItem>
-              <MenuItem onClick={e => this.handleClose(e, "/signup")}>アカウント作成</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/tos")}>{i18n.t('settingBar.tos')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/privacy")}>{i18n.t('settingBar.privacy')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/login")}>{i18n.t('settingBar.login')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/signup")}>{i18n.t('settingBar.signup')}</MenuItem>
             </Menu>
           </b>
           // <Link to='/login' className={styles.profile}>ログイン</Link>
@@ -182,7 +171,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   beforeLoginListbar = () => {
     return (
       <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-        <ListIcon ></ListIcon>
+        <ListIcon style={{padding: 0}}></ListIcon>
       </Button>
         <Menu
           id="simple-menu"
@@ -200,9 +189,11 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     return (
       <div style={{textAlign: "left", display: 'inline', width: '100%'}}>
         <br></br>
-        <Link to="/" className={styles.hearvo}><b style={{ fontSize: 20, marginLeft: 10, marginTop: 20 }}>Hearvo</b></Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >your voice must be heard</small>
+        <Link to="/" className={styles.hearvo}>
+          <b style={{ fontSize: 20, marginLeft: 10}}>{i18n.t("header.title")}</b>
+        </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small>
 
-        <span style={{ float: "right", textAlign: 'right' }} >
+        <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} >
           <span style={{width: '100%'}}>{this.searchBar()}</span>
           {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar() }
         </span>

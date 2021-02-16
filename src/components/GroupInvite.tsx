@@ -9,6 +9,7 @@ import { RouteComponentProps, Link, Redirect, withRouter, useParams } from 'reac
 import Dialog from '@material-ui/core/Dialog';
 import { submit_button } from "../css/Feed/PostContent.module.css";
 import Header from './Header';
+import i18n from "../helpers/i18n";
 
 interface GroupInviteProps {
 
@@ -31,27 +32,25 @@ const GroupInvite = (props: GroupInviteProps) => {
     e.preventDefault();
     setSuccess(false); setError(""); setMessage("");
     if (groupName.length < 1) {
-      setError("グループ名を入力してください");
+      setError(i18n.t('group.enterGroupName'));
       setSuccess(false);
       return
     }
-    axios.post(`/groups/users`, { link }, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+    axios.post(`/groups/users`, { link }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
       .then((res: any) => {
         const title = res.data.title;
         setGroupName(title);
-        setMessage("参加しました");
+        setMessage(i18n.t('group.joined'));
         setSuccess(true);
       }).catch((res: any) => {
-        console.log(res.data);
-        setError("参加できませんでした");
+        setError(i18n.t('group.failedToJoin'));
         setSuccess(false);
       });
   };
 
   useEffect(() => {
-    axios.get(`/groups?link=${link}`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+    axios.get(`/groups?link=${link}`, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
       .then((res: any) => {
-        console.log(res.data);
         const title = res.data.title;
         setGroupName(title);
         setAlreadyJoined(res.data.already_joined);
@@ -60,16 +59,16 @@ const GroupInvite = (props: GroupInviteProps) => {
   });
 
   if(isLoading) {
-    return (<div>Loading</div>)
+    return (<div></div>)
   } else {
     return (
       <div>
         <Header></Header>
         <div style={{textAlign: 'center'}}>
-        <h1>グループに参加する</h1>
+          <h1>{i18n.t('group.joinGroup')}</h1>
         <form onSubmit={e => submit(e)}>
-            <h2>グループ「{groupName}」</h2>
-          <div>{alreadyJoined ? "既にこのグループに参加しています" : <button>参加する</button>}</div>
+            <h2>{i18n.t('group.group')} {groupName}</h2>
+            <div>{alreadyJoined ? i18n.t('group.alreadyJoined') : <button>{i18n.t('group.join')}</button>}</div>
         </form>
         <div style={{ color: "red" }}>{error ? error : ""}</div>
         <div style={{ color: "black" }}>{message ? message : ""}</div>

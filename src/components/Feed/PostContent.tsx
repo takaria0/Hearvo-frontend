@@ -21,18 +21,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { AxiosInterceptorManager } from 'axios';
-
+import i18n from "../../helpers/i18n";
 
 const hasIncorrectInputMultiple = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, titleList: any, voteDataList: any ) => {
-  // const parentTitle = props.title;
-  // const parentContent = props.content;
-  // const children = titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } }) } });
-  // const postObj = { title: parentTitle, content: parentContent, end_at: props.endAt, group_id: props.targetGroupId, vote_type_id: "3", topic: props.topicList, children: children }
-
-  // console.log('title', title)
-  // console.log('topic', topic)
-  
-
 
   if (title.length === 0) {
     return true;
@@ -41,20 +32,6 @@ const hasIncorrectInputMultiple = (title: string, content: string, topic: [], vo
   if (topic.length === 0) {
     return true;
   }
-
-
-
-  // const childrenVoteObj = children.filter((elem: any) => {
-  //   const voteCheck = elem.vote_obj.filter((obj: any) => (obj.content.length !== 0))
-  //   if(voteCheck.length === 0) {
-  //     return true
-  //   }
-  //   return false;
-  // })
-
-  // if (childrenVoteObj.length === 0) {
-  //   return true;
-  // }
 
   return false;
 
@@ -71,13 +48,10 @@ const hasIncorrectInput = (title: string, content: string, topic: [], vote_type_
     return true;
   }
 
-
   if(vote_type_id === 1) {
     const result = vote_obj.filter((elem: any) => (elem.length === 0))
     return result.length === 0 ?  false : true;
   }
-
-  
 
   return false;
 
@@ -114,15 +88,11 @@ const VoteCandidateForm = (props: any) => {
     e.preventDefault();
     const jwt = getJwt();
 
-    axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt } })
+    axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
-        console.log(1);
-        // this.isPostedChange(true);
         props.editParentHandle(e, false);
-        console.log(2);
         switch (props.targetGroupId) {
           case "":
-            console.log(3);
             history.push("/latest");
             break;
           default:
@@ -133,10 +103,8 @@ const VoteCandidateForm = (props: any) => {
 
       }).catch((err: any) => {
         console.log(5);
-        // props.isPostedChange(false);
-        setErrorMessage("投稿に失敗しました")
+        setErrorMessage(i18n.t("newPost.failedToPost"));
       })
-    console.log(6);
   }
 
   const submit = (e: any) => {
@@ -147,13 +115,11 @@ const VoteCandidateForm = (props: any) => {
     switch (props.voteTypeId) {
       case 1:
         postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "1", vote_obj: voteData.map((elem:any) => {return {content: elem}}) }
-        console.log("postObj", postObj);
         callAxios(e, postObj);
         return
 
       case 2:
         postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "2", vote_obj: voteData.map((elem: any) => { return { content: elem } }), mj_option_list: props.matrixCandidateList};
-        console.log("postObj", postObj);
         callAxios(e, postObj);
         return  
 
@@ -176,26 +142,26 @@ const VoteCandidateForm = (props: any) => {
     setVoteData([...voteData, '']);
   }
 
-  const voteStyle = { padding: '3px', marginBottom: '5px' }
+  const voteStyle = { padding: '3px', marginBottom: '5px', width: '30ch'  }
 
   const submitButton = () => {
     const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData);
 
     switch(invalid) {
       case true:
-        return (<div><br></br><div style={{  border: 'none' , color:'gray', backgroundColor: "white" }}>投稿</div></div>)
+        return (<div><br></br><br></br><br></br><div style={{  border: 'none' , color:'gray', backgroundColor: "white" }}>{i18n.t("newPost.post")}</div></div>)
       case false:
-        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}>投稿</button></div>)
+        return (<div><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}>{i18n.t("newPost.post")}</button></div>)
     }
   }
   
   return (
     <div style={{ textAlign: 'center'}}>
-      投票候補
+      {i18n.t("newPost.voteCandidate")}
       {voteData.map((val: any, idx: number) => {
         return (
           <div key={idx}>
-            <input style={voteStyle} placeholder={`投票候補 ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
+            <input style={voteStyle} placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
             {idx > 1 ? <button type="button" onClick={e => deleteHandle(e, idx)}><RemoveIcon style={{ fontSize: 16 }}></RemoveIcon></button> : ''}
           </div>
         )
@@ -225,12 +191,12 @@ const MultipleVoteFormEach = (props: any) => {
   return (
   <div>
     <hr></hr>
-    <h2>投票 {props.idx + 1}</h2>
+    <h2>{i18n.t("newPost.vote")} {props.idx + 1}</h2>
     <div>
-        <input placeholder="タイトルを入力" className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => addTitle(e)}></input><br></br>
+        <input placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => addTitle(e)}></input><br></br>
     </div>
     <div>
-        <textarea placeholder="本文を入力" className={styles.content} rows={6} maxLength={5000} onChange={e => addContent(e)}></textarea>
+        <textarea placeholder={i18n.t("newPost.contentPlaceholder")} className={styles.content} rows={6} maxLength={5000} onChange={e => addContent(e)}></textarea>
     </div>
       <div><VoteCandidateForm 
       voteTypeId={3}
@@ -245,7 +211,6 @@ const MultipleVoteFormEach = (props: any) => {
 const MultipleVoteForm = (props: any) => {
   const multipleVoteNum = props.multipleVoteNum;
   const history = useHistory();
-  // console.log('props.multipleVoteNum', props.multipleVoteNum);
 
   const [titleList, setTitleList] = useState(Array(multipleVoteNum).fill(''));
   const [contentList, setContentList] = useState(Array(multipleVoteNum).fill(''));
@@ -285,7 +250,6 @@ const MultipleVoteForm = (props: any) => {
   }, [props.multipleVoteNum]);
 
   const submit = (e: any) => {
-    console.log(0);
     const parentTitle = props.title;
     const parentContent = props.content;
     const children = titleList.map((elem: any, idx: any) => { return { title: titleList[idx], content: contentList[idx], vote_obj: voteDataList[idx].map((elem: any) => { return { content: elem } })}});
@@ -316,11 +280,8 @@ const MultipleVoteForm = (props: any) => {
     }
 
     const jwt = getJwt();
-    console.log(1);
-    axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt } })
+    axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
-        // this.isPostedChange(true);
-        console.log(2);
         props.editParentHandle(e, false);
         switch (props.targetGroupId) {
           case "":
@@ -334,11 +295,8 @@ const MultipleVoteForm = (props: any) => {
         }
 
       }).catch((err: any) => {
-        console.log(5);
-        // props.isPostedChange(false);
       })
     e.preventDefault();
-    console.log(6);  
   };
 
   const submitButton = () => {
@@ -346,9 +304,9 @@ const MultipleVoteForm = (props: any) => {
 
     switch (invalid) {
       case true:
-        return (<div><br></br><div style={{ border: 'none', color: 'gray', backgroundColor: "white" }}  >投稿</div></div>)
+        return (<div><br></br><br></br><br></br><div style={{ border: 'none', color: 'gray', backgroundColor: "white" }}  >{i18n.t("newPost.vote")}</div></div>)
       case false:
-        return (<div><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} >投稿</button></div>)
+        return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} >{i18n.t("newPost.vote")}</button></div>)
     }
   }
 
@@ -398,14 +356,14 @@ const MatrixVoteForm = (props: any) => {
       JSX.push(
         (<span>
           <span key={idx}>
-            <input style={{ padding: '3px', width: '90px', marginRight: '10px', marginTop: '10px' }} placeholder={`回答 ${idx + 1}`} onChange={e => matrixCandidateListChange(e, idx)}></input>
+            <input style={{ padding: '3px', width: '90px', marginRight: '10px', marginTop: '10px' }} placeholder={`${i18n.t("newPost.MatrixAnswer")} ${idx + 1}`} onChange={e => matrixCandidateListChange(e, idx)}></input>
           </span>
         </span>)
       )
     }
     return (
       <div>
-        回答の種類&nbsp;<select name="mj-nums" id="mj-nums" onChange={e => matrixNumChange(e)}>
+        {i18n.t("newPost.MatrixNum")}&nbsp;<select name="mj-nums" id="mj-nums" onChange={e => matrixNumChange(e)}>
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
@@ -438,7 +396,7 @@ const TopicCandidates = (props: any) => {
 
   useEffect(() => {
     const jwt = getJwt();
-    axios.get(`/topics?startswith=${props.topic}`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+    axios.get(`/topics?startswith=${props.topic}`, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
     .then(res => {
       setTopicCandidateList(res.data);
       setIsLoading(false);
@@ -449,19 +407,6 @@ const TopicCandidates = (props: any) => {
 
   }, [props.topic])
 
-  // console.log('props.topic', props.topic);
-  // console.log('props.cursor', props.cursor);
-  // console.log('props.topicList', props.topicList);
-  // console.log('topicCandidateList', topicCandidateList);
-
-  // get current topic index
-
-
-  // get current editing topic
-
-  // get topic list 
-
-  // on push, update topic
 
   if(isLoading) {return (<span></span>)}
 
@@ -493,11 +438,12 @@ const VoteForm = (props: any) => {
   const [groupList, setGroupList] = useState<any>([]);
   const [targetGroupId, setTargetGroupId] = useState("");
   const [multipleVoteNum, setMultipleVoteNum] = useState(2);
+  const [isSendTargetGroup, setIsSendTargetGroup] = useState(false);
 
   useEffect(() => {
     // get group list
     const jwt = getJwt();
-    axios.get(`/groups`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+    axios.get(`/groups`, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
       .then((res: any) => {
         setGroupList(res.data);
       }).catch((res: any) => { });
@@ -615,23 +561,39 @@ const VoteForm = (props: any) => {
     }
   }
 
+  const changeIsSendTargetGroup = (e: any) => {
+    setIsSendTargetGroup(e.target.checked);
+
+    if (e.target.checked === false) {
+      setTargetGroupId("");
+    }
+  }
+
   return (
     <div>
       <form>
-        投稿先&nbsp;&nbsp;
-        <NativeSelect value={targetGroupId} onChange={e =>  setTargetGroupId(e.target.value)}>
-          <option value="">Hearvo</option>
-          <option value="">-------------</option>
-          {groupList.map((elem: any) => {
-            return (
-              <option value={elem.id}>{elem.title}</option>
-            )
-          })}
-        </NativeSelect><hr></hr>
-        <div>投票タイプ <select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
-          <option value={1}>通常投票</option>
-          <option value={3}>連続投票</option>
-          <option value={2}>マトリックス投票</option>
+        <label><input name="issendtargetgroup" type="checkbox" onChange={e => changeIsSendTargetGroup(e)} />{i18n.t("newPost.groupPost")}</label>
+        {isSendTargetGroup ? 
+        <span>
+            &nbsp;&nbsp;{i18n.t("newPost.targetPost")}&nbsp;&nbsp;
+        <NativeSelect value={targetGroupId} onChange={e => setTargetGroupId(e.target.value)}>
+              {/* <option value="">Hearvo</option> */}
+              <option value="">-------------</option>
+              {groupList.map((elem: any) => {
+                return (
+                  <option value={elem.id}>{elem.title}</option>
+                )
+              })}
+            </NativeSelect>
+        </span>
+          : ''}
+
+        
+        <hr></hr>
+        <div>{i18n.t("newPost.voteType")} <select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
+          <option value={1}>{i18n.t("newPost.normalVote")}</option>
+          <option value={3}>{i18n.t("newPost.continuasVote")}</option>
+          <option value={2}>{i18n.t("newPost.matrixVote")}</option>
         </select>
           {voteTypeId === 3 ? <span><select style={{ padding: '3px' }} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>
             <option value={2}>2</option>
@@ -643,24 +605,24 @@ const VoteForm = (props: any) => {
         <br></br>
 
         <div>
-        終了 <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(e)}></input> 時間後
+          {i18n.t("newPost.end")} <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(e)}></input> {i18n.t("newPost.hourLater")}
       </div><br></br>
 
         <div>
-          トピック 一つ以上、読点で区切って入力 
-        <input placeholder='トピック1、トピック2、・・・' style={{ padding: '5px', width: '100%', marginBottom: '10px' }} value={topicString} type="text" onChange={e => editTopic(e)}></input>
+          {i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}
+          <input placeholder={i18n.t("newPost.topicPlaceholder")}style={{ padding: '5px', width: '100%', marginBottom: '10px' }} value={topicString} type="text" onChange={e => editTopic(e)}></input>
           {renderTopic()}
         </div>
         <div><TopicCandidates topic={topicString} cursor={currentTopicCursor} topicList={topicList}></TopicCandidates></div>
 
       <hr></hr><br></br>
-        {voteTypeId === 3 ? <h2>表題</h2> : <h2>投票</h2>}
+        {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : <h2>{i18n.t("newPost.vote")}</h2>}
       
       <div>
-        <input placeholder="タイトルを入力" className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => setTitle(e.target.value)}></input><br></br>
+          <input placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => setTitle(e.target.value)}></input><br></br>
       </div>
       <div>
-        <textarea placeholder="本文を入力" className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea>
+          <textarea placeholder={i18n.t("newPost.contentPlaceholder")} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea>
       </div>
 
 
@@ -750,7 +712,7 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
 
   // componentDidMount = () => {
   //   const jwt = getJwt();
-  //   axios.get(`/groups`, { headers: { 'Authorization': `Bearer ${jwt}`, } })
+  //   axios.get(`/groups`, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
   //     .then((res: any) => {
   //       this.setState({groupList: res.data})
   //     }).catch((res: any) => {});
@@ -768,11 +730,11 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
     return (
       <div>
         <Dialog disableBackdropClick={true} fullScreen={maxWidth.matches ? true : false} fullWidth={true} open={this.props.edit} onClose={e => this.props.editParentHandle(e, false)} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">投稿</DialogTitle>
+          <DialogTitle id="form-dialog-title">{i18n.t("newPost.post")}</DialogTitle>
           <DialogContent>
 
             <div style={{ textAlign: 'left' }}>
-              <button  style={{width: '15%' }} onClick={e => this.props.editParentHandle(e, false)}>戻る</button>
+              <button  style={{width: '15%' }} onClick={e => this.props.editParentHandle(e, false)}>{i18n.t("newPost.cancel")}</button>
             </div>
             <br></br>
 
@@ -1054,7 +1016,7 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
   //   const options = {
   //     method: 'POST',
   //     headers: {
-  //       'Authorization': 'Bearer ' + jwt,
+  //       'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY,
   //     },
   //     body: data
   //   };

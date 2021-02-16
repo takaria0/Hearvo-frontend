@@ -4,7 +4,7 @@ import axios from './Api';
 import { Button, TextField, Fab } from '@material-ui/core';
 import { RouteProps, withRouter, RouteComponentProps } from 'react-router';
 import * as styles from '../css/Comment.module.css';
-
+import i18n from "../helpers/i18n";
 
 
 interface ReplyCommentProps extends RouteComponentProps<{}> {
@@ -56,7 +56,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
       },
       {
         headers: {
-          'Authorization': `Bearer ${jwt}`,
+          'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY,
         }
       }
     )
@@ -76,7 +76,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
         <form onSubmit={e => this.submit(e)}>
           <div><textarea rows={5} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea></div>
           <div>
-            <Button type="submit" value="Submit" variant="contained" color="primary">返信する</Button>
+            <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.reply")}</Button>
           </div>
         </form>
       </div>

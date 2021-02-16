@@ -12,17 +12,23 @@ import PostDetail from './components/PostDetail';
 import Header from './components/Header';
 import Settings from './components/Settings';
 import ProfileDetail from './components/ProfileDetail';
-import MyPostHeader from './components/Feed/MyPostHeader';
 import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import GroupCreate from './components/GroupCreate';
 import GroupInvite from './components/GroupInvite';
 import GroupList from './components/GroupList';
 import { HomeOutlined } from '@material-ui/icons';
+import { Helmet } from "react-helmet";
 
 function App() {
   return (
     <div className={styles.body}>
+      <Helmet
+        title="Hearvo"
+        description="Your voice must be heard"
+        link={window.location.href}
+      >
+      </Helmet>
     <BrowserRouter>
     <Switch>
       <Route path="/signup" exact component={Signup} />
@@ -39,9 +45,11 @@ function App() {
       <Route path="/search" exact component={Home} key="search-home" />
       <Route path="/posts/:post_id" component={PostDetail} />
       <Auth>
-          <Route path="/profile" exact component={ProfileDetail} />
-          <Route path="/profile/feed/myposts" exact component={Home} key="myposts-home" />
-          <Route path="/profile/feed/voted" exact component={Home} key="voted-home" />
+          <Route path="/profile/myposts" exact component={ProfileDetail} />
+          <Route path="/profile/voted" exact component={ProfileDetail} />
+          <Route path="/profile/following" exact component={ProfileDetail} />
+          {/* <Route path="/profile/feed/myposts" exact component={Home} key="myposts-home" /> */}
+          {/* <Route path="/profile/feed/voted" exact component={Home} key="voted-home" /> */}
           <Route path="/group/:group_id/feed" exact component={Home} />
           <Route path="/group/list" exact component={GroupList} />
           <Route path="/group/create" exact component={GroupCreate} />

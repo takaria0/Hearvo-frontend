@@ -3,6 +3,8 @@ import axios from './Api';
 import { RouteComponentProps, Link } from 'react-router-dom'
 import { Button, TextField, Fab } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
+import i18n from "../helpers/i18n";
+
 export interface LoginProps extends RouteComponentProps<{}>{
 }
 
@@ -26,7 +28,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     };
     this.change = this.change.bind(this);
     this.submit = this.submit.bind(this);
-    document.title = "Login";
+    document.title = i18n.t("login.login");
   }
 
   change(e: any, field: string) {
@@ -40,17 +42,15 @@ class Login extends React.Component<LoginProps, LoginState> {
   submit(e: any) {
     e.preventDefault();
 
-    axios.post("/login", {
-      email: this.state.email,
-      password: this.state.password,
-    }).then((res: any) => {
+    axios.post("/login", { email: this.state.email, password: this.state.password }, { headers: { Country: process.env.REACT_APP_COUNTRY } })
+    .then((res: any) => {
       const resMessage = res.data.message;
       this.setState({
         successMessage: resMessage,
       })
 
       localStorage.setItem("jwt", res.data.token);
-      axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}` } }).then((res: any) => {
+      axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
         localStorage.setItem("user", JSON.stringify(res.data));
 
         this.props.history.push("/");
@@ -59,9 +59,8 @@ class Login extends React.Component<LoginProps, LoginState> {
       })
       
     }).catch((err: any) => {
-      const resMessage = err.response.data.message;
       this.setState({
-        errorMessage: resMessage,
+        errorMessage: i18n.t("login.failedToLogin"),
       })
     })
   };
@@ -70,29 +69,27 @@ class Login extends React.Component<LoginProps, LoginState> {
     return (
       <div className={styles.body}>
         <h1>Hearvo</h1>
-        {/* <Link to="/intro">開発状況</Link> */}
         <div className={styles.body_inside}>
-          
-        <h2 >Login</h2>
+          <h2 >{i18n.t("login.login")}</h2>
         <form onSubmit={e => this.submit(e)}>
           <div>
-            <div>メールアドレス</div>
+              <div>{i18n.t("login.email")}</div>
             <input  className={styles.email} minLength={1} maxLength={300} type="email" name="email"  onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
           
 
           <div>
-            <div>パスワード</div>
+              <div>{i18n.t("login.password")}</div>
             <input className={styles.password} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
           
 
           <div className={styles.button}>
-            <Button  type="submit" value="Submit" variant="contained" color="primary" >Login</Button>
+              <Button type="submit" value="Submit" variant="contained" color="primary" >{i18n.t("login.login")}</Button>
           </div>
         </form>
         <div className={styles.footer}>
-          <Link to="/signup">アカウント作成</Link>
+            <Link to="/signup">{i18n.t("login.createAccount")}</Link>
         </div>
         <div style={{ color: 'red', textAlign: 'center', margin: '5px' }}>
             {this.state.errorMessage ? this.state.errorMessage : ''}
