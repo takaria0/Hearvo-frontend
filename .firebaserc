@@ -7,6 +7,9 @@
       "hosting": {
         "hearvo-jp": [
           "hearvo-c1393"
+        ],
+        "hearvo-us": [
+          "hearvo-us"
         ]
       }
     }

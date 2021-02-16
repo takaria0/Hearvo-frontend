@@ -117,7 +117,7 @@ const InitialUserInfoForm = (props: any) => {
       return
     }
 
-    if (year.length === 0 || props.data.editYear === i18n.t("feed.year")) {
+    if (year.length === 0) {
       setInitialSettingMessage(i18n.t("feed.enterAge"));
       return
     }
