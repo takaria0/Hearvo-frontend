@@ -13,7 +13,7 @@ import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-dom'
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
-
+import i18n from "../../helpers/i18n";
 
 const moment = require('moment-timezone');
 // moment.locale('ja');
@@ -27,7 +27,7 @@ const renderVoteMjResult = (baseData: any) => {
     <table style={{ margin: "auto", border: "1px solid black", borderCollapse: "collapse" }}>
 
 
-      <tr><th style={{ border: "1px solid black", borderCollapse: "collapse" }}> 候補 </th>{baseData.mj_options.map((obj: any) => {
+      <tr><th style={{ border: "1px solid black", borderCollapse: "collapse" }}> {i18n.t("eachPost.candidate")} </th>{baseData.mj_options.map((obj: any) => {
         return (
           <th style={{ border: "1px solid black", borderCollapse: "collapse" }}>{obj.content}</th>
         )
@@ -86,22 +86,9 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       data: [],
       totalVote: 0,
       errorMessage: '',
-      // buttonColor: this.generateButtonColor(),
     }
   }
-  // generateButtonColor = () => {
-  //   let buttonColor = new Map();
-  //   this.props.voteContent.map((vo: any) => {
-  //     this.props.mjOptions.map((elem: any) => {
-  //       let mjColor = new Map();
-  //       mjColor.set(elem.id, 'none');
-  //       buttonColor.set(vo.id, mjColor);
-  //     })
-  //   })
-  //   console.log('Generate Button Color:', buttonColor);
 
-  //   return buttonColor;
-  // }
 
   submit = (e: any) => {
     e.preventDefault();
@@ -111,7 +98,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
     }
 
     if (this.props.voteContent.length !== this.state.voteMjCount.length) {
-      this.setState({errorMessage: '全ての候補に投票して下さい'})
+      this.setState({ errorMessage: i18n.t("eachPost.selectAllCandidate")})
       return
     }
 
@@ -127,7 +114,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       post_id: this.props.postId,
     };
     const config = {
-      headers: { Authorization: `Bearer ${jwt}` }
+      headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY }
     };
     axios.post(
       "/vote_mj_users",
@@ -155,30 +142,9 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       })
 
     }).catch((err) => {
-      // // console.log(err);
     })
   };
 
-  // updateButtonColor = (voteMjId: number, mjOptionId: number) => {
-  //   let currentButtonColor = this.state.buttonColor;
-
-  //   console.log('BeforeButtonColor', currentButtonColor)
-  //   // Init button Color
-  //   // for (let insideKey of currentButtonColor.get(voteMjId).keys()) {
-  //   //   let color = currentButtonColor.get(voteMjId);
-  //   //   color.set(insideKey, 'pink')
-  //   //   currentButtonColor.set(voteMjId, color);
-  //   // };
-  //   currentButtonColor = this.generateButtonColor();
-  //   console.log('InitButtonColor', currentButtonColor)
-
-  //   // Update Button Color
-  //   let currentMjColor = currentButtonColor.get(voteMjId);
-  //   currentMjColor.set(mjOptionId, 'blue');
-  //   currentButtonColor.set(voteMjId, currentMjColor)
-  //   console.log('AfterButtonColor', currentButtonColor)
-  //   return currentButtonColor
-  // }
 
   change(e: any, voteMjId: number) {
 
@@ -188,10 +154,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       vote_mj_id: voteMjId,
       mj_option_id: parseInt(e.target.value),
     });
-
-    // const currentButtonColor = this.updateButtonColor(voteMjId, parseInt(e.target.value));
     this.setState({
-      // buttonColor: currentButtonColor,
       voteMjCount: filteredArray,
     })
   }
@@ -199,7 +162,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
   render() {
 
     if ((this.state.isClicked === true && this.state.isLoaded === false)) {
-      return (<div>Loading ...</div>)
+      return (<div></div>)
     }
     if ((this.state.isClicked || this.props.hasVoted === true) && this.state.isLoaded === true) {
       return (
@@ -208,7 +171,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
             <table style={{ margin: "auto", border: "1px solid black", borderCollapse: "collapse" }}>
 
 
-              <tr><th style={{ border: "1px solid black", borderCollapse: "collapse" }}> 候補 </th>{this.state.data.mj_options.map((obj: any) => {
+              <tr><th style={{ border: "1px solid black", borderCollapse: "collapse" }}> {i18n.t("eachPost.candidate")} </th>{this.state.data.mj_options.map((obj: any) => {
                 return (
                   <th style={{ border: "1px solid black", borderCollapse: "collapse" }}>{obj.content}</th>
                 )
@@ -269,7 +232,7 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
                 )
               })}
 
-              <button  style={{ marginTop: '10px' }} type="submit" >投票</button>
+              <button  style={{ marginTop: '10px' }} type="submit" >{i18n.t("newPost.vote")}</button>
             </form>
             <div style={{ color : 'red'}}>
               {this.state.errorMessage ? this.state.errorMessage : ''}

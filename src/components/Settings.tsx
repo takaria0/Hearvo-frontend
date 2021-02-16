@@ -6,7 +6,7 @@ import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
 import Header from './Header';
-
+import i18n from "../helpers/i18n";
 
 
 interface SettingsProps extends RouteComponentProps<{}>{
@@ -30,7 +30,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
       confirmPassword: '',
       responseMessage: '',
     }
-    document.title = "Settings";
+    document.title = i18n.t("settings.settings");
   }
 
   componentDidMount() {
@@ -45,7 +45,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 
     if (confirmPassword.length === 0) {
       this.setState({
-        responseMessage: 'パスワードを入力してください'
+        responseMessage: i18n.t('settings.enterPassword'),
       })
       return
     }
@@ -53,22 +53,22 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 
     if (confirmPassword.length < 8) {
       this.setState({
-        responseMessage: 'パスワードは8文字以上です'
+        responseMessage: i18n.t('settings.passwordLength'),
       })
       return
     }
 
 
-    axios.delete("/users?", { headers: { Authorization: `Bearer ${jwt}`, confirmPassword: confirmPassword } })
+    axios.delete("/users?", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, confirmPassword: confirmPassword } })
       .then((res: any) => {
         this.setState({
-          responseMessage: 'アカウントを削除しました'
+          responseMessage: i18n.t('settings.deletedAccount'),
         })
         localStorage.clear();
         this.props.history.push("/login");
       }).catch((res: any) => {
         this.setState({
-          responseMessage: 'アカウントを削除できませんでした'
+          responseMessage: i18n.t('settings.failedToDelete'),
         })
       });
   }
@@ -105,24 +105,24 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
     })
   }
 
-  renderPasswordChange = () => {
-    return (
-      <div>
-        <form>
-        <div style={{  margin: '10px'}}>
-          <input type='password' placeholder='現在のパスワード' style={{ width: '200px', padding: '5px' }}></input>
-        </div>
-        <div style={{  margin: '10px' }}>
-          <input type='password' placeholder='変更後のパスワード' style={{ width: '200px', padding: '5px' }}></input>
-        </div>
-        <div style={{  margin: '10px' }}>
-          <input type='password' placeholder='変更後のパスワード（確認用）' style={{ width: '200px', padding: '5px' }}></input>
-        </div>
-        <button>変更</button>
-        </form>
-      </div>
-    )
-  }
+  // renderPasswordChange = () => {
+  //   return (
+  //     <div>
+  //       <form>
+  //       <div style={{  margin: '10px'}}>
+  //         <input type='password' placeholder='現在のパスワード' style={{ width: '200px', padding: '5px' }}></input>
+  //       </div>
+  //       <div style={{  margin: '10px' }}>
+  //         <input type='password' placeholder='変更後のパスワード' style={{ width: '200px', padding: '5px' }}></input>
+  //       </div>
+  //       <div style={{  margin: '10px' }}>
+  //         <input type='password' placeholder='変更後のパスワード（確認用）' style={{ width: '200px', padding: '5px' }}></input>
+  //       </div>
+  //       <button>変更</button>
+  //       </form>
+  //     </div>
+  //   )
+  // }
 
   renderAccountDelete = () => {
 
@@ -131,25 +131,26 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 // </ form>
     return (
       <div style={{ textAlign: 'left', margin: '10px' }}>
-        Hearvoのアカウントを削除します。<b style={{color: 'red'}}>削除されたアカウントは、二度と復旧することができません。</b>削除する際にはよく確認してください。アカウントを削除した後のデータの扱いについては、<Link to='/privacy'>プライバシーポリシー</Link>をご覧ください。
+        {i18n.t("settings.deleteDesc1")}<b style={{ color: 'red' }}>{i18n.t("settings.deleteDesc2")}</b>
+
         <form style={{textAlign: 'center'}} onSubmit={e => this.openConfirm(e)}>
-          <button style={{ border: 'none', color: 'white', backgroundColor: 'red', marginTop: '10px', padding: '10px', borderRadius: '5px' }}><b>アカウントを削除する</b></button>
+          <button style={{ border: 'none', color: 'white', backgroundColor: 'red', marginTop: '10px', padding: '10px', borderRadius: '5px' }}><b>{i18n.t("settings.deleteAccount")}</b></button>
         </form>
 
         <Dialog  open={this.state.confirmToggle}>
           <div style={{ marginTop: '10px', textAlign: 'center'}}>
-            確認のためにパスワードを入力してください。
+            {i18n.t("settings.confirmPassword")}
             <form>
               <input style={{ padding: '10px', margin: '5px'}} type="password" value={this.state.confirmPassword} onChange={e => this.change(e, 'confirmPassword')}></input>
             </form>
           </div>
-          <div style={{ fontSize: '20px', padding:'20px', margin:'5px'}}>本当にアカウントを削除しますか？二度と復旧は出来ません。</div>
+          <div style={{ fontSize: '20px', padding: '20px', margin: '5px' }}>{i18n.t("settings.confirmMessage")}</div>
           <div style={{textAlign: 'center', marginBottom: '10px'}}>
             <span>
-              <button style={{ border: 'none', borderRadius: '5px', color: 'white', backgroundColor: 'red', width: '100px', padding: '10px', marginRight: '50px' }} onClick={e => this.submitAcccountDelete(e)}>はい</button>
+              <button style={{ border: 'none', borderRadius: '5px', color: 'white', backgroundColor: 'red', width: '100px', padding: '10px', marginRight: '50px' }} onClick={e => this.submitAcccountDelete(e)}>{i18n.t("settings.yes")}</button>
           </span>
           <span>
-              <button style={{ border: 'none', borderRadius: '5px', width: '100px', padding: '10px' }} onClick={e => this.closeConfirm(e)}>いいえ</button>
+              <button style={{ border: 'none', borderRadius: '5px', width: '100px', padding: '10px' }} onClick={e => this.closeConfirm(e)}>{i18n.t("settings.no")}</button>
           </span>
           <div style={{ color: 'red', padding: '10px'}}>
             {this.state.responseMessage ? this.state.responseMessage : ''}
@@ -169,9 +170,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
       <div style={{ textAlign: 'center' }}>
         <ul style={{ margin: '10px', padding: 0, textDecoration: "none"}}>
 
-          <li style={{ textDecoration: "none" }}><h2>パスワード変更</h2></li>
-          {this.renderPasswordChange()}
-          <li style={{ textDecoration: "none" }} onClick={e => this.boolChange(e, 'isAccountDelete')}><h2>アカウント削除</h2></li>
+          {/* <li style={{ textDecoration: "none" }}><h2>パスワード変更</h2></li>
+          {this.renderPasswordChange()} */}
+          <li style={{ textDecoration: "none" }} onClick={e => this.boolChange(e, 'isAccountDelete')}><h2>{i18n.t("settings.deleteAccountNoun")}</h2></li>
           {this.renderAccountDelete()}
         </ul>
         <div>

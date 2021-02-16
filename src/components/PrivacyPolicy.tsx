@@ -1,10 +1,12 @@
 import React from 'react';
-// import * as styles from '../css/Home.module.css';
+import * as styles from '../css/Home.module.css';
 
 const PrivacyPolicy = (props: any) => {
   return (
-    <div style={{backgroundColor: "white"}}>
-      <div style={{ width: '80ch', margin: 10 }}>
+
+    <div className={styles.body}>
+      <div>
+      <div style={{ margin: 10 }}>
       <h1>プライバシーポリシー</h1>
 
 
@@ -94,6 +96,7 @@ const PrivacyPolicy = (props: any) => {
 
       <p>【2021年2月10日改定】</p>
 
+      </div>
       </div>
     </div>
   )

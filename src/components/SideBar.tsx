@@ -7,12 +7,13 @@ import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import Header from './Header';
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
+import i18n from "../helpers/i18n";
 
 const DetailInfo = (props: any) => {
 
   return (
     <div style={{  marginTop: 20, borderWidth: 2, borderRadius: 5, backgroundColor: 'white', padding: 5}}>
-      <small><Link to="/tos">利用規約</Link>  <Link to="/privacy">プライバシーポリシー</Link></small>
+      <small><Link to="/tos">{i18n.t("sidebar.tos")}</Link>  <Link to="/privacy">{i18n.t("sidebar.privacy")}</Link></small>
   </div>
   )
 }
@@ -25,7 +26,7 @@ const SideBar = (props: any) => {
 
   useEffect(() => {
     const jwt = getJwt();
-    axios.get("/topics?sidebar=true", { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.get("/topics?sidebar=true", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
     .then(res => {
       setPopularTopic(res.data);
       setIsLoading(false);
@@ -35,11 +36,11 @@ const SideBar = (props: any) => {
     
   }, []);
 
-  if (isLoading) {return (<div><h3>人気のトピック</h3></div>)}
+  if (isLoading) {return (<div><h3>{i18n.t("sidebar.trending")}</h3></div>)}
 
   return (
     <div>
-      <h3>人気のトピック</h3>
+      <h3>{i18n.t("sidebar.trending")}</h3>
       <div style={{ border: 'none', borderWidth: 2, borderRadius: 5, backgroundColor: 'white'}}>
       
         <div style={{padding: 10, paddingTop: 10, paddingBottom: 20}}>

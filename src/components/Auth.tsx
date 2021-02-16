@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
 import { withRouter, RouteComponentProps } from 'react-router-dom'
-
+import i18n from "../helpers/i18n";
 
 export interface AuthProps extends RouteComponentProps<{}>{
 }
@@ -28,7 +28,7 @@ class Auth extends React.Component<AuthProps, AuthState> {
       this.props.history.push("/login");
     }
 
-    axios.get(`/users`, { headers: {Authorization: `Bearer ${jwt}`}}).then((res: any) => {
+    axios.get(`/users`, { headers: {Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY}}).then((res: any) => {
       this.setState({
         user: res.data,
       });
@@ -45,7 +45,7 @@ class Auth extends React.Component<AuthProps, AuthState> {
       return (
       <div>
         <h1>
-          Loading ...
+          {/* Loading ... */}
         </h1>
       </div>
       )

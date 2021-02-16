@@ -9,6 +9,7 @@ import * as styles from '../../css/Feed/PostContent.module.css';
 import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';
+import i18n from "../../helpers/i18n";
 
 export interface BaseHeaderProps extends RouteComponentProps<{}> {
   keyword: string;
@@ -39,7 +40,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
 
   componentDidMount = () => {
     const jwt = getJwt();
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}` } }).then((res: any) => {
+    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
       this.setState({
         isLogin: true,
       });
@@ -77,21 +78,11 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
   }
 
 
-
-
-
-
-
-
   headerJSX = () => {
-    if (this.state.edit) {
       return (
         <div className={styles.mini_header}>
-          {/* <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link> */}
           <div className={styles.mini_header_inside}>
-            <Link to="/popular">人気</Link> <Link to="/latest">最新</Link>{"    "} 
-
-
+            <Link to="/popular">{i18n.t("feed.popular")}</Link> <Link to="/latest">{i18n.t("feed.latest")}</Link>{"    "} 
             {(window.location.pathname.split("/")[1] === "popular"|| window.location.pathname === "/") ?
               <b><button style={{ textDecoration: "none"}}　aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
                  <TodayIcon style={{fontSize: 16}}/>
@@ -103,56 +94,22 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
                   open={Boolean(this.state.anchorEl)}
                   onClose={e => this.handleClose(e, "")}
                 >
-                  <MenuItem onClick={e => this.handleClose(e, "now")}>今</MenuItem>
-                  <MenuItem onClick={e => this.handleClose(e, "today")}>今日</MenuItem>
-                  <MenuItem onClick={e => this.handleClose(e, "week")}>今週</MenuItem>
-                  <MenuItem onClick={e => this.handleClose(e, "month")}>今月</MenuItem>
+                  <MenuItem onClick={e => this.handleClose(e, "now")}>{i18n.t("feed.now")}</MenuItem>
+                  <MenuItem onClick={e => this.handleClose(e, "today")}>{i18n.t("feed.today")}</MenuItem>
+                  <MenuItem onClick={e => this.handleClose(e, "week")}>{i18n.t("feed.thisWeek")}</MenuItem>
+                  <MenuItem onClick={e => this.handleClose(e, "month")}>{i18n.t("feed.thisMonth")}</MenuItem>
                 </Menu></b>
             : ""}
             
-            <span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, false)}><CloseIcon style={{ fontSize: 16 }}></CloseIcon></button></span>
-            
+            {this.state.edit ? 
+              <span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, false)}><CloseIcon style={{ fontSize: 16 }}></CloseIcon></button></span>
+              :
+              <span style={{ float: "right", textAlign: "right" }}>
+                <button onClick={e => this.editHandle(e, true)}><CreateIcon style={{ fontSize: 16 }}></CreateIcon></button></span>
+              }
           </div>
         </div>
       )
-    } else {
-      return (
-        <div className={styles.mini_header}>
-          {/* <Link to="/intro" style={{margin:10, padding: 10, textAlign: "center", marginRight: "auto", marginLeft: "auto"}}>開発状況</Link> */}
-          <div className={styles.mini_header_inside}>
-
-            <Link to="/popular" >人気</Link> <Link to="/latest">最新</Link>{"    "} {(window.location.pathname.split("/")[1] === "popular" || window.location.pathname === "/") ? 
-              <b><button style={{ textDecoration: "none" }} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-                 <TodayIcon style={{fontSize: 16}}/>
-              </button>
-              <Menu
-                id="simple-menu"
-                anchorEl={this.state.anchorEl}
-                keepMounted
-                open={Boolean(this.state.anchorEl)}
-                onClose={e => this.handleClose(e, "")}
-              >
-                <MenuItem onClick={e => this.handleClose(e, "now")}>今</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "today")}>今日</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "week")}>今週</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "month")}>今月</MenuItem>
-                </Menu></b>
-              : ""}
-              
-
-            <span style={{ float: "right", textAlign: "right" }}>
-
-            {/* <form style={{ display: "inline" }} onSubmit={e => this.searchSubmit(e)}> */}
-
-            
-              <button onClick={e => this.editHandle(e, true)}><CreateIcon style={{ fontSize: 16 }}></CreateIcon></button>
-              
-              </span>
-
-          </div>
-        </div>
-      )
-    }
   }
 
   render() { 

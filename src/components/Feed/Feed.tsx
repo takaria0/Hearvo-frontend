@@ -8,59 +8,12 @@ import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 
 import NewEachPost from './NewEachPost';
+import TopicFollowButton from '../TopicFollowButton';
+import i18n from "../../helpers/i18n";
+import initialTopics from '../../helpers/initialTopics';
 
 
-const INITIAL_TOPICS_JP = ['IT',
-  'テクノロジー',
-  '科学',
-  '映画',
-  '料理',
-  'グルメ',
-  '音楽',
-  '本',
-  '旅行',
-  'ビジネス',
-  '心理学',
-  '歴史',
-  '健康',
-  '写真',
-  'スポーツ',
-  'ゲーム',
-  'ファッション',
-  '美容',
-  '運動',
-  '勉強',
-  '学校',
-  '経済',
-  '政治',
-  'ファイナンス',
-  '金融',
-  'テレビ',
-  '芸能',
-  '教育',
-  '報道',
-  '文学',
-  'アート',
-  '芸術',
-  '数学',
-  '哲学',
-  '物理',
-  '医療',
-  '化学',
-  '日常生活',
-  'エンタメ',
-  'お笑い',
-  '漫画',
-  'アニメ',
-  'ペット',
-  '動物',
-  '経営',
-  '起業',
-  '就活',
-  '恋愛',
-  '育児',
-  '人間関係']
-
+const INITIAL_TOPICS = initialTopics;
 
 const InitialTopicForm = (props: any) => {
 
@@ -71,7 +24,7 @@ const InitialTopicForm = (props: any) => {
 
   const jwt = getJwt();
   useEffect(() => {
-    axios.get(`/topics?initial_topics=${JSON.stringify(INITIAL_TOPICS_JP)}`, { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.get(`/topics?initial_topics=${JSON.stringify(INITIAL_TOPICS)}`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
     .then(res => {
       const addChecked = res.data.map((elem: any) => {return {...elem, checked: false}});
       setTopicList(addChecked);
@@ -104,16 +57,16 @@ const InitialTopicForm = (props: any) => {
     const topic_id_list = saveTopicList.map((elem: any) => (elem.id));
 
     if(topic_id_list.length < 3) {
-      setErrorMessage('3つ以上のトピックを選択してください');
+      setErrorMessage(i18n.t("feed.selectThreeTopics"));
       return
     }
 
     const jwt = getJwt();
-    axios.post("/topics/users", { topic_id_list }, { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.post("/topics/users", { topic_id_list }, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
         props.setFinish(true);
       }).catch((res: any) => {
-        setErrorMessage('内容を確認してください');
+        setErrorMessage(i18n.t("feed.confirmContent"));
       });
   }
 
@@ -123,7 +76,7 @@ const InitialTopicForm = (props: any) => {
   <div>
     <Dialog open={true}>
         <div style={{ paddingLeft: 20}}>
-          <h2>トピックの選択</h2>
+          <h2>{i18n.t("feed.chooseTopic")}</h2>
             <form onSubmit={e => submit(e)} style={{ width: '50ch'}}>
             <ul style={{ columnCount: 3}}>
             {topicList.map((topic: any, idx: number) => {
@@ -136,7 +89,7 @@ const InitialTopicForm = (props: any) => {
               })}
             </ul>
               <div style={{ float: 'right', textAlign: 'right', marginRight: 20, marginBottom: 30, marginTop: 20}}>
-              <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }} >保存</button>
+              <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }} >{i18n.t("feed.save")}</button>
               </div>
               
             </form>
@@ -150,7 +103,9 @@ const InitialTopicForm = (props: any) => {
 
 const InitialUserInfoForm = (props: any) => {
 
+  const [userObj, setUserObj] = useState<any>(JSON.parse(localStorage.getItem("user") || "{}"));
   const [gender, setGender] = useState<string>("");
+  const [genderDetail, setGenderDetail] = useState<string>("");
   const [year, setYear] = useState<string>("");
   const [initialSettingMessage, setInitialSettingMessage] = useState("");
 
@@ -159,22 +114,27 @@ const InitialUserInfoForm = (props: any) => {
 
     // ADD ERROR HANDLING
     if (gender.length === 0) {
-      setInitialSettingMessage('性別を入力してください');
+      setInitialSettingMessage(i18n.t("feed.enterGender"));
       return
     }
 
-    if (year.length === 0 || props.data.editYear === '年') {
-      setInitialSettingMessage('年齢を入力してください');
+    if (year.length === 0 || props.data.editYear === i18n.t("feed.year")) {
+      setInitialSettingMessage(i18n.t("feed.enterAge"));
       return
     }
 
-    const postObj = { gender: gender, birth_year: year };
+    const postObj = { gender: gender, birth_year: year, gender_detail: genderDetail };
     const jwt = getJwt();
-    axios.put("/users?initial_setting=true", postObj, { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.put("/users?initial_setting=true", postObj, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
+        const resUser = res.data;
+        userObj.gender = resUser.gender;
+        userObj.birth_year = resUser.year;
+        setUserObj(userObj);
+        localStorage.setItem("user", JSON.stringify(resUser));
         props.setFinish(true);
       }).catch((res: any) => {
-        setInitialSettingMessage('内容を確認してください');
+        setInitialSettingMessage(i18n.t("feed.confirmContent"));
       });
   }
 
@@ -195,36 +155,36 @@ const InitialUserInfoForm = (props: any) => {
     yearOption = yearOption.reverse();
     return (
       <div>
-        <label htmlFor="dob-day" >生年</label>
+        <label htmlFor="dob-day" >{i18n.t("feed.birthYear")}</label>
         <div>
           <select name="dob-year" id="dob-year" onChange={e => setYear(e.target.value)}>
-            <option value="">年</option>
+            <option value="">{i18n.t("feed.year")}</option>
             {yearOption}
           </select>
-          {/* <select name="dob-month" id="dob-month" onChange={e => this.change(e, "editMonth")}>
-              <option value="">月</option>
-              {monthOption}
-            </select> */}
         </div>
       </div>
     )
   }
-
+  console.log('props.data.userObj', props.data.userObj);
   return (
     <div>
-      <Dialog open={parseInt(props.data.userObj.login_count) === 1 && props.data.editInitialUserInfoForm}>
+      {/* <Dialog open={parseInt(props.data.userObj.login_count) === 1 && props.data.editInitialUserInfoForm}> */}
+      <Dialog open={userObj.gender === null || userObj.birth_year === null}>
         <div style={{ padding: '10px', margin: '10px' }}>
-          <h1>ユーザー情報の入力</h1>
+          <h1>{i18n.t("feed.inputUserInfo")}</h1>
           <form onSubmit={e => submit(e)}>
             <div style={{ paddingTop: '20px' }}>
-              性別 {props.data.userObj.gender}
+              性別
               <div>
                 <select onChange={e => setGender(e.target.value)}>
-                  <option value="">性別</option>
-                  <option value="1">女性</option>
-                  <option value="0">男性</option>
-                  <option value="2">どちらでもない</option>
+                  <option value="">{i18n.t("feed.gender")}</option>
+                  <option value="1">{i18n.t("feed.male")}</option>
+                  <option value="0">{i18n.t("feed.female")}</option>
+                  <option value="2">{i18n.t("feed.other")}</option>
                 </select>
+              </div>
+              <div>
+                {gender === "2" ? <div><br></br><input type="text" placeholder={i18n.t("feed.freeForm")} maxLength={20} onChange={e => setGenderDetail(e.target.value)}></input></div> : ''}
               </div>
             </div >
             {/* {props.data.userObj.age} */}
@@ -232,13 +192,13 @@ const InitialUserInfoForm = (props: any) => {
               {birthDayForm()}
             </div>
             <br></br><br></br>
-            <span style={{ float: 'right', textAlign: 'right', padding: 10}}><button style={{paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5}}>完了</button></span>
+            <span style={{ float: 'right', textAlign: 'right', padding: 10 }}><button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }}>{i18n.t("feed.done")}</button></span>
             
           </form>
           <div style={{ color: 'red', textAlign: 'center' }}>
             {initialSettingMessage ? initialSettingMessage : ''}
           </div>
-          {/* <div style={{ fontSize: '12px' }} onClick={e => this.closeDialog(e)}>あとで入力する</div> */}
+
         </div>
       </Dialog>
     </div>
@@ -256,13 +216,10 @@ const InitialForm = (props: any) => {
     props.data.userObj.login_count = props.data.userObj.login_count + 1;
     localStorage.setItem("user", JSON.stringify(props.data.userObj));
     const jwt = getJwt();
-    axios.put(`/users?login_count=${props.data.userObj.login_count}`, {}, { headers: { Authorization: `Bearer ${jwt}` } })
+    axios.put(`/users?login_count=${props.data.userObj.login_count}`, {}, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
     .then((res) => {
     }).catch((err) => {
     })
-    // this.setState({
-    //   editInitialUserInfoForm: false,
-    // })
   }
   
   if (isUserInfoFinished && isTopicFormFinished) {
@@ -342,7 +299,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   handleObserver = (entities: any) => {
     const target = entities[0];
-    // console.log("target", target)
     if (target.isIntersecting && this.state.page < 50) {
       this.setState({
         page: this.state.page + 1,
@@ -431,7 +387,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         const searchWord = urlParams.get('q') || "";
         const type = urlParams.get('type') || "";
         queryUrl = orderType ? `/posts?search=${searchWord}&type=${type}&page=${page}&keyword=${orderType}` : `/posts?search=${searchWord}&type=${type}&page=${page}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
             this.setState({ dataArray: res.data, isLoaded: true, searchQuery: window.location.search, searchWord: searchWord});
           }).catch((err) => { })
@@ -440,7 +396,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       case "topic":
         const topicWord = urlParams.get('tp') || "";
         queryUrl = orderType ? `/posts?topic=${topicWord}&page=${newpage}&keyword=${orderType}` : `/posts?topic=${topicWord}&page=${newpage}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
             this.setState({dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data],isLoaded: true, topicTitle: topicWord})})
           .catch((err) => { })
@@ -450,12 +406,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
         const tempArray = window.location.pathname.split("/");
         const groupId = tempArray[tempArray.length - 2];
         queryUrl = orderType ? `/posts?group_id=${groupId}&page=${newpage}&keyword=${orderType}` : `/posts?group_id=${groupId}&page=${newpage}`;
-        axios.get(`/groups?id=${groupId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(`/groups?id=${groupId}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ groupTitle: res.data.already_joined ? res.data.title : "<このグループは存在しません>"})
+            this.setState({ groupTitle: res.data.already_joined ? res.data.title : i18n.t("feed.groupDoesntExist")})
             // show the content if the user has joined the group
             if (res.data.already_joined) {
-              axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+              axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
                 .then(res => {
                   this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true  })
 
@@ -467,14 +423,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
         break;
       
       case "popular":
-        axios.get(`/posts?keyword=popular&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(`/posts?keyword=popular&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
             this.setState({dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true,});})
           .catch((err) => { })
         break;
 
       case "latest":
-        axios.get(`/posts?keyword=latest&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(`/posts?keyword=latest&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
             this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, });
           })
@@ -483,18 +439,18 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
       case "myposts":
         queryUrl = `/posts?keyword=myposts&page=${newpage}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "自分の投稿" })
+            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
           .catch((err) => { })
         break;
 
       case "voted":
         queryUrl = `/posts?keyword=voted&page=${newpage}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "投票済み" })
+            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
           .catch((err) => { })
         break;
@@ -534,7 +490,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
     if(this.state.isLoaded === false) {
       return (
         <div>
-          Loading ...
         </div>
       )
     } else {
@@ -543,23 +498,22 @@ class Feed extends React.Component<FeedProps, FeedState> {
           <div>
             <InitialForm data={this.state}></InitialForm>
             {this.state.miniTitle ? <h3>{this.state.miniTitle}</h3> : ''}
-            {this.state.topicTitle ? <h3>トピック {this.state.topicTitle}</h3> : ''}
-            {this.state.groupTitle ? <h3>グループ「{this.state.groupTitle}」</h3> : ''}
-            {this.state.searchWord ? <h3>「{this.state.searchWord}」の検索結果</h3> : ''}
-            {/* <small>{JSON.stringify(this.state.dataArray, null, 2)}</small> */}
+            {this.state.topicTitle ? <span><b style={{ fontSize: '1.17em'}}>{i18n.t("feed.topic")} {this.state.topicTitle}</b> <TopicFollowButton topicWord={this.state.topicTitle}></TopicFollowButton></span> : ''}
+            {this.state.groupTitle ? <h3>{i18n.t("feed.group")} {this.state.groupTitle}</h3> : ''}
+            {this.state.searchWord ? <h3>{this.state.searchWord} {i18n.t("feed.searchResult")}</h3> : ''}
           </div>
           <ul className={styles.ul}>
             
             { this.state.dataArray.length > 0 ?
               this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost>})
             : 
-            "該当なし"
+            i18n.t("feed.noContent") 
             }            
             
           </ul>
 
           <div className="loading" ref={this.loader}>
-            <h2><button onClick={e => this.click(e)}>More</button></h2>
+            <h2><button onClick={e => this.click(e)}>{i18n.t("feed.more")}</button></h2>
           </div> 
         </div>
       );

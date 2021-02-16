@@ -1,10 +1,11 @@
 import React from 'react';
-// import * as styles from '../css/Home.module.css';
+import * as styles from '../css/Home.module.css';
 
 const TermsOfService = (props: any) => {
   return (
-    <div style={{backgroundColor: "white" }}>
-      <div style={{ width: '80ch', margin: 10}}>
+    <div className={styles.body}>
+      <div style={{}}>
+      <div style={{  margin: 10}}>
       <h1>利用規約</h1>
     
 
@@ -170,6 +171,8 @@ const TermsOfService = (props: any) => {
 
       </div>
     </div>
+    </div>
+
   )
 }
 

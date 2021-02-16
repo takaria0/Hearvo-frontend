@@ -13,6 +13,8 @@ import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-do
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
+import i18n from "../../helpers/i18n";
+
 
 const moment = require('moment-timezone');
 // moment.locale('ja');
@@ -66,7 +68,7 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
       post_id: this.props.postId,
     };
     const config = {
-      headers: { Authorization: `Bearer ${jwt}` }
+      headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY }
     };
 
     axios.post(
@@ -94,7 +96,7 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
   render() {
 
     if (this.state.isClicked === true && this.state.isLoaded === false) {
-      return (<div>Loading ...</div>)
+      return (<div></div>)
     }
 
     if ((this.state.isClicked || this.props.hasVoted === true) && this.state.isLoaded === true) {
@@ -103,7 +105,7 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
       const y = this.state.voteSelectsCount.map((da: any) => {return da.content});
       const voteIdList = this.state.voteSelectsCount.map((da: any) => {return da.vote_select_id});
       let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: this.props.data.my_vote, voteIdList: voteIdList }];
-      let layout = { title: `合計票数: ${this.state.totalVote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
+      let layout = { title: `${i18n.t("eachPost.totalVote")}: ${this.state.totalVote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
 
       return (<div className={styles.vote_section} > { renderVoteSelectResult(plotData, layout)}</div>)
 

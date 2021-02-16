@@ -7,6 +7,8 @@ import NewEachPost from './Feed/NewEachPost';
 import Comment from './Comment';
 import Header from './Header';
 import SideBar from './SideBar';
+import EachPostHelmet from './Feed/EachPostHelmet';
+import i18n from "../helpers/i18n";
 
 type VoteSelectType = {
   id: number;
@@ -64,11 +66,8 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
       isLoginLoaded: false,
       userObj: {},
     }
-    // // console.log("POST DETAIL CONSTRUCTOOOOOOOOOOOO");
-    // // console.log("this.state");
-    // // console.log(this.state)
 
-    axios.get(`/posts?id=${postId}`, { headers: { 'Authorization': 'Bearer ' + jwt } })
+    axios.get(`/posts?id=${postId}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
         this.setState({
           data: res.data,
@@ -81,7 +80,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
   componentDidMount = () => {
     const jwt = getJwt();
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}` } }).then((res: any) => {
+    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
       this.setState({
         isLogin: true,
         isLoginLoaded: true,
@@ -100,14 +99,14 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
   
   render() {
     const data = this.state.data;
-    document.title = data?.title ? data?.title : "";
-
+    // document.title = data?.title ? data?.title : "";
 
 
     if(this.state.isLoaded) {
       return (
         <div>
           <Header></Header>
+          <EachPostHelmet data={this.state.data}></EachPostHelmet>
         <div className={styles.body}>
 
             <div className={styles.feed}>
