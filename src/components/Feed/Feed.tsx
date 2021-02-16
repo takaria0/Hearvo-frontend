@@ -176,8 +176,8 @@ const InitialUserInfoForm = (props: any) => {
               <div>
                 <select onChange={e => setGender(e.target.value)}>
                   <option value="">{i18n.t("feed.gender")}</option>
-                  <option value="1">{i18n.t("feed.male")}</option>
-                  <option value="0">{i18n.t("feed.female")}</option>
+                  <option value="1">{i18n.t("feed.female")}</option>
+                  <option value="0">{i18n.t("feed.male")}</option>
                   <option value="2">{i18n.t("feed.other")}</option>
                 </select>
               </div>
