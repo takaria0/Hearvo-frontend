@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "target": "hearvo-c1393",
+      "target": "hearvo-jp",
       "public": "build",
       "ignore": [
         "firebase.json",

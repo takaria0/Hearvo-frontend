@@ -55,7 +55,7 @@ const GroupInvite = (props: GroupInviteProps) => {
         setGroupName(title);
         setAlreadyJoined(res.data.already_joined);
         setIsLoading(false);
-      }).catch((res: any) => {console.log(res)});
+      }).catch((res: any) => {});
   });
 
   if(isLoading) {

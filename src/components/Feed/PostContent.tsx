@@ -96,13 +96,11 @@ const VoteCandidateForm = (props: any) => {
             history.push("/latest");
             break;
           default:
-            console.log(4);
             history.push(`/group/${props.targetGroupId}/feed`);
             break;
         }
 
       }).catch((err: any) => {
-        console.log(5);
         setErrorMessage(i18n.t("newPost.failedToPost"));
       })
   }
@@ -285,11 +283,9 @@ const MultipleVoteForm = (props: any) => {
         props.editParentHandle(e, false);
         switch (props.targetGroupId) {
           case "":
-            console.log(3);
             history.push("/latest");
             break;
           default:
-            console.log(4);
             history.push(`/group/${props.targetGroupId}/feed`);
             break;
         }

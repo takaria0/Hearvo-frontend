@@ -53,7 +53,6 @@ const InitialTopicForm = (props: any) => {
 
   const submit = (e: any) => {
     e.preventDefault();
-    console.log(topicList);
     const topic_id_list = saveTopicList.map((elem: any) => (elem.id));
 
     if(topic_id_list.length < 3) {
@@ -165,7 +164,6 @@ const InitialUserInfoForm = (props: any) => {
       </div>
     )
   }
-  console.log('props.data.userObj', props.data.userObj);
   return (
     <div>
       {/* <Dialog open={parseInt(props.data.userObj.login_count) === 1 && props.data.editInitialUserInfoForm}> */}

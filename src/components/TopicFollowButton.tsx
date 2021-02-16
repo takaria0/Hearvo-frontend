@@ -23,7 +23,6 @@ const TopicFollowButton = (props: any) => {
     
     axios.get(`/topics/users?topic_word=${props.topicWord}`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
-        console.log('res.data', res.data)
         setIsFollowed(false);
         if(res.data.following) {
           setIsFollowed(true);
