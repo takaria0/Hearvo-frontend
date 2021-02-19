@@ -300,9 +300,9 @@ const MultipleVoteForm = (props: any) => {
 
     switch (invalid) {
       case true:
-        return (<div><br></br><br></br><br></br><div style={{ border: 'none', color: 'gray', backgroundColor: "white" }}  >{i18n.t("newPost.vote")}</div></div>)
+        return (<div><br></br><br></br><br></br><div style={{ border: 'none', color: 'gray', backgroundColor: "white" }}  >{i18n.t("newPost.post")}</div></div>)
       case false:
-        return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} >{i18n.t("newPost.vote")}</button></div>)
+        return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => submit(e)} >{i18n.t("newPost.post")}</button></div>)
     }
   }
 

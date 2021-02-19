@@ -8,6 +8,7 @@ import Header from './Header';
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
 import i18n from "../helpers/i18n";
+import TopicFollowButton from './TopicFollowButton';
 
 const DetailInfo = (props: any) => {
 
@@ -41,15 +42,20 @@ const SideBar = (props: any) => {
   return (
     <div>
       <h3>{i18n.t("sidebar.trending")}</h3>
-      <div style={{ border: 'none', borderWidth: 2, borderRadius: 5, backgroundColor: 'white'}}>
+      <div style={{ fontFamily:'monospace, serif', border: 'none', borderWidth: 2, borderRadius: 5, backgroundColor: 'white'}}>
       
         <div style={{padding: 10, paddingTop: 10, paddingBottom: 20}}>
         {popularTopic.map((elem: any, idx: number) => {
           return (
-          <div style={{paddingLeft: 20, paddingTop: 5, marginBottom: 5}}>
+            <div style={{ height: '45px', border: 'none', borderWidth: '1px', paddingRight: 5, paddingBottom: 0, marginBottom: 5, borderRadius: 10, paddingLeft: 5}}>
               <Link to={`/topic?tp=${elem.topic}`} style={{ textDecoration: 'none', }}>
-                <div>{idx+1} {elem.topic} </div>
-              </Link>
+                <span>{idx + 1} {elem.topic}</span></Link> 
+              <span style={{float: 'right', textAlign: 'right'}}>
+                <TopicFollowButton topicWord={elem.topic}></TopicFollowButton>
+                
+                </span>
+              <div style={{ paddingBottom: 3}}></div>
+              <hr></hr>
           </div>)
         })}
         </div>

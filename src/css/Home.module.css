@@ -29,13 +29,13 @@
     .feed {
       align-items: flex-start;
       width: 60%;
-      margin-left: 5%;
+      /* margin-left: 5%; */
     }
 
     .side_bar {
       align-items: flex-start;
-      width: 20ch;
-      margin-left: 5%;
+      width: 30ch;
+      margin-left: 1%;
     }
 
 }
@@ -51,14 +51,14 @@
 
   .feed {
     align-items: flex-start;
-    width: 60%;
-    margin-left: 10%;
+    width: 70ch;
+    /* margin-left: 10%; */
   }
 
   .side_bar {
     align-items: flex-start;
-    width: 20ch;
-    margin-left: 5%;
+    width: 30ch;
+    margin-left: 1%;
   }
 
 }
@@ -76,7 +76,7 @@
 
   .feed {
     align-items: flex-start;
-    width: 40%;
+    width: 70ch;
     margin-left: 20%;
   }
 

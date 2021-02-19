@@ -72,6 +72,8 @@ i18next
             voteRecord: '投票履歴',
             myPost: '投稿',
             joined: '作成日',
+            topicFollowings: 'フォロー',
+            topicPosts: '投稿数'
           },
           compare: {
             age: '年齢',

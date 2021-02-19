@@ -130,7 +130,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 //    // ... form
 // </ form>
     return (
-      <div style={{ textAlign: 'left', margin: '10px' }}>
+      <div style={{ textAlign: 'center', margin: '10px' }}>
         {i18n.t("settings.deleteDesc1")}<b style={{ color: 'red' }}>{i18n.t("settings.deleteDesc2")}</b>
 
         <form style={{textAlign: 'center'}} onSubmit={e => this.openConfirm(e)}>
@@ -173,7 +173,10 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
           {/* <li style={{ textDecoration: "none" }}><h2>パスワード変更</h2></li>
           {this.renderPasswordChange()} */}
           <li style={{ textDecoration: "none" }} onClick={e => this.boolChange(e, 'isAccountDelete')}><h2>{i18n.t("settings.deleteAccountNoun")}</h2></li>
-          {this.renderAccountDelete()}
+          <div style={{textAlign: 'center'}}>
+              {this.renderAccountDelete()}
+          </div>
+          
         </ul>
         <div>
           {/* {this.state.isAccountDelete ? this.renderAccountDelete() : ''} */}

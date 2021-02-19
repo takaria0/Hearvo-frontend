@@ -58,7 +58,7 @@ const TopicFollowButton = (props: any) => {
 
   if (isLoading) { return (<span></span>) }
 
-  const buttonStyle = { marginTop: -10, border: 'solid', borderWidth: 1, borderRadius: 5, paddingTop: 2, paddingBottom: 2 };
+  const buttonStyle = { marginTop: 0, border: 'solid', borderWidth: 1, borderRadius: 5, paddingTop: 2, paddingBottom: 2 };
   if(isFollowed) {
     return (
       <span>&nbsp;&nbsp;&nbsp;

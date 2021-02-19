@@ -137,9 +137,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               keepMounted
               open={Boolean(this.state.anchorEl)}
               onClose={e => this.handleClose(e, "none")}>
-                <MenuItem onClick={e => this.handleClose(e, "/profile/myposts")}>{i18n.t('settingBar.profile')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/group/list")}>{i18n.t('settingBar.groupList')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/group/create")}>{i18n.t('settingBar.groupCreate')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/profile/following")}>{i18n.t('settingBar.profile')}</MenuItem>
+                {/* <MenuItem onClick={e => this.handleClose(e, "/group/list")}>{i18n.t('settingBar.groupList')}</MenuItem> */}
+                {/* <MenuItem onClick={e => this.handleClose(e, "/group/create")}>{i18n.t('settingBar.groupCreate')}</MenuItem> */}
                 <MenuItem onClick={e => this.handleClose(e, "/tos")}>{i18n.t('settingBar.tos')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/privacy")}>{i18n.t('settingBar.privacy')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/settings")}>{i18n.t('settingBar.settings')}</MenuItem>
