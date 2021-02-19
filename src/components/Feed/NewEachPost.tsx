@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Dialog } from '@material-ui/core';
+import { Dialog, Divider } from '@material-ui/core';
 import axios from '../Api';
 import { Helmet } from "react-helmet";
 
@@ -16,7 +16,13 @@ import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
 import { MyResponsivePie } from '../../helpers/NivoPlots';
 import CompareResult from './CompareResult';
 import i18n from "../../helpers/i18n";
-
+import StarIcon from '@material-ui/icons/Star';
+import ShareIcon from '@material-ui/icons/Share';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import PollIcon from '@material-ui/icons/Poll';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -76,6 +82,155 @@ const plotAttributes = (genderData: any, ageData: any) => {
       </div>
     </div>
   )
+}
+
+const renderTopic = (data: any) => (
+  <div style={{ color: 'black' }}>
+    &nbsp;&nbsp;{data.topics.map((elem: any) => {
+    return (
+      <span style={{}}>
+        <Link className={styles.topic_link} to={`/topic?tp=${elem.topic.topic}`}>
+          <small style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem.topic.topic}</small>
+        </Link>
+        {'  '}
+      </span>
+    )
+  })}
+  </div>
+)
+
+const PostHeader = (props: any) => {
+
+  const createdAtJSX = (
+    <span style={{fontSize: 16, float: 'right', textAlign: 'right'}}>
+      {getDiffTime(props.data.created_at.slice(0, -7).replace("T", " "))}&nbsp;
+    </span >
+  )
+
+  switch(props.link) {
+    case "posts":
+      return (
+          <div>
+          <div className={styles.title}>{props.data.title}  {createdAtJSX} </div>
+              {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>}
+              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
+          </div>
+      )
+      break;
+
+    default:
+      return (
+        <div>
+          <Link to={`/posts/${props.data?.id}`} className={styles.each_post_link}>
+            <div className={styles.title}>{props.data.title} {createdAtJSX}</div>
+            {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>}
+            <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
+          </Link>
+        </div>
+      )
+      break;
+  }
+}
+
+const PostFooter = (props: any) => {
+  return (
+    <div>
+      <div>
+        {/* <div className={styles.footer}> */}
+        <div style={{ marginLeft: 15, fontSize: 12, color: '#404040', marginBottom: 10}}>
+          {getEndTime(props.data.end_at.slice(0, -3).replace("T", " "))}
+        </div>
+        {/* </div> */}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 10 }}>
+        <span>
+          <StarIcon style={{ fontSize: 20 }}/>
+        </span >
+        <span>
+          <EqualizerIcon style={{ fontSize: 20 }} />
+          {props.data.total_vote}
+        </span>
+        <span>
+          <ChatBubbleIcon style={{ fontSize: 20 }} />&nbsp;{props.data.comments.length}
+        </span >
+        <span>
+          <ShareIcon style={{ fontSize: 20 }}/>
+        </span >
+        <span>
+          <MoreHorizIcon style={{ fontSize: 20 }}/>
+        </span >
+      </div>
+    </div>
+
+  )
+};
+
+const getDiffTime = (datetime: string) => {
+  // console.log("記事の時間", datetime);
+  // console.log("moment()の時間", moment().format("YYYY-MM-DD HH:mm:ss"));
+  const diff = moment(moment(moment().format("YYYY-MM-DD HH:mm:ss"))).diff(datetime);
+  const duration = moment.duration(diff);
+
+  // 日・時・分・秒を取得
+  const years = duration.years();
+  const months = duration.months();
+  const weeks = duration.weeks();
+  const days = duration.days();
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
+
+  if (years > 0) {
+    return `${years}${i18n.t("eachPost.yearBefore")}`
+  } else if (months > 0) {
+    return `${months}${i18n.t("eachPost.monthBefore")}`
+  } else if (weeks > 0) {
+    return `${weeks}${i18n.t("eachPost.weekBefore")}`
+  } else if (days > 0) {
+    return `${days}${i18n.t("eachPost.dayBefore")}`
+  } else if (hours > 0) {
+    return `${hours}${i18n.t("eachPost.hourBefore")}`
+  } else if (minutes > 0) {
+    return `${minutes}${i18n.t("eachPost.minuteBefore")}`
+  } else {
+    return `${seconds}${i18n.t("eachPost.secondBefore")}`
+  }
+  // return moment(datetime).fromNow()
+}
+
+const getEndTime = (datetime: string) => {
+  const diff = moment(datetime).diff(moment(moment().format("YYYY-MM-DD HH:mm:ss")));
+  const duration = moment.duration(diff);
+
+  // 日・時・分・秒を取得
+  const years = duration.years();
+  const months = duration.months();
+  const weeks = duration.weeks();
+  const days = duration.days();
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
+
+  const signCheck = duration.asSeconds();
+  if (signCheck < 0) {
+    return i18n.t("eachPost.voteEnd")
+  }
+
+  if (years > 0) {
+    return `${years}${i18n.t("eachPost.yearLater")}`
+  } else if (months > 0) {
+    return `${months}${i18n.t("eachPost.monthLater")}`
+  } else if (weeks > 0) {
+    return `${weeks}${i18n.t("eachPost.weekLater")}`
+  } else if (days > 0) {
+    return `${days}${i18n.t("eachPost.dayLater")}`
+  } else if (hours > 0) {
+    return `${hours}${i18n.t("eachPost.hourLater")}`
+  } else if (minutes > 0) {
+    return `${minutes}${i18n.t("eachPost.minuteLater")}`
+  } else {
+    return `${seconds}${i18n.t("eachPost.secondLater")}`
+  }
 }
 
 
@@ -191,73 +346,6 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
   //   )
   // }
 
-  getDiffTime = (datetime: string) => {
-    // console.log("記事の時間", datetime);
-    // console.log("moment()の時間", moment().format("YYYY-MM-DD HH:mm:ss"));
-    const diff = moment(moment(moment().format("YYYY-MM-DD HH:mm:ss"))).diff(datetime);
-    const duration = moment.duration(diff);
-
-    // 日・時・分・秒を取得
-    const years = duration.years();
-    const months = duration.months();
-    const weeks = duration.weeks();
-    const days = duration.days();
-    const hours = duration.hours();
-    const minutes = duration.minutes();
-    const seconds = duration.seconds();
-
-    if(years > 0) {
-      return `${years}${i18n.t("eachPost.yearBefore")}`
-    } else if (months > 0) {
-      return `${months}${i18n.t("eachPost.monthBefore")}`
-    } else if (weeks > 0) {
-      return `${weeks}${i18n.t("eachPost.weekBefore")}`
-    } else if(days > 0) {
-      return `${days}${i18n.t("eachPost.dayBefore")}`
-    } else if(hours > 0) {
-      return `${hours}${i18n.t("eachPost.hourBefore")}`
-    } else if(minutes > 0) {
-      return `${minutes}${i18n.t("eachPost.minuteBefore")}`
-    } else {
-      return `${seconds}${i18n.t("eachPost.secondBefore")}`
-    }
-    // return moment(datetime).fromNow()
-  } 
-
-  getEndTime = (datetime: string) => {
-    const diff = moment(datetime).diff(moment(moment().format("YYYY-MM-DD HH:mm:ss")));
-    const duration = moment.duration(diff);
-
-    // 日・時・分・秒を取得
-    const years = duration.years();
-    const months = duration.months();
-    const weeks = duration.weeks();
-    const days = duration.days();
-    const hours = duration.hours();
-    const minutes = duration.minutes();
-    const seconds = duration.seconds();
-
-    const signCheck = duration.asSeconds();
-    if(signCheck < 0) {
-      return i18n.t("eachPost.voteEnd")
-    }
-
-    if (years > 0) {
-      return `${years}${i18n.t("eachPost.yearLater")}`
-    } else if (months > 0) {
-      return `${months}${i18n.t("eachPost.monthLater")}`
-    } else if (weeks > 0) {
-      return `${weeks}${i18n.t("eachPost.weekLater")}`
-    } else if (days > 0) {
-      return `${days}${i18n.t("eachPost.dayLater")}`
-    } else if (hours > 0) {
-      return `${hours}${i18n.t("eachPost.hourLater")}`
-    } else if (minutes > 0) {
-      return `${minutes}${i18n.t("eachPost.minuteLater")}`
-    } else {
-      return `${seconds}${i18n.t("eachPost.secondLater")}`
-    }
-  }
 
   change(e: any, field: string) {
     this.setState({
@@ -297,21 +385,6 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
     this.setState({doFilter: val});
   }
 
-  renderTopic = (data: any) => (
-    <div style={{ color: 'black' }}>
-      &nbsp;&nbsp;{data.topics.map((elem: any) => {
-        return (
-          <span style={{ }}>
-            <Link className={styles.topic_link}  to={`/topic?tp=${elem.topic.topic}`}>
-            <small style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem.topic.topic}</small>
-            </Link>
-            {'  '}
-          </span>
-        )
-      })}
-    </div>
-  )
-
   
 
   renderEachData = (data: any, vote_type_id: number, currentFirstURL: string) => {
@@ -336,34 +409,6 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       // post detail page. posts/id 
       case "posts":
         const mobStyle = { paddingBottom: '10px' }
-        // const renderCondition = () =>
-        // (
-        //   <Dialog open={this.state.doFilter}>
-        //     <div style={{ margin: '30px' }}>
-        //       <button onClick={e => this.filterClick(e, false)}>戻る</button>
-        //       <div>以下の条件で絞り込みをした結果を表示します。</div>
-        //       <form onSubmit={e => this.submit(e)}>
-        //         <div>最小年齢</div>
-        //         <div style={mobStyle}><input type="number" onChange={e => this.change(e, "minAge")} value={this.state.minAge} /></div>
-        //         <div>最大年齢</div>
-        //         <div style={mobStyle}>
-        //           <input type="number" onChange={e => this.change(e, "maxAge")} value={this.state.maxAge} /></div>
-        //         <div>性別</div>
-        //         <div style={mobStyle}>
-        //           <select onChange={e => this.change(e, "genderSelect")}>
-        //             <option value="">性別</option>
-        //             <option value="1">女性</option>
-        //             <option value="0">男性</option>
-        //             <option value="2">どちらでもない</option>
-        //           </select></div>
-        //         <div> 職業</div>
-        //         <div style={mobStyle}>{this.occupationForm()}</div>
-        //         <div style={mobStyle}><button >更新</button></div>
-        //       </form>
-        //       <button onClick={e => this.resetClick(e)}>リセット</button>
-        //     </div>
-        //   </Dialog>
-        // )
 
         const genderData = [
           { id: i18n.t("eachPost.male"), value: this.props.data.gender_distribution.male, color: "hsla(220, 64%, 50%, 1)" },
@@ -388,13 +433,11 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         const baseItem = (
         <div>
           <li className={styles.li}>
-            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+            {/* <div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
+              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div> */}
+              <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
 
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link>
-
-            {/* {this.state.doFilter ? renderCondition() : ""} */}
 
               {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}><CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
               
@@ -406,7 +449,9 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
               {plotAttributes(genderData, ageData)}
 
-            <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div ><div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} </div ></div>
+            {/* <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div ><div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} </div >
+            </div> */}
+              <PostFooter data={this.props.data}></PostFooter>
           </li>
         </div>
         )
@@ -419,16 +464,18 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       default:
         return (
           <li className={styles.li}>
-            <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+            {/* <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
               <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link>
+            </Link> */}
+            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
 
-            <div className={styles.footer}><div>{this.getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
-              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}</div ></div>
+            {/* <div className={styles.footer}><div>{getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}</div > */}
+            <PostFooter data={this.props.data}></PostFooter>
 
           </li>
         )
@@ -453,18 +500,20 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         return (
           <li className={styles.li}>
             
-            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}>
+            {/* <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}>
               <div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
               <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link>
+            </Link> */}
+            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
             </div>
-            <div className={styles.footer}>
-              <div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
-              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div >
-            </div>
+            <PostFooter data={this.props.data}></PostFooter>
+            {/* <div className={styles.footer}>
+              <div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div >
+            </div> */}
           </li>
         )
 
@@ -478,33 +527,53 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
         return (
           <li className={styles.li}>
-            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+            {/* <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
               <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link>
+            </Link> */}
+            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
             </div>
-            <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
-              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div >
+            <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <PostFooter data={this.props.data}></PostFooter>
+              {/* <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div > */}
             </div>
           </li>
         )
 
 
       case 3:
+        if (currentFirstURL === 'posts') {
+          return (
+            <li className={styles.li}>
+              {/* <div className={styles.title}>{this.props.data.title}</div>
+                {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
+                <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
+                 */}
+              <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
+              <div className={styles.vote_section}>
+                <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
+              </div>
+              <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+                <PostFooter data={this.props.data}></PostFooter>
+                {/* <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div > */}
+              </div>
+            </li>
+          )
+        }
         return (
           <li className={styles.li}>
-            <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? this.renderTopic(this.props.data) : <div></div>}
+            {/* <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
+              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
               <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link>
+            </Link> */}
+            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
+
             <div className={styles.vote_section}>
               <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end}　postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
             </div>
-            <div className={styles.footer}><div>{this.getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
-              <div>{this.getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div >
-            </div>
+            <PostFooter data={this.props.data}></PostFooter>
           </li>
         )
     }

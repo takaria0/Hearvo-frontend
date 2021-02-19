@@ -12,7 +12,7 @@ const Home = (props: any) => {
   return (
     <div>
       <Header></Header>
-    <div className={styles.body}>
+      <div className={styles.body}>
         <div className={styles.feed}>
           <BaseHeader keyword={props.match.params.keyword}></BaseHeader>
       </div>

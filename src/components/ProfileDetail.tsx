@@ -9,6 +9,9 @@ import SideBar from './SideBar';
 import Feed from './Feed/Feed';
 import TopicFollowButton from './TopicFollowButton';
 import i18n from "../helpers/i18n";
+import { spawn } from 'child_process';
+import PersonIcon from '@material-ui/icons/Person';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 // 0 -> male
 // 1 -> female
 // 2 -> others
@@ -368,10 +371,22 @@ const FollowingTopicList = (props: any) => {
     <div>
       {topicList.map((topic: any) => {
         return (
-          <div style={{ padding: 10, border: 'solid', borderRadius: 5, borderWidth: 1, backgroundColor: 'white', marginTop: 5 }}><Link style={{textDecoration: 'none'}} to={`/topic?tp=${topic.topic}`}>{topic.topic}</Link>
-          <span style={{textAlign: 'right', float: 'right'}}>
-              <TopicFollowButton topicWord={topic.topic}></TopicFollowButton>
-          </span>
+          <div style={{ padding: 10, border: 'solid', borderRadius: 5, borderWidth: 1, backgroundColor: 'white', marginTop: 5 }}>
+          <div >
+            <span>
+            <Link style={{textDecoration: 'none'}} to={`/topic?tp=${topic.topic}`}>{topic.topic}</Link>
+            </span>
+              <span style={{ textAlign: 'right', float: 'right' }}>
+                <TopicFollowButton topicWord={topic.topic}></TopicFollowButton>
+              </span>
+
+            <div>
+                <PostAddIcon style={{ fontSize: 16 }} />{topic.num_of_posts} &nbsp;&nbsp; 
+                <PersonIcon style={{ fontSize: 16 }} />{topic.num_of_users} 
+            </div>
+
+          </div>
+          
           </div>
         )
       })}

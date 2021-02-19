@@ -23,7 +23,6 @@ const TopicFollowButton = (props: any) => {
     
     axios.get(`/topics/users?topic_word=${props.topicWord}`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
-        console.log('res.data', res.data)
         setIsFollowed(false);
         if(res.data.following) {
           setIsFollowed(true);
@@ -59,7 +58,7 @@ const TopicFollowButton = (props: any) => {
 
   if (isLoading) { return (<span></span>) }
 
-  const buttonStyle = { marginTop: -10, border: 'solid', borderWidth: 1, borderRadius: 5, paddingTop: 2, paddingBottom: 2 };
+  const buttonStyle = { marginTop: 0, border: 'solid', borderWidth: 1, borderRadius: 5, paddingTop: 2, paddingBottom: 2 };
   if(isFollowed) {
     return (
       <span>&nbsp;&nbsp;&nbsp;
