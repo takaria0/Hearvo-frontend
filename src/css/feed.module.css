@@ -7,7 +7,7 @@
   background-color: white;
   border: solid;
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 6px;
   margin-bottom: 10px;
   font-size: 12px;
 }
@@ -83,7 +83,7 @@
   background-color: #454545;
   color: white;
   padding: 5px 10px;
-  border-radius: 3px;
+  border-radius: 6px;
 } */
 
 .radio:checked+label {
@@ -122,7 +122,7 @@
   background-color: white;
   border: solid;
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 6px;
   margin-bottom: 10px;
 }
 
@@ -196,7 +196,7 @@
   background-color: #454545;
   color: white;
   padding: 5px 10px;
-  border-radius: 3px;
+  border-radius: 6px;
 } */
 .topic_link {
   color: black;
@@ -229,7 +229,7 @@
   background-color: white;
   border: solid;
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 6px;
   margin-bottom: 10px;
 }
 

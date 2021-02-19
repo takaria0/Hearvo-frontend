@@ -381,8 +381,12 @@ const FollowingTopicList = (props: any) => {
               </span>
 
             <div>
-                <PostAddIcon style={{ fontSize: 16 }} />{topic.num_of_posts} &nbsp;&nbsp; 
-                <PersonIcon style={{ fontSize: 16 }} />{topic.num_of_users} 
+                {/* <PostAddIcon style={{ fontSize: 16 }} /> */}
+                {i18n.t("profile.topicPosts")}&nbsp; 
+                {topic.num_of_posts} &nbsp;&nbsp; 
+                {/* <PersonIcon style={{ fontSize: 16 }} /> */}
+                {i18n.t("profile.topicFollowings")}&nbsp; 
+                {topic.num_of_users} 
             </div>
 
           </div>
@@ -432,7 +436,7 @@ const ProfileDetail = (props: any) => {
           <span><Link style={{ textDecoration: 'none' }} to="/profile/voted">{i18n.t("profile.numOfVotes")} {user.num_of_votes}</Link></span>
 
           <div style={{ float: 'right', textAlign: 'right' }}><small>{i18n.t("profile.joined")} {user.created_at.slice(0, 10)}</small></div>
-          <div style={{ marginTop:10, border: 'solid', borderWidth: 1, paddingTop: 10, paddingBottom: 10, display: 'flex', justifyContent: 'space-evenly'}}>
+          <div style={{ marginTop:10, backgroundColor: 'white', borderRadius: 5, border: 'solid', borderWidth: 1, paddingTop: 10, paddingBottom: 10, display: 'flex', justifyContent: 'space-evenly'}}>
             <span>
               <Link style={{ textDecoration: 'none' }} to="/profile/voted">{i18n.t("profile.voteRecord")}</Link>
             </span>&nbsp;

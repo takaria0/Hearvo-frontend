@@ -498,7 +498,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
           <div>
             <InitialForm data={this.state}></InitialForm>
             {this.state.miniTitle ? <h3>{this.state.miniTitle}</h3> : ''}
-            {this.state.topicTitle ? <span><b style={{ fontSize: '1.17em'}}>{i18n.t("feed.topic")} {this.state.topicTitle}</b> <TopicFollowButton topicWord={this.state.topicTitle}></TopicFollowButton></span> : ''}
+            {this.state.topicTitle ? <span><b style={{ fontSize: '1.17em'}}>{i18n.t("feed.topic")} {this.state.topicTitle}</b> 
+             <TopicFollowButton topicWord={this.state.topicTitle}></TopicFollowButton></span> : ''}
             {this.state.groupTitle ? <h3>{i18n.t("feed.group")} {this.state.groupTitle}</h3> : ''}
             {this.state.searchWord ? <h3>{this.state.searchWord} {i18n.t("feed.searchResult")}</h3> : ''}
           </div>
