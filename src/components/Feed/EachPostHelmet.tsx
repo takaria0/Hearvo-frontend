@@ -20,7 +20,6 @@ const EachPostHelmet = (props: any) => (
     // { property: 'og:site_name', content: "Fishii.shop" },
 
     { name: 'viewport', content: 'width=device-width, maximum-scale=1' },
-    // { name: 'apple-itunes-app', content: 'app-id=1125423676' },
     ]}
   >
     <title>{"Hearvo | " + props.data.title}</title>
