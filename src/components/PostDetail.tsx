@@ -74,7 +74,6 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
           isLoaded: true,
         });
       }).catch((err) => {
-        console.log(err.response.data);
       })
   }
 

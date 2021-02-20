@@ -121,7 +121,6 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
       voteMjPostObj,
       config,
     ).then(res => {
-      console.log("res", res);
       const countVotePostObj = { post_id: this.props.postId }
       axios.post(
         "/count_vote_mjs",
@@ -148,7 +147,6 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
 
   change(e: any, voteMjId: number) {
 
-    console.log('this.state.voteMjCount', this.state.voteMjCount);
     const filteredArray = this.state.voteMjCount.filter((el: any) => { return el.vote_mj_id != voteMjId; });
     filteredArray.push({
       vote_mj_id: voteMjId,

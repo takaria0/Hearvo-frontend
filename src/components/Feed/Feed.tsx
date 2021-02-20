@@ -53,7 +53,6 @@ const InitialTopicForm = (props: any) => {
 
   const submit = (e: any) => {
     e.preventDefault();
-    console.log(topicList);
     const topic_id_list = saveTopicList.map((elem: any) => (elem.id));
 
     if(topic_id_list.length < 3) {
@@ -119,7 +118,7 @@ const InitialUserInfoForm = (props: any) => {
       return
     }
 
-    if (year.length === 0 || props.data.editYear === i18n.t("feed.year")) {
+    if (year.length === 0) {
       setInitialSettingMessage(i18n.t("feed.enterAge"));
       return
     }

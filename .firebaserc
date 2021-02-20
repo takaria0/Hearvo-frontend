@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "hearvo-c1393"
+  },
+  "targets": {
+    "hearvo-c1393": {
+      "hosting": {
+        "hearvo-jp": [
+          "hearvo-c1393"
+        ],
+        "hearvo-us": [
+          "hearvo-us"
+        ]
+      }
+    }
   }
 }

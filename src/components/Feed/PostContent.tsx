@@ -142,7 +142,6 @@ const VoteCandidateForm = (props: any) => {
         }
 
       }).catch((err: any) => {
-        console.log(5);
         setErrorMessage(i18n.t("newPost.failedToPost"));
       })
   }
