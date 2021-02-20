@@ -49,10 +49,10 @@ class Login extends React.Component<LoginProps, LoginState> {
         successMessage: resMessage,
       })
 
-      localStorage.setItem("jwt", res.data.token);
+      if (typeof window !== 'undefined') {localStorage.setItem("jwt", res.data.token)};
       axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
-        localStorage.setItem("user", JSON.stringify(res.data));
 
+      if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(res.data))};
         this.props.history.push("/");
       }).catch((err: any) => {
         this.props.history.push("/login");

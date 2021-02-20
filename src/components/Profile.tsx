@@ -23,7 +23,7 @@ interface ProfileProps extends RouteComponentProps<{}> {
 }
 
 interface ProfileState {
-  user?: userObject;
+  user: any;
   anchorEl: any;
   isLogin: boolean;
   isLoaded: boolean;
@@ -34,9 +34,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props);
 
-    const userObj: userObject = JSON.parse(localStorage.getItem("user") || "{}");
     this.state = {
-      user: userObj,
+      user: {},
       anchorEl: 0,
       isLogin: false,
       isLoaded: false,
@@ -75,6 +74,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
   componentDidMount = () => {
     const jwt = getJwt();
+    let userObj = {};
+    if (typeof window !== 'undefined') { userObj = JSON.parse(localStorage.getItem("user") || "{}") };
+    this.setState({ user: userObj});
     axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
       this.setState({
         isLogin: true,
@@ -101,8 +103,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     })
 
     if(val === "/login") {
-      localStorage.removeItem("jwt");
-      localStorage.removeItem("user");
+      if (typeof window !== 'undefined') {localStorage.removeItem("jwt")};
+      if (typeof window !== 'undefined') {localStorage.removeItem("user")};
       this.props.history.push(`${val}`);
       return
     }

@@ -355,35 +355,35 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
 
 
-  submit = (e: any) => {
-    e.preventDefault();
-    const jwt = getJwt();
-    axios.get(`/posts?id=${this.props.data.id}&do_filter=yes&gender=${this.state.genderSelect}&min_age=${this.state.minAge}&max_age=${this.state.maxAge}&occupation=${this.state.occupation}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
-      .then((res: any) => {
-        const data = res.data;
-        this.setState({ 
-          data: data,
-          doFilter: false,
-         });
-      }).catch((err) => {
-      })
-  }
+  // submit = (e: any) => {
+  //   e.preventDefault();
+  //   const jwt = getJwt();
+  //   axios.get(`/posts?id=${this.props.data.id}&do_filter=yes&gender=${this.state.genderSelect}&min_age=${this.state.minAge}&max_age=${this.state.maxAge}&occupation=${this.state.occupation}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+  //     .then((res: any) => {
+  //       const data = res.data;
+  //       this.setState({ 
+  //         data: data,
+  //         doFilter: false,
+  //        });
+  //     }).catch((err) => {
+  //     })
+  // }
 
-  resetClick = (e: any) => {
-    e.preventDefault();
-    const jwt = getJwt();
-    axios.get(`/posts?id=${this.props.data.id}&do_filter=no`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
-      .then((res: any) => {
-        const data = res.data;
-        this.setState({ data });
+  // resetClick = (e: any) => {
+  //   e.preventDefault();
+  //   const jwt = getJwt();
+  //   axios.get(`/posts?id=${this.props.data.id}&do_filter=no`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+  //     .then((res: any) => {
+  //       const data = res.data;
+  //       this.setState({ data });
         
-      }).catch((err) => {
-      })
-  }
+  //     }).catch((err) => {
+  //     })
+  // }
 
-  filterClick = (e: any, val: boolean) => {
-    this.setState({doFilter: val});
-  }
+  // filterClick = (e: any, val: boolean) => {
+    // this.setState({doFilter: val});
+  // }
 
   
 
@@ -433,24 +433,13 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         const baseItem = (
         <div>
           <li className={styles.li}>
-            {/* <div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div> */}
               <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
-
-
               {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}><CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
-              
-
 
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
             </div>
-
               {plotAttributes(genderData, ageData)}
-
-            {/* <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div ><div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length} </div >
-            </div> */}
               <PostFooter data={this.props.data}></PostFooter>
           </li>
         </div>
@@ -464,17 +453,10 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       default:
         return (
           <li className={styles.li}>
-            {/* <Link to={`/posts/${data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link> */}
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
-
-            {/* <div className={styles.footer}><div>{getDiffTime(data.created_at.slice(0, -7).replace("T", " "))}</div >
-              <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {data.comments.length}</div > */}
             <PostFooter data={this.props.data}></PostFooter>
 
           </li>
@@ -499,21 +481,11 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
         return (
           <li className={styles.li}>
-            
-            {/* <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}>
-              <div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link> */}
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
             </div>
             <PostFooter data={this.props.data}></PostFooter>
-            {/* <div className={styles.footer}>
-              <div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
-              <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div >
-            </div> */}
           </li>
         )
 
@@ -527,17 +499,12 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
         return (
           <li className={styles.li}>
-            {/* <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link> */}
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
             </div>
             <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
               <PostFooter data={this.props.data}></PostFooter>
-              {/* <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div > */}
             </div>
           </li>
         )
@@ -547,29 +514,19 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         if (currentFirstURL === 'posts') {
           return (
             <li className={styles.li}>
-              {/* <div className={styles.title}>{this.props.data.title}</div>
-                {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
-                <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-                 */}
               <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
               <div className={styles.vote_section}>
                 <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
               </div>
               <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
                 <PostFooter data={this.props.data}></PostFooter>
-                {/* <div>{getEndTime(this.props.data.end_at.slice(0, -3).replace("T", " "))} <CheckIcon style={{ fontSize: 12 }}></CheckIcon> {this.props.data.total_vote} <CommentIcon style={{ fontSize: 12 }}></CommentIcon> {this.props.data.comments.length}</div > */}
               </div>
             </li>
           )
         }
         return (
           <li className={styles.li}>
-            {/* <Link to={`/posts/${this.props.data?.id}`} className={styles.each_post_link}><div className={styles.title}>{this.props.data.title}</div>
-              {this.props.data.topics.length > 0 ? renderTopic(this.props.data) : <div></div>}
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(this.props.data.content)}</div>
-            </Link> */}
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
-
             <div className={styles.vote_section}>
               <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end}　postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
             </div>
