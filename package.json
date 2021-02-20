@@ -43,8 +43,8 @@
     "build-snapshot": "react-scripts build && react-snapshot",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:production-jp": "env-cmd -f .env.prod.jp npm run build",
-    "build:production-us": "env-cmd -f .env.prod.us npm run build"
+    "build:production-jp": "env-cmd -f .env.prod.jp npm run build-snapshot",
+    "build:production-us": "env-cmd -f .env.prod.us npm run build-snapshot"
   },
   "eslintConfig": {
     "extends": [
