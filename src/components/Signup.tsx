@@ -88,7 +88,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
       email: this.state.email,
       password: this.state.password,
     }).then((res: any) => {
-      localStorage.setItem("jwt", res.data.token);
+      if (typeof window !== 'undefined') {localStorage.setItem("jwt", res.data.token)};
       this.setState({
         signupSuccessMessage: i18n.t("signup.createdAccount"),
       })

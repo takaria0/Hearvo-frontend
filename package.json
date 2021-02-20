@@ -8,7 +8,6 @@
     "@nivo/bar": "^0.67.0",
     "@nivo/core": "^0.67.0",
     "@nivo/pie": "^0.67.0",
-    "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.2.0",
     "@types/jest": "^26.0.15",
@@ -44,8 +43,8 @@
     "build-snapshot": "react-scripts build && react-snapshot",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:production-jp": "env-cmd -f .env.prod.jp npm run build",
-    "build:production-us": "env-cmd -f .env.prod.us npm run build"
+    "build:production-jp": "env-cmd -f .env.prod.jp npm run build-snapshot",
+    "build:production-us": "env-cmd -f .env.prod.us npm run build-snapshot"
   },
   "eslintConfig": {
     "extends": [
@@ -64,5 +63,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

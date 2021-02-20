@@ -117,6 +117,9 @@ i18next
           },
           newPost: {
             post: '投稿',
+            add: '追加',
+            title: 'タイトル',
+            content: '内容',
             cancel: '戻る',
             groupPost: 'グループに投稿する',
             targetPost: '投稿先',

@@ -23,11 +23,10 @@ import { Helmet } from "react-helmet";
 function App() {
   return (
     <div className={styles.body}>
-      <Helmet
-        title="Hearvo"
-        description="Your voice must be heard"
-        link={window.location.href}
-      >
+      <Helmet>
+        <title>Hearvo</title>
+        <meta name="description" content="Your voice must be heard" />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
     <BrowserRouter>
     <Switch>

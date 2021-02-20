@@ -101,8 +101,9 @@ const InitialTopicForm = (props: any) => {
 };
 
 const InitialUserInfoForm = (props: any) => {
-
-  const [userObj, setUserObj] = useState<any>(JSON.parse(localStorage.getItem("user") || "{}"));
+  let initialUser = {};
+  if (typeof window !== 'undefined') {initialUser = JSON.parse(localStorage.getItem("user") || "{}");}
+  const [userObj, setUserObj] = useState<any>(initialUser);
   const [gender, setGender] = useState<string>("");
   const [genderDetail, setGenderDetail] = useState<string>("");
   const [year, setYear] = useState<string>("");
@@ -130,7 +131,7 @@ const InitialUserInfoForm = (props: any) => {
         userObj.gender = resUser.gender;
         userObj.birth_year = resUser.year;
         setUserObj(userObj);
-        localStorage.setItem("user", JSON.stringify(resUser));
+        if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(resUser))};
         props.setFinish(true);
       }).catch((res: any) => {
         setInitialSettingMessage(i18n.t("feed.confirmContent"));
@@ -164,6 +165,7 @@ const InitialUserInfoForm = (props: any) => {
       </div>
     )
   }
+
   return (
     <div>
       {/* <Dialog open={parseInt(props.data.userObj.login_count) === 1 && props.data.editInitialUserInfoForm}> */}
@@ -212,7 +214,7 @@ const InitialForm = (props: any) => {
   const closeDialog = () => {
 
     props.data.userObj.login_count = props.data.userObj.login_count + 1;
-    localStorage.setItem("user", JSON.stringify(props.data.userObj));
+    if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(props.data.userObj))};
     const jwt = getJwt();
     axios.put(`/users?login_count=${props.data.userObj.login_count}`, {}, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
     .then((res) => {
@@ -270,11 +272,13 @@ class Feed extends React.Component<FeedProps, FeedState> {
   constructor(props: any) {
     super(props);
 
+    let initialUser = {};
+
     this.state = {
       isLoaded: false,
       voteLoading: false,
       page: 1,
-      userObj: JSON.parse(localStorage.getItem("user") || "{}"),
+      userObj: initialUser,
       editInitialUserInfoForm: true,
       dataArray: [],
       location: window.location.href,
@@ -305,6 +309,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   componentDidMount = () => {
+    if (typeof window !== 'undefined') {  this.setState({ userObj: JSON.parse(localStorage.getItem("user") || "{}")}) }
     var options = {
       root: null,
       rootMargin: "20px",

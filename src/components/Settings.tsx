@@ -64,7 +64,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
         this.setState({
           responseMessage: i18n.t('settings.deletedAccount'),
         })
-        localStorage.clear();
+        if (typeof window !== 'undefined') {localStorage.clear()};
         this.props.history.push("/login");
       }).catch((res: any) => {
         this.setState({

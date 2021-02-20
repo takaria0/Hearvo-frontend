@@ -32,9 +32,9 @@ class Auth extends React.Component<AuthProps, AuthState> {
       this.setState({
         user: res.data,
       });
-      localStorage.setItem("user", JSON.stringify(res.data));
+      if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(res.data));}
     }).catch((err: any) => {
-      localStorage.removeItem("jwt");
+      if (typeof window !== 'undefined') {localStorage.removeItem("jwt")};
       this.props.history.push("/login");
     })
 
