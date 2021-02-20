@@ -6,12 +6,12 @@ import { Helmet } from "react-helmet";
 const EachPostHelmet = (props: any) => (
   <Helmet
     meta={[
-    // { name: 'author', content: "Fishii.shop" },
-    // { name: 'twitter:site', content: "Fishii.shop" },
-    // { name: 'twitter:creator', content: "Fishii.shop" },
-    { name: 'twitter:title', content: props.data.title },
+    { name: 'twitter:card', content: "summary" },
+    { name: 'twitter:creator', content: "@hearvo" },
+    { name: 'twitter:title', content: "Hearvo | " + props.data.title },
+    { name: 'twitter:description', content: props.data.content },
       // { name: 'twitter:image', content: props.data. },
-      { property: 'og:title', content: props.data.title },
+    { property: 'og:title', content: props.data.title },
     { property: 'og:site_name', content: "Hearvo" },
     { property: 'og:type', content: "website" },
     { property: 'og:url', content: "https://" + window.location.hostname + "/posts/" + props.data.id },
