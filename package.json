@@ -29,6 +29,7 @@
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.8.6",
     "react-linkify": "^1.0.0-alpha",
+    "react-loading-skeleton": "^2.1.1",
     "react-plotly.js": "^2.5.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
@@ -43,8 +44,8 @@
     "build-snapshot": "react-scripts build && react-snapshot",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:production-jp": "env-cmd -f .env.prod.jp npm run build-snapshot",
-    "build:production-us": "env-cmd -f .env.prod.us npm run build-snapshot"
+    "build:production-jp": "env-cmd -f .env.prod.jp npm run build",
+    "build:production-us": "env-cmd -f .env.prod.us npm run build"
   },
   "eslintConfig": {
     "extends": [

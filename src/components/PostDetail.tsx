@@ -1,4 +1,4 @@
-import { RouteProps, withRouter, RouteComponentProps } from 'react-router';
+import {  withRouter, RouteComponentProps } from 'react-router';
 import React from 'react';
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
@@ -8,7 +8,6 @@ import Comment from './Comment';
 import Header from './Header';
 import SideBar from './SideBar';
 import EachPostHelmet from './Feed/EachPostHelmet';
-import i18n from "../helpers/i18n";
 
 type VoteSelectType = {
   id: number;

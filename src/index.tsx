@@ -5,8 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { render } from 'react-snapshot';
 
-// ReactDOM.render(
-render(
+ReactDOM.render(
+// render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,

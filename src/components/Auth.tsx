@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
 import { withRouter, RouteComponentProps } from 'react-router-dom'
-import i18n from "../helpers/i18n";
 
 export interface AuthProps extends RouteComponentProps<{}>{
 }

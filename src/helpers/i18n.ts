@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
 
 const LANGUAGE = process.env.REACT_APP_COUNTRY;
 
@@ -89,6 +88,7 @@ i18next
           feed: {
             popular: '人気',
             latest: '最新',
+            recommend: 'おすすめ',
             now: '今',
             today: '今日',
             thisWeek: '今週',
@@ -113,6 +113,7 @@ i18next
             group: 'グループ　',
             searchResult: 'の検索結果',
             noContent: '該当なし',
+            followMore: 'トピックをたくさんフォローしよう！',
             more: 'さらに見る'
           },
           newPost: {
@@ -187,7 +188,7 @@ i18next
             age: '年齢',
             male: '男性',
             female: '女性',
-            other: 'どちらでもない',
+            others: 'どちらでもない',
             cancel: 'キャンセル',
             compareDescription: '以下の選択肢から、比較したい結果を二つ選んでください。二つの結果の積み上げ棒グラフが作成されます。',
             commentButton: 'コメントする',

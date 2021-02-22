@@ -23,66 +23,13 @@ import PollIcon from '@material-ui/icons/Poll';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import AttributePlotPie from './AttributePlotPie';
+import AttributePlotBar from './AttributePlotBar';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
 moment.tz.setDefault('UTC');
 
-
-const plotAttributes = (genderData: any, ageData: any) => {
-  const height = 300;
-  return (
-    <div>
-      <h4 style={{ textAlign: 'center' }}>{i18n.t("eachPost.votersAttributes")}</h4>
-      <div style={{ height }}>
-        <h5 style={{ textAlign: 'center' }}>{i18n.t("eachPost.gender")}</h5>
-        <MyResponsivePie data={genderData} colors={{ datum: 'data.color' }} legends={[
-          {
-            anchor: 'top-left',
-            direction: 'column',
-            justify: false,
-            translateX: 0,
-            translateY: 56,
-            itemsSpacing: 0,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemTextColor: '#999',
-            itemDirection: 'left-to-right',
-            itemOpacity: 1,
-            symbolSize: 18,
-            // symbolShape: 'circle',
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemTextColor: '#000'
-                }
-              }
-            ]
-          }
-        ]}></MyResponsivePie>
-      </div>
-      <h5 style={{ textAlign: 'center' }}>{i18n.t("eachPost.age")}</h5>
-      <div style={{ height }}>
-        <MyResponsivePie data={ageData} colors={{ "scheme": "set3" }} legends={
-          [
-            {
-              anchor: 'top-left',
-              direction: 'column',
-              justify: false,
-              translateX: 0,
-              translateY: 0,
-              itemWidth: 100,
-              itemHeight: 20,
-              itemsSpacing: 0,
-              symbolSize: 20,
-              itemDirection: 'left-to-right'
-            }
-          ]}></MyResponsivePie>
-      </div>
-    </div>
-  )
-}
 
 const renderTopic = (data: any) => (
   <div style={{ color: 'black' }}>
@@ -119,13 +66,16 @@ const PostHeader = (props: any) => {
       break;
 
     default:
+      const content = props.data.content.length > 200 ? props.data.content.slice(0, 200) + "..." : props.data.content;
       return (
         <div>
+          <div className={styles.title}>
           <Link to={`/posts/${props.data?.id}`} className={styles.each_post_link}>
-            <div className={styles.title}>{props.data.title} {createdAtJSX}</div>
+            {props.data.title}</Link> {createdAtJSX}
+          </div>
             {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>}
-            <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
-          </Link>
+          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(content)}</div>
+          
         </div>
       )
       break;
@@ -143,9 +93,9 @@ const PostFooter = (props: any) => {
         {/* </div> */}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 10 }}>
-        <span>
+        {/* <span>
           <StarIcon style={{ fontSize: 20 }}/>
-        </span >
+        </span > */}
         <span>
           <EqualizerIcon style={{ fontSize: 20 }} />
           {props.data.total_vote}
@@ -410,26 +360,6 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       case "posts":
         const mobStyle = { paddingBottom: '10px' }
 
-        const genderData = [
-          { id: i18n.t("eachPost.male"), value: this.props.data.gender_distribution.male, color: "hsla(220, 64%, 50%, 1)" },
-          { id: i18n.t("eachPost.female"), value: this.props.data.gender_distribution.female, color: "hsla(0, 56%, 50%, 1)" },
-          { id: i18n.t("eachPost.other"), value: this.props.data.gender_distribution.others, color: "hsla(114, 100%, 23%, 1)" }];
-
-        const ageData = [
-          { id: '0-9', value: this.props.data.age_distribution["0_9"] },
-          { id: '10-19', value: this.props.data.age_distribution["10_19"] },
-          { id: '20-29', value: this.props.data.age_distribution["20_29"] },
-          { id: '30-39', value: this.props.data.age_distribution["30_39"] },
-          { id: '40-49', value: this.props.data.age_distribution["40_49"] },
-          { id: '50-59', value: this.props.data.age_distribution["50_59"] },
-          { id: '60-69', value: this.props.data.age_distribution["60_69"] },
-          { id: '70-79', value: this.props.data.age_distribution["70_79"] },
-          { id: '80-89', value: this.props.data.age_distribution["80_89"] },
-          { id: '90-99', value: this.props.data.age_distribution["90_99"] },
-          { id: '100-109', value: this.props.data.age_distribution["100_109"] },
-          { id: '110-119', value: this.props.data.age_distribution["110_119"] },
-        ]
-
         const baseItem = (
         <div>
           <li className={styles.li}>
@@ -439,7 +369,12 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
             </div>
-              {plotAttributes(genderData, ageData)}
+              {/* <AttributePlotPie ageDist={this.props.data.age_distribution} genderDist={this.props.data.gender_distribution} /> */}
+              <AttributePlotBar
+              ageDist={this.props.data.age_distribution}
+              genderDist={this.props.data.gender_distribution}
+              total_vote={this.props.data.total_vote}
+               />
               <PostFooter data={this.props.data}></PostFooter>
           </li>
         </div>

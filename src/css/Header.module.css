@@ -18,7 +18,7 @@
   color: black;
   background-color: hsl(116, 49%, 45%);
   margin-bottom: 10px;
-  margin-top: -10px;
+  margin-top: -5px;
   padding-bottom: -10px;
 }
 
@@ -84,7 +84,7 @@
   color: black;
   background-color: hsl(116, 49%, 45%);
   margin-bottom: 40px;
-  padding-bottom: 0px;
+  padding-bottom: 10px;
 }
 
 .remark {
@@ -140,7 +140,7 @@
   color: black;
   background-color: hsl(116, 49%, 45%);
   margin-bottom: 80px;
-  padding-bottom: 0px;
+  padding-bottom: 10px;
 }
 
 .remark {

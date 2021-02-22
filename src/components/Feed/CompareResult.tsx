@@ -24,6 +24,8 @@ const CompareResult = (props: any) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [rawPostObj, setRawPostObj] = useState<any>([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [firstTitle, setFirstTitle] = useState("");
+  const [secondTitle, setSecondTitle] = useState("");
 
   useEffect(() => {
 
@@ -36,7 +38,7 @@ const CompareResult = (props: any) => {
 
       case true:
         if (rawPostObj.length > 1) {
-          setErrorMessage(i18n.t("compare.gender"))
+          setErrorMessage(i18n.t("compare.selectTwo"))
           return
         }
         setRawPostObj([...rawPostObj, { title: elem.title, value: elem.value, type: elem.type }])
@@ -73,7 +75,10 @@ const CompareResult = (props: any) => {
     }
 
     const postObj = { parent_id: initialSelectOption[0].value, first_target, second_target };
-
+    
+    setFirstTitle(rawPostObj[0].title);
+    setSecondTitle(rawPostObj[1].title);
+    // console.log("compare_Post_Obj", postObj);
 
     axios.post(`/vote_selects/compare`, postObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
@@ -114,11 +119,23 @@ const CompareResult = (props: any) => {
   }
 
   const barPlot = () => {
+
+    const mediaQueryMin900 = window.matchMedia('(min-width: 900px)')
+    const margin = mediaQueryMin900.matches ? 
+    { top: 50, right: 200, bottom: 50, left: 160 } : { top: 50, right: 150, bottom: 50, left: 100 } ;
     const keysVer1 = Object.keys(compareData.result[0]).map((key: string) => (key)).slice(1);
+
     return (
       <div>
+        <div>
+          {firstTitle ? 
+          <div>
+            {firstTitle} vs {secondTitle}
+          </div> 
+          : ""}
+        </div>
         <div style={{ height: 350 }}>
-          <MyResponsiveBar data={compareData.result} keys={keysVer1}></MyResponsiveBar>
+          <MyResponsiveBar data={JSON.parse(JSON.stringify(compareData.result))} keys={JSON.parse(JSON.stringify(keysVer1))} margin={margin}></MyResponsiveBar>
         </div>
       </div>
     )

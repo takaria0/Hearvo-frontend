@@ -1,43 +1,24 @@
-import React, { ReactComponentElement, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 import { useHistory } from "react-router";
 
-import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
-import { Button, TextField, Fab, Input, Menu, MenuItem } from '@material-ui/core';
-import CreateIcon from '@material-ui/icons/Create';
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import * as styles from '../../css/Feed/PostContent.module.css';
-import { idText, StringLiteral } from 'typescript';
-import { CollectionsBookmarkOutlined, CropLandscapeOutlined, TransferWithinAStationSharp } from '@material-ui/icons';
 import Feed from './Feed';
 import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
 import RemoveIcon from '@material-ui/icons/Remove';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { AxiosInterceptorManager } from 'axios';
 import i18n from "../../helpers/i18n";
 
-const hasIncorrectInputMultiple = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, titleList: any, voteDataList: any ) => {
-
-  if (title.length === 0) {
-    return true;
-  }
-
-  if (topic.length === 0) {
-    return true;
-  }
-
-  return false;
-
-};
-
-const hasIncorrectInput = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, vote_obj: [] ) => {
+/*
+If the values are incorrect,
+return true
+*/
+const hasIncorrectInput = (title: string, content: string, topic: [], vote_type_id: number, end_at: string, group_id: string, vote_obj: [], mjOptionList: [] ) => {
 
 
   if (title.length === 0) {
@@ -48,10 +29,17 @@ const hasIncorrectInput = (title: string, content: string, topic: [], vote_type_
     return true;
   }
 
-  if(vote_type_id === 1) {
+  if(vote_type_id === 2) {
+    const result = mjOptionList.filter((elem: any) => (elem.length === 0))
+    if(result.length !== 0) return true;
+  }
+
+  if(vote_type_id === 1 || vote_type_id === 2) {
     const result = vote_obj.filter((elem: any) => (elem.length === 0))
-    return result.length === 0 ?  false : true;
+    if(result.length !== 0) return true;
   }
+
+
 
   return false;
 
@@ -116,6 +104,14 @@ const VoteCandidateForm = (props: any) => {
         values = [...props.voteDataList[props.idx]];
         values[idx] = e.target.value;
         updateVoteDataList[props.idx] = values;
+        let count = 0; let allLength = 0;
+        const result = updateVoteDataList.map((elem: any) => (
+          elem.map((inside: any) => { 
+            allLength+=1;
+            try{if(inside.length === 0) {count = count + 1} }catch(err: any){}
+          })));
+        if(count === 0 && allLength > 3) { props.setIsVoteDateListOk(true) } else { props.setIsVoteDateListOk(false) };
+
         props.setVoteDataList(updateVoteDataList);
         return
       default:
@@ -178,12 +174,13 @@ const VoteCandidateForm = (props: any) => {
   const addHandle = (e: any) => {
     if (voteData.length > 6) { return };
     setVoteData([...voteData, '']);
+    if (props.voteTypeId === 3) { props.setIsVoteDateListOk(false) };
   }
 
   const voteStyle = { padding: '7px', marginBottom: '5px', width: '40ch'  }
 
   const submitButton = () => {
-    const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData);
+    const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData, props.matrixCandidateList);
 
     switch(invalid) {
       case true:
@@ -221,7 +218,7 @@ const VoteCandidateForm = (props: any) => {
       {voteData.map((val: any, idx: number) => {
         return (
           <div key={idx}>
-            <input style={voteStyle} placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
+            <input style={voteStyle} maxLength={30} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
             {idx > 1 ? <span style={{marginLeft: 5}}><button type="button" onClick={e => deleteHandle(e, idx)}><RemoveIcon style={{ fontSize: 16 }}></RemoveIcon></button></span> : ''}
           </div>
         )
@@ -247,6 +244,10 @@ const MultipleVoteFormEach = (props: any) => {
   const addTitle = (e: any) => {
     let updateTitleList = props.titleList;
     updateTitleList[props.idx] = e.target.value;
+
+    const result = updateTitleList.filter((elem: any) => (elem.length === 0))
+    if(result.length === 0) { props.setIsTitleListOk(true) } else { props.setIsTitleListOk(false) };
+    
     props.setTitleList(updateTitleList);
   }
 
@@ -261,7 +262,7 @@ const MultipleVoteFormEach = (props: any) => {
     <hr></hr>
     <h2>{i18n.t("newPost.vote")} {props.idx + 1}</h2>
     <div>
-        <input placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => addTitle(e)}></input><br></br>
+        <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => addTitle(e)}></input><br></br>
     </div>
     <div>
         <textarea placeholder={i18n.t("newPost.contentPlaceholder")} className={styles.content} rows={6} maxLength={5000} onChange={e => addContent(e)}></textarea>
@@ -271,10 +272,38 @@ const MultipleVoteFormEach = (props: any) => {
       idx={props.idx}
       voteDataList={props.voteDataList}
       setVoteDataList={props.setVoteDataList}
+      setIsVoteDateListOk={props.setIsVoteDateListOk}
       ></VoteCandidateForm></div>
     </div>
     )
 }
+
+const SubmitButtonMultiple = (props: any) => {
+  const [invalid, setInvalid] = useState(true);
+
+  useEffect(() => {
+    if (
+      props.title.length !== 0 && 
+      props.topicList.length !== 0 &&
+      props.isTitleListOk &&
+      props.isVoteDateListOk
+      ) {
+      setInvalid(false);
+    } else {
+      setInvalid(true);
+    }
+    
+  })
+
+  switch (invalid) {
+    case true:
+      return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
+    case false:
+      return (<div><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => props.submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
+      // return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => {e.preventDefault();setIsConfirm(true)}} >{i18n.t("newPost.post")}</button></div>)
+  }
+}
+
 
 const MultipleVoteForm = (props: any) => {
   const multipleVoteNum = props.multipleVoteNum;
@@ -285,14 +314,23 @@ const MultipleVoteForm = (props: any) => {
   const [voteDataList, setVoteDataList] = useState<any>(Array(multipleVoteNum).fill([]));
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirm, setIsConfirm] = useState(false);
+  const [isTitleListOk, setIsTitleListOk] = useState(false);
+  const [isVoteDateListOk, setIsVoteDateListOk] = useState(false);
   
   useEffect(() => {
 
+
+
     if (titleList.length < multipleVoteNum) {
+      setIsTitleListOk(false);
       setTitleList([ ...titleList, '' ]);
     }
 
     if (titleList.length > multipleVoteNum) {
+      const decreaseTitleList = titleList.slice(0, titleList.length - 1);
+      const result = decreaseTitleList.filter((elem: any) => (elem.length === 0))
+      if(result.length === 0) { setIsTitleListOk(true) } else { setIsTitleListOk(false) };
+    
       setTitleList(titleList.slice(0, titleList.length - 1));
     }
 
@@ -305,18 +343,25 @@ const MultipleVoteForm = (props: any) => {
     }
 
     if (voteDataList.length < multipleVoteNum) {
-      setVoteDataList([...voteDataList, []]);
+      setIsVoteDateListOk(false);
+      setVoteDataList([...voteDataList, ['', '']]);
     }
 
     if (voteDataList.length > multipleVoteNum) {
+      const decreaseVoteDataList = voteDataList.slice(0, voteDataList.length - 1);
+      let count = 0; let allLength = 0;
+      const result = decreaseVoteDataList.map((elem: any) => (
+        elem.map((inside: any) => { 
+          allLength+=1;
+          try{if(inside.length === 0) {count = count + 1} }catch(err: any){}
+        })));
+      if(count === 0 && allLength > 3) { setIsVoteDateListOk(true) } else { setIsVoteDateListOk(false) };
+
       setVoteDataList(voteDataList.slice(0, voteDataList.length - 1));
     }
 
-    // setTitleList(Array(multipleVoteNum).fill(''));
-    // setContentList(Array(multipleVoteNum).fill(''));
-    // setVoteDataList(Array(multipleVoteNum).fill([]));
-
   }, [props.multipleVoteNum]);
+  // });
 
   const submit = (e: any) => {
     const parentTitle = props.title;
@@ -366,17 +411,6 @@ const MultipleVoteForm = (props: any) => {
     e.preventDefault();
   };
 
-  const submitButton = () => {
-    const invalid = hasIncorrectInputMultiple(props.title, props.content, props.topicList, 3, props.endAt, props.targetGroupId, titleList, voteDataList)
-
-    switch (invalid) {
-      case true:
-        return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
-      case false:
-        return (<div><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
-        // return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => {e.preventDefault();setIsConfirm(true)}} >{i18n.t("newPost.post")}</button></div>)
-    }
-  }
 
   const confirmDialogBaseMultiple = () => {
     const parentTitle = props.title;
@@ -401,9 +435,23 @@ const MultipleVoteForm = (props: any) => {
     voteDataList={voteDataList}
     setVoteDataList={setVoteDataList}
     topicList={props.topicList}
+    setIsTitleListOk={setIsTitleListOk}
+    setIsVoteDateListOk={setIsVoteDateListOk}
     ></MultipleVoteFormEach>)})}
       <div style={{ textAlign: 'right', paddingRight: 10, marginBottom: 20 }}>
-        {submitButton()}
+        <SubmitButtonMultiple 
+          title={props.title}
+          content={props.content}
+          targetGroupId={props.targetGroupId}
+          endAt={props.end_at}
+          titleList={titleList}
+          contentList={contentList}
+          voteDataList={voteDataList}
+          topicList={props.topicList}
+          submit={submit}
+          isTitleListOk={isTitleListOk}
+          isVoteDateListOk={isVoteDateListOk}
+        />
     </div>
       
     <div>{errorMessage ? errorMessage : ''}</div>
@@ -436,7 +484,7 @@ const MatrixVoteForm = (props: any) => {
       JSX.push(
         (<span>
           <span key={idx}>
-            <input style={{ padding: '3px', width: '90px', marginRight: '10px', marginTop: '10px' }} placeholder={`${i18n.t("newPost.MatrixAnswer")} ${idx + 1}`} onChange={e => matrixCandidateListChange(e, idx)}></input>
+            <input required maxLength={10} style={{ padding: '3px', width: '90px', marginRight: '10px', marginTop: '10px' }} placeholder={`${i18n.t("newPost.MatrixAnswer")} ${idx + 1}`} onChange={e => matrixCandidateListChange(e, idx)}></input>
           </span>
         </span>)
       )
@@ -652,6 +700,8 @@ const VoteForm = (props: any) => {
   return (
     <div>
       <form onKeyPress={e => {if(e.key === 'Enter'){e.preventDefault()}}}>
+        
+        <span style={{display: 'none'}}>
         <label><input name="issendtargetgroup" type="checkbox" onChange={e => changeIsSendTargetGroup(e)} /><b>{i18n.t("newPost.groupPost")}</b></label>
         {isSendTargetGroup ? 
         <span>
@@ -667,6 +717,7 @@ const VoteForm = (props: any) => {
             </NativeSelect>
         </span>
           : ''}
+        </span>
 
         
         <hr></hr>
@@ -690,7 +741,7 @@ const VoteForm = (props: any) => {
 
         <div>
           <b>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</b>
-          <input placeholder={i18n.t("newPost.topicPlaceholder")}style={{ padding: 7, width: '100%', marginBottom: '10px' }} value={topicString} type="text" onChange={e => editTopic(e)}></input>
+          <input required placeholder={i18n.t("newPost.topicPlaceholder")}style={{ padding: 7, width: '100%', marginBottom: '10px' }} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}></input>
           {renderTopic()}
         </div>
         
@@ -702,7 +753,7 @@ const VoteForm = (props: any) => {
         {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : <h2>{i18n.t("newPost.vote")}</h2>}
       
       <div>
-          <input placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} style={{padding: 7}} minLength={1} maxLength={150} type="text" onChange={e => setTitle(e.target.value)}></input><br></br>
+          <input required placeholder={i18n.t("newPost.titlePlaceholder")}  className={styles.title} style={{padding: 7}} minLength={1} maxLength={150} type="text" onChange={e => setTitle(e.target.value)}></input><br></br>
       </div>
       <div>
           <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea>
@@ -722,7 +773,7 @@ const VoteForm = (props: any) => {
 export interface NewPostContentProps extends RouteComponentProps<{}> {
   edit: boolean;
   editParentHandle: any;
-  keyword: string;
+  // keyword: string;
   isLogin: boolean;
 }
 
@@ -829,7 +880,7 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
       <div>
         <div>{this.createForm()}</div>
         <div>
-          <Feed isLogin={this.props.isLogin} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></Feed>
+          <Feed isLogin={this.props.isLogin} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></Feed>
         </div>
       </div>
     );
