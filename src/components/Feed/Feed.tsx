@@ -340,7 +340,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
 
   getData = (page: number) => {
-    this.setState({isLoaded: false});
+    this.setState({ isLoaded: false, searchWord: "", topicTitle: ""});
     const urlParams = new URLSearchParams(window.location.search);
     const keywordArray = window.location.pathname.split("/");
 

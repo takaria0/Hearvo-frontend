@@ -8,7 +8,7 @@ import SideBar from './SideBar';
 import Feed from './Feed/Feed';
 import TopicFollowButtonLoaded from './TopicFollowButtonLoaded';
 import i18n from "../helpers/i18n";
-
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 
 const FollowingTopicList = (props: any) => {
@@ -27,7 +27,17 @@ const FollowingTopicList = (props: any) => {
       })
   }, []);
 
-  if(isLoading) {return (<span></span>)}
+  if(isLoading) {
+    const skeletonList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    return (
+      <div>
+        {skeletonList.map((elem: any) => (
+          <SkeletonTheme color="#FFFFFF" highlightColor="#E2E2E2">
+            <p style={{ border: 'solid', borderWidth: 1, borderRadius: 6 }}><Skeleton duration={0.8} height={50} /></p>
+          </SkeletonTheme>
+        ))}
+      </div>
+    )}
 
   return (
     <div>
