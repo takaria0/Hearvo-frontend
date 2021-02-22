@@ -13,13 +13,14 @@ import i18n from "../helpers/i18n";
 
 const Profile = (props: any) => {
   const jwt = getJwt();
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem("user") || "{}"));
   const [isLoading, setIsLoading] = useState(true);
   const urlParams = new URLSearchParams(window.location.search);
   const keywordArray = window.location.pathname.split("/");
 
 
   useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
     axios.get("/users?profile_detail=true", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
         setUser(res.data);
@@ -30,13 +31,13 @@ const Profile = (props: any) => {
       })
   }, []);
 
-  if (isLoading) {
-    return (<span><Header></Header>
-      <div className={styles.body}>
-        <div className={styles.feed}></div>
-        <div className={styles.side_bar}><SideBar></SideBar></div></div>
-    </span>)
-  }
+  // if (isLoading) {
+  //   return (<span><Header></Header>
+  //     <div className={styles.body}>
+  //       <div className={styles.feed}></div>
+  //       <div className={styles.side_bar}><SideBar></SideBar></div></div>
+  //   </span>)
+  // }
 
   return (
     <div>
