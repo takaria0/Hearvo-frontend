@@ -74,7 +74,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
   }
 
   componentDidMount = () => {
-    this.setState({ mediaQuery: window.matchMedia('(min-width: 500px)')});
+    this.setState({ mediaQuery: window.matchMedia('(min-width: 800px)')});
     const jwt = getJwt();
     let userObj = {};
     if (typeof window !== 'undefined') { userObj = JSON.parse(localStorage.getItem("user") || "{}") };
@@ -118,14 +118,14 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
   };
 
   searchBar = () => {
-
-    const searchWidth = this.state.mediaQuery.matches ? "35ch" : "60%" ;
+    const display = this.state.mediaQuery.matches ? "inline" : "none";
+    // const searchWidth = this.state.mediaQuery.matches ? "60ch" : "60%" ;
     return (
-      <form style={{ display: "inline", width: '100%' }} onSubmit={e => this.searchSubmit(e)}>
-        <span style={{ border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 10, padding: 6}}>
+      <form onSubmit={e => this.searchSubmit(e)}>
+        <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 10, padding: 6}}>
           {/* <SearchIcon  /> */}
         <input maxLength={50} type="text" 
-        style={{ border: 'none', width: searchWidth, outline: 'none', backgroundColor: 'white' }}
+            style={{ border: 'none', width: "60ch", outline: 'none', backgroundColor: 'white' }}
          className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
         ></input>
         </span>
@@ -198,19 +198,23 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
   render() {
 
     return (
-      <div style={{textAlign: "left", display: 'inline', width: '100%'}}>
-        <br></br>
-        <Link to="/" className={styles.hearvo}>
-          <b style={{ fontSize: 20, marginLeft: 10}}>{i18n.t("header.title")}</b>
-        </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small>
+      <div style={{ transform: 'translateY(10px)' }}>
+        <span style={{height: '10px'}}></span>
+        <span style={{ display: 'flex', justifyContent: 'space-between'}}>
+          <span>
+          <Link to="/" className={styles.hearvo}>
+            <b style={{ fontSize: 20, marginLeft: 10 }}>{i18n.t("header.title")}</b>
+          </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></span>
 
-        <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} >
-          <span style={{width: '100%'}}>{this.searchBar()}</span>
-          {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar() }
+          {/* <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} > */}
+          <span style={{ transform: 'translateY(5px)'}}>
+            {this.searchBar()}
+          </span>
+          <span style={{ transform: 'translateY(-3px)' }}>
+            {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar()}
+          </span>
         </span>
-
-
-        <br></br><br></br>
+        {/* </span> */}
       </div>
     )
   }

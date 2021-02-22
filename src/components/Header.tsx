@@ -9,9 +9,7 @@ const Header = () => {
   return (
     <div>
     <div className={styles.header}>
-      <div className={styles.header_inside}>
         <HeaderChild></HeaderChild>
-      </div>
     </div>
     </div>
   )

@@ -42,13 +42,7 @@ function App() {
         <Route path="/topic" exact component={Home}  />
         <Route path="/popular" exact component={Home}/>
         <Route path="/popular/:time" exact component={Home} />
-        <Route path="/search" exact component={Home} />
-      {/* <Route path="/latest" exact component={Home} key="latest-home" />
-      <Route path="/topic" exact component={Home} key="topic-home" />
-      <Route path="/popular" exact component={Home} key="popular-home" />
-      <Route path="/popular/:time" exact component={Home} key="popular-time-home" />
-      <Route path="/search" exact component={Home} key="search-home" /> */}
-
+        <Route path="/search" component={Home} />
       <Route path="/posts/:post_id" component={PostDetail} />
       <Auth>
           <Route path="/profile" component={Profile} />
