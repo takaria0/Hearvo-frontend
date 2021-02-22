@@ -1,17 +1,12 @@
-import { Group } from "@material-ui/icons"
-import React, { useEffect, useState, useRef } from 'react';
-import { Button } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import axios from './Api';
 
 import * as styles from '../css/Home.module.css';
 import { getJwt } from '../helpers/jwt';
-import { RouteComponentProps, Link, Redirect, withRouter, useParams } from 'react-router-dom'
-import Dialog from '@material-ui/core/Dialog';
-import { submit_button } from "../css/Feed/PostContent.module.css";
+import { Link, useParams } from 'react-router-dom'
 import Header from './Header';
 import SideBar from './SideBar';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import { type } from "os";
 import i18n from "../helpers/i18n";
 interface GroupListProps {
 

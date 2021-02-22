@@ -21,10 +21,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import { MyResponsivePie, MyResponsiveBar } from '../../helpers/NivoPlots';
 import CompareResult from './CompareResult';
 import i18n from "../../helpers/i18n";
+import AttributePlotPie from './AttributePlotPie';
+import AttributePlotBar from './AttributePlotBar';
 
 const moment = require('moment-timezone');
 moment.tz.setDefault('Etc/UTC');
-
 
 
 
@@ -106,11 +107,12 @@ const EachMultipleVote = (props: any) => {
 
   const voteSelectResult = () => {
 
-    let ageDist: any; let genderDist: any;
+    let ageDist: any; let genderDist: any; let totalVote: any;
     const resultJSX = data.map((each: any) => {
       let x, y, plotData, layout;
       ageDist = each.age_distribution;
       genderDist = each.gender_distribution;
+      totalVote = each.total_vote;
       x = each.vote_selects_count.map((da: any) => {
         return (da.count * 100) / each.total_vote
       });
@@ -130,78 +132,16 @@ const EachMultipleVote = (props: any) => {
       )
     })
 
-    const genderData = [
-      { id: i18n.t("eachPost.male"), value: genderDist.male, color: "hsla(220, 64%, 50%, 1)" },
-      { id: i18n.t("eachPost.female"), value: genderDist.female, color: "hsla(0, 56%, 50%, 1)" },
-      { id: i18n.t("eachPost.other"), value: genderDist.other, color: "hsla(114, 100%, 23%, 1)" }];
-
-    const ageData = [
-      { id: '0-9', value: ageDist["0_9"]  },
-      { id: '10-19', value: ageDist["10_19"]},
-      { id: '20-29', value: ageDist["20_29"] },
-      { id: '30-39', value: ageDist["30_39"] },
-      { id: '40-49', value: ageDist["40_49"] },
-      { id: '50-59', value: ageDist["50_59"] },
-      { id: '60-69', value: ageDist["60_69"] },
-      { id: '70-79', value: ageDist["70_79"] },
-      { id: '80-89', value: ageDist["80_89"] },
-      { id: '90-99', value: ageDist["90_99"] },
-      { id: '100-109', value: ageDist["100_109"] },
-      { id: '110-119', value: ageDist["110_119"] },
-    ]
 
     return (
     <div>
       {resultJSX}
-      <div>
-          <h4>{i18n.t("eachPost.votersAttributes")}</h4>
-          <h5 style={{ textAlign: 'center' }}>{i18n.t("eachPost.gender")}</h5>
-          <div style={{height: 300}}> 
-            <MyResponsivePie data={genderData} colors={{ datum: 'data.color' }} legends={[
-              {
-                anchor: 'top-left',
-                direction: 'column',
-                justify: false,
-                translateX: 0,
-                translateY: 56,
-                itemsSpacing: 0,
-                itemWidth: 100,
-                itemHeight: 18,
-                itemTextColor: '#999',
-                itemDirection: 'left-to-right',
-                itemOpacity: 1,
-                symbolSize: 18,
-                // symbolShape: 'circle',
-                effects: [
-                  {
-                    on: 'hover',
-                    style: {
-                      itemTextColor: '#000'
-                    }
-                  }
-                ]
-              }
-            ]}></MyResponsivePie>
-          </div>
-          <h5 style={{ textAlign: 'center' }}>{i18n.t("eachPost.age")}</h5>
-          <div style={{ height: 300 }}> 
-            <MyResponsivePie data={ageData} colors={{ "scheme": "set3" }} legends={
-              [
-              {
-                anchor: 'top-left',
-                direction: 'column',
-                justify: false,
-                translateX: 0,
-                translateY: 0,
-                itemWidth: 100,
-                itemHeight: 20,
-                itemsSpacing: 0,
-                symbolSize: 20,
-                itemDirection: 'left-to-right'
-              }
-              ]}></MyResponsivePie>
-          </div>
-      </div>
+      {/* <AttributePlotPie ageDist={ageDist} genderDist={genderDist}/> */}
+      <AttributePlotBar
+      ageDist={ageDist}
+      genderDist={genderDist}
+      total_vote={totalVote}
+        />
     </div>
       );
   }
@@ -233,7 +173,7 @@ const EachMultipleVote = (props: any) => {
   if (!doesVoteStart) { return (
     <div>
       <h2><NoteIcon style={{ marginBottom: -5,  padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-      <button style={{ border: 'solid', backgroundColor: '#60D4FF', color: 'white', borderWidth: 1, borderRadius: 5, padding: 10 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></button>
+      <button style={{ border: 'solid', fontSize:16, backgroundColor: '#01B1F8', color: 'white', borderWidth: 1, borderRadius: 5, padding: 10 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></button>
   </div>
   ) }
 

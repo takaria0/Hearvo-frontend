@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from './Api';
 import { RouteComponentProps, Link } from 'react-router-dom'
-import { Button, TextField, Fab } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
 import i18n from "../helpers/i18n";
 

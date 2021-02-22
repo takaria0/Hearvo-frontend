@@ -372,8 +372,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
       orderType = "latest";
     }
     if (window.location.pathname === "/") {
-      feedType = "popular";
+      feedType = "recommend";
     }
+
 
 
     const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
@@ -458,6 +459,15 @@ class Feed extends React.Component<FeedProps, FeedState> {
           .catch((err) => { })
         break;
 
+      case "recommend":
+        queryUrl = `/posts?keyword=recommend&page=${newpage}`;
+        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+          .then(res => {
+            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
+          })
+          .catch((err) => { })
+        break;
+
       default:
         break;
     }
@@ -511,7 +521,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
             { this.state.dataArray.length > 0 ?
               this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost>})
             : 
-            i18n.t("feed.noContent") 
+              <div><div>{i18n.t("feed.noContent")}</div><div>{i18n.t("feed.followMore")}</div></div>
             }            
             
           </ul>

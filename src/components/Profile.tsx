@@ -1,11 +1,10 @@
 import React from 'react';
 import * as styles from '../css/Header.module.css';
 import { Button, Menu, MenuItem } from '@material-ui/core';
-import { withRouter, RouteComponentProps, Link, Redirect } from 'react-router-dom'
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import axios from './Api';
 import ListIcon from '@material-ui/icons/List';
-// import { useTranslation } from "react-i18next";
 import i18n from "../helpers/i18n";
 
 type userObject = {
@@ -28,6 +27,7 @@ interface ProfileState {
   isLogin: boolean;
   isLoaded: boolean;
   searchValue: string;
+  mediaQuery: any;
 }
  
 class Profile extends React.Component<ProfileProps, ProfileState> {
@@ -40,6 +40,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
       isLogin: false,
       isLoaded: false,
       searchValue: "",
+      mediaQuery: {},
     }
     
   }
@@ -73,6 +74,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   }
 
   componentDidMount = () => {
+    this.setState({ mediaQuery: window.matchMedia('(min-width: 500px)')});
     const jwt = getJwt();
     let userObj = {};
     if (typeof window !== 'undefined') { userObj = JSON.parse(localStorage.getItem("user") || "{}") };
@@ -116,10 +118,17 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   };
 
   searchBar = () => {
+
+    const searchWidth = this.state.mediaQuery.matches ? "35ch" : "60%" ;
     return (
       <form style={{ display: "inline", width: '100%' }} onSubmit={e => this.searchSubmit(e)}>
-        <input type="text" style={{ width: '60%', padding: '3px' }} className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
+        <span style={{ border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 10, padding: 6}}>
+          {/* <SearchIcon  /> */}
+        <input maxLength={50} type="text" 
+        style={{ border: 'none', width: searchWidth, outline: 'none', backgroundColor: 'white' }}
+         className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
         ></input>
+        </span>
       </form>
     )
   }

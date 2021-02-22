@@ -1,13 +1,9 @@
-import { Group } from "@material-ui/icons"
-import React, { useEffect, useState, useRef } from 'react';
-import { Button } from '@material-ui/core';
+import React, { useState } from 'react';
 import axios from './Api';
 
 import * as styles from '../css/Home.module.css';
 import { getJwt } from '../helpers/jwt';
-import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
-import { submit_button } from "../css/Feed/PostContent.module.css";
 import Header from './Header';
 import SideBar from './SideBar';
 import i18n from "../helpers/i18n";
@@ -88,7 +84,7 @@ const GroupCreate = (props: GroupCreateProps) => {
             <h1>{i18n.t("group.createGroup")}</h1>
             <div style={{ border: 'none' }}>{i18n.t("group.createGroupDesc")}</div>
             <form onSubmit={e => submit(e)} style={{textAlign: 'center'}}><br></br>
-              <input style={{ padding: 5, width: 200 }} onChange={e => onChangeGroupName(e)}></input>
+              <input maxLength={20} style={{ padding: 5, width: 200 }} onChange={e => onChangeGroupName(e)}></input>
               <div style={{ marginTop: 10 }}>
                 <button>{i18n.t("group.create")}</button>
               </div>

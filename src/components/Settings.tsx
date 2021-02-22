@@ -1,8 +1,6 @@
 import React from 'react';
 import axios from './Api';
-// import * as styles from '../css/Settings.module.css';
-import { Button, Input } from '@material-ui/core';
-import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
 import Header from './Header';
@@ -141,7 +139,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
           <div style={{ marginTop: '10px', textAlign: 'center'}}>
             {i18n.t("settings.confirmPassword")}
             <form>
-              <input style={{ padding: '10px', margin: '5px'}} type="password" value={this.state.confirmPassword} onChange={e => this.change(e, 'confirmPassword')}></input>
+              <input maxLength={32} required style={{ padding: '10px', margin: '5px'}} type="password" value={this.state.confirmPassword} onChange={e => this.change(e, 'confirmPassword')}></input>
             </form>
           </div>
           <div style={{ fontSize: '20px', padding: '20px', margin: '5px' }}>{i18n.t("settings.confirmMessage")}</div>

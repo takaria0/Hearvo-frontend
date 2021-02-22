@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from './Api';
 import * as styles from '../css/Home.module.css';
-import { Button, Input } from '@material-ui/core';
-import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import Header from './Header';
 import SideBar from './SideBar';
 import Feed from './Feed/Feed';
 import TopicFollowButton from './TopicFollowButton';
 import i18n from "../helpers/i18n";
-import { spawn } from 'child_process';
-import PersonIcon from '@material-ui/icons/Person';
-import PostAddIcon from '@material-ui/icons/PostAdd';
 // 0 -> male
 // 1 -> female
 // 2 -> others
@@ -111,6 +107,14 @@ const ProfileDetail = (props: any) => {
       <div className={styles.side_bar}><SideBar></SideBar></div></div>
   </span>) }
 
+  const voteRecordStyle = keywordArray.includes("voted") ?
+   { textDecoration: 'underline', } :
+   { textDecoration: 'none' }
+
+  const myPostsStyle = keywordArray.includes("myposts") ?
+   { textDecoration: 'underline', } :
+   { textDecoration: 'none' }
+
   return (
     <div>
       <Header></Header>
@@ -123,14 +127,18 @@ const ProfileDetail = (props: any) => {
           <span><Link style={{ textDecoration: 'none' }} to="/profile/voted">{i18n.t("profile.numOfVotes")} {user.num_of_votes}</Link></span>
 
           <div style={{ float: 'right', textAlign: 'right' }}><small>{i18n.t("profile.joined")} {user.created_at.slice(0, 10)}</small></div>
+
+
           <div style={{ marginTop:10, backgroundColor: 'white', borderRadius: 5, border: 'solid', borderWidth: 1, paddingTop: 10, paddingBottom: 10, display: 'flex', justifyContent: 'space-evenly'}}>
-            <span>
-              <Link style={{ textDecoration: 'none' }} to="/profile/voted">{i18n.t("profile.voteRecord")}</Link>
+            <span style={{backgroundColor: 'white'}}>
+              <Link style={voteRecordStyle} to="/profile/voted">{i18n.t("profile.voteRecord")}</Link>
             </span>&nbsp;
             <span>
-              <Link style={{ textDecoration: 'none' }} to="/profile/myposts">{i18n.t("profile.myPost")}</Link>
+              <Link style={myPostsStyle} to="/profile/myposts">{i18n.t("profile.myPost")}</Link>
             </span>
           </div>
+
+
           <div>
             {keywordArray.includes("following") ?
               <FollowingTopicList></FollowingTopicList>

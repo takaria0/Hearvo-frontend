@@ -1,8 +1,8 @@
 import React from 'react';
 import { getJwt } from '../helpers/jwt';
 import axios from './Api';
-import { Button, TextField, Fab } from '@material-ui/core';
-import { RouteProps, withRouter, RouteComponentProps } from 'react-router';
+import { Button } from '@material-ui/core';
+import {  withRouter, RouteComponentProps } from 'react-router';
 import * as styles from '../css/Comment.module.css';
 import i18n from "../helpers/i18n";
 
@@ -74,7 +74,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     return (
       <div>
         <form onSubmit={e => this.submit(e)}>
-          <div><textarea rows={5} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea></div>
+          <div><textarea maxLength={1000} rows={5} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea></div>
           <div>
             <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.reply")}</Button>
           </div>

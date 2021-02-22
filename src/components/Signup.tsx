@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from './Api';
 import { RouteComponentProps, Link } from 'react-router-dom'
-import { Button, TextField, Fab } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
 import i18n from '../helpers/i18n';
 export interface SignupProps extends RouteComponentProps<{}> {
@@ -68,7 +68,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
       return
     }
 
-    const letters = /^[0-9a-zA-Z]+$/;
+    const letters = /^[0-9a-zA-Z_]+$/;
     if (!this.state.userName.match(letters)) {
       this.setState({
         errorMessage: i18n.t("signup.useAlphabet")
@@ -114,7 +114,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
         <form onSubmit={e => this.submit(e)}>
           <div>
               <div>{i18n.t("signup.userName")}</div>
-            <input className={styles.email} minLength={1} maxLength={32} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
+            <input className={styles.email} minLength={1} maxLength={20} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
           </div>
           <div>
               <div>{i18n.t("signup.email")}</div>
