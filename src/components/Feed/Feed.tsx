@@ -236,7 +236,7 @@ const InitialForm = (props: any) => {
 
 
 export interface FeedProps {
-  keyword: string;
+  // keyword: string;
   isPosted: boolean;
   isPostedHandeler: any;
   isLogin: boolean;

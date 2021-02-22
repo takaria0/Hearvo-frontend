@@ -12,7 +12,7 @@ import TodayIcon from '@material-ui/icons/Today';
 import i18n from "../../helpers/i18n";
 
 export interface BaseHeaderProps extends RouteComponentProps<{}> {
-  keyword: string;
+  // keyword: string;
 }
  
 export interface BaseHeaderState {
@@ -128,7 +128,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     return ( 
       <div>
         <div>{this.headerJSX()}</div>
-        <PostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle} keyword={this.props.keyword}></PostContent>
+        <PostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle}></PostContent>
       </div>
      );
   }

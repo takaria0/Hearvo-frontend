@@ -6,29 +6,8 @@ import { getJwt } from '../helpers/jwt';
 import Header from './Header';
 import SideBar from './SideBar';
 import Feed from './Feed/Feed';
-import TopicFollowButton from './TopicFollowButton';
+import TopicFollowButtonLoaded from './TopicFollowButtonLoaded';
 import i18n from "../helpers/i18n";
-// 0 -> male
-// 1 -> female
-// 2 -> others
-const genderIntToString = (num: number | undefined) => {
-  switch(num) {
-    case 0:
-      return i18n.t("eachPost.male")
-      break;
-    case 1:
-      return i18n.t("eachPost.female")
-      break;
-    case 2:
-      return i18n.t("eachPost.other")
-      break;
-    
-    default:
-      return ""
-      break;
-  }
-}
-
 
 
 
@@ -60,7 +39,7 @@ const FollowingTopicList = (props: any) => {
             <Link style={{textDecoration: 'none'}} to={`/topic?tp=${topic.topic}`}>{topic.topic}</Link>
             </span>
               <span style={{ textAlign: 'right', float: 'right' }}>
-                <TopicFollowButton topicWord={topic.topic}></TopicFollowButton>
+                <TopicFollowButtonLoaded topicWord={topic.topic} isFollowed={true}></TopicFollowButtonLoaded>
               </span>
 
             <div>
@@ -90,22 +69,6 @@ const ProfileDetail = (props: any) => {
   const keywordArray = window.location.pathname.split("/");
 
 
-  useEffect(() => {
-    axios.get("/users?profile_detail=true", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
-    .then(res => {
-      setUser(res.data);
-      setIsLoading(false);
-    })
-    .catch(err => {
-      setIsLoading(false);
-    })
-  }, []);
-
-  if (isLoading) { return (<span><Header></Header>
-    <div className={styles.body}>
-      <div className={styles.feed}></div>
-      <div className={styles.side_bar}><SideBar></SideBar></div></div>
-  </span>) }
 
   const voteRecordStyle = keywordArray.includes("voted") ?
    { textDecoration: 'underline', } :
@@ -117,17 +80,6 @@ const ProfileDetail = (props: any) => {
 
   return (
     <div>
-      <Header></Header>
-      <div className={styles.body}>
-        <div className={styles.feed}>
-          <h2>{user.name}</h2>
-
-          <span><Link style={{ textDecoration: 'none' }} to="/profile/following">{i18n.t("profile.following")} {user.num_of_following_topics}</Link></span>&nbsp;&nbsp;&nbsp;
-          
-          <span><Link style={{ textDecoration: 'none' }} to="/profile/voted">{i18n.t("profile.numOfVotes")} {user.num_of_votes}</Link></span>
-
-          <div style={{ float: 'right', textAlign: 'right' }}><small>{i18n.t("profile.joined")} {user.created_at.slice(0, 10)}</small></div>
-
 
           <div style={{ marginTop:10, backgroundColor: 'white', borderRadius: 5, border: 'solid', borderWidth: 1, paddingTop: 10, paddingBottom: 10, display: 'flex', justifyContent: 'space-evenly'}}>
             <span style={{backgroundColor: 'white'}}>
@@ -143,16 +95,11 @@ const ProfileDetail = (props: any) => {
             {keywordArray.includes("following") ?
               <FollowingTopicList></FollowingTopicList>
              : 
-             <Feed isLogin={true} keyword={'myposts'} isPosted={false} isPostedHandeler={null}></Feed>}
+             <Feed isLogin={true} isPosted={false} isPostedHandeler={null}></Feed>}
             
           </div>
-        </div>
 
-        <div className={styles.side_bar}>
-          <SideBar></SideBar>
-        </div>
       </div>
-    </div>
   )
 }
 

@@ -773,7 +773,7 @@ const VoteForm = (props: any) => {
 export interface NewPostContentProps extends RouteComponentProps<{}> {
   edit: boolean;
   editParentHandle: any;
-  keyword: string;
+  // keyword: string;
   isLogin: boolean;
 }
 
@@ -880,7 +880,7 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
       <div>
         <div>{this.createForm()}</div>
         <div>
-          <Feed isLogin={this.props.isLogin} keyword={this.props.keyword} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></Feed>
+          <Feed isLogin={this.props.isLogin} isPosted={this.state.posted} isPostedHandeler={this.isPostedChange}></Feed>
         </div>
       </div>
     );

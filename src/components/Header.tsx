@@ -1,5 +1,5 @@
 import React from 'react';
-import Profile from './Profile';
+import HeaderChild from './HeaderChild';
 import * as styles from '../css/Header.module.css';
 
 
@@ -10,7 +10,7 @@ const Header = () => {
     <div>
     <div className={styles.header}>
       <div className={styles.header_inside}>
-        <Profile></Profile>
+        <HeaderChild></HeaderChild>
       </div>
     </div>
     </div>
