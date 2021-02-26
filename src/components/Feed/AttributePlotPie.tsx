@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { MyResponsivePie, MyResponsiveBar } from '../../helpers/NivoPlots';
 import i18n from "../../helpers/i18n";
 import { CollectionsBookmarkRounded } from '@material-ui/icons';
+import { Bar, HorizontalBar } from 'react-chartjs-2';
 
 const moment = require('moment-timezone');
 moment.tz.setDefault('Etc/UTC');
@@ -12,31 +13,45 @@ interface AttributePlotPiePlops  {
 }
 
 const AttributePlotPie = (props: AttributePlotPiePlops) => {
+    let totalVote = Number(props.genderDist.male) + Number(props.genderDist.female) + Number(props.genderDist.others);  
     const genderData = [
       { id: i18n.t("eachPost.male"), value: props.genderDist.male, color: "hsla(220, 64%, 50%, 1)" },
       { id: i18n.t("eachPost.female"), value: props.genderDist.female, color: "hsla(0, 56%, 50%, 1)" },
       { id: i18n.t("eachPost.others"), value: props.genderDist.others, color: "hsla(114, 100%, 23%, 1)" }];
 
     const ageData = [
-      { label: '0-9', y: props.ageDist["0_9"]  },
-      { label: '10-19', y: props.ageDist["10_19"]},
-      { label: '20-29', y: props.ageDist["20_29"] },
-      { label: '30-39', y: props.ageDist["30_39"] },
-      { label: '40-49', y: props.ageDist["40_49"] },
-      { label: '50-59', y: props.ageDist["50_59"] },
-      { label: '60-69', y: props.ageDist["60_69"] },
-      { label: '70-79', y: props.ageDist["70_79"] },
-      { label: '80-89', y: props.ageDist["80_89"] },
-      { label: '90-99', y: props.ageDist["90_99"] },
-      { label: '100-109', y: props.ageDist["100_109"] },
-      { label: '110-119', y: props.ageDist["110_119"] },
+      { x: '0-9', y: props.ageDist["0_9"] * 100 / totalVote, },
+      { x: '10-19', y: props.ageDist["10_19"] * 100 / totalVote, },
+      { x: '20-29', y: props.ageDist["20_29"] * 100 / totalVote, },
+      { x: '30-39', y: props.ageDist["30_39"] * 100 / totalVote, },
+      { x: '40-49', y: props.ageDist["40_49"] * 100 / totalVote,},
+      { x: '50-59', y: props.ageDist["50_59"] * 100 / totalVote, },
+      { x: '60-69', y: props.ageDist["60_69"] * 100 / totalVote,},
+      { x: '70-79', y: props.ageDist["70_79"] * 100 / totalVote,},
+      { x: '80-89', y: props.ageDist["80_89"] * 100 / totalVote,},
+      { x: '90-99', y: props.ageDist["90_99"] * 100 / totalVote,},
+      { x: '100-109', y: props.ageDist["100_109"] * 100 / totalVote,},
+      { x: '110-119', y: props.ageDist["110_119"] * 100 / totalVote,},
     ];
 
   const mediaQueryMin900 = window.matchMedia('(min-width: 900px)')
   const margin = mediaQueryMin900.matches ?
     { top: 50, right: 200, bottom: 50, left: 160 } : { top: 50, right: 150, bottom: 50, left: 100 };
   const keysVer1 = ageData.map((obj: any) => (obj.label));
-  console.log('ageData', ageData);
+  const data = {
+    labels: ageData.map((obj: any) => (obj.x)),
+    datasets: [
+      {
+        label: i18n.t("eachPost.age"),
+        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+        borderColor: 'rgba(0, 0, 255, 0.1)',
+        borderWidth: 1,
+        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+        hoverBorderColor: 'rgba(255,99,132,1)',
+        data: ageData.map((obj: any) => (obj.y.toFixed(1))),
+      }
+    ]
+  };
 
   return (
     <div>
@@ -74,11 +89,34 @@ const AttributePlotPie = (props: AttributePlotPiePlops) => {
           </div>
           <h5 style={{ textAlign: 'center' }}>{i18n.t("eachPost.age")}</h5>
           <div style={{ height: 300 }}> 
-          <MyResponsiveBar 
+          {/* <MyResponsiveBar 
             data={ageData}
             keys={JSON.parse(JSON.stringify(keysVer1))}
             margin={margin}
-          ></MyResponsiveBar>
+          ></MyResponsiveBar> */}
+          <HorizontalBar
+            data={data}
+            width={100}
+            height={50}
+            options={
+            {
+                scales: {
+                  xAxes: [{
+                    ticks: {max: 100},
+                    gridLines: {
+                      drawOnChartArea: false
+                    }
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      drawOnChartArea: false
+                    }
+                  }]
+                },
+              maintainAspectRatio: false 
+            }
+            }
+          />
             {/* <MyResponsivePie data={ageData} colors={{ "scheme": "set3" }} legends={
               [
               {
