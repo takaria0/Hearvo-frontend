@@ -136,12 +136,12 @@ const EachMultipleVote = (props: any) => {
     return (
     <div>
       {resultJSX}
-      {/* <AttributePlotPie ageDist={ageDist} genderDist={genderDist}/> */}
-      <AttributePlotBar
+      <AttributePlotPie ageDist={ageDist} genderDist={genderDist}/>
+      {/* <AttributePlotBar
       ageDist={ageDist}
       genderDist={genderDist}
       total_vote={totalVote}
-        />
+        /> */}
     </div>
       );
   }

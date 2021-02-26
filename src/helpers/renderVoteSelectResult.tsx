@@ -21,7 +21,15 @@ export const renderVoteSelectResult = (data: any, layout: any) => {
                 <div style= {{ border: 'solid 1px', borderRadius: '5px', marginBottom: '5px' }}>
                   <div style={{ paddingLeft: '2px', paddingTop: '3px', paddingBottom: '3px', backgroundColor: backGroundColor, width: `${isNaN(x[idx]) ? 0 : x[idx]}%` }} >
                     <div style={ { whiteSpace: 'nowrap', padding: 2 } }>
-                      <div style={ { textAlign: 'left' } }>{ label } { isNaN(x[idx]) ? 0 : x[idx] }%</div>
+                      <div style={ { textAlign: 'left' } }>
+                        <span style={{ textAlign: 'left' }}>
+                          {label} &nbsp;
+                        </span>
+                        <span style={{ textAlign: 'right' }}>
+                          {isNaN(x[idx]) ? 0 : x[idx]}%
+                      </span>
+                      </div>
+
                     </div>
                   </div>
                 </div>

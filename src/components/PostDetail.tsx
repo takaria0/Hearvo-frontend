@@ -54,8 +54,8 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
   constructor(props: any) {
     super(props);
 
-    const jwt = getJwt();
-    const postId = parseInt(this.props.match.params.post_id);
+    // const jwt = getJwt();
+    // const postId = parseInt(this.props.match.params.post_id);
 
     this.state = {
       userName: "",
@@ -65,8 +65,12 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
       isLoginLoaded: false,
       userObj: {},
     }
+  }
 
-    axios.get(`/posts?id=${postId}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+  componentDidMount = () => {
+    const jwt = getJwt();
+    console.log(this.props.match.params.post_id);
+    axios.get(`/posts?id=${this.props.match.params.post_id}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
         this.setState({
           data: res.data,
@@ -74,10 +78,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
         });
       }).catch((err) => {
       })
-  }
 
-  componentDidMount = () => {
-    const jwt = getJwt();
     axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
       this.setState({
         isLogin: true,

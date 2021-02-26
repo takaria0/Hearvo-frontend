@@ -22,7 +22,9 @@ i18next
           sidebar: {
             trending: '人気のトピック',
             tos: '利用規約',
-            privacy: 'プライバシーポリシー'
+            privacy: 'プライバシーポリシー',
+            relatedPosts: '関連投稿',
+            noContent: '該当なし'
           },
           login: {
             login: 'ログイン',
