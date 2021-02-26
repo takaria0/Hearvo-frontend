@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Dialog } from '@material-ui/core';
+import { Button, Dialog, Checkbox, FormControlLabel } from '@material-ui/core';
 import { useHistory } from "react-router";
 import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
@@ -107,11 +107,27 @@ const CompareResult = (props: any) => {
           {selectOption.map((elem: any) => {
             return (
               <div>
-                <input type="checkbox" id="scales" name="scales" onChange={e => change(e, elem)} ></input><label htmlFor={elem.title}>{elem.title}</label>
+                {/* <input type="checkbox" id="scales" name="scales" onChange={e => change(e, elem)} ></input><label htmlFor={elem.title}>{elem.title}</label> */}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={state.checkedB}
+                      onChange={e => change(e, elem)}
+                      name="check"
+                      color="primary"
+                    />
+                  }
+                  label={elem.title}
+                />
               </div>
             )
           })}
-          <div style={{ marginTop: 20 }}>{errorMessage ? "" : <button onClick={e => submit(e)}>{i18n.t("compare.compare")}</button>}</div>
+          <div style={{ marginTop: 20 }}>{errorMessage ? "" : 
+          // <button onClick={e => submit(e)}>{i18n.t("compare.compare")}</button>
+          <Button variant="contained" color="primary" onClick={e => submit(e)}>
+          {i18n.t("compare.compare")}
+          </Button>
+          }</div>
           <div style={{ padding: 10, color: 'red' }}>{errorMessage ? errorMessage : ''}</div>
         </div>
       </Dialog>
@@ -143,7 +159,12 @@ const CompareResult = (props: any) => {
 
   return (
     <div>
-      <button style={{ marginTop: 20 }} onClick={e => setOpenDialog(true)}>{i18n.t("compare.compare")}</button>
+      {/* <button style={{ border: 'solid', borderRadius: 20, borderWidth: 1, marginTop: 20, marginBottom: 10, color: 'white', backgroundColor: '#01B1F8', padding: 10, paddingRight: 20, paddingLeft: 20 }} onClick={e => setOpenDialog(true)}>{i18n.t("compare.compare")}</button> */}
+      <div style={{marginBottom: 10, textAlign: 'right', marginRight: 20}}>
+        <Button variant="contained" color="primary" onClick={e => setOpenDialog(true)}>
+          {i18n.t("compare.compare")}
+        </Button>
+      </div>
       {optionDialog()}
       {isLoading ? "" : barPlot()}
     </div>)

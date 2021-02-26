@@ -7,6 +7,14 @@ import axios from './Api';
 import ListIcon from '@material-ui/icons/List';
 import i18n from "../helpers/i18n";
 
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SettingsIcon from '@material-ui/icons/Settings';
+import DescriptionIcon from '@material-ui/icons/Description';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+
 type userObject = {
   id: string;
   name: string;
@@ -123,7 +131,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     return (
       <form onSubmit={e => this.searchSubmit(e)}>
         <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 10, padding: 6}}>
-          {/* <SearchIcon  /> */}
+          {/* <SearchIcon style={{padding: 0}} /> */}
         <input maxLength={50} type="text" 
             style={{ border: 'none', width: "60ch", outline: 'none', backgroundColor: 'white' }}
          className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
@@ -148,13 +156,13 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
               keepMounted
               open={Boolean(this.state.anchorEl)}
               onClose={e => this.handleClose(e, "none")}>
-                <MenuItem onClick={e => this.handleClose(e, "/profile/following")}>{i18n.t('settingBar.profile')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/profile/following")}><AccountCircleIcon />&nbsp;{i18n.t('settingBar.profile')}</MenuItem>
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/list")}>{i18n.t('settingBar.groupList')}</MenuItem> */}
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/create")}>{i18n.t('settingBar.groupCreate')}</MenuItem> */}
-                <MenuItem onClick={e => this.handleClose(e, "/tos")}>{i18n.t('settingBar.tos')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/privacy")}>{i18n.t('settingBar.privacy')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/settings")}>{i18n.t('settingBar.settings')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/login")}>{i18n.t('settingBar.logout')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/tos")}><DescriptionIcon />&nbsp;{i18n.t('settingBar.tos')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/privacy")}><AssignmentIndIcon />&nbsp;{i18n.t('settingBar.privacy')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/settings")}><SettingsIcon />&nbsp;{i18n.t('settingBar.settings')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/login")}><ExitToAppIcon />&nbsp;{i18n.t('settingBar.logout')}</MenuItem>
             </Menu>
           </b>
           :
@@ -167,10 +175,10 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
               keepMounted
               open={Boolean(this.state.anchorEl)}
               onClose={e => this.handleClose(e, "none")}>
-                <MenuItem onClick={e => this.handleClose(e, "/tos")}>{i18n.t('settingBar.tos')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/privacy")}>{i18n.t('settingBar.privacy')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/login")}>{i18n.t('settingBar.login')}</MenuItem>
-                <MenuItem onClick={e => this.handleClose(e, "/signup")}>{i18n.t('settingBar.signup')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/tos")}><DescriptionIcon />&nbsp;{i18n.t('settingBar.tos')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/privacy")}><AssignmentIndIcon />&nbsp;{i18n.t('settingBar.privacy')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/login")}><AccountCircleIcon />&nbsp;{i18n.t('settingBar.login')}</MenuItem>
+                <MenuItem onClick={e => this.handleClose(e, "/signup")}><PersonAddIcon />&nbsp;{i18n.t('settingBar.signup')}</MenuItem>
             </Menu>
           </b>
           // <Link to='/login' className={styles.profile}>ログイン</Link>

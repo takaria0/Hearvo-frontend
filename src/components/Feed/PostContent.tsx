@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import i18n from "../../helpers/i18n";
-
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 /*
 If the values are incorrect,
 return true
@@ -177,7 +177,7 @@ const VoteCandidateForm = (props: any) => {
     if (props.voteTypeId === 3) { props.setIsVoteDateListOk(false) };
   }
 
-  const voteStyle = { padding: '7px', marginBottom: '5px', width: '40ch'  }
+  const voteStyle = { padding: '7px', marginBottom: '5px', width: '50ch'  }
 
   const submitButton = () => {
     const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData, props.matrixCandidateList);
@@ -218,7 +218,7 @@ const VoteCandidateForm = (props: any) => {
       {voteData.map((val: any, idx: number) => {
         return (
           <div key={idx}>
-            <input style={voteStyle} maxLength={30} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
+            <input style={voteStyle} maxLength={25} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
             {idx > 1 ? <span style={{marginLeft: 5}}><button type="button" onClick={e => deleteHandle(e, idx)}><RemoveIcon style={{ fontSize: 16 }}></RemoveIcon></button></span> : ''}
           </div>
         )
@@ -265,7 +265,8 @@ const MultipleVoteFormEach = (props: any) => {
         <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => addTitle(e)}></input><br></br>
     </div>
     <div>
-        <textarea placeholder={i18n.t("newPost.contentPlaceholder")} className={styles.content} rows={6} maxLength={5000} onChange={e => addContent(e)}></textarea>
+        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={e => addContent(e)}></TextareaAutosize>
+        {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} className={styles.content} rows={6} maxLength={5000} onChange={e => addContent(e)}></textarea> */}
     </div>
       <div><VoteCandidateForm 
       voteTypeId={3}
@@ -724,7 +725,7 @@ const VoteForm = (props: any) => {
         <div><b>{i18n.t("newPost.voteType")}</b>&nbsp;&nbsp;<select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
           <option value={1}>{i18n.t("newPost.normalVote")}</option>
           <option value={3}>{i18n.t("newPost.continuasVote")}</option>
-          <option value={2}>{i18n.t("newPost.matrixVote")}</option>
+          {/* <option value={2}>{i18n.t("newPost.matrixVote")}</option> */}
         </select>
           {voteTypeId === 3 ? <span><select style={{ padding: '3px' }} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>
             <option value={2}>2</option>
@@ -756,7 +757,8 @@ const VoteForm = (props: any) => {
           <input required placeholder={i18n.t("newPost.titlePlaceholder")}  className={styles.title} style={{padding: 7}} minLength={1} maxLength={150} type="text" onChange={e => setTitle(e.target.value)}></input><br></br>
       </div>
       <div>
-          <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea>
+          <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={e => setContent(e.target.value)}></TextareaAutosize>
+          {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea> */}
       </div>
 
 

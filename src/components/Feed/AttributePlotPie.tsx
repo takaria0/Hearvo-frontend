@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { MyResponsivePie, MyResponsiveBar } from '../../helpers/NivoPlots';
 import i18n from "../../helpers/i18n";
+import { CollectionsBookmarkRounded } from '@material-ui/icons';
 
 const moment = require('moment-timezone');
 moment.tz.setDefault('Etc/UTC');
@@ -17,26 +18,35 @@ const AttributePlotPie = (props: AttributePlotPiePlops) => {
       { id: i18n.t("eachPost.others"), value: props.genderDist.others, color: "hsla(114, 100%, 23%, 1)" }];
 
     const ageData = [
-      { id: '0-9', value: props.ageDist["0_9"]  },
-      { id: '10-19', value: props.ageDist["10_19"]},
-      { id: '20-29', value: props.ageDist["20_29"] },
-      { id: '30-39', value: props.ageDist["30_39"] },
-      { id: '40-49', value: props.ageDist["40_49"] },
-      { id: '50-59', value: props.ageDist["50_59"] },
-      { id: '60-69', value: props.ageDist["60_69"] },
-      { id: '70-79', value: props.ageDist["70_79"] },
-      { id: '80-89', value: props.ageDist["80_89"] },
-      { id: '90-99', value: props.ageDist["90_99"] },
-      { id: '100-109', value: props.ageDist["100_109"] },
-      { id: '110-119', value: props.ageDist["110_119"] },
-    ]
+      { label: '0-9', y: props.ageDist["0_9"]  },
+      { label: '10-19', y: props.ageDist["10_19"]},
+      { label: '20-29', y: props.ageDist["20_29"] },
+      { label: '30-39', y: props.ageDist["30_39"] },
+      { label: '40-49', y: props.ageDist["40_49"] },
+      { label: '50-59', y: props.ageDist["50_59"] },
+      { label: '60-69', y: props.ageDist["60_69"] },
+      { label: '70-79', y: props.ageDist["70_79"] },
+      { label: '80-89', y: props.ageDist["80_89"] },
+      { label: '90-99', y: props.ageDist["90_99"] },
+      { label: '100-109', y: props.ageDist["100_109"] },
+      { label: '110-119', y: props.ageDist["110_119"] },
+    ];
+
+  const mediaQueryMin900 = window.matchMedia('(min-width: 900px)')
+  const margin = mediaQueryMin900.matches ?
+    { top: 50, right: 200, bottom: 50, left: 160 } : { top: 50, right: 150, bottom: 50, left: 100 };
+  const keysVer1 = ageData.map((obj: any) => (obj.label));
+  console.log('ageData', ageData);
+
   return (
     <div>
       <div>
           <h4 style={{ textAlign: 'center' }}>{i18n.t("eachPost.votersAttributes")}</h4>
           <h5 style={{ textAlign: 'center' }}>{i18n.t("eachPost.gender")}</h5>
           <div style={{height: 300}}> 
-            <MyResponsivePie data={genderData} colors={{ datum: 'data.color' }} legends={[
+            
+            {/* <MyResponsivePie data={genderData} colors={{ datum: 'data.color' }} legends={[ */}
+          <MyResponsivePie data={genderData} colors={{ "scheme": 'set3' }} legends={[
               {
                 anchor: 'top-left',
                 direction: 'column',
@@ -64,7 +74,12 @@ const AttributePlotPie = (props: AttributePlotPiePlops) => {
           </div>
           <h5 style={{ textAlign: 'center' }}>{i18n.t("eachPost.age")}</h5>
           <div style={{ height: 300 }}> 
-            <MyResponsivePie data={ageData} colors={{ "scheme": "set3" }} legends={
+          <MyResponsiveBar 
+            data={ageData}
+            keys={JSON.parse(JSON.stringify(keysVer1))}
+            margin={margin}
+          ></MyResponsiveBar>
+            {/* <MyResponsivePie data={ageData} colors={{ "scheme": "set3" }} legends={
               [
               {
                 anchor: 'top-left',
@@ -78,7 +93,7 @@ const AttributePlotPie = (props: AttributePlotPiePlops) => {
                 symbolSize: 20,
                 itemDirection: 'left-to-right'
               }
-              ]}></MyResponsivePie>
+              ]}></MyResponsivePie> */}
           </div>
       </div>
     </div>

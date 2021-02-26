@@ -43,7 +43,7 @@ function App() {
         <Route path="/popular" exact component={Home}/>
         <Route path="/popular/:time" exact component={Home} />
         <Route path="/search" component={Home} />
-      <Route path="/posts/:post_id" component={PostDetail} />
+          <Route path="/posts/:post_id" render={(props) => <PostDetail key={Math.random().toString(36)} />} />
       <Auth>
           <Route path="/profile" component={Profile} />
           <Route path="/group/:group_id/feed" exact component={Home} />

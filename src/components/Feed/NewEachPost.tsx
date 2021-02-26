@@ -25,26 +25,12 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import AttributePlotPie from './AttributePlotPie';
 import AttributePlotBar from './AttributePlotBar';
+import RenderTopic from './RenderTopic';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
 moment.tz.setDefault('UTC');
 
-
-const renderTopic = (data: any) => (
-  <div style={{ color: 'black' }}>
-    &nbsp;&nbsp;{data.topics.map((elem: any) => {
-    return (
-      <span style={{}}>
-        <Link className={styles.topic_link} to={`/topic?tp=${elem.topic.topic}`}>
-          <small style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem.topic.topic}</small>
-        </Link>
-        {'  '}
-      </span>
-    )
-  })}
-  </div>
-)
 
 const PostHeader = (props: any) => {
 
@@ -59,7 +45,8 @@ const PostHeader = (props: any) => {
       return (
           <div>
           <div className={styles.title}>{props.data.title}  {createdAtJSX} </div>
-              {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>}
+          <RenderTopic topics={props.data.topics} />
+              {/* {props.data.topics.length > 0 ? renderTopic(props.data): <div></div>} */}
               <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
           </div>
       )
@@ -73,7 +60,8 @@ const PostHeader = (props: any) => {
           <Link to={`/posts/${props.data?.id}`} className={styles.each_post_link}>
             {props.data.title}</Link> {createdAtJSX}
           </div>
-            {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>}
+          <RenderTopic topics={props.data.topics}/>
+            {/* {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>} */}
           <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(content)}</div>
           
         </div>
@@ -369,12 +357,12 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
             </div>
-              {/* <AttributePlotPie ageDist={this.props.data.age_distribution} genderDist={this.props.data.gender_distribution} /> */}
-              <AttributePlotBar
+              <AttributePlotPie ageDist={this.props.data.age_distribution} genderDist={this.props.data.gender_distribution} />
+              {/* <AttributePlotBar
               ageDist={this.props.data.age_distribution}
               genderDist={this.props.data.gender_distribution}
               total_vote={this.props.data.total_vote}
-               />
+               /> */}
               <PostFooter data={this.props.data}></PostFooter>
           </li>
         </div>

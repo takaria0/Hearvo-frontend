@@ -211,13 +211,24 @@ const InitialForm = (props: any) => {
   const [isUserInfoFinished, setIsUserInfoFinished] = useState(false);
   const [isTopicFormFinished, setIsTopicFormFinished] = useState(false);
 
+  // useEffect(() => {
+  //   const userObj = JSON.parse(localStorage.getItem("user") || "{}");
+
+  //   if (userObj.gender && userObj.birth_year) {
+  //     setIsUserInfoFinished(true);
+  //     setIsTopicFormFinished(true);
+  //   }
+
+  // });
+
   const closeDialog = () => {
 
     props.data.userObj.login_count = props.data.userObj.login_count + 1;
-    if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(props.data.userObj))};
+    // if (typeof window !== 'undefined') {};
     const jwt = getJwt();
-    axios.put(`/users?login_count=${props.data.userObj.login_count}`, {}, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    axios.get(`/users`,  { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
     .then((res) => {
+      localStorage.setItem("user", JSON.stringify(res.data));
     }).catch((err) => {
     })
   }
@@ -232,6 +243,25 @@ const InitialForm = (props: any) => {
   }
 
   return (<InitialUserInfoForm data={props.data} setFinish={setIsUserInfoFinished}></InitialUserInfoForm>);
+}
+
+
+const TopicHeader = (props: any) => {
+
+  if(!props.topicTitle) return (<span></span>);
+
+
+  return (
+    <div style={{ backgroundColor: 'white', padding: 10, border: 'solid', borderWidth: 1, borderRadius: 7 }}>
+    <span >
+      <b style={{ fontSize: '1.17em' }}>{i18n.t("feed.topic")} {props.topicTitle}</b>
+        <TopicFollowButton topicWord={props.topicTitle}></TopicFollowButton>
+        <div>
+          投稿数 {props.topicNumPosts} フォロー {props.topicNumUsers}
+        </div>
+    </span>
+  </div>
+  )
 }
 
 
@@ -261,6 +291,8 @@ export interface FeedState {
   groupTitle: string;
   searchWord: string;
   miniTitle: string;
+  topicNumPosts: number;
+  topicNumUsers: number;
 }
 
 interface Params {
@@ -293,6 +325,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
       groupTitle: "",
       searchWord: "",
       miniTitle: "",
+      topicNumPosts: 0,
+      topicNumUsers: 0,
     };
     document.title = "Hearvo"
   };
@@ -408,7 +442,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         queryUrl = orderType ? `/posts?topic=${topicWord}&page=${newpage}&keyword=${orderType}` : `/posts?topic=${topicWord}&page=${newpage}`;
         axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data],isLoaded: true, topicTitle: topicWord})})
+            this.setState({ dataArray: page === 1 ? res.data.posts : [...this.state.dataArray, ...res.data.posts], isLoaded: true, topicTitle: topicWord, topicNumPosts: res.data.topic.num_of_posts, topicNumUsers: res.data.topic.num_of_users})})
           .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
@@ -423,7 +457,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
             if (res.data.already_joined) {
               axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
                 .then(res => {
-                  this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true  })
+                  this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true  })
 
                 })
                 .catch((err) => { this.setState({isLoaded: true}) })
@@ -435,14 +469,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
       case "popular":
         axios.get(`/posts?keyword=popular&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true,});})
+            this.setState({dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true,});})
           .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
       case "latest":
         axios.get(`/posts?keyword=latest&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, });
+            this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, });
           })
           .catch((err) => { this.setState({ isLoaded: true }) })
         break;
@@ -451,7 +485,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         queryUrl = `/posts?keyword=myposts&page=${newpage}`;
         axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
+            this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
           .catch((err) => { this.setState({ isLoaded: true })})
         break;
@@ -460,7 +494,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         queryUrl = `/posts?keyword=voted&page=${newpage}`;
         axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
+            this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
           .catch((err) => { this.setState({ isLoaded: true })})
         break;
@@ -469,7 +503,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         queryUrl = `/posts?keyword=recommend&page=${newpage}`;
         axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: page === 0 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
+            this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
           .catch((err) => { this.setState({ isLoaded: true })})
         break;
@@ -510,7 +544,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
       const skeletonList = [1,2,3,4,5,6,7,8,9];
       return (
         <div>
-          <InitialForm data={this.state}></InitialForm>
           {skeletonList.map((elem: any) => (
             <SkeletonTheme color="#FFFFFF" highlightColor="#E2E2E2">
               <p style={{ border: 'solid', borderWidth: 1, borderRadius: 6 }}><Skeleton duration={0.8} height={250} /></p>
@@ -520,14 +553,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
       )
     }
 
+    
     if (this.state.isLoaded === true) {
       return (
         <div>
           <div>
             <InitialForm data={this.state}></InitialForm>
             {this.state.miniTitle ? <h3>{this.state.miniTitle}</h3> : ''}
-            {this.state.topicTitle ? <span><b style={{ fontSize: '1.17em' }}>{i18n.t("feed.topic")} {this.state.topicTitle}</b>
-              <TopicFollowButton topicWord={this.state.topicTitle}></TopicFollowButton></span> : ''}
+            <TopicHeader topicTitle={this.state.topicTitle} topicNumUsers={this.state.topicNumUsers} topicNumPosts={this.state.topicNumPosts} ></TopicHeader>
             {this.state.groupTitle ? <h3>{i18n.t("feed.group")} {this.state.groupTitle}</h3> : ''}
             {this.state.searchWord ? <h3>{this.state.searchWord} {i18n.t("feed.searchResult")}</h3> : ''}
           </div>
