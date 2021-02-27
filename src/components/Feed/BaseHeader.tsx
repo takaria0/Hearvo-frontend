@@ -127,6 +127,8 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
   render() { 
     return ( 
       <div>
+        <span >New<Link to="/help"> Hearvoとは何か</Link></span>
+
         <div>{this.headerJSX()}</div>
         <PostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle}></PostContent>
       </div>

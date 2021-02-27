@@ -24,7 +24,7 @@ i18next
             tos: '利用規約',
             privacy: 'プライバシーポリシー',
             relatedPosts: '関連投稿',
-            noContent: '該当なし'
+            noContent: '該当なし',
           },
           login: {
             login: 'ログイン',
@@ -61,7 +61,8 @@ i18next
             settings: '設定',
             logout: 'ログアウト',
             login: 'ログイン',
-            signup: 'アカウント作成'
+            signup: 'アカウント作成',
+            help: 'ヘルプ'
           },
           topicFollow: {
             follow: 'フォローする',

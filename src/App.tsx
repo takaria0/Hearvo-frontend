@@ -18,6 +18,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import GroupCreate from './components/GroupCreate';
 import GroupInvite from './components/GroupInvite';
 import GroupList from './components/GroupList';
+import Help from './components/Help/Content';
 import { HomeOutlined } from '@material-ui/icons';
 import { Helmet } from "react-helmet";
 
@@ -36,6 +37,7 @@ function App() {
       <Route path="/intro" exact component={Intro} key="intro" />
       <Route path="/tos" exact component={TermsOfService} key="terms" />
       <Route path="/privacy" exact component={PrivacyPolicy} key="privacypolicy" />
+      <Route path="/help" exact component={Help} key="help" />
 
         <Route path="/" exact component={Home} />
         <Route path="/latest" exact component={Home}  />
