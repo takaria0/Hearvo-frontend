@@ -7,3 +7,4 @@ declare module 'react-snapshot';
 declare module 'react-i18next';
 declare module 'i18next';
 declare module 'react-loading-skeleton';
+declare module 'react-google-login';

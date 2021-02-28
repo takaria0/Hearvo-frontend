@@ -24,13 +24,14 @@ i18next
             tos: '利用規約',
             privacy: 'プライバシーポリシー',
             relatedPosts: '関連投稿',
-            noContent: '該当なし'
+            noContent: '該当なし',
           },
           login: {
             login: 'ログイン',
             email: 'メールアドレス',
             password: 'パスワード',
             createAccount: 'アカウント作成',
+            successToLogin: 'ログインしました',
             failedToLogin: 'ログインに失敗しました',
           },
           signup: {
@@ -61,7 +62,8 @@ i18next
             settings: '設定',
             logout: 'ログアウト',
             login: 'ログイン',
-            signup: 'アカウント作成'
+            signup: 'アカウント作成',
+            help: 'ヘルプ'
           },
           topicFollow: {
             follow: 'フォローする',
