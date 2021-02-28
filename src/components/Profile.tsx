@@ -44,7 +44,7 @@ const Profile = (props: any) => {
       <Header></Header>
       <div className={styles.body}>
         <div className={styles.feed}>
-          <h2>{user.name}</h2>
+          <h2>{user.profile_name}</h2>
 
           <span><Link style={{ textDecoration: 'none' }} to="/profile/following">{i18n.t("profile.following")} {user.num_of_following_topics}</Link></span>&nbsp;&nbsp;&nbsp;
 

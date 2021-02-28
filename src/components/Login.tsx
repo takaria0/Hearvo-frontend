@@ -4,7 +4,7 @@ import { RouteComponentProps, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
 import i18n from "../helpers/i18n";
-
+import { GoogleLogin } from 'react-google-login';
 export interface LoginProps extends RouteComponentProps<{}>{
 }
 
@@ -65,6 +65,33 @@ class Login extends React.Component<LoginProps, LoginState> {
     })
   };
 
+  responseGoogle = (res: any) => {
+
+    // send tokenId to backend and get response (get jwt) and save it to localStorage
+    // then history.push("/")
+
+    axios.post("/login?google_login=true", { }, { headers: { googleTokenId: res.tokenId, Country: process.env.REACT_APP_COUNTRY } })
+      .then((res: any) => {
+        if (typeof window !== 'undefined') { localStorage.setItem("jwt", res.data.token) };
+        
+        this.setState({ successMessage: i18n.t("login.successToLogin")})
+
+        axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
+
+          if (typeof window !== 'undefined') { localStorage.setItem("user", JSON.stringify(res.data)) };
+          this.props.history.push("/");
+        }).catch((err: any) => {
+          this.props.history.push("/login");
+        })
+
+
+      }).catch((err: any) => {
+        this.setState({
+          errorMessage: i18n.t("login.failedToLogin"),
+        })
+      })
+  };
+
   render() {
     return (
       <div className={styles.body}>
@@ -74,15 +101,24 @@ class Login extends React.Component<LoginProps, LoginState> {
         <form onSubmit={e => this.submit(e)}>
           <div>
               <div>{i18n.t("login.email")}</div>
-            <input  className={styles.email} minLength={1} maxLength={300} type="email" name="email"  onChange={e => this.change(e, "email")} value={this.state.email} />
+              <input style={{ padding:5, width: '23ch' }} className={styles.email} minLength={1} maxLength={300} type="email" name="email"  onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
-          
+   
 
           <div>
               <div>{i18n.t("login.password")}</div>
-            <input className={styles.password} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
+              <input style={{ padding: 5, width: '23ch' }} className={styles.password} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
           
+            <div style={{marginBottom: 20, marginTop: 20}}>
+              <GoogleLogin
+                clientId="984877314328-2kvinv2q3o9bgstfjherl42t7gf1rc05.apps.googleusercontent.com"
+                buttonText="Login with Google"
+                onSuccess={this.responseGoogle}
+                // onFailure={}
+                cookiePolicy={'single_host_origin'}
+              />
+            </div>
 
           <div className={styles.button}>
               <Button type="submit" value="Submit" variant="contained" color="primary" >{i18n.t("login.login")}</Button>

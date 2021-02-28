@@ -31,6 +31,7 @@ i18next
             email: 'メールアドレス',
             password: 'パスワード',
             createAccount: 'アカウント作成',
+            successToLogin: 'ログインしました',
             failedToLogin: 'ログインに失敗しました',
           },
           signup: {

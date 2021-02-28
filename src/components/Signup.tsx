@@ -114,20 +114,20 @@ class Signup extends React.Component<SignupProps, SignupState> {
         <form onSubmit={e => this.submit(e)}>
           <div>
               <div>{i18n.t("signup.userName")}</div>
-            <input className={styles.email} minLength={1} maxLength={20} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
+              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={1} maxLength={20} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
           </div>
           <div>
               <div>{i18n.t("signup.email")}</div>
-            <input className={styles.email} minLength={1} maxLength={300} type="email" onChange={e => this.change(e, "email")} value={this.state.email} />
+              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={1} maxLength={300} type="email" onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
           <div>
               <div>{i18n.t("signup.password")}</div>
-            <input className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
+              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
 
           <div>
               <div>{i18n.t("signup.confirmPassword")}</div>
-            <input className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
+              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
           </div>
           <div style={{ fontSize: 14, marginBottom: 10}}>
               {i18n.t("signup.confirmText1")}<br></br><Link to="/tos" target="_blank">{i18n.t("signup.confirmText2")}</Link>{i18n.t("signup.confirmText3")}<Link to="/privacy" target="_blank">{i18n.t("signup.confirmText4")}</Link>{i18n.t("signup.confirmText5")}<br></br>
