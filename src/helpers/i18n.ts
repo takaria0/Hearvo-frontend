@@ -33,6 +33,11 @@ i18next
             createAccount: 'アカウント作成',
             successToLogin: 'ログインしました',
             failedToLogin: 'ログインに失敗しました',
+            confirmText1: '続行することによって',
+            confirmText2: '利用規約',
+            confirmText3: 'と',
+            confirmText4: 'プライバシーポリシー',
+            confirmText5: 'に同意します。',
           },
           signup: {
             passwordLength: 'パスワードは8文字以上に設定してください',

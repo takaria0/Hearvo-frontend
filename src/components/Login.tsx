@@ -120,6 +120,10 @@ class Login extends React.Component<LoginProps, LoginState> {
               />
             </div>
 
+            <div style={{ fontSize: 14, marginBottom: 10 }}>
+              {i18n.t("login.confirmText1")}<br></br><Link to="/tos" target="_blank">{i18n.t("login.confirmText2")}</Link>{i18n.t("login.confirmText3")}<Link to="/privacy" target="_blank">{i18n.t("login.confirmText4")}</Link>{i18n.t("login.confirmText5")}<br></br>
+            </div>
+
           <div className={styles.button}>
               <Button type="submit" value="Submit" variant="contained" color="primary" >{i18n.t("login.login")}</Button>
           </div>
