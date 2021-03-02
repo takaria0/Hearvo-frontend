@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 import { useHistory } from "react-router";
@@ -14,6 +14,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import i18n from "../../helpers/i18n";
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import { stringify } from 'querystring';
 /*
 If the values are incorrect,
 return true
@@ -533,8 +534,19 @@ const TopicCandidates = (props: any) => {
     .catch(err => {
 
     });
+  }, [props.topic, props.ref])
 
-  }, [props.topic])
+
+  const topicChange = (e: any, topic: string) => {
+    e.preventDefault();
+    let rawTopicList = props.topicList;
+    rawTopicList[props.currentTopicIdx] = topic;
+    props.setTopicString(rawTopicList.join(", "));
+
+    setTopicCandidateList([]);
+    // console.log(props.ref);
+    // props.ref.current.focus();
+  };
 
 
   if(isLoading) {return (<span></span>)}
@@ -542,9 +554,9 @@ const TopicCandidates = (props: any) => {
   if(topicCandidateList.length === 0) {return (<span></span>)}
 
   return (
-  <div>
+  <div style={{marginTop: 10}}>
     {topicCandidateList.map((topic: any) => {
-      return (<div>{topic.topic}, {topic.num_of_posts}</div>)
+      return (<div><button style={{ marginBottom: 1, border: 'none', padding: 5, borderRadius: 10, borderWidth: 1, backgroundColor: 'rgba(0, 0, 255, 0.1)'}} onClick={e => topicChange(e, topic.topic)}>{topic.topic}, {topic.num_of_posts}</button></div>)
     })}
   </div>)
 }
@@ -563,11 +575,13 @@ const VoteForm = (props: any) => {
   const [maxTopicNum, setMaxTopicNum] = useState(10);
   const [topicString, setTopicString] = useState("");
   const [topicList, setTopicList] = useState<any>([]);
-  const [currentTopicCursor, setCurrentTopicCursor] = useState('');
+  const [currentTopicIdx, setCurrentTopicIdx] = useState(0);
+  const [currentTopic, setCurrentTopic] = useState('');
   const [groupList, setGroupList] = useState<any>([]);
   const [targetGroupId, setTargetGroupId] = useState("");
   const [multipleVoteNum, setMultipleVoteNum] = useState(2);
   const [isSendTargetGroup, setIsSendTargetGroup] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     // get group list
@@ -602,6 +616,55 @@ const VoteForm = (props: any) => {
     return count > 0 ? true : false;
   }
 
+  const getCurrentTopic = (cursor: any, topicString: any, beforeTopicList: any) => {
+
+
+    const getCommaIdx = (topicString: string) => {
+      const delims = [',', '，', '、'];
+      let commaIdx = [];
+      for (let idx = 0; idx < topicString.length; idx++) {
+        if (delims.includes(topicString[idx])) { commaIdx.push(idx) };
+      }
+      return commaIdx;
+    };
+
+    const commaIdx = getCommaIdx(topicString);
+
+    // console.log('cursor', cursor);
+    // console.log('topicString', topicString);
+    // console.log('beforeTopicList', beforeTopicList);
+    // console.log('commaIdx', commaIdx);
+
+
+    let currentTopicIdx: number;
+    // if duplicate
+    // commaIdx [5, 10, 17], cursor 10
+    // currentTopicIdx -> 2
+    if (commaIdx.includes(cursor)) { 
+      currentTopicIdx = commaIdx.indexOf(cursor);
+      // console.log('currentTopicIdx', currentTopicIdx);
+      // console.log('duplicate', beforeTopicList[currentTopicIdx]);
+      setCurrentTopicIdx(currentTopicIdx);
+      return beforeTopicList[currentTopicIdx];
+    }
+
+    // not
+    // commaIdx [5, 10, 17], cursor 15
+    // concat [5, 10, 15, 17]
+    // currentTopicIdx -> 3
+    commaIdx.push(cursor)
+    let numArray = new Int32Array(commaIdx); // normal sort doesn't sort numbers!
+    numArray = numArray.sort();
+    currentTopicIdx = numArray.indexOf(cursor);
+    setCurrentTopicIdx(currentTopicIdx);
+    // console.log('numArray', numArray);
+    // console.log('currentTopicIdx', currentTopicIdx);
+    // console.log('not duplicate', beforeTopicList[currentTopicIdx]);
+    if (beforeTopicList.length < currentTopicIdx) { return beforeTopicList[beforeTopicList.length]}
+    return beforeTopicList[currentTopicIdx];
+  };
+
+
   const renderTopic = () => {
     const pattern = (/,|，|、/g);
     if (topicString.length === 0) return;
@@ -633,22 +696,27 @@ const VoteForm = (props: any) => {
   const editTopic = (e: any) => {
     const rawTopicString = e.target.value;
     const currentCursor = e.target.selectionStart;
-    setCurrentTopicCursor(currentCursor);
+
+
     const pattern = (/,|，|、/g);
     setTopicString(rawTopicString)
     if (doContainDelim(rawTopicString)) {
-      let topicList = rawTopicString.split(pattern);
-      topicList = topicList.slice(0, maxTopicNum);
-      topicList = topicList.map((tp: string) => (tp.trim())).filter((el: string) => (el.length > 0));
-      setTopicList(topicList);
+      let rawTopicList = rawTopicString.split(pattern);
+      rawTopicList = rawTopicList.slice(0, maxTopicNum);
+      rawTopicList = rawTopicList.map((tp: string) => (tp.trim())).filter((el: string) => (el.length > 0));
+
+      setCurrentTopic(getCurrentTopic(currentCursor, rawTopicString, rawTopicList));
+      setTopicList(rawTopicList);
       return 
     }
     if (rawTopicString.length === 0) { 
       setTopicList([]);
+      setCurrentTopic("");
       return
     };
 
     setTopicList([rawTopicString]);
+    setCurrentTopic(rawTopicString);
   };
 
   const voteFormRender = () => {
@@ -742,12 +810,12 @@ const VoteForm = (props: any) => {
 
         <div>
           <b>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</b>
-          <input required placeholder={i18n.t("newPost.topicPlaceholder")}style={{ padding: 7, width: '100%', marginBottom: '10px' }} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}></input>
+          <input ref={inputRef} required placeholder={i18n.t("newPost.topicPlaceholder")}style={{ padding: 7, width: '100%', marginBottom: '10px' }} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}></input>
           {renderTopic()}
         </div>
         
         <div>
-          {/* <TopicCandidates topic={topicString} cursor={currentTopicCursor} topicList={topicList}></TopicCandidates> */}
+          <TopicCandidates ref={inputRef} topic={currentTopic} currentTopicIdx={currentTopicIdx} topicList={topicList} setTopicList={setTopicList} setTopicString={setTopicString}></TopicCandidates>
         </div>
 
       <hr></hr><br></br>
