@@ -556,7 +556,7 @@ const TopicCandidates = (props: any) => {
   return (
   <div style={{marginTop: 10}}>
     {topicCandidateList.map((topic: any) => {
-      return (<div><button style={{ marginBottom: 1, border: 'none', padding: 5, borderRadius: 10, borderWidth: 1, backgroundColor: 'rgba(0, 0, 255, 0.1)'}} onClick={e => topicChange(e, topic.topic)}>{topic.topic}, {topic.num_of_posts}</button></div>)
+      return (<div><button style={{ marginBottom: 1, border: 'none', padding: 5, borderRadius: 10, borderWidth: 1, backgroundColor: 'rgba(0, 0, 255, 0.1)'}} onClick={e => topicChange(e, topic.topic)}>{topic.topic} {topic.num_of_posts}</button></div>)
     })}
   </div>)
 }

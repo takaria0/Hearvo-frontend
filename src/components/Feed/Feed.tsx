@@ -174,7 +174,7 @@ const InitialUserInfoForm = (props: any) => {
           <h1>{i18n.t("feed.inputUserInfo")}</h1>
           <form onSubmit={e => submit(e)}>
             <div style={{ paddingTop: '20px' }}>
-              性別
+              {i18n.t("feed.gender")}
               <div>
                 <select onChange={e => setGender(e.target.value)}>
                   <option value="">{i18n.t("feed.gender")}</option>
@@ -198,7 +198,6 @@ const InitialUserInfoForm = (props: any) => {
           <div style={{ color: 'red', textAlign: 'center' }}>
             {initialSettingMessage ? initialSettingMessage : ''}
           </div>
-
         </div>
       </Dialog>
     </div>
@@ -257,7 +256,7 @@ const TopicHeader = (props: any) => {
       <b style={{ fontSize: '1.17em' }}>{i18n.t("feed.topic")} {props.topicTitle}</b>
         <TopicFollowButton topicWord={props.topicTitle}></TopicFollowButton>
         <div>
-          投稿数 {props.topicNumPosts} フォロー {props.topicNumUsers}
+          {i18n.t("feed.posts")} {props.topicNumPosts} {i18n.t("feed.following")} {props.topicNumUsers}
         </div>
     </span>
   </div>

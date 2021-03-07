@@ -95,6 +95,8 @@ i18next
             compare: '比較する'
           },
           feed: {
+            posts: '投稿数',
+            following: 'フォロー',
             popular: '人気',
             latest: '最新',
             recommend: 'おすすめ',
@@ -262,6 +264,11 @@ i18next
             password: 'Password',
             createAccount: 'Create New Account',
             failedToLogin: 'Failed to Log in',
+            confirmText1: 'By continuing, you agree to our ',
+            confirmText2: 'Terms of Service',
+            confirmText3: ' and ',
+            confirmText4: 'Privacy Policy',
+            confirmText5: '.',
           },
           signup: {
             passwordLength: 'Password length must be 8 characters or more',
@@ -319,6 +326,8 @@ i18next
             compare: 'Compare'
           },
           feed: {
+            posts: 'Post',
+            following: 'Following',
             recommend: 'Recommend',
             popular: 'Popular',
             latest: 'Latest',
@@ -362,9 +371,9 @@ i18next
             end: 'End',
             hourLater: 'hours later',
             topic: 'Topic',
-            topicDescription: 'enter at least on topic, separate topics with a comma',
+            topicDescription: 'Enter at least one topic, separate topics with a comma',
             topicPlaceholder: 'Topic 1, Topic 2, ...',
-            vote: 'Vote',
+            vote: 'Poll',
             titlePlaceholder: 'Enter title',
             contentPlaceholder: 'Enter content',
             voteCandidate: 'Vote option',
