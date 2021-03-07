@@ -33,6 +33,11 @@ i18next
             createAccount: 'アカウント作成',
             successToLogin: 'ログインしました',
             failedToLogin: 'ログインに失敗しました',
+            confirmText1: '続行することによって',
+            confirmText2: '利用規約',
+            confirmText3: 'と',
+            confirmText4: 'プライバシーポリシー',
+            confirmText5: 'に同意します。',
           },
           signup: {
             passwordLength: 'パスワードは8文字以上に設定してください',
@@ -245,6 +250,8 @@ i18next
             search: 'Search'
           },
           sidebar: {
+            relatedPosts: 'Related polls',
+            noContent: 'No content',
             trending: 'Trending',
             tos: 'Terms of Service',
             privacy: 'Privacy Policy'
@@ -276,6 +283,7 @@ i18next
             login: 'Log in',
           },
           settingBar: {
+            help: 'Help',
             profile: 'Profile',
             groupList: 'Group List',
             groupCreate: 'Create Group',
@@ -296,6 +304,8 @@ i18next
             voteRecord: 'Votes',
             myPost: 'Posts',
             joined: 'Joined',
+            topicFollowings: 'Following',
+            topicPosts: 'Posts'
           },
           compare: {
             age: 'Age',
@@ -309,6 +319,7 @@ i18next
             compare: 'Compare'
           },
           feed: {
+            recommend: 'Recommend',
             popular: 'Popular',
             latest: 'Latest',
             now: 'Now',
@@ -335,7 +346,8 @@ i18next
             group: 'Group　',
             searchResult: ' results',
             noContent: 'No content',
-            more: 'More'
+            more: 'More',
+            followMore: 'Follow more topics!',
           },
           newPost: {
             post: 'Post',
