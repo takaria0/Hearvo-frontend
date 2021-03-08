@@ -135,6 +135,11 @@ const RelatedPosts = (props: any) => {
   )
 }
 
+declare global {
+  interface Window {
+    adsbygoogle: any;
+  }
+}
 
 const SideBar = (props: any) => {
 
@@ -144,19 +149,40 @@ const SideBar = (props: any) => {
   useEffect(() => {
     const updateUrl = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
     setCurrentUrl(updateUrl);
+    if (window.adsbygoogle) {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }
   }, [])
+
+  const googleAd = () => (
+    <div>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins className="adsbygoogle"
+        style={{display:'block'}}
+        data-ad-client="ca-pub-9487157880259062"
+        data-ad-slot="7134151692"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+    </div>
+  );
 
   switch (currentUrl) {
     case "posts":
       const postId = window.location.pathname.split("/")[2];
       return (
-        <RelatedPosts postId={postId}/>
+        <span>
+          <RelatedPosts postId={postId} />
+          {googleAd()}
+        </span>
       )
     break;
 
     default:
       return (
-        <TrendingTopics />
+        <span>
+          <TrendingTopics />
+          {googleAd()}
+        </span>
       )
     break;
   }
