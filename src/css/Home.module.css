@@ -1,6 +1,6 @@
 @media screen and (max-width: 700px) and (min-width: 0px) {
   .body {
-    background-color: rgb(237, 237, 237);
+    background-color: rgb(242, 242, 242);
     /* display: flex; */
     width: 98%;
     /* margin-right: 2%; */
@@ -19,7 +19,7 @@
 
 @media screen and (max-width: 1000px) and (min-width: 800px) {
   .body {
-    background-color: rgb(237, 237, 237);
+    background-color: rgb(242, 242, 242);
     display: flex;
     /* width: 60%; */
     /* margin-right: 10%; */
@@ -42,7 +42,7 @@
 
 @media screen and (max-width: 1200px) and (min-width: 1000px) {
   .body {
-    background-color: rgb(237, 237, 237);
+    background-color: rgb(242, 242, 242);
     display: flex;
     /* width: 60%; */
     /* margin-right: 10%; */
@@ -67,7 +67,7 @@
 
 @media screen and (min-width:1200px) {
   .body {
-    background-color: rgb(237, 237, 237);
+    background-color: rgb(242, 242, 242);
     display: flex;
     /* width: 50%; */
     /* margin-right: 10%; */

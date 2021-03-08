@@ -44,8 +44,15 @@ const PostHeader = (props: any) => {
     case "posts":
       return (
           <div>
-          <div className={styles.title}>{props.data.title}  {createdAtJSX} </div>
-          <RenderTopic topics={props.data.topics} />
+            <div style={{marginTop: 10, marginBottom: 10, marginRight: 10}}>
+              <span className={styles.title}>{props.data.title}</span>
+              <span>{createdAtJSX}</span>
+            </div>
+
+          <div style={{marginBottom: 10}}>
+            <RenderTopic topics={props.data.topics} />
+          </div>
+          
               {/* {props.data.topics.length > 0 ? renderTopic(props.data): <div></div>} */}
               <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
           </div>
@@ -56,11 +63,15 @@ const PostHeader = (props: any) => {
       const content = props.data.content.length > 200 ? props.data.content.slice(0, 200) + "..." : props.data.content;
       return (
         <div>
-          <div className={styles.title}>
-          <Link to={`/posts/${props.data?.id}`} className={styles.each_post_link}>
-            {props.data.title}</Link> {createdAtJSX}
+          <div style={{ marginTop: 10, marginBottom: 10, marginRight: 10 }}>
+            <span className={styles.title}>
+              <Link to={`/posts/${props.data?.id}`} className={styles.each_post_link}>{props.data.title}</Link></span>
+            <span>{createdAtJSX}</span>
           </div>
-          <RenderTopic topics={props.data.topics}/>
+
+          <div style={{ marginBottom: 10 }}>
+            <RenderTopic topics={props.data.topics} />
+          </div>
             {/* {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>} */}
           <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(content)}</div>
           
