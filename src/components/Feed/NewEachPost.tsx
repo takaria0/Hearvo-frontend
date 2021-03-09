@@ -26,6 +26,12 @@ import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import AttributePlotPie from './AttributePlotPie';
 import AttributePlotBar from './AttributePlotBar';
 import RenderTopic from './RenderTopic';
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+  TwitterIcon
+} from "react-share";
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -103,7 +109,8 @@ const PostFooter = (props: any) => {
           <ChatBubbleIcon style={{ fontSize: 20 }} />&nbsp;{props.data.comments.length}
         </span >
         <span>
-          <ShareIcon style={{ fontSize: 20 }}/>
+          <TwitterShareButton title={"Hearvo | " + props.data.title} url={"https://" + window.location.hostname + "/posts/" + props.data.id} ><TwitterIcon size={20} round={true}  iconFillColor='white'/></TwitterShareButton>
+          {/* <ShareIcon style={{ fontSize: 20 }} /> */}
         </span >
         <span>
           <MoreHorizIcon style={{ fontSize: 20 }}/>
