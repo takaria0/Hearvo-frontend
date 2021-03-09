@@ -170,10 +170,10 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 
           {/* <li style={{ textDecoration: "none" }}><h2>パスワード変更</h2></li>
           {this.renderPasswordChange()} */}
-          <li style={{ textDecoration: "none" }} onClick={e => this.boolChange(e, 'isAccountDelete')}><h2>{i18n.t("settings.deleteAccountNoun")}</h2></li>
+          {/* <li style={{ textDecoration: "none" }} onClick={e => this.boolChange(e, 'isAccountDelete')}><h2>{i18n.t("settings.deleteAccountNoun")}</h2></li>
           <div style={{textAlign: 'center'}}>
               {this.renderAccountDelete()}
-          </div>
+          </div> */}
           
         </ul>
         <div>

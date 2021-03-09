@@ -15,6 +15,45 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const INITIAL_TOPICS = initialTopics;
 
+
+const GoogleAdTimeLine = (props: any) => {
+  const currentFirstURL = window.location.pathname;
+  const [currentUrl, setCurrentUrl] = useState(currentFirstURL);
+
+  useEffect(() => {
+    if (window.adsbygoogle && process.env.REACT_APP_ENV !== "dev") {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }
+  }, [currentUrl])
+
+  return (
+    <div className={styles.li}>
+      <div style={{ padding: 5 }}>
+        {/* <ins className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-9487157880259062"
+          data-ad-slot="9919085375"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins> */}
+        {/* <ins className="adsbygoogle"
+          style={{display:"block"}}
+          data-ad-format="fluid"
+          data-ad-layout-key="-fw-2j-1z-4k+xg"
+          data-ad-client="ca-pub-9487157880259062"
+          data-ad-slot="6631411206"></ins> */}
+        <ins className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-format="fluid"
+          data-ad-layout-key="-g3-2s+16+a+ey"
+          data-ad-client="ca-pub-9487157880259062"
+          data-ad-slot="9421226074"></ins>
+      </div>
+    </div>
+  )
+}
+
+
+
 const InitialTopicForm = (props: any) => {
 
   const [topicList, setTopicList] = useState<any>([]);
@@ -518,7 +557,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       this.setState({
         location: window.location.href,
         dataArray: []
-      })
+      });
       this.getData(1);
     }
     if (prevProps.isPosted !== this.props.isPosted || this.props.isPosted === true) {
@@ -538,6 +577,19 @@ class Feed extends React.Component<FeedProps, FeedState> {
     }
   }
 
+
+
+  feedList = () => {
+    let feedArray = this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost> });
+    feedArray.splice(1, 0, <GoogleAdTimeLine />);
+    feedArray.splice(10, 0, <GoogleAdTimeLine />);
+    return (
+      <span>
+        {feedArray}
+      </span>
+    )
+  }
+
   render() { 
     if(this.state.isLoaded === false) {
       const skeletonList = [1,2,3,4,5,6,7,8,9];
@@ -552,7 +604,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       )
     }
 
-    
+
     if (this.state.isLoaded === true) {
       return (
         <div>
@@ -566,7 +618,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           <ul className={styles.ul}>
 
             {this.state.dataArray.length > 0 ?
-              this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost> })
+              this.feedList()
               :
               <div><div>{i18n.t("feed.noContent")}</div><div>{i18n.t("feed.followMore")}</div></div>
             }

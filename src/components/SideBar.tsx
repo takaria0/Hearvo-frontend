@@ -141,6 +141,35 @@ declare global {
   }
 }
 
+const GoogleAdSideBar = (props: any) => {
+  const currentFirstURL = window.location.pathname;
+  const [currentUrl, setCurrentUrl] = useState(currentFirstURL);
+  const [media, setMedia] = useState<any>(window.matchMedia("(min-width: 700px)"));
+
+  useEffect(() => {
+    if (window !== undefined) { setMedia(window.matchMedia("(min-width: 700px)")) }
+    if (window.adsbygoogle && process.env.REACT_APP_ENV !== "dev" ) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (error) {
+      }
+    }
+  }, [currentUrl, media])
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ padding: 5, border: 'solid', borderWidth: 1, borderRadius: 7, backgroundColor: 'white' }}>
+        <ins className="adsbygoogle"
+          style={{ display: 'block' }}
+          data-ad-client="ca-pub-9487157880259062"
+          data-ad-slot="7134151692"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  )
+}
+
 const SideBar = (props: any) => {
 
   const currentFirstURL = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
@@ -149,22 +178,8 @@ const SideBar = (props: any) => {
   useEffect(() => {
     const updateUrl = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
     setCurrentUrl(updateUrl);
-    if (window.adsbygoogle) {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    }
   }, [])
 
-  const googleAd = () => (
-    <div>
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-      <ins className="adsbygoogle"
-        style={{display:'block'}}
-        data-ad-client="ca-pub-9487157880259062"
-        data-ad-slot="7134151692"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-    </div>
-  );
 
   switch (currentUrl) {
     case "posts":
@@ -172,7 +187,7 @@ const SideBar = (props: any) => {
       return (
         <span>
           <RelatedPosts postId={postId} />
-          {googleAd()}
+          <GoogleAdSideBar />
         </span>
       )
     break;
@@ -181,7 +196,7 @@ const SideBar = (props: any) => {
       return (
         <span>
           <TrendingTopics />
-          {googleAd()}
+          <GoogleAdSideBar />
         </span>
       )
     break;
