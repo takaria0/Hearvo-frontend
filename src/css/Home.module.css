@@ -71,19 +71,18 @@
     display: flex;
     /* width: 50%; */
     /* margin-right: 10%; */
-    margin-left: 2%;
   }
 
   .feed {
     align-items: flex-start;
     width: 70ch;
-    margin-left: 20%;
+    margin-left: 30%;
   }
 
   .side_bar {
     align-items: flex-start;
     width: 30ch;
-    margin-left: 30px;
+    margin: 0 100px;
   }
 }
 
