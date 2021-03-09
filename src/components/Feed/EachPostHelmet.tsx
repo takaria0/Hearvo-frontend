@@ -6,10 +6,10 @@ import { Helmet } from "react-helmet";
 const EachPostHelmet = (props: any) => (
   <Helmet
     meta={[
-    { name: 'twitter:card', content: "summary" },
-    { name: 'twitter:creator', content: "@hearvo" },
-    { name: 'twitter:title', content: "Hearvo | " + props.data.title },
-    { name: 'twitter:description', content: props.data.content },
+    // { name: 'twitter:card', content: "summary" },
+    // { name: 'twitter:creator', content: "@hearvo" },
+    // { name: 'twitter:title', content: "Hearvo | " + props.data.title },
+    // { name: 'twitter:description', content: props.data.content },
       // { name: 'twitter:image', content: props.data. },
     { property: 'og:title', content: props.data.title },
     { property: 'og:site_name', content: "Hearvo" },
