@@ -69,7 +69,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
   componentDidMount = () => {
     const jwt = getJwt();
-    console.log(this.props.match.params.post_id);
+    // console.log(this.props.match.params.post_id);
     axios.get(`/posts?id=${this.props.match.params.post_id}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
         this.setState({
