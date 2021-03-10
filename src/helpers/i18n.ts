@@ -71,7 +71,7 @@ i18next
             help: 'ヘルプ'
           },
           topicFollow: {
-            follow: 'フォローする',
+            follow: 'フォロー',
             unfollow: 'フォロー解除'
           },
           profile: {

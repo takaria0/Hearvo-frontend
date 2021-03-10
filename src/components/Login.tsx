@@ -5,6 +5,7 @@ import { Button } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
 import i18n from "../helpers/i18n";
 import { GoogleLogin } from 'react-google-login';
+import { Mixpanel } from '../helpers/mixpanel';
 export interface LoginProps extends RouteComponentProps<{}>{
 }
 
@@ -50,15 +51,26 @@ class Login extends React.Component<LoginProps, LoginState> {
       })
 
       if (typeof window !== 'undefined') {localStorage.setItem("jwt", res.data.token)};
-      axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
+      axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } })
+      .then((res: any) => {
+        if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(res.data))};
 
-      if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(res.data))};
+        Mixpanel.identify(res.data.id);
+        Mixpanel.track('Successful login', {});
+        Mixpanel.people.set({
+          name: res.data.name,
+        });
+
         this.props.history.push("/");
+
+
       }).catch((err: any) => {
+        Mixpanel.track('Unsuccessful login', {});
         this.props.history.push("/login");
       })
       
     }).catch((err: any) => {
+      Mixpanel.track('Unsuccessful login', {});
       this.setState({
         errorMessage: i18n.t("login.failedToLogin"),
       })
@@ -76,16 +88,25 @@ class Login extends React.Component<LoginProps, LoginState> {
         
         this.setState({ successMessage: i18n.t("login.successToLogin")})
 
-        axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
+        axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } })
+        .then((res: any) => {
 
           if (typeof window !== 'undefined') { localStorage.setItem("user", JSON.stringify(res.data)) };
+          Mixpanel.identify(res.data.id);
+          Mixpanel.track('Successful Google login', {});
+          Mixpanel.people.set({
+            name: res.data.name,
+          });
           this.props.history.push("/");
+
         }).catch((err: any) => {
+          Mixpanel.track('Unsuccessful Google login', {});
           this.props.history.push("/login");
         })
 
 
       }).catch((err: any) => {
+        Mixpanel.track('Unsuccessful Google login', {});
         this.setState({
           errorMessage: i18n.t("login.failedToLogin"),
         })
