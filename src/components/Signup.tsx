@@ -4,6 +4,7 @@ import { RouteComponentProps, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
 import i18n from '../helpers/i18n';
+import { Mixpanel } from '../helpers/mixpanel';
 export interface SignupProps extends RouteComponentProps<{}> {
 }
 
@@ -89,6 +90,9 @@ class Signup extends React.Component<SignupProps, SignupState> {
       password: this.state.password,
     }).then((res: any) => {
       if (typeof window !== 'undefined') {localStorage.setItem("jwt", res.data.token)};
+
+      Mixpanel.track('Successful Signup', {});
+
       this.setState({
         signupSuccessMessage: i18n.t("signup.createdAccount"),
       })
@@ -97,6 +101,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
       }
       timeout(1000).then(() => { this.props.history.push("/login");})
     }).catch((err: any) => {
+      Mixpanel.track('Unsuccessful Signup', {});
       const resMessage = err.response.data.message;
       this.setState({
         errorMessage: resMessage,

@@ -14,7 +14,7 @@ import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
 import i18n from "../../helpers/i18n";
-
+import { Mixpanel } from '../../helpers/mixpanel';
 
 const moment = require('moment-timezone');
 // moment.locale('ja');
@@ -76,6 +76,9 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
       voteSelectPostObj,
       config,
     ).then(res => {
+
+      Mixpanel.track('Successful Vote', { ...voteSelectPostObj });
+
       const countVotePostObj = { post_id: this.props.postId }
       axios.post(
         "/count_vote_selects",
@@ -89,7 +92,7 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
         });
       })
     }).catch((err) => {
-      // // console.log(err);
+      Mixpanel.track('Unsuccessful Vote', { ...voteSelectPostObj });
     })
   }
 

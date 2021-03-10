@@ -23,6 +23,7 @@ import CompareResult from './CompareResult';
 import i18n from "../../helpers/i18n";
 import AttributePlotPie from './AttributePlotPie';
 import AttributePlotBar from './AttributePlotBar';
+import { Mixpanel } from '../../helpers/mixpanel';
 
 const moment = require('moment-timezone');
 moment.tz.setDefault('Etc/UTC');
@@ -69,15 +70,15 @@ const EachMultipleVote = (props: any) => {
   const addResult = (e: any, vote_select_id: number, post_id: number) => {
     // e.preventDefault();
     if (data.length - 1 === dataIdx) {
-
-      axios.post("/multiple_vote_users", { parent_id: props.postId, result: [...voteResult, { vote_select_id, post_id }] }, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+      const voteObj = { parent_id: props.postId, result: [...voteResult, { vote_select_id, post_id }] }
+      axios.post("/multiple_vote_users", voteObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
-
+        Mixpanel.track('Successful Multiple Vote', { ...voteObj });
         setDoesVoteEnd(true);
         history.push(`/posts/${props.postId}`);
       })
       .catch(err => {
-
+        Mixpanel.track('Unsuccessful Multiple Vote', { ...voteObj });
         setDoesVoteEnd(true);
         history.push(`/posts/${props.postId}`);
       });
