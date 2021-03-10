@@ -1,6 +1,6 @@
 const mixpanel = require('mixpanel-browser');
 
-mixpanel.init("f276206d4acdf49c1a165f0a690e36ac");
+mixpanel.init(process.env.REACT_APP_MIX_PANEL_TOKEN);
 
 let env_check = process.env.REACT_APP_ENV === 'prod';
 

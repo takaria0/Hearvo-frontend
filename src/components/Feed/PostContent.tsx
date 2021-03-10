@@ -15,6 +15,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import i18n from "../../helpers/i18n";
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { stringify } from 'querystring';
+import { Mixpanel } from '../../helpers/mixpanel';
 /*
 If the values are incorrect,
 return true
@@ -128,6 +129,7 @@ const VoteCandidateForm = (props: any) => {
 
     axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
+        Mixpanel.track('Successful New Post', { ...postObj });
         props.editParentHandle(e, false);
         switch (props.targetGroupId) {
           case "":
@@ -139,6 +141,7 @@ const VoteCandidateForm = (props: any) => {
         }
 
       }).catch((err: any) => {
+        Mixpanel.track('Unsuccessful New Post', { ...postObj });
         setErrorMessage(i18n.t("newPost.failedToPost"));
       })
   }
@@ -398,6 +401,7 @@ const MultipleVoteForm = (props: any) => {
     const jwt = getJwt();
     axios.post("/posts", postObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
+        Mixpanel.track('Successful New Multiple Post', { ...postObj });
         props.editParentHandle(e, false);
         switch (props.targetGroupId) {
           case "":
@@ -409,6 +413,7 @@ const MultipleVoteForm = (props: any) => {
         }
 
       }).catch((err: any) => {
+        Mixpanel.track('Unsuccessful New Multiple Post', { ...postObj });
       })
     e.preventDefault();
   };
