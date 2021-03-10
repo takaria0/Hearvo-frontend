@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Dialog, Divider } from '@material-ui/core';
+import { Dialog,  DialogTitle, DialogContent, Divider, Menu, MenuItem, List, ListItem } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import axios from '../Api';
 import { Helmet } from "react-helmet";
 
@@ -17,6 +18,7 @@ import { MyResponsivePie } from '../../helpers/NivoPlots';
 import CompareResult from './CompareResult';
 import i18n from "../../helpers/i18n";
 import StarIcon from '@material-ui/icons/Star';
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import ShareIcon from '@material-ui/icons/Share';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import PollIcon from '@material-ui/icons/Poll';
@@ -32,6 +34,7 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from "react-share";
+import { render } from '@testing-library/react';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -88,6 +91,24 @@ const PostHeader = (props: any) => {
 }
 
 const PostFooter = (props: any) => {
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openDialog, setopenDialog] = useState(false);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setopenDialog(false);
+  };
+
+  const handleOpen_reportList = () => {
+    setAnchorEl(null);
+    setopenDialog(true);
+  }
+
   return (
     <div>
       <div>
@@ -113,7 +134,38 @@ const PostFooter = (props: any) => {
           {/* <ShareIcon style={{ fontSize: 20 }} /> */}
         </span >
         <span>
+      <div>
+        <button onClick={handleClick} style={{border: "none"}}>
           <MoreHorizIcon style={{ fontSize: 20 }}/>
+        </button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleOpen_reportList}><ReportProblemIcon/>&nbsp;{i18n.t("eachPost.report")}</MenuItem>
+          </Menu>
+          <Dialog open={openDialog} onClose={handleClose}>
+            <DialogTitle>問題を報告する</DialogTitle>
+            <DialogContent style={{fontSize: 20}}>この投稿について、問題の詳細をお知らせください。</DialogContent>
+              <List>
+                <ListItem button onClick={handleClose}>
+                  内容に興味がない
+                </ListItem>
+                <ListItem button onClick={handleClose}>
+                  不審な内容またはスパムである
+                </ListItem>
+                <ListItem button onClick={handleClose}>
+                  不適切または攻撃的な内容を含んでいる
+                </ListItem>
+                <ListItem button onClick={handleClose}>
+                  自傷行為や自殺の意思をほのめかしている
+                </ListItem>
+              </List>
+            </Dialog>
+      </div>
         </span >
       </div>
     </div>

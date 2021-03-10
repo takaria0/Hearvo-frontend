@@ -207,6 +207,7 @@ i18next
             seeResult: '結果を見る',
             startContinuasVote: '連続投票を開始',
             selectAllCandidate: '全ての候補に投票して下さい',
+            report: '通報する',
           },
           settings: {
             settings: '設定',
