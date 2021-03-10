@@ -148,20 +148,20 @@ const PostFooter = (props: any) => {
             <MenuItem onClick={handleOpen_reportList}><ReportProblemIcon/>&nbsp;{i18n.t("eachPost.report")}</MenuItem>
           </Menu>
           <Dialog open={openDialog} onClose={handleClose}>
-            <DialogTitle>問題を報告する</DialogTitle>
-            <DialogContent style={{fontSize: 20}}>この投稿について、問題の詳細をお知らせください。</DialogContent>
+            <DialogTitle>{i18n.t("eachPost.reportAnIssue")}</DialogTitle>
+            <DialogContent style={{fontSize: 20}}>{i18n.t("eachPost.tellUsDetail")}</DialogContent>
               <List>
                 <ListItem button onClick={handleClose}>
-                  内容に興味がない
+                  {i18n.t("eachPost.notInterested")}
                 </ListItem>
                 <ListItem button onClick={handleClose}>
-                  不審な内容またはスパムである
+                  {i18n.t("eachPost.suspiciousOrSpam")}
                 </ListItem>
                 <ListItem button onClick={handleClose}>
-                  不適切または攻撃的な内容を含んでいる
+                  {i18n.t("eachPost.abusiveOrHarmful")}
                 </ListItem>
                 <ListItem button onClick={handleClose}>
-                  自傷行為や自殺の意思をほのめかしている
+                  {i18n.t("eachPost.selfharmOrSuicide")}
                 </ListItem>
               </List>
             </Dialog>
