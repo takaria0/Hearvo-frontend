@@ -112,7 +112,7 @@ const CommentItem = (props: any) => {
 
 
   return (
-    <span style={{ wordWrap: "break-word" }}>
+    <span style={{ wordWrap: "break-word", whiteSpace: 'pre-wrap' }}>
       <div>&nbsp;{props.data.content}</div>
       <span>
         <span>&nbsp;&nbsp;
