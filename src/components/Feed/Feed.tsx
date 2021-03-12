@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Button, Dialog, Checkbox } from '@material-ui/core';
+import React, { useEffect, useState, useRef, useMemo, } from 'react';
+import { Button, Dialog, Checkbox, MenuItem, FormControl, Select, InputLabel, makeStyles, Theme, createStyles, TextField, FormHelperText, } from '@material-ui/core';
 import axios from '../Api';
 
 // import { withRouter, RouteComponentProps } from 'react-router-dom'
@@ -64,26 +64,26 @@ const InitialTopicForm = (props: any) => {
   const jwt = getJwt();
   useEffect(() => {
     axios.get(`/topics?initial_topics=${JSON.stringify(INITIAL_TOPICS)}`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
-    .then(res => {
-      const addChecked = res.data.map((elem: any) => {return {...elem, checked: false}});
-      setTopicList(addChecked);
-      setIsLoading(false);
-    })
-    .catch(err => {
-      setIsLoading(false);
-    });
+      .then(res => {
+        const addChecked = res.data.map((elem: any) => { return { ...elem, checked: false } });
+        setTopicList(addChecked);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        setIsLoading(false);
+      });
 
   }, [])
-  
+
   const change = (e: any, topic_id: number, topic: string, idx: number) => {
 
-    switch(e.target.checked) {
+    switch (e.target.checked) {
       case false:
         // delete topic
         let newSaveTopicList = saveTopicList.filter((elem: any) => (elem.id !== topic_id));
         setSaveTopicList(newSaveTopicList);
         return
-      
+
       case true:
         // add topic
         setSaveTopicList([...saveTopicList, { id: topic_id, topic: topic, checked: e.target.checked }]);
@@ -94,7 +94,7 @@ const InitialTopicForm = (props: any) => {
     e.preventDefault();
     const topic_id_list = saveTopicList.map((elem: any) => (elem.id));
 
-    if(topic_id_list.length < 3) {
+    if (topic_id_list.length < 3) {
       setErrorMessage(i18n.t("feed.selectThreeTopics"));
       return
     }
@@ -108,47 +108,49 @@ const InitialTopicForm = (props: any) => {
       });
   }
 
-  if(isLoading) {return (<div></div>)}
+  if (isLoading) { return (<div></div>) }
 
   return (
-  <div>
-    <Dialog open={true}>
-        <div style={{ paddingLeft: 20}}>
+    <div>
+      <Dialog open={true}>
+        <div style={{ paddingLeft: 20 }}>
           <h2>{i18n.t("feed.chooseTopic")}</h2>
-            <form onSubmit={e => submit(e)} style={{ width: '50ch'}}>
-            <ul style={{ columnCount: 3}}>
-            {topicList.map((topic: any, idx: number) => {
-              return (
-              <div>
-                  <input type="checkbox" id="" onChange={e => change(e, topic.id, topic.topic, idx)} name={topic.topic} value={topic.id}></input>
-                <label htmlFor="subscribeNews">{topic.topic}</label>
-              </div>
-              )
+          <form onSubmit={e => submit(e)} style={{ width: '50ch' }}>
+            <ul style={{ columnCount: 3 }}>
+              {topicList.map((topic: any, idx: number) => {
+                return (
+                  <div>
+                    <input type="checkbox" id="" onChange={e => change(e, topic.id, topic.topic, idx)} name={topic.topic} value={topic.id}></input>
+                    <label htmlFor="subscribeNews">{topic.topic}</label>
+                  </div>
+                )
               })}
             </ul>
-              <div style={{ float: 'right', textAlign: 'right', marginRight: 20, marginBottom: 30, marginTop: 20}}>
+            <div style={{ float: 'right', textAlign: 'right', marginRight: 20, marginBottom: 30, marginTop: 20 }}>
               <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }} >{i18n.t("feed.save")}</button>
-              </div>
-              
-            </form>
-            <div style={{color: 'red'}}>{errorMessage ? errorMessage : ''}</div>
-      </div>
-    </Dialog>
+            </div>
 
-  </div>
+          </form>
+          <div style={{ color: 'red' }}>{errorMessage ? errorMessage : ''}</div>
+        </div>
+      </Dialog>
+
+    </div>
   )
 };
 
 const InitialUserInfoForm = (props: any) => {
   let initialUser = {};
-  if (typeof window !== 'undefined') {initialUser = JSON.parse(localStorage.getItem("user") || "{}");}
+  if (typeof window !== 'undefined') { initialUser = JSON.parse(localStorage.getItem("user") || "{}"); }
   const [userObj, setUserObj] = useState<any>(initialUser);
+  const [genderOpen, setGenderOpen] = useState<any>(false);
   const [gender, setGender] = useState<string>("");
   const [genderDetail, setGenderDetail] = useState<string>("");
+  const [yearOpen, setYearOpen] = useState<any>(false);
   const [year, setYear] = useState<string>("");
   const [initialSettingMessage, setInitialSettingMessage] = useState("");
 
-  const submit = (e:any) => {
+  const submit = (e: any) => {
     e.preventDefault();
 
     // ADD ERROR HANDLING
@@ -170,38 +172,141 @@ const InitialUserInfoForm = (props: any) => {
         userObj.gender = resUser.gender;
         userObj.birth_year = resUser.year;
         setUserObj(userObj);
-        if (typeof window !== 'undefined') {localStorage.setItem("user", JSON.stringify(resUser))};
+        if (typeof window !== 'undefined') { localStorage.setItem("user", JSON.stringify(resUser)) };
         props.setFinish(true);
       }).catch((res: any) => {
         setInitialSettingMessage(i18n.t("feed.confirmContent"));
       });
   }
 
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        '& > *': {
+          margin: theme.spacing(1),
+          width: '25ch',
+        },
+      },
+      button: {
+        display: 'block',
+        marginTop: theme.spacing(2),
+      },
+      formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        width: '25ch',
+      },
+      selectEmpty_gender: i18n.t("feed.gender"),
+    }),
+  );
+
+  const classes = useStyles();
+
+  const genderForm = () => {
+
+    const handleChange = (e: any) => {
+      setGender(e.target.value)
+    };
+
+    const handleClose = () => {
+      setGenderOpen(false);
+    };
+
+    const handleOpen = () => {
+      setGenderOpen(true);
+    };
+    
+    return (
+      <div>
+        <FormControl className={classes.formControl}>
+          <InputLabel>{i18n.t("feed.gender")}</InputLabel>
+          <Select
+            open={genderOpen}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            value={gender}
+            onChange={handleChange}
+          // displayEmpty
+          // className={classes.selectEmpty_gender}
+          >
+
+            <MenuItem value="">{i18n.t("feed.gender")}</MenuItem>
+            <MenuItem value="1">{i18n.t("feed.female")}</MenuItem>
+            <MenuItem value="0">{i18n.t("feed.male")}</MenuItem>
+            <MenuItem value="2">{i18n.t("feed.other")}</MenuItem>
+          </Select>
+        </FormControl>
+        <div>
+          {gender === "2"
+            ?
+            <div>
+              <form className={classes.root} noValidate autoComplete="off">
+                <FormHelperText>
+                <TextField onChange={e => setGenderDetail(e.target.value)} />
+                {i18n.t("feed.freeform")}
+              </FormHelperText></form>
+            </div>
+            : ''}
+        </div>
+
+      </div>
+    )
+  }
+
   const birthDayForm = () => {
     const currentYear = new Date().getUTCFullYear();
     let yearOption = [];
     let monthOption = [];
+
+    const handleChange = (e: any) => {
+      setYear(e.target.value)
+    };
+
+    const handleClose = () => {
+      setYearOpen(false);
+    };
+
+    const handleOpen = () => {
+      setYearOpen(true);
+    };
+
     for (let year = currentYear - 120; year < currentYear; year++) {
       yearOption.push(
-        (<option value={year}>{year}</option>)
+        (<MenuItem value={year}>{year}</MenuItem>)
       )
     }
     for (let month = 1; month <= 12; month++) {
       monthOption.push(
-        (<option value={month}>{month}</option>)
+        (<MenuItem value={month}>{month}</MenuItem>)
       )
     }
+    
     yearOption = yearOption.reverse();
+
     return (
-      <div>
-        <label htmlFor="dob-day" >{i18n.t("feed.birthYear")}</label>
-        <div>
-          <select name="dob-year" id="dob-year" onChange={e => setYear(e.target.value)}>
-            <option value="">{i18n.t("feed.year")}</option>
-            {yearOption}
-          </select>
-        </div>
-      </div>
+      <FormControl className={classes.formControl}>
+        <InputLabel>{i18n.t("feed.birthYear")}</InputLabel>
+        <Select
+          open={yearOpen}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          // value={year}
+          onChange={handleChange}
+        >
+          <MenuItem value="">{i18n.t("feed.year")}</MenuItem>
+          {yearOption}
+        </Select>
+      </FormControl>
+
+      // <div>
+      //   <label htmlFor="dob-day" >{i18n.t("feed.birthYear")}</label>
+      //   <div>
+      //     <select name="dob-year" id="dob-year" onChange={e => setYear(e.target.value)}>
+      //       <option value="">{i18n.t("feed.year")}</option>
+      //       {yearOption}
+      //     </select>
+      //   </div>
+      // </div>
     )
   }
 
@@ -212,7 +317,12 @@ const InitialUserInfoForm = (props: any) => {
         <div style={{ padding: '10px', margin: '10px' }}>
           <h1>{i18n.t("feed.inputUserInfo")}</h1>
           <form onSubmit={e => submit(e)}>
-            <div style={{ paddingTop: '20px' }}>
+            <div>
+              {genderForm()}
+            </div>
+
+            <br></br>
+            {/* <div style={{ paddingTop: '20px' }}>
               {i18n.t("feed.gender")}
               <div>
                 <select onChange={e => setGender(e.target.value)}>
@@ -225,13 +335,21 @@ const InitialUserInfoForm = (props: any) => {
               <div>
                 {gender === "2" ? <div><br></br><input type="text" placeholder={i18n.t("feed.freeForm")} maxLength={20} onChange={e => setGenderDetail(e.target.value)}></input></div> : ''}
               </div>
-            </div >
+            </div > */}
+
             {/* {props.data.userObj.age} */}
-            <div style={{ paddingTop: '20px' }}>
+
+            <div>
               {birthDayForm()}
             </div>
-            <br></br><br></br>
-            <span style={{ float: 'right', textAlign: 'right', padding: 10 }}><button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }}>{i18n.t("feed.done")}</button></span>
+
+            <br></br>
+            <br></br>
+            
+            <span style={{ float: 'right', textAlign: 'right',}}>
+              {/* <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }}>{i18n.t("feed.done")}</button> */}
+              <Button type="submit">{i18n.t("feed.done")}</Button>
+            </span>
             
           </form>
           <div style={{ color: 'red', textAlign: 'center' }}>
@@ -264,13 +382,13 @@ const InitialForm = (props: any) => {
     props.data.userObj.login_count = props.data.userObj.login_count + 1;
     // if (typeof window !== 'undefined') {};
     const jwt = getJwt();
-    axios.get(`/users`,  { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
-    .then((res) => {
-      localStorage.setItem("user", JSON.stringify(res.data));
-    }).catch((err) => {
-    })
+    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+      .then((res) => {
+        localStorage.setItem("user", JSON.stringify(res.data));
+      }).catch((err) => {
+      })
   }
-  
+
   if (isUserInfoFinished && isTopicFormFinished) {
     closeDialog();
     return (<span></span>);
@@ -286,19 +404,19 @@ const InitialForm = (props: any) => {
 
 const TopicHeader = (props: any) => {
 
-  if(!props.topicTitle) return (<span></span>);
+  if (!props.topicTitle) return (<span></span>);
 
 
   return (
     <div style={{ backgroundColor: 'white', padding: 10, border: 'solid', borderWidth: 1, borderRadius: 7 }}>
-    <span >
-      <b style={{ fontSize: '1.17em' }}>{i18n.t("feed.topic")} {props.topicTitle}</b>
+      <span >
+        <b style={{ fontSize: '1.17em' }}>{i18n.t("feed.topic")} {props.topicTitle}</b>
         <TopicFollowButton topicWord={props.topicTitle}></TopicFollowButton>
         <div>
           {i18n.t("feed.posts")} {props.topicNumPosts} {i18n.t("feed.following")} {props.topicNumUsers}
         </div>
-    </span>
-  </div>
+      </span>
+    </div>
   )
 }
 
@@ -309,7 +427,7 @@ export interface FeedProps {
   isPostedHandeler: any;
   isLogin: boolean;
 }
- 
+
 export interface FeedState {
   isLoaded: boolean,
   voteLoading: boolean,
@@ -336,7 +454,7 @@ export interface FeedState {
 interface Params {
   group_id: string;
 }
- 
+
 class Feed extends React.Component<FeedProps, FeedState> {
 
   constructor(props: any) {
@@ -381,7 +499,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   componentDidMount = () => {
-    if (typeof window !== 'undefined') {  this.setState({ userObj: JSON.parse(localStorage.getItem("user") || "{}")}) }
+    if (typeof window !== 'undefined') { this.setState({ userObj: JSON.parse(localStorage.getItem("user") || "{}") }) }
     var options = {
       root: null,
       rootMargin: "20px",
@@ -396,7 +514,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   getTimeQuery = (keyword: string, keywordArray: string[]) => {
     let time = keyword === "popular" ? keywordArray.pop() : "today";
-    if(time === "popular") {
+    if (time === "popular") {
       time = "today";
     }
     return time;
@@ -417,7 +535,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     } else {
       this.setState({ isLoaded: false, searchWord: "", topicTitle: "" });
     }
-    
+
     const urlParams = new URLSearchParams(window.location.search);
     const keywordArray = window.location.pathname.split("/");
 
@@ -461,7 +579,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
 
 
-    let newpage; let queryUrl = ""; 
+    let newpage; let queryUrl = "";
     newpage = page === 0 ? 1 : page;
 
     switch (feedType) {
@@ -471,8 +589,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
         queryUrl = orderType ? `/posts?search=${searchWord}&type=${type}&page=${page}&keyword=${orderType}` : `/posts?search=${searchWord}&type=${type}&page=${page}`;
         axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: res.data, isLoaded: true, searchQuery: window.location.search, searchWord: searchWord});
-          }).catch((err) => { this.setState({ isLoaded: true, searchWord: searchWord, searchQuery: window.location.search}) })
+            this.setState({ dataArray: res.data, isLoaded: true, searchQuery: window.location.search, searchWord: searchWord });
+          }).catch((err) => { this.setState({ isLoaded: true, searchWord: searchWord, searchQuery: window.location.search }) })
         break;
 
       case "topic":
@@ -480,7 +598,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
         queryUrl = orderType ? `/posts?topic=${topicWord}&page=${newpage}&keyword=${orderType}` : `/posts?topic=${topicWord}&page=${newpage}`;
         axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ dataArray: page === 1 ? res.data.posts : [...this.state.dataArray, ...res.data.posts], isLoaded: true, topicTitle: topicWord, topicNumPosts: res.data.topic.num_of_posts, topicNumUsers: res.data.topic.num_of_users})})
+            this.setState({ dataArray: page === 1 ? res.data.posts : [...this.state.dataArray, ...res.data.posts], isLoaded: true, topicTitle: topicWord, topicNumPosts: res.data.topic.num_of_posts, topicNumUsers: res.data.topic.num_of_users })
+          })
           .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
@@ -490,24 +609,25 @@ class Feed extends React.Component<FeedProps, FeedState> {
         queryUrl = orderType ? `/posts?group_id=${groupId}&page=${newpage}&keyword=${orderType}` : `/posts?group_id=${groupId}&page=${newpage}`;
         axios.get(`/groups?id=${groupId}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({ groupTitle: res.data.already_joined ? res.data.title : i18n.t("feed.groupDoesntExist")})
+            this.setState({ groupTitle: res.data.already_joined ? res.data.title : i18n.t("feed.groupDoesntExist") })
             // show the content if the user has joined the group
             if (res.data.already_joined) {
               axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
                 .then(res => {
-                  this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true  })
+                  this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true })
 
                 })
-                .catch((err) => { this.setState({isLoaded: true}) })
+                .catch((err) => { this.setState({ isLoaded: true }) })
             }
           }).catch((err) => { this.setState({ isLoaded: true }) });
 
         break;
-      
+
       case "popular":
         axios.get(`/posts?keyword=popular&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
           .then(res => {
-            this.setState({dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true,});})
+            this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, });
+          })
           .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
@@ -525,7 +645,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
-          .catch((err) => { this.setState({ isLoaded: true })})
+          .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
       case "voted":
@@ -534,7 +654,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
-          .catch((err) => { this.setState({ isLoaded: true })})
+          .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
       case "recommend":
@@ -543,7 +663,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
-          .catch((err) => { this.setState({ isLoaded: true })})
+          .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
       default:
@@ -570,7 +690,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   click = (e: any) => {
-    if(this.state.page < 49) {
+    if (this.state.page < 49) {
       this.setState({
         page: this.state.page + 1
       })
@@ -590,9 +710,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
     )
   }
 
-  render() { 
-    if(this.state.isLoaded === false) {
-      const skeletonList = [1,2,3,4,5,6,7,8,9];
+  render() {
+    if (this.state.isLoaded === false) {
+      const skeletonList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       return (
         <div>
           {skeletonList.map((elem: any) => (
@@ -630,8 +750,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
           </div>
         </div>
       );
-    }    
+    }
   }
 }
- 
+
 export default Feed;

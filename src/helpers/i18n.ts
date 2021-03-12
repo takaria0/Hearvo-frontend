@@ -125,7 +125,8 @@ i18next
             searchResult: 'の検索結果',
             noContent: '該当なし',
             followMore: 'トピックをたくさんフォローしよう！',
-            more: 'さらに見る'
+            more: 'さらに見る',
+            required: '* 必須',
           },
           newPost: {
             post: '投稿',
@@ -358,6 +359,7 @@ i18next
             noContent: 'No content',
             more: 'More',
             followMore: 'Follow more topics!',
+            required: 'required *'
           },
           newPost: {
             post: 'Post',
