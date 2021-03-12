@@ -104,9 +104,35 @@ const PostFooter = (props: any) => {
     setopenDialog(false);
   };
 
-  const handleOpen_reportList = () => {
+  const handleOpenReportList = () => {
     setAnchorEl(null);
     setopenDialog(true);
+  }
+
+  const handleSubmit = (e: any, value: number) => {
+    e.preventDefault();
+
+    const jwt = getJwt();
+    const postData = {
+      post_id: props.data.id,
+      reasons: [
+        {
+          reason: value,
+          reason_detail: null,
+        }
+      ]
+    };
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY }
+    };
+
+    axios.post("/reports", postData, config)
+    .then(res => {
+      handleClose();
+    })
+    .catch(err => {
+      handleClose();
+    })
   }
 
   return (
@@ -135,7 +161,7 @@ const PostFooter = (props: any) => {
         </span >
         <span>
       <div>
-        <button onClick={handleClick} style={{border: "none"}}>
+        <button onClick={handleClick} style={{border: "none", backgroundColor: 'white'}}>
           <MoreHorizIcon style={{ fontSize: 20 }}/>
         </button>
           <Menu
@@ -145,22 +171,22 @@ const PostFooter = (props: any) => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleOpen_reportList}><ReportProblemIcon/>&nbsp;{i18n.t("eachPost.report")}</MenuItem>
+            <MenuItem onClick={handleOpenReportList}><ReportProblemIcon/>&nbsp;{i18n.t("eachPost.report")}</MenuItem>
           </Menu>
           <Dialog open={openDialog} onClose={handleClose}>
             <DialogTitle>{i18n.t("eachPost.reportAnIssue")}</DialogTitle>
             <DialogContent style={{fontSize: 20}}>{i18n.t("eachPost.tellUsDetail")}</DialogContent>
               <List>
-                <ListItem button onClick={handleClose}>
+                <ListItem button onClick={e => handleSubmit(e, 0)}>
                   {i18n.t("eachPost.notInterested")}
                 </ListItem>
-                <ListItem button onClick={handleClose}>
+                <ListItem button onClick={e => handleSubmit(e, 1)}>
                   {i18n.t("eachPost.suspiciousOrSpam")}
                 </ListItem>
-                <ListItem button onClick={handleClose}>
+                <ListItem button onClick={e => handleSubmit(e, 2)}>
                   {i18n.t("eachPost.abusiveOrHarmful")}
                 </ListItem>
-                <ListItem button onClick={handleClose}>
+                <ListItem button onClick={e => handleSubmit(e, 3)}>
                   {i18n.t("eachPost.selfharmOrSuicide")}
                 </ListItem>
               </List>
