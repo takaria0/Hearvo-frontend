@@ -12,7 +12,7 @@ const RenderTopic = (props: any) => {
       &nbsp;&nbsp;{props.topics.map((elem: any) => {
       return (
         <span style={{}}>
-          <Link className={styles.topic_link} to={`/topic?tp=${elem.topic.topic}`}>
+          <Link className={styles.topic_link} to={`/topic?tp=${elem.topic.topic}`} key={`/topic?tp=${elem.topic.topic}`}>
             <small style={{ border: '', borderRadius: '7px', padding: '2px', backgroundColor: '#D3D3D3' }}>{elem.topic.topic}</small>
           </Link>
           {'  '}

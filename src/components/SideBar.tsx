@@ -154,7 +154,8 @@ const GoogleAdSideBar = (props: any) => {
       } catch (error) {
       }
     }
-  }, [currentUrl, media])
+  }, [currentUrl])
+// }, [currentUrl, media])
 
   return (
     <div style={{ marginTop: 10 }}>

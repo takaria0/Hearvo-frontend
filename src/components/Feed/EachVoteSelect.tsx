@@ -15,6 +15,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
 import i18n from "../../helpers/i18n";
 import { Mixpanel } from '../../helpers/mixpanel';
+import CountryContext from '../../helpers/context';
 
 const moment = require('moment-timezone');
 // moment.locale('ja');
@@ -50,15 +51,25 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
     }
   }
 
-  change(e: any, id: number) {
+  change(e: any, id: number, context: any) {
     e.preventDefault();
-    this.setState({
-      isClicked: true,
-    });
+    
     if (this.props.isLogin === false) {
       this.props.history.push("/login");
       return
     }
+
+    // if a user accesed from different countries, stop voting.
+    if (context.country !== process.env.REACT_APP_COUNTRY) {
+      return;
+    }
+
+    this.setState({
+      isClicked: true,
+    });
+
+
+
     const jwt = getJwt();
     // if (!jwt) {
     //   this.props.history.push("/login");
@@ -116,15 +127,19 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
 
 
     return (
-      <div style={{ width: "100%" }} className={styles.content}>
-        {this.props.voteContent.map((data: any) => {
-          return (
-            <div style={{ whiteSpace: 'nowrap', border: 'solid 1px', borderRadius: '5px', margin: '5px', padding: '5px'}}  className={styles.vote_button}>
-                  <div  onClick={e => this.change(e, data.id)}>{data.content}</div>
+      <CountryContext.Consumer>
+        {context => (
+          <div style={{ width: "100%" }} className={styles.content}>
+            {this.props.voteContent.map((data: any) => {
+              return (
+                <div style={{ whiteSpace: 'nowrap', border: 'solid 1px', borderRadius: '5px', margin: '5px', padding: '5px' }} className={styles.vote_button}>
+                  <div onClick={e => this.change(e, data.id, context)}>{data.content}</div>
                 </div>
-          )
-        })}
-      </div>
+              )
+            })}
+          </div>
+        )}
+      </CountryContext.Consumer>
     );
   }
 }
