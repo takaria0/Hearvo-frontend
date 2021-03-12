@@ -190,7 +190,7 @@ const VoteCandidateForm = (props: any) => {
       case true:
         return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE"  }}>{i18n.t("newPost.post")}</span></div>)
       case false:
-        return (<div><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
+        return (<div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
         // return (<div><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => { e.preventDefault();setIsConfirm(true)}}>{i18n.t("newPost.post")}</button></div>)
     }
   }
@@ -304,7 +304,7 @@ const SubmitButtonMultiple = (props: any) => {
     case true:
       return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
     case false:
-      return (<div><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => props.submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
+      return (<div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => props.submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
       // return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => {e.preventDefault();setIsConfirm(true)}} >{i18n.t("newPost.post")}</button></div>)
   }
 }
@@ -773,7 +773,7 @@ const VoteForm = (props: any) => {
 
   return (
     <div>
-      <form onKeyPress={e => {if(e.key === 'Enter'){e.preventDefault()}}}>
+      
         
         <span style={{display: 'none'}}>
         <label><input name="issendtargetgroup" type="checkbox" onChange={e => changeIsSendTargetGroup(e)} /><b>{i18n.t("newPost.groupPost")}</b></label>
@@ -834,8 +834,8 @@ const VoteForm = (props: any) => {
           {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea> */}
       </div>
 
-
-
+      {/* <form onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>*/}
+      <form>
         {voteFormRender()}
       </form>
     </div>

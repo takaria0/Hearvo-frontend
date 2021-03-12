@@ -60,7 +60,7 @@ const PostHeader = (props: any) => {
           </div>
           
               {/* {props.data.topics.length > 0 ? renderTopic(props.data): <div></div>} */}
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
+          <div className={styles.content} style={{ whiteSpace: 'pre-wrap', marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
           </div>
       )
       break;
@@ -79,7 +79,7 @@ const PostHeader = (props: any) => {
             <RenderTopic topics={props.data.topics} />
           </div>
             {/* {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>} */}
-          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(content)}</div>
+          <div className={styles.content} style={{ whiteSpace: 'pre-wrap', marginLeft: '10px' }}>{toHashTag(wrapContent(content))}</div>
           
         </div>
       )
@@ -189,8 +189,23 @@ const getEndTime = (datetime: string) => {
   }
 }
 
+const wrapContent = (content: string) => {
+  // if content contais 10 more lines, wrap it.
+  content = content.trim();
+  const numLines = content.split(/\r\n|\r|\n/).length;
+
+  let returnContent = "";
+  if (numLines > 10) {
+    returnContent = content.split(/\r\n|\r|\n/).slice(0, 10).join("\n") + "\n...";
+  } else {
+    returnContent = content;
+  }
+  return returnContent
+
+}
 
 const toHashTag = (content: string) => {
+  content = content.trim();
   const baseURL = window.location.origin;
   const splitedContent = content.replace(/　/g, " ").split(" ").map((str) => {
     if (str.startsWith("#")) {
@@ -368,7 +383,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
         const baseItem = (
         <div>
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
               <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
               {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}><CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
 
@@ -393,7 +408,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       // default feed
       default:
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
@@ -421,7 +436,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         }
 
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
@@ -439,7 +454,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         }
 
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
@@ -454,7 +469,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       case 3:
         if (currentFirstURL === 'posts') {
           return (
-            <li className={styles.li}>
+            <li className={styles.li} key={this.props.data.id}>
               <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
               <div className={styles.vote_section}>
                 <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
@@ -466,7 +481,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           )
         }
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end}　postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>

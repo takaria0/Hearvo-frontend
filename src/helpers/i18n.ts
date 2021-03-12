@@ -203,6 +203,7 @@ i18next
             cancel: 'キャンセル',
             compareDescription: '以下の選択肢から、比較したい結果を二つ選んでください。二つの結果の積み上げ棒グラフが作成されます。',
             commentButton: 'コメントする',
+            commentPlaceholder: 'あなたの意見は？',
             reply: '返信する',
             seeResult: '結果を見る',
             startContinuasVote: '連続投票を開始',
