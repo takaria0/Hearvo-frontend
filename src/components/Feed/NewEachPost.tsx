@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Dialog, Divider } from '@material-ui/core';
+import { Dialog,  DialogTitle, DialogContent, Divider, Menu, MenuItem, List, ListItem } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import axios from '../Api';
 import { Helmet } from "react-helmet";
 
@@ -17,6 +18,7 @@ import { MyResponsivePie } from '../../helpers/NivoPlots';
 import CompareResult from './CompareResult';
 import i18n from "../../helpers/i18n";
 import StarIcon from '@material-ui/icons/Star';
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import ShareIcon from '@material-ui/icons/Share';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import PollIcon from '@material-ui/icons/Poll';
@@ -32,6 +34,7 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from "react-share";
+import { render } from '@testing-library/react';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -60,7 +63,7 @@ const PostHeader = (props: any) => {
           </div>
           
               {/* {props.data.topics.length > 0 ? renderTopic(props.data): <div></div>} */}
-              <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
+          <div className={styles.content} style={{ whiteSpace: 'pre-wrap', marginLeft: '10px' }}>{toHashTag(props.data.content)}</div>
           </div>
       )
       break;
@@ -79,7 +82,7 @@ const PostHeader = (props: any) => {
             <RenderTopic topics={props.data.topics} />
           </div>
             {/* {props.data.topics.length > 0 ? renderTopic(props.data) : <div></div>} */}
-          <div className={styles.content} style={{ marginLeft: '10px' }}>{toHashTag(content)}</div>
+          <div className={styles.content} style={{ whiteSpace: 'pre-wrap', marginLeft: '10px' }}>{toHashTag(wrapContent(content))}</div>
           
         </div>
       )
@@ -88,6 +91,50 @@ const PostHeader = (props: any) => {
 }
 
 const PostFooter = (props: any) => {
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openDialog, setopenDialog] = useState(false);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setopenDialog(false);
+  };
+
+  const handleOpenReportList = () => {
+    setAnchorEl(null);
+    setopenDialog(true);
+  }
+
+  const handleSubmit = (e: any, value: number) => {
+    e.preventDefault();
+
+    const jwt = getJwt();
+    const postData = {
+      post_id: props.data.id,
+      reasons: [
+        {
+          reason: value,
+          reason_detail: null,
+        }
+      ]
+    };
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY }
+    };
+
+    axios.post("/reports", postData, config)
+    .then(res => {
+      handleClose();
+    })
+    .catch(err => {
+      handleClose();
+    })
+  }
+
   return (
     <div>
       <div>
@@ -113,7 +160,38 @@ const PostFooter = (props: any) => {
           {/* <ShareIcon style={{ fontSize: 20 }} /> */}
         </span >
         <span>
+      <div>
+        <button onClick={handleClick} style={{border: "none", backgroundColor: 'white'}}>
           <MoreHorizIcon style={{ fontSize: 20 }}/>
+        </button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleOpenReportList}><ReportProblemIcon/>&nbsp;{i18n.t("eachPost.report")}</MenuItem>
+          </Menu>
+          <Dialog open={openDialog} onClose={handleClose}>
+            <DialogTitle>{i18n.t("eachPost.reportAnIssue")}</DialogTitle>
+            <DialogContent style={{fontSize: 20}}>{i18n.t("eachPost.tellUsDetail")}</DialogContent>
+              <List>
+                <ListItem button onClick={e => handleSubmit(e, 0)}>
+                  {i18n.t("eachPost.notInterested")}
+                </ListItem>
+                <ListItem button onClick={e => handleSubmit(e, 1)}>
+                  {i18n.t("eachPost.suspiciousOrSpam")}
+                </ListItem>
+                <ListItem button onClick={e => handleSubmit(e, 2)}>
+                  {i18n.t("eachPost.abusiveOrHarmful")}
+                </ListItem>
+                <ListItem button onClick={e => handleSubmit(e, 3)}>
+                  {i18n.t("eachPost.selfharmOrSuicide")}
+                </ListItem>
+              </List>
+            </Dialog>
+      </div>
         </span >
       </div>
     </div>
@@ -189,8 +267,23 @@ const getEndTime = (datetime: string) => {
   }
 }
 
+const wrapContent = (content: string) => {
+  // if content contais 10 more lines, wrap it.
+  content = content.trim();
+  const numLines = content.split(/\r\n|\r|\n/).length;
+
+  let returnContent = "";
+  if (numLines > 10) {
+    returnContent = content.split(/\r\n|\r|\n/).slice(0, 10).join("\n") + "\n...";
+  } else {
+    returnContent = content;
+  }
+  return returnContent
+
+}
 
 const toHashTag = (content: string) => {
+  content = content.trim();
   const baseURL = window.location.origin;
   const splitedContent = content.replace(/　/g, " ").split(" ").map((str) => {
     if (str.startsWith("#")) {
@@ -368,7 +461,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
         const baseItem = (
         <div>
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
               <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
               {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}><CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
 
@@ -393,7 +486,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       // default feed
       default:
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
@@ -421,7 +514,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         }
 
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
@@ -439,7 +532,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         }
 
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
@@ -454,7 +547,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       case 3:
         if (currentFirstURL === 'posts') {
           return (
-            <li className={styles.li}>
+            <li className={styles.li} key={this.props.data.id}>
               <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
               <div className={styles.vote_section}>
                 <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
@@ -466,7 +559,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
           )
         }
         return (
-          <li className={styles.li}>
+          <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
               <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end}　postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>

@@ -125,7 +125,8 @@ i18next
             searchResult: 'の検索結果',
             noContent: '該当なし',
             followMore: 'トピックをたくさんフォローしよう！',
-            more: 'さらに見る'
+            more: 'さらに見る',
+            required: '* 必須',
           },
           newPost: {
             post: '投稿',
@@ -203,10 +204,18 @@ i18next
             cancel: 'キャンセル',
             compareDescription: '以下の選択肢から、比較したい結果を二つ選んでください。二つの結果の積み上げ棒グラフが作成されます。',
             commentButton: 'コメントする',
+            commentPlaceholder: 'あなたの意見は？',
             reply: '返信する',
             seeResult: '結果を見る',
             startContinuasVote: '連続投票を開始',
             selectAllCandidate: '全ての候補に投票して下さい',
+            report: '報告する',
+            reportAnIssue: '問題を報告する',
+            tellUsDetail: 'この投稿について、問題の詳細をお知らせください。',
+            notInterested: '内容に興味がない',
+            suspiciousOrSpam: '不審な内容またはスパムである',
+            abusiveOrHarmful: '不適切または攻撃的な内容を含んでいる',
+            selfharmOrSuicide: '自傷行為や自殺の意思をほのめかしている',
           },
           settings: {
             settings: '設定',
@@ -358,6 +367,7 @@ i18next
             noContent: 'No content',
             more: 'More',
             followMore: 'Follow more topics!',
+            required: 'required *'
           },
           newPost: {
             post: 'Post',

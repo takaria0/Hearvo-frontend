@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Button, Dialog } from '@material-ui/core';
 import { useHistory } from "react-router";
 import axios from '../Api';
@@ -24,6 +24,7 @@ import i18n from "../../helpers/i18n";
 import AttributePlotPie from './AttributePlotPie';
 import AttributePlotBar from './AttributePlotBar';
 import { Mixpanel } from '../../helpers/mixpanel';
+import CountryContext from '../../helpers/context';
 
 const moment = require('moment-timezone');
 moment.tz.setDefault('Etc/UTC');
@@ -42,6 +43,7 @@ const EachMultipleVote = (props: any) => {
   const [voteResult, setVoteResult] = useState<any>([]);
   const [dataIdx, setDataIdx] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const context = useContext(CountryContext);
 
   useEffect(()=> {
     
@@ -64,6 +66,11 @@ const EachMultipleVote = (props: any) => {
       return
     }
 
+    // if a user accesed from different countries, stop voting.
+    if (context.country !== process.env.REACT_APP_COUNTRY) {
+      return;
+    }
+
     setDoesVoteStart(true);
   }
 
@@ -71,6 +78,7 @@ const EachMultipleVote = (props: any) => {
     // e.preventDefault();
     if (data.length - 1 === dataIdx) {
       const voteObj = { parent_id: props.postId, result: [...voteResult, { vote_select_id, post_id }] }
+
       axios.post("/multiple_vote_users", voteObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
       .then(res => {
         Mixpanel.track('Successful Multiple Vote', { ...voteObj });
@@ -82,6 +90,7 @@ const EachMultipleVote = (props: any) => {
         setDoesVoteEnd(true);
         history.push(`/posts/${props.postId}`);
       });
+
       return
     }
     setVoteResult([...voteResult, { vote_select_id, post_id }]);

@@ -7,6 +7,7 @@ import * as styles from '../css/Comment.module.css';
 import ReplyComment from './ReplyComment';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import i18n from "../helpers/i18n";
 
 const moment = require('moment-timezone');
@@ -53,14 +54,14 @@ const CommentItem = (props: any) => {
     const good_or_bad = value;
     const jwt = getJwt();
     axios.post("/comments/fav", { comment_id, good_or_bad }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
-      .then(res => { }).catch(err => { })
+    .then(res => { }).catch(err => { })
   };
 
   const likeDelete = (data: any) => {
     const comment_id = data.id;
     const jwt = getJwt();
     axios.delete("/comments/fav", { data: { comment_id }, headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
-      .then(res => { }).catch(err => { })
+    .then(res => { }).catch(err => { })
   }
 
   const onGoodClick = (e: any) => {
@@ -110,10 +111,14 @@ const CommentItem = (props: any) => {
   const goodStyle = isGoodClicked ? { margin: 0, padding: 0, fontSize: 12, color: "#004DBF" } : { margin: 0, padding: 0, fontSize: 12, color: "gray" };
   const badStyle = isBadClicked ? { margin: 0, padding: 0, fontSize: 12, color: "#004DBF" } : { margin: 0, padding: 0, fontSize: 12, color: "gray" };
 
+  const deleteLastNewline = (x: string) => {
+    return x.trim();
+  }
+
 
   return (
-    <span style={{ wordWrap: "break-word" }}>
-      <div>&nbsp;{props.data.content}</div>
+    <span style={{ wordWrap: "break-word", whiteSpace: 'pre-wrap' }}>
+      <div>&nbsp;{deleteLastNewline(props.data.content)}</div>
       <span>
         <span>&nbsp;&nbsp;
             <ThumbUpIcon onClick={e => onGoodClick(e)} style={goodStyle}></ThumbUpIcon>
@@ -328,7 +333,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
     const CommentView = (props: any) => {
       if (this.state.commentId === props.id) {
         return (
-          <li className={styles.com_li}>
+          <li className={styles.com_li} key={props.id}>
             <div className={styles.body}>
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
@@ -343,7 +348,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         )
       } else {
         return (
-          <li className={styles.com_li}>
+          <li className={styles.com_li} key={props.id}>
             <div className={styles.body}>
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
@@ -367,14 +372,17 @@ class Comment extends React.Component<CommentProps, CommentState> {
     );
 
 
+
       if(this.state.isLoaded) {
         return (
-          <div>
+          <div className={styles.comment_body}>
             <div>
               <form onSubmit={e => this.baseSubmit(e)}>
-                <div><textarea maxLength={1000} rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
-                <div>
-                  <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.commentButton")}</Button>
+                <div style={{ textAlign: 'center' }}>
+                  <TextareaAutosize maxLength={1000} placeholder={i18n.t("eachPost.commentPlaceholder")} rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></TextareaAutosize> 
+                  <div className={styles.submit}>
+                    <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.commentButton")}</Button>
+                  </div>
                 </div>
               </form>
             </div>
@@ -384,13 +392,16 @@ class Comment extends React.Component<CommentProps, CommentState> {
       }
 
       return (
-        <div>
+        <div className={styles.comment_body}>
           <div>
             <form onSubmit={e => this.baseSubmit(e)}>
-            <div><textarea maxLength={1000} rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></textarea> </div>
-            <div>
-              <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.commentButton")}</Button>
-            </div>
+              <div style={{ textAlign: 'center' }}>
+                <TextareaAutosize maxLength={1000} rows={5} placeholder={i18n.t("eachPost.commentPlaceholder")} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></TextareaAutosize>
+                <div className={styles.submit}>
+                  <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.commentButton")}</Button>
+                </div>
+              </div>
+
             </form>
           </div>
           <div>
