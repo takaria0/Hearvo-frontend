@@ -22,4 +22,4 @@ export const label: string;
 export const vote_button: string;
 export const topic_link: string;
 export const topic_list: string;
-
+export const initial_topic: string;
