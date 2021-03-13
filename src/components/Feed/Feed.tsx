@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef, useMemo, } from 'react';
-import { Button, Dialog, Checkbox, MenuItem, FormControl, Select, InputLabel, makeStyles, Theme, createStyles, TextField, FormHelperText, } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
+import { Button, Dialog, Checkbox, MenuItem, FormControl, Select, InputLabel, makeStyles, Theme, createStyles, TextField, FormHelperText, List, ListItem, ListItemText, useMediaQuery} from '@material-ui/core';
 import axios from '../Api';
+
+import CommentIcon from '@material-ui/icons/Comment';
 
 // import { withRouter, RouteComponentProps } from 'react-router-dom'
 import * as styles from '../../css/Feed.module.css';
@@ -12,6 +15,7 @@ import TopicFollowButton from '../TopicFollowButton';
 import i18n from "../../helpers/i18n";
 import initialTopics from '../../helpers/initialTopics';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { BorderColor } from '@material-ui/icons';
 
 const INITIAL_TOPICS = initialTopics;
 
@@ -60,6 +64,8 @@ const InitialTopicForm = (props: any) => {
   const [saveTopicList, setSaveTopicList] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<any>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const jwt = getJwt();
   useEffect(() => {
@@ -112,9 +118,36 @@ const InitialTopicForm = (props: any) => {
 
   return (
     <div>
-      <Dialog open={true}>
-        <div style={{ paddingLeft: 20 }}>
-          <h2>{i18n.t("feed.chooseTopic")}</h2>
+      <Dialog open={true} fullScreen={fullScreen}>
+        <form className={styles.initial_topic} onSubmit={e => submit(e)}>
+          <List style={{ maxHeight: "75ch", overflow: "auto" }}>
+            <h2 style={{ textAlign: "center", padding: "2ch 3.2ch" }}>{i18n.t("feed.chooseTopic")}</h2>
+            {topicList.map((topic: any, idx: number) => {
+              return (
+                <div>
+                  <ListItem style={{ borderBottom: "solid", borderWidth: "1px", borderColor: "#9E9E9E", }}>
+                    <ListItemText primary={topic.topic} style={{ marginLeft: "2ch" }} />
+                    <Checkbox onChange={e => change(e, topic.id, topic.topic, idx)} name={topic.topic} value={topic.id} style={{ marginRight: "0.5ch" }} color="primary" />
+                  </ListItem>
+                </div>
+              )
+            })}
+          </List>
+          <div>
+            <div style={{ color: 'red', textAlign:"center", height:0, lineHeight:6,}}>{errorMessage ? errorMessage : ''}</div>
+            <div style={{ float: 'right', textAlign: 'right', marginRight: 20, marginBottom: 30, marginTop: 30 }}>
+              <Button type="submit" variant="contained" color="primary">
+                {i18n.t("feed.save")}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </Dialog>
+
+
+      {/* <Dialog open={true}>
+        <div>
+          <h2 style={{ textAlign: "center" }}>{i18n.t("feed.chooseTopic")}</h2>
           <form onSubmit={e => submit(e)} style={{ width: '50ch' }}>
             <ul style={{ columnCount: 3 }}>
               {topicList.map((topic: any, idx: number) => {
@@ -133,8 +166,7 @@ const InitialTopicForm = (props: any) => {
           </form>
           <div style={{ color: 'red' }}>{errorMessage ? errorMessage : ''}</div>
         </div>
-      </Dialog>
-
+      </Dialog> */}
     </div>
   )
 };
@@ -215,7 +247,7 @@ const InitialUserInfoForm = (props: any) => {
     const handleOpen = () => {
       setGenderOpen(true);
     };
-    
+
     return (
       <div>
         <FormControl className={classes.formControl}>
@@ -229,7 +261,6 @@ const InitialUserInfoForm = (props: any) => {
           // displayEmpty
           // className={classes.selectEmpty_gender}
           >
-
             <MenuItem value="">{i18n.t("feed.gender")}</MenuItem>
             <MenuItem value="1">{i18n.t("feed.female")}</MenuItem>
             <MenuItem value="0">{i18n.t("feed.male")}</MenuItem>
@@ -242,13 +273,12 @@ const InitialUserInfoForm = (props: any) => {
             <div>
               <form className={classes.root} noValidate autoComplete="off">
                 <FormHelperText>
-                <TextField onChange={e => setGenderDetail(e.target.value)} />
-                {i18n.t("feed.freeform")}
-              </FormHelperText></form>
+                  <TextField onChange={e => setGenderDetail(e.target.value)} />
+                  {i18n.t("feed.freeform")}
+                </FormHelperText></form>
             </div>
             : ''}
         </div>
-
       </div>
     )
   }
@@ -257,6 +287,19 @@ const InitialUserInfoForm = (props: any) => {
     const currentYear = new Date().getUTCFullYear();
     let yearOption = [];
     let monthOption = [];
+
+    for (let year = currentYear - 120; year < currentYear; year++) {
+      yearOption.push(
+        (<MenuItem value={year}>{year}</MenuItem>)
+      )
+    }
+    for (let month = 1; month <= 12; month++) {
+      monthOption.push(
+        (<MenuItem value={month}>{month}</MenuItem>)
+      )
+    }
+
+    yearOption = yearOption.reverse();
 
     const handleChange = (e: any) => {
       setYear(e.target.value)
@@ -269,19 +312,6 @@ const InitialUserInfoForm = (props: any) => {
     const handleOpen = () => {
       setYearOpen(true);
     };
-
-    for (let year = currentYear - 120; year < currentYear; year++) {
-      yearOption.push(
-        (<MenuItem value={year}>{year}</MenuItem>)
-      )
-    }
-    for (let month = 1; month <= 12; month++) {
-      monthOption.push(
-        (<MenuItem value={month}>{month}</MenuItem>)
-      )
-    }
-    
-    yearOption = yearOption.reverse();
 
     return (
       <FormControl className={classes.formControl}>
@@ -345,12 +375,12 @@ const InitialUserInfoForm = (props: any) => {
 
             <br></br>
             <br></br>
-            
-            <span style={{ float: 'right', textAlign: 'right',}}>
+
+            <span style={{ float: 'right', textAlign: 'right', }}>
               {/* <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }}>{i18n.t("feed.done")}</button> */}
-              <Button type="submit">{i18n.t("feed.done")}</Button>
+              <Button type="submit" variant="contained" color="primary">{i18n.t("feed.done")}</Button>
             </span>
-            
+
           </form>
           <div style={{ color: 'red', textAlign: 'center' }}>
             {initialSettingMessage ? initialSettingMessage : ''}

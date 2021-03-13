@@ -18,6 +18,9 @@
   -moz-columns: 2;
 }
 
+.initial_topic {
+
+}
 
 .title {
   font-size: 18px;
@@ -133,6 +136,10 @@
   -moz-columns: 2;
 }
 
+.initial_topic {
+  width: 60ch;
+}
+
 .title {
   font-size: 18px;
   font-weight: bold;
@@ -241,7 +248,9 @@
   -moz-columns: 2;
 }
 
-
+.initial_topic {
+  width: 60ch;
+}
 
 .title {
   font-size: 18px;
