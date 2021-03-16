@@ -42,7 +42,7 @@ export default function CustomizedSnackbars() {
         setOpen(false);
     };
 
-    if (judgeCountry.country === process.env.REACT_APP_COUNTRY) {
+    if (judgeCountry.country !== process.env.REACT_APP_COUNTRY) {
         return (
             <div className={classes.root}>
                 <Snackbar open={!isClosed} autoHideDuration={6000} onClose={handleClose}>
