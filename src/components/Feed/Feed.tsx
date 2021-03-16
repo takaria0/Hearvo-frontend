@@ -543,9 +543,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
   };
 
   getTimeQuery = (keyword: string, keywordArray: string[]) => {
-    let time = keyword === "popular" ? keywordArray.pop() : "today";
+    let time = keyword === "popular" ? keywordArray.pop() : "week";
     if (time === "popular") {
-      time = "today";
+      time = "week";
     }
     return time;
   };

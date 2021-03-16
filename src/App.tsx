@@ -56,7 +56,7 @@ function App() {
           <Route path="/intro" exact component={Intro} key="intro" />
           <Route path="/tos" exact component={TermsOfService} key="terms" />
           <Route path="/privacy" exact component={PrivacyPolicy} key="privacypolicy" />
-          <Route path="/help" exact component={Help} key="help" />
+          {/* <Route path="/help" exact component={Help} key="help" /> */}
           <Route path="/" exact component={Home} />
           <Route path="/latest" exact component={Home}  />
           <Route path="/topic" exact component={Home}  />

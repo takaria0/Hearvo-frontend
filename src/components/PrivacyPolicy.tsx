@@ -1,5 +1,6 @@
 import React from 'react';
 import * as styles from '../css/Home.module.css';
+import i18n from "../helpers/i18n";
 
 const PrivacyPolicy = (props: any) => {
   return (
@@ -7,6 +8,7 @@ const PrivacyPolicy = (props: any) => {
     <div className={styles.body}>
       <div>
       <div style={{ margin: 10 }}>
+      <span style={{ color:'red',fontWeight:'bold',fontSize:'15pt',paddingBottom:'1pt',borderBottom:'1.5pt solid ' }}>{i18n.t('privacy.sorry')}</span>
       <h1>プライバシーポリシー</h1>
 
 

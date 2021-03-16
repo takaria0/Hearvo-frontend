@@ -232,6 +232,12 @@ i18next
             yes: 'はい',
             no: 'いいえ',
           },
+          tos: {
+            sorry:'',
+          },
+          privacy:{
+            sorry:'',
+          },
         },
       },
 
@@ -461,6 +467,12 @@ i18next
             confirmMessage: 'Are you sure?',
             yes: 'Yes',
             no: 'No',
+          },
+          tos: {
+            sorry:'An English version of ToS and Privacy policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+          },
+          privacy:{
+            sorry:'An English version of ToS and Privacy policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
           },
         },
       },
