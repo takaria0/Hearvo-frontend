@@ -37,15 +37,12 @@ export default function CustomizedSnackbars() {
         setIsClosed(localStorage.getItem("isClosed"));
     })
 
-    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
+    const handleClose = () => {
         localStorage.setItem("isClosed", JSON.stringify(true));
         setOpen(false);
     };
 
-    if (judgeCountry.country !== process.env.REACT_APP_COUNTRY) {
+    if (judgeCountry.country === process.env.REACT_APP_COUNTRY) {
         return (
             <div className={classes.root}>
                 <Snackbar open={!isClosed} autoHideDuration={6000} onClose={handleClose}>
