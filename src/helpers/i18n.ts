@@ -232,6 +232,9 @@ i18next
             yes: 'はい',
             no: 'いいえ',
           },
+          alert: {
+            outside: 'You are accessing Hearvo from outside Japan. Some actions are limited. Learn more.',
+          },
         },
       },
 
@@ -461,6 +464,9 @@ i18next
             confirmMessage: 'Are you sure?',
             yes: 'Yes',
             no: 'No',
+          },
+          alert: {
+            outside: 'You are accessing Hearvo from outside the United States. Some actions are limited. Learn more.',
           },
         },
       },
