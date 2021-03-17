@@ -1,13 +1,17 @@
 import React from 'react';
 import * as styles from '../css/Header.module.css';
-import { Button, Menu, MenuItem } from '@material-ui/core';
+import { Button, Menu, MenuItem,Paper,Tab,Tabs } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import axios from './Api';
 import ListIcon from '@material-ui/icons/List';
 import i18n from "../helpers/i18n";
 
+import BaseHeader from '../components/Feed/BaseHeader';
+
 import SearchIcon from '@material-ui/icons/Search';
+import CreateIcon from '@material-ui/icons/Create';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -15,6 +19,8 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import HelpIcon from '@material-ui/icons/Help';
+
+
 
 type userObject = {
   id: string;
@@ -53,7 +59,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     }
     
   }
-  
+
 
   searchSubmit = (e: any) => {
     e.preventDefault();
@@ -216,11 +222,15 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
           <Link to="/" className={styles.hearvo}>
             <b style={{ fontSize: 20, marginLeft: 10 }}>{i18n.t("header.title")}</b>
           </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></span>
+          <Button　href="/">{i18n.t("feed.recommend")}</Button>
+          <Button　href="/popular">{i18n.t("feed.popular")}</Button>
+          <Button　href="/latest">{i18n.t("feed.latest")}</Button>
 
           {/* <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} > */}
           <span style={{ transform: 'translateY(5px)'}}>
             {this.searchBar()}
           </span>
+          
           <span style={{ transform: 'translateY(-3px)' }}>
             {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar()}
           </span>
