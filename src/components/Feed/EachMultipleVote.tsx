@@ -67,9 +67,10 @@ const EachMultipleVote = (props: any) => {
     }
 
     // if a user accesed from different countries, stop voting.
-    if (context.country !== process.env.REACT_APP_COUNTRY) {
-      return;
-    }
+    
+    // if (context.country !== process.env.REACT_APP_COUNTRY) {
+    //   return;
+    // }
 
     setDoesVoteStart(true);
   }

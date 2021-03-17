@@ -183,6 +183,13 @@ const VoteCandidateForm = (props: any) => {
 
   const voteStyle = { padding: '7px', marginBottom: '5px', width: '50ch' }
 
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+
+  const handleClick = (e: any) => {
+    setIsClicked(true);
+    submit(e)
+  }
+
   const submitButton = () => {
     const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData, props.matrixCandidateList);
 
@@ -190,7 +197,13 @@ const VoteCandidateForm = (props: any) => {
       case true:
         return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
       case false:
-        return (<div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
+        return (
+          <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
+            <br></br><br></br><br></br>
+            <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" } : { fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }}>
+              <b>{i18n.t("newPost.post")}</b>
+            </button>
+          </div>)
       // return (<div><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => { e.preventDefault();setIsConfirm(true)}}>{i18n.t("newPost.post")}</button></div>)
     }
   }
@@ -285,7 +298,8 @@ const MultipleVoteFormEach = (props: any) => {
 
 const SubmitButtonMultiple = (props: any) => {
   const [invalid, setInvalid] = useState(true);
-
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  
   useEffect(() => {
     if (
       props.title.length !== 0 &&
@@ -300,11 +314,22 @@ const SubmitButtonMultiple = (props: any) => {
 
   })
 
+  const handleClick = (e: any) => {
+    setIsClicked(true);
+    props.submit(e);
+  }
+
   switch (invalid) {
     case true:
       return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
     case false:
-      return (<div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}><br></br><br></br><br></br><button style={{ fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }} onClick={e => props.submit(e)}><b>{i18n.t("newPost.post")}</b></button></div>)
+      return (
+        <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
+          <br></br><br></br><br></br>
+          <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" } : { fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }}>
+            <b>{i18n.t("newPost.post")}</b>
+          </button>
+        </div>)
     // return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => {e.preventDefault();setIsConfirm(true)}} >{i18n.t("newPost.post")}</button></div>)
   }
 }
@@ -782,7 +807,7 @@ const VoteForm = (props: any) => {
         {isSendTargetGroup ?
           <span>
             &nbsp;&nbsp;<b>{i18n.t("newPost.targetPost")}</b>&nbsp;&nbsp;
-        <NativeSelect value={targetGroupId} onChange={e => setTargetGroupId(e.target.value)}>
+            <NativeSelect value={targetGroupId} onChange={e => setTargetGroupId(e.target.value)}>
               {groupList.map((elem: any) => {
                 return (
                   <Button value={elem.id}>{elem.title}</Button>
@@ -802,7 +827,7 @@ const VoteForm = (props: any) => {
           {i18n.t("newPost.normalVote")}
         </Button>
         <Button value={3} onClick={e => setVoteTypeId(3)}
-          style={voteTypeId === 3 ? { borderRadius: '100px',  backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
+          style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
           {i18n.t("newPost.continuasVote")}
         </Button>
 
