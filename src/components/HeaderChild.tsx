@@ -113,15 +113,39 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
       anchorEl: 0
     })
 
+
+    const url = window.location.pathname.split("/");
+    let params = window.location.search;
+
     if(val === "/login") {
       if (typeof window !== 'undefined') {localStorage.removeItem("jwt")};
       if (typeof window !== 'undefined') {localStorage.removeItem("user")};
-      this.props.history.push(`${val}`);
+
+      if (url[1]===""){
+        this.props.history.push(`${val}`);
+      }else if(params!==""){
+        params = params.replace('?','&');
+        this.props.history.push(`${val}`+"?destination="+url[1]+params);
+      }else if(url[2]==null){
+        this.props.history.push(`${val}`+"?destination="+url[1]);
+      }else{
+        this.props.history.push(`${val}`+"?destination="+url[1]+'&postId='+url[2]);
+      }
       return
     }
 
     if (val !== "none") {
-      this.props.history.push(`${val}`);
+      // this.props.history.push(`${val}`);
+      if (url[1]===""){
+        this.props.history.push(`${val}`);
+      }else if(params!==""){
+        params = params.replace('?','&');
+        this.props.history.push(`${val}`+"?destination="+url[1]+params);
+      }else if(url[2]==null){
+        this.props.history.push(`${val}`+"?destination="+url[1]);
+      }else{
+        this.props.history.push(`${val}`+"?destination="+url[1]+'&postId='+url[2]);
+      }
       return
     }
   };

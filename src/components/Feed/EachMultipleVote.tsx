@@ -60,9 +60,21 @@ const EachMultipleVote = (props: any) => {
 
   const startClick = (e: any) => {
     e.preventDefault();
+    const url = window.location.pathname.split("/");
+    let params = window.location.search;
 
     if (props.isLogin === false) {
-      history.push("/login");
+      // history.push("/login");
+      if (url[1]===""){
+        history.push("/login");
+      }else if(params!==""){
+        params=params.replace('?','&');
+        history.push("/login"+"?destination="+url[1]+params);
+      }else if(url[2]==null){
+        history.push("/login"+"?destination="+url[1]);
+      }else{
+        history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
+      }
       return
     }
 

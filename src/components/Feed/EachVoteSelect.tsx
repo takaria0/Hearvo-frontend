@@ -13,7 +13,7 @@ import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-do
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
-import i18n from "../../helpers/i18n";
+import i18n from '../../helpers/i18n';
 import { Mixpanel } from '../../helpers/mixpanel';
 import CountryContext from '../../helpers/context';
 
@@ -53,9 +53,20 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
 
   change(e: any, id: number, context: any) {
     e.preventDefault();
-    
+    const url = window.location.pathname.split("/");
+    let params = window.location.search;
+
     if (this.props.isLogin === false) {
-      this.props.history.push("/login");
+      if (url[1]===""){
+        this.props.history.push("/login");
+      }else if(params!==""){
+        params=params.replace('?','&');
+        this.props.history.push("/login"+"?destination="+url[1]+params);
+      }else if(url[2]==null){
+        this.props.history.push("/login"+"?destination="+url[1]);
+      }else{
+        this.props.history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
+      }
       return
     }
 

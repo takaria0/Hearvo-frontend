@@ -18,7 +18,7 @@ export interface SignupState {
 }
 
 class Signup extends React.Component<SignupProps, SignupState> {
-
+  
   constructor(props: any) {
     super(props);
 
@@ -33,7 +33,9 @@ class Signup extends React.Component<SignupProps, SignupState> {
     this.change = this.change.bind(this);
     this.submit = this.submit.bind(this);
     document.title = "Signup";
+    const params = window.location.search;
   }
+
 
   change(e: any, field: string) {
 
@@ -45,7 +47,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   submit(e: any) {
     e.preventDefault();
-
+    const params = window.location.search;
     // need more elavorate password verification this.state.password === this.state.passwordVerify
     if(this.state.password.length < 8) {
       this.setState({
@@ -99,7 +101,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
       function timeout(delay: number) {
         return new Promise(res => setTimeout(res, delay));
       }
-      timeout(1000).then(() => { this.props.history.push("/login");})
+      timeout(1000).then(() => { this.props.history.push("/login"+params);})
     }).catch((err: any) => {
       Mixpanel.track('Unsuccessful Signup', {});
       const resMessage = err.response.data.message;
@@ -149,7 +151,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
           {this.state.signupSuccessMessage}
         </div>
           <div className={styles.footer}>
-          <Link to="/login">{i18n.t("signup.login")}</Link>
+          <Link to={"/login"+window.location.search}>{i18n.t("signup.login")}</Link>
       </div>
         </div>
       </div>

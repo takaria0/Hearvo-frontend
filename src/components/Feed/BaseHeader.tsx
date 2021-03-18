@@ -9,7 +9,7 @@ import * as styles from '../../css/Feed/PostContent.module.css';
 import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';
-import i18n from "../../helpers/i18n";
+import i18n from '../../helpers/i18n';
 
 export interface BaseHeaderProps extends RouteComponentProps<{}> {
   // keyword: string;

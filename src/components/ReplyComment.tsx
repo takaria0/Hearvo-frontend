@@ -4,7 +4,7 @@ import axios from './Api';
 import { Button } from '@material-ui/core';
 import {  withRouter, RouteComponentProps } from 'react-router';
 import * as styles from '../css/Comment.module.css';
-import i18n from "../helpers/i18n";
+import i18n from '../helpers/i18n';
 
 
 interface ReplyCommentProps extends RouteComponentProps<{}> {
@@ -37,8 +37,10 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
 
 
   submit(e: any) {
+    const url = window.location.pathname.split("/");
     if (this.props.isLogin === false) {
-      this.props.history.push("/login");
+      // this.props.history.push("/login");
+      this.props.history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
       return
     }
 

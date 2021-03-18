@@ -3,7 +3,7 @@ import axios from './Api';
 import { RouteComponentProps, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
 import * as styles from '../css/Login.module.css';
-import i18n from "../helpers/i18n";
+import i18n from '../helpers/i18n';
 import { GoogleLogin } from 'react-google-login';
 import { Mixpanel } from '../helpers/mixpanel';
 export interface LoginProps extends RouteComponentProps<{}>{
@@ -42,7 +42,14 @@ class Login extends React.Component<LoginProps, LoginState> {
 
   submit(e: any) {
     e.preventDefault();
-
+    const params = new URLSearchParams(window.location.search);
+    const previousUrl = {
+      destination: params.get("destination"),
+      postId: params.get("postId"),
+      topic: params.get("tp"),
+      search:params.get("q"),
+    }
+      
     axios.post("/login", { email: this.state.email, password: this.state.password }, { headers: { Country: process.env.REACT_APP_COUNTRY } })
     .then((res: any) => {
       const resMessage = res.data.message;
@@ -60,8 +67,19 @@ class Login extends React.Component<LoginProps, LoginState> {
         Mixpanel.people.set({
           name: res.data.name,
         });
-
-        this.props.history.push("/");
+        
+        if (previousUrl.destination === null){
+          this.props.history.push("/");
+        }else if(previousUrl.destination !== null && previousUrl.postId !==null){
+          this.props.history.push("/"+`${previousUrl.destination}`+"/"+`${previousUrl.postId}`);
+        }else if(previousUrl.topic !== null){
+          this.props.history.push("/topic?tp="+`${previousUrl.topic}`);
+        }else if(previousUrl.search !== null){
+          this.props.history.push("/search?q="+`${previousUrl.search}`);
+        }else{
+          this.props.history.push("/"+`${previousUrl.destination}`);
+        }
+        // this.props.history.push("/");
 
 
       }).catch((err: any) => {
@@ -82,6 +100,12 @@ class Login extends React.Component<LoginProps, LoginState> {
     // send tokenId to backend and get response (get jwt) and save it to localStorage
     // then history.push("/")
 
+    const params = new URLSearchParams(window.location.search);
+    const previousUrl = {
+      destination: params.get("destination"),
+      postId: params.get("postId")
+    }
+
     axios.post("/login?google_login=true", { }, { headers: { googleTokenId: res.tokenId, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
         if (typeof window !== 'undefined') { localStorage.setItem("jwt", res.data.token) };
@@ -97,7 +121,14 @@ class Login extends React.Component<LoginProps, LoginState> {
           Mixpanel.people.set({
             name: res.data.name,
           });
-          this.props.history.push("/");
+          // this.props.history.push("/");
+          if (previousUrl.destination === null && previousUrl.postId === null){
+            this.props.history.push("/");
+          }else if(previousUrl.destination !== null && previousUrl.postId ===null){
+            this.props.history.push("/"+`${previousUrl.destination}`);
+          }else{
+            this.props.history.push("/"+`${previousUrl.destination}`+"/"+`${previousUrl.postId}`);
+          }
 
         }).catch((err: any) => {
           Mixpanel.track('Unsuccessful Google login', {});
@@ -150,7 +181,7 @@ class Login extends React.Component<LoginProps, LoginState> {
           </div>
         </form>
         <div className={styles.footer}>
-            <Link to="/signup">{i18n.t("login.createAccount")}</Link>
+            <Link to={"/signup"+window.location.search}>{i18n.t("login.createAccount")}</Link>
         </div>
         <div style={{ color: 'red', textAlign: 'center', margin: '5px' }}>
             {this.state.errorMessage ? this.state.errorMessage : ''}
