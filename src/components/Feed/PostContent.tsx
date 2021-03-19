@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import * as styles from '../../css/Feed/PostContent.module.css';
 import Feed from './Feed';
-import { Dialog, DialogContent, DialogTitle, NativeSelect, Button } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, NativeSelect, Button,} from '@material-ui/core';
 import i18n from "../../helpers/i18n";
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { stringify } from 'querystring';
@@ -15,6 +15,10 @@ import { Mixpanel } from '../../helpers/mixpanel';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import CloseIcon from '@material-ui/icons/Close';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { FileCopy } from '@material-ui/icons';
 
 /*
 If the values are incorrect,
@@ -230,7 +234,7 @@ const VoteCandidateForm = (props: any) => {
     <div >
       <div style={{ textAlign: 'left', paddingLeft: 5, marginTop: 10 }}>
         {isConfirm ? confirmDialogBase() : ""}
-        <b>{i18n.t("newPost.voteCandidate")}</b>
+        {/* <b>{i18n.t("newPost.voteCandidate")}</b> */}
         <div style={{ marginTop: 10 }}>
           {voteData.map((val: any, idx: number) => {
             return (
@@ -601,7 +605,7 @@ const VoteForm = (props: any) => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [textLength, setTextLength] = useState(0);
+  const [contentTextLength, setContentTextLength] = useState(0);
   const [voteTypeId, setVoteTypeId] = useState(1);
   const [endAt, setEndAt] = useState(24);
   const [endAtDate, setEndAtDate] = useState(defaultEndAt);
@@ -799,11 +803,6 @@ const VoteForm = (props: any) => {
     }
   }
 
-  const textChange = (e: any) => {
-    setContent(e.target.value);
-    setTextLength(e.target.value.length);
-  }
-
   return (
     <div>
 
@@ -824,18 +823,21 @@ const VoteForm = (props: any) => {
           : ''}
       </span>
 
+      <div>
+        {/* <b>{i18n.t("newPost.voteType")}</b>&nbsp;&nbsp; */}
 
-      <hr></hr>
-      <div><b>{i18n.t("newPost.voteType")}</b>&nbsp;&nbsp;
+          <Button value={1} onClick={e => setVoteTypeId(1)}
+            style={voteTypeId === 1 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
+            <InsertDriveFileIcon />
+            {i18n.t("newPost.normalVote")}
+            <ExpandMoreIcon />
+          </Button>
 
-        <Button value={1} onClick={e => setVoteTypeId(1)}
-          style={voteTypeId === 1 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
-          {i18n.t("newPost.normalVote")}
-        </Button>
-        <Button value={3} onClick={e => setVoteTypeId(3)}
-          style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
-          {i18n.t("newPost.continuasVote")}
-        </Button>
+          <Button value={3} onClick={e => setVoteTypeId(3)}
+            style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
+            <FileCopyIcon />
+            {i18n.t("newPost.continuasVote")}
+          </Button>
 
         {/* <select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
         <option value={1}>{i18n.t("newPost.normalVote")}</option>
@@ -866,17 +868,16 @@ const VoteForm = (props: any) => {
         <TopicCandidates ref={inputRef} topic={currentTopic} currentTopicIdx={currentTopicIdx} topicList={topicList} setTopicList={setTopicList} setTopicString={setTopicString}></TopicCandidates>
       </div>
 
-      <hr></hr><br></br>
       {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : <h2>{i18n.t("newPost.vote")}</h2>}
 
       <div>
-        <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} style={{ padding: 7 }} minLength={1} maxLength={150} type="text" onChange={(e) => textChange(e)}></input><br></br>
+        <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} style={{ padding: 7 }} minLength={1} maxLength={150} type="text" onChange={(e) => setTitle(e.target.value)}></input><br></br>
         <div>
-          {textLength}/150
+          {/* {title.length}/150 */}
         </div>
       </div>
       <div>
-        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={(e) => textChange(e)}></TextareaAutosize>
+        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={(e) => setContent(e.target.value)}></TextareaAutosize>
         {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea> */}
       </div>
 
