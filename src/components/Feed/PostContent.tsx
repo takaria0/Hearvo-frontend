@@ -195,12 +195,12 @@ const VoteCandidateForm = (props: any) => {
 
     switch (invalid) {
       case true:
-        return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
+        return (<div><br></br><br></br><br></br><span style={{fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
       case false:
         return (
           <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
             <br></br><br></br><br></br>
-            <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" } : { fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }}>
+            <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" } : { outline: "none",fontSize: 16, border: 'none', color: 'white', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#01B1F8" }}>
               <b>{i18n.t("newPost.post")}</b>
             </button>
           </div>)
@@ -321,12 +321,12 @@ const SubmitButtonMultiple = (props: any) => {
 
   switch (invalid) {
     case true:
-      return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
+      return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
     case false:
       return (
         <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
           <br></br><br></br><br></br>
-          <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { border: 'none', color: 'gray', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#D7DCDE" } : { fontSize: 16, border: 'none', color: 'white', borderRadius: 5, padding: 10, paddingLeft: 20, paddingRight: 20, backgroundColor: "#01B1F8" }}>
+          <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" } : { fontSize: 16, border: 'none', color: 'white', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#01B1F8" }}>
             <b>{i18n.t("newPost.post")}</b>
           </button>
         </div>)
@@ -601,6 +601,7 @@ const VoteForm = (props: any) => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [textLength, setTextLength] = useState(0);
   const [voteTypeId, setVoteTypeId] = useState(1);
   const [endAt, setEndAt] = useState(24);
   const [endAtDate, setEndAtDate] = useState(defaultEndAt);
@@ -798,6 +799,11 @@ const VoteForm = (props: any) => {
     }
   }
 
+  const textChange = (e: any) => {
+    setContent(e.target.value);
+    setTextLength(e.target.value.length);
+  }
+
   return (
     <div>
 
@@ -864,10 +870,13 @@ const VoteForm = (props: any) => {
       {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : <h2>{i18n.t("newPost.vote")}</h2>}
 
       <div>
-        <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} style={{ padding: 7 }} minLength={1} maxLength={150} type="text" onChange={e => setTitle(e.target.value)}></input><br></br>
+        <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} style={{ padding: 7 }} minLength={1} maxLength={150} type="text" onChange={(e) => textChange(e)}></input><br></br>
+        <div>
+          {textLength}/150
+        </div>
       </div>
       <div>
-        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={e => setContent(e.target.value)}></TextareaAutosize>
+        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={(e) => textChange(e)}></TextareaAutosize>
         {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea> */}
       </div>
 
@@ -974,7 +983,7 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
           <DialogContent>
             <div>
               <div style={{ textAlign: 'right' }}>
-                <button style={{ backgroundColor: 'white', border: 'none', }} onClick={e => this.props.editParentHandle(e, false)}><CloseIcon /></button>
+                <button style={{ backgroundColor: 'white', border: 'none', outline: 'none' }} onClick={e => this.props.editParentHandle(e, false)}><CloseIcon /></button>
               </div>
               <br></br>
 
