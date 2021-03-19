@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import * as styles from '../../css/Feed/PostContent.module.css';
 import Feed from './Feed';
-import { Dialog, DialogContent, DialogTitle, NativeSelect, Button,} from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, NativeSelect, Button, Menu, MenuItem } from '@material-ui/core';
 import i18n from "../../helpers/i18n";
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { stringify } from 'querystring';
@@ -199,12 +199,12 @@ const VoteCandidateForm = (props: any) => {
 
     switch (invalid) {
       case true:
-        return (<div><br></br><br></br><br></br><span style={{fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
+        return (<div><br></br><br></br><br></br><span style={{ fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
       case false:
         return (
           <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
             <br></br><br></br><br></br>
-            <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" } : { outline: "none",fontSize: 16, border: 'none', color: 'white', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#01B1F8" }}>
+            <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" } : { outline: "none", fontSize: 16, border: 'none', color: 'white', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#01B1F8" }}>
               <b>{i18n.t("newPost.post")}</b>
             </button>
           </div>)
@@ -303,7 +303,7 @@ const MultipleVoteFormEach = (props: any) => {
 const SubmitButtonMultiple = (props: any) => {
   const [invalid, setInvalid] = useState(true);
   const [isClicked, setIsClicked] = useState<boolean>(false);
-  
+
   useEffect(() => {
     if (
       props.title.length !== 0 &&
@@ -618,6 +618,7 @@ const VoteForm = (props: any) => {
   const [targetGroupId, setTargetGroupId] = useState("");
   const [multipleVoteNum, setMultipleVoteNum] = useState(2);
   const [isSendTargetGroup, setIsSendTargetGroup] = useState(false);
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -803,6 +804,10 @@ const VoteForm = (props: any) => {
     }
   }
 
+  const handleClickMenu = () => {
+    setOpenMenu(true)
+  }
+
   return (
     <div>
 
@@ -826,18 +831,22 @@ const VoteForm = (props: any) => {
       <div>
         {/* <b>{i18n.t("newPost.voteType")}</b>&nbsp;&nbsp; */}
 
-          <Button value={1} onClick={e => setVoteTypeId(1)}
+
+        <Button style={{ borderRadius: '100px', backgroundColor: '#ccc' }} onClick={handleClickMenu}>
+        <InsertDriveFileIcon />{i18n.t("newPost.normalVote")}<ExpandMoreIcon />
+        </Button>
+        <Menu open={openMenu}>
+          <MenuItem value={1} onClick={e => setVoteTypeId(1)}
             style={voteTypeId === 1 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
             <InsertDriveFileIcon />
             {i18n.t("newPost.normalVote")}
-            <ExpandMoreIcon />
-          </Button>
-
-          <Button value={3} onClick={e => setVoteTypeId(3)}
+          </MenuItem>
+          <MenuItem value={3} onClick={e => setVoteTypeId(3)}
             style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
             <FileCopyIcon />
             {i18n.t("newPost.continuasVote")}
-          </Button>
+          </MenuItem>
+        </Menu>
 
         {/* <select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
         <option value={1}>{i18n.t("newPost.normalVote")}</option>
