@@ -6,7 +6,8 @@ import { useHistory } from "react-router";
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import * as styles from '../../css/Feed/PostContent.module.css';
 import Feed from './Feed';
-import { Dialog, DialogContent, DialogTitle, NativeSelect, Button, Menu, MenuItem } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, NativeSelect, Button, Menu, MenuItem, Grid } from '@material-ui/core';
+import { shadows } from '@material-ui/system';
 import i18n from "../../helpers/i18n";
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { stringify } from 'querystring';
@@ -618,7 +619,7 @@ const VoteForm = (props: any) => {
   const [targetGroupId, setTargetGroupId] = useState("");
   const [multipleVoteNum, setMultipleVoteNum] = useState(2);
   const [isSendTargetGroup, setIsSendTargetGroup] = useState(false);
-  const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const [openMenu, setOpenMenu] = useState<any>(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -804,9 +805,18 @@ const VoteForm = (props: any) => {
     }
   }
 
-  const handleClickMenu = () => {
-    setOpenMenu(true)
-  }
+  const handleClickMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setOpenMenu(e.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpenMenu(null);
+  };
+
+  const handleChooseMenu = (e: any) => {
+    setOpenMenu(null);
+    setVoteTypeId(e.target.value)
+  };
 
   return (
     <div>
@@ -830,23 +840,37 @@ const VoteForm = (props: any) => {
 
       <div>
         {/* <b>{i18n.t("newPost.voteType")}</b>&nbsp;&nbsp; */}
-
-
-        <Button style={{ borderRadius: '100px', backgroundColor: '#ccc' }} onClick={handleClickMenu}>
-        <InsertDriveFileIcon />{i18n.t("newPost.normalVote")}<ExpandMoreIcon />
-        </Button>
-        <Menu open={openMenu}>
-          <MenuItem value={1} onClick={e => setVoteTypeId(1)}
-            style={voteTypeId === 1 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
-            <InsertDriveFileIcon />
-            {i18n.t("newPost.normalVote")}
-          </MenuItem>
-          <MenuItem value={3} onClick={e => setVoteTypeId(3)}
-            style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#ccc' } : { borderRadius: '100px' }}>
-            <FileCopyIcon />
-            {i18n.t("newPost.continuasVote")}
-          </MenuItem>
-        </Menu>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div style={{ position: 'absolute', left: '0', borderRadius: '100px' }}>
+            <button style={{ backgroundColor: 'white', border: 'none', outline: 'none' }} onClick={e => props.editParentHandle(e, false)}><CloseIcon /></button>
+          </div>
+          <div style={{ margin: '0' }}>
+            <Button style={{ borderRadius: '100px', backgroundColor: '#ccc' }} onClick={handleClickMenu}>
+              {voteTypeId === 1 ? <div style={{ display: 'flex', alignItems: 'center' }}>
+                <InsertDriveFileIcon />{i18n.t("newPost.normalVote")}<ExpandMoreIcon />
+              </div> : <div style={{ display: 'flex', alignItems: 'center' }}>
+                <FileCopyIcon />{i18n.t("newPost.continuasVote")}<ExpandMoreIcon />
+              </div>}
+            </Button>
+              <Menu
+                anchorEl={openMenu}
+                keepMounted
+                open={Boolean(openMenu)}
+                onClose={handleCloseMenu}
+                getContentAnchorEl={null}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <MenuItem value={1} onClick={e => handleChooseMenu(e)}>
+                  <InsertDriveFileIcon />
+                  {i18n.t("newPost.normalVote")}
+                </MenuItem>
+                <MenuItem value={3} onClick={e => handleChooseMenu(e)}>
+                  <FileCopyIcon />
+                  {i18n.t("newPost.continuasVote")}
+                </MenuItem>
+              </Menu>
+          </div>
+        </div>
 
         {/* <select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
         <option value={1}>{i18n.t("newPost.normalVote")}</option>
@@ -992,10 +1016,10 @@ class PostContent extends React.Component<NewPostContentProps, NewPostContentSta
           {/* <DialogTitle id="form-dialog-title">{i18n.t("newPost.post")}</DialogTitle> */}
           <DialogContent>
             <div>
-              <div style={{ textAlign: 'right' }}>
+              {/* <div style={{ textAlign: 'left' }}>
                 <button style={{ backgroundColor: 'white', border: 'none', outline: 'none' }} onClick={e => this.props.editParentHandle(e, false)}><CloseIcon /></button>
               </div>
-              <br></br>
+              <br></br> */}
 
               <VoteForm editParentHandle={this.props.editParentHandle}></VoteForm>
             </div>
