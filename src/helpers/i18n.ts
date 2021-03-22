@@ -153,6 +153,7 @@ i18next
             parentTitle: '表題',
             MatrixNum: '回答の種類',
             MatrixAnswer: '回答',
+            AddOprions: '選択肢を追加'
           },
           group: {
             groupCreateTitle1: '新たなグループ、「',

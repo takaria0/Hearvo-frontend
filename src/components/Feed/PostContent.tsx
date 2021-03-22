@@ -6,8 +6,7 @@ import { useHistory } from "react-router";
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import * as styles from '../../css/Feed/PostContent.module.css';
 import Feed from './Feed';
-import { Dialog, DialogContent, DialogTitle, NativeSelect, Button, Menu, MenuItem, Grid } from '@material-ui/core';
-import { shadows } from '@material-ui/system';
+import { Dialog, DialogContent, DialogTitle, NativeSelect, Button, Menu, MenuItem, Grid, DialogActions } from '@material-ui/core';
 import i18n from "../../helpers/i18n";
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { stringify } from 'querystring';
@@ -19,7 +18,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import { FileCopy } from '@material-ui/icons';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 /*
 If the values are incorrect,
@@ -98,6 +97,8 @@ const VoteCandidateForm = (props: any) => {
   const [voteData, setVoteData] = useState<any>(['', '']);
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirm, setIsConfirm] = useState(false);
+  const [isVoteFormFocused, setIsVoteFormFocused] = useState(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const history = useHistory();
 
 
@@ -186,10 +187,6 @@ const VoteCandidateForm = (props: any) => {
     if (props.voteTypeId === 3) { props.setIsVoteDateListOk(false) };
   }
 
-  const voteStyle = { padding: '7px', marginBottom: '5px', width: '50ch' }
-
-  const [isClicked, setIsClicked] = useState<boolean>(false);
-
   const handleClick = (e: any) => {
     setIsClicked(true);
     submit(e)
@@ -200,14 +197,28 @@ const VoteCandidateForm = (props: any) => {
 
     switch (invalid) {
       case true:
-        return (<div><br></br><br></br><br></br><span style={{ fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
+        return (
+          <div>
+            <Button disabled={true} style={{
+              fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px",
+              // padding: 10, paddingLeft: 30, paddingRight: 30,
+              backgroundColor: "#D7DCDE"
+            }}>{i18n.t("newPost.post")}</Button>
+          </div>)
       case false:
         return (
           <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
-            <br></br><br></br><br></br>
-            <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" } : { outline: "none", fontSize: 16, border: 'none', color: 'white', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#01B1F8" }}>
-              <b>{i18n.t("newPost.post")}</b>
-            </button>
+            <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
+              fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px",
+              // padding: 10, paddingLeft: 30, paddingRight: 30,
+              backgroundColor: "#D7DCDE"
+            } : {
+              outline: "none", fontSize: 16, border: 'none', color: 'white', borderRadius: "100px",
+              // padding: 10, paddingLeft: 30, paddingRight: 30,
+              backgroundColor: "#01B1F8"
+            }}>
+              {i18n.t("newPost.post")}
+            </Button>
           </div>)
       // return (<div><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => { e.preventDefault();setIsConfirm(true)}}>{i18n.t("newPost.post")}</button></div>)
     }
@@ -231,31 +242,54 @@ const VoteCandidateForm = (props: any) => {
     )
   }
 
+
   return (
-    <div >
-      <div style={{ textAlign: 'left', paddingLeft: 5, marginTop: 10 }}>
+    <div>
+      <div style={{ textAlign: 'left', paddingLeft: 3, marginTop: 10 }}>
         {isConfirm ? confirmDialogBase() : ""}
         {/* <b>{i18n.t("newPost.voteCandidate")}</b> */}
         <div style={{ marginTop: 10 }}>
           {voteData.map((val: any, idx: number) => {
             return (
-              <div key={idx}>
-                <input style={voteStyle} maxLength={25} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
-                {idx > 1 ? <span style={{ marginLeft: 5 }}><button type="button" onClick={e => deleteHandle(e, idx)}><RemoveIcon style={{ fontSize: 16 }}></RemoveIcon></button></span> : ''}
+              <div key={idx} style={{ display: 'flex', alignItems: 'center' }}>
+                <input className={styles.vote_option} maxLength={25} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
+                {idx > 1 ? <span style={{ marginLeft: 5 }}><button type="button" onClick={e => deleteHandle(e, idx)} style={{ outline: 'none', border: 'none', backgroundColor: 'white' }}><DeleteForeverIcon style={{ fontSize: 24 }} /></button></span> : ''}
               </div>
             )
           })}
         </div>
       </div>
-      <div style={{ marginLeft: 5 }}>
-        <button type="button" onClick={e => addHandle(e)}><AddIcon style={{ fontSize: 16 }}></AddIcon></button>
+
+      <div style={{ marginTop: '1ch', marginLeft: '.5ch' }}>
+        <Button disableRipple style={{ borderRadius: '100px', color: '#3477cc' }} type="button" onClick={e => addHandle(e)}>
+          <b>{i18n.t('newPost.AddOptions')}</b>
+          {/* <AddIcon style={{ fontSize: 24 }}></AddIcon> */}
+        </Button>
       </div>
 
 
-      <div style={{ textAlign: 'right', paddingRight: 10, marginBottom: 20 }}>
-        {props.voteTypeId === 3 ? '' : submitButton()}
+
+
+      <hr style={{ marginTop: '5ch' }}></hr>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
+        <div style={{ position: 'absolute', left: '0', fontSize: 16 }}>
+          {i18n.t("newPost.end")}
+          N
+          {/* <input className={styles.date_button} value={props.endAt} min={24} max={168} type="number" onChange={e => props.changeEndAt(e)}></input> */}
+          {i18n.t("newPost.hourLater")}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
+          <div>
+            <Button disableRipple style={{ backgroundColor: '#f5f5f5', border: 'none', outline: 'none', fontSize: 16, borderRadius: '100px', position: 'relative', right: '2ch' }} onClick={e => props.editParentHandle(e, false)}>キャンセル</Button>
+          </div>
+          <div>
+            {props.voteTypeId === 3 ? '' : submitButton()}
+          </div>
+        </div>
       </div>
+
       <div style={{ color: 'red' }}>{errorMessage ? errorMessage : ''}</div>
+
     </div>
   )
 
@@ -606,7 +640,6 @@ const VoteForm = (props: any) => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [contentTextLength, setContentTextLength] = useState(0);
   const [voteTypeId, setVoteTypeId] = useState(1);
   const [endAt, setEndAt] = useState(24);
   const [endAtDate, setEndAtDate] = useState(defaultEndAt);
@@ -619,7 +652,6 @@ const VoteForm = (props: any) => {
   const [targetGroupId, setTargetGroupId] = useState("");
   const [multipleVoteNum, setMultipleVoteNum] = useState(2);
   const [isSendTargetGroup, setIsSendTargetGroup] = useState(false);
-  const [openMenu, setOpenMenu] = useState<any>(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -631,8 +663,6 @@ const VoteForm = (props: any) => {
       }).catch((res: any) => { });
   }, []);
 
-
-
   const changeEndAt = (e: any) => {
     const dt = new Date();
     const endHour = e.target.value ? parseInt(e.target.value) : 0;
@@ -642,6 +672,7 @@ const VoteForm = (props: any) => {
       const endDateString = endDate.toISOString().slice(0, -8);
       setEndAtDate(endDateString);
     }
+    return;
   }
 
   const doContainDelim = (topics: string) => {
@@ -805,17 +836,26 @@ const VoteForm = (props: any) => {
     }
   }
 
-  const handleClickMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setOpenMenu(e.currentTarget);
+  const [isTopicFocused, setIsTopicFocused] = useState(false);
+  const [isTitleFocused, setIsTitleFocused] = useState(false);
+  const [isContentFocused, setIsContentFocused] = useState(false);
+
+  const handleTopicFocus = () => {
+    setIsTopicFocused(true);
   };
 
-  const handleCloseMenu = () => {
-    setOpenMenu(null);
+  const handleTitleFocus = () => {
+    setIsTitleFocused(true);
   };
 
-  const handleChooseMenu = (e: any) => {
-    setOpenMenu(null);
-    setVoteTypeId(e.target.value)
+  const handleContentFocus = () => {
+    setIsContentFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsTopicFocused(false);
+    setIsTitleFocused(false);
+    setIsContentFocused(false);
   };
 
   return (
@@ -838,6 +878,7 @@ const VoteForm = (props: any) => {
           : ''}
       </span>
 
+
       <div>
         {/* <b>{i18n.t("newPost.voteType")}</b>&nbsp;&nbsp; */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
@@ -845,32 +886,23 @@ const VoteForm = (props: any) => {
             <button style={{ backgroundColor: 'white', border: 'none', outline: 'none' }} onClick={e => props.editParentHandle(e, false)}><CloseIcon /></button>
           </div>
           <div style={{ margin: '0' }}>
-            <Button style={{ borderRadius: '100px', backgroundColor: '#ccc' }} onClick={handleClickMenu}>
-              {voteTypeId === 1 ? <div style={{ display: 'flex', alignItems: 'center' }}>
-                <InsertDriveFileIcon />{i18n.t("newPost.normalVote")}<ExpandMoreIcon />
-              </div> : <div style={{ display: 'flex', alignItems: 'center' }}>
-                <FileCopyIcon />{i18n.t("newPost.continuasVote")}<ExpandMoreIcon />
-              </div>}
+            <Button value={1} onClick={e => setVoteTypeId(1)} disableRipple
+              style={voteTypeId === 1 ? { borderRadius: '100px', backgroundColor: '#f5f5f5', marginRight: '.5ch' } : { borderRadius: '100px', marginRight: '.5ch' }}>
+              <InsertDriveFileIcon style={{ fontSize: 20 }} />
+              &nbsp;
+              {i18n.t("newPost.normalVote")}
             </Button>
-              <Menu
-                anchorEl={openMenu}
-                keepMounted
-                open={Boolean(openMenu)}
-                onClose={handleCloseMenu}
-                getContentAnchorEl={null}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                <MenuItem value={1} onClick={e => handleChooseMenu(e)}>
-                  <InsertDriveFileIcon />
-                  {i18n.t("newPost.normalVote")}
-                </MenuItem>
-                <MenuItem value={3} onClick={e => handleChooseMenu(e)}>
-                  <FileCopyIcon />
-                  {i18n.t("newPost.continuasVote")}
-                </MenuItem>
-              </Menu>
+            <Button value={3} onClick={e => setVoteTypeId(3)} disableRipple
+              style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#f5f5f5', marginLeft: '.5ch' } : { borderRadius: '100px', marginLeft: '.5ch' }}>
+              <FileCopyIcon style={{ fontSize: 20 }} />
+              &nbsp;
+              {i18n.t("newPost.continuasVote")}
+            </Button>
           </div>
         </div>
+
+        <br></br>
+        <b>{i18n.t("newPost.end")}</b> <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(e)}></input> <b>{i18n.t("newPost.hourLater")}</b>
 
         {/* <select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
         <option value={1}>{i18n.t("newPost.normalVote")}</option>
@@ -888,36 +920,52 @@ const VoteForm = (props: any) => {
       <br></br>
 
       <div>
-        <b>{i18n.t("newPost.end")}</b> <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(e)}></input> <b>{i18n.t("newPost.hourLater")}</b>
-      </div><br></br>
-
-      <div>
         <b>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</b>
-        <input ref={inputRef} required placeholder={i18n.t("newPost.topicPlaceholder")} style={{ padding: 7, width: '100%', marginBottom: '10px' }} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}></input>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <input ref={inputRef} required placeholder={i18n.t("newPost.topicPlaceholder")} onFocus={handleTopicFocus} onBlur={handleBlur} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}
+            style={isTopicFocused ?
+              { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid black', borderRadius: '4px', outline: 'none' } :
+              { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid #eeeff1', borderRadius: '4px' }
+            }>
+          </input>
+        </div>
         {renderTopic()}
       </div>
 
       <div>
         <TopicCandidates ref={inputRef} topic={currentTopic} currentTopicIdx={currentTopicIdx} topicList={topicList} setTopicList={setTopicList} setTopicString={setTopicString}></TopicCandidates>
       </div>
+      <hr></hr>
 
-      {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : <h2>{i18n.t("newPost.vote")}</h2>}
+      {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : ''}
 
-      <div>
-        <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} style={{ padding: 7 }} minLength={1} maxLength={150} type="text" onChange={(e) => setTitle(e.target.value)}></input><br></br>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <input required placeholder={i18n.t("newPost.titlePlaceholder")} minLength={1} maxLength={150} type="text" onFocus={handleTitleFocus} onBlur={handleBlur} onChange={(e) => setTitle(e.target.value)}
+          style={isTitleFocused ?
+            { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid black', borderRadius: '4px', outline: 'none' } :
+            { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid #eeeff1', borderRadius: '4px' }
+          }></input><br></br>
         <div>
-          {/* {title.length}/150 */}
+          {/* {title.l ength}/150 */}
         </div>
       </div>
-      <div>
-        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={(e) => setContent(e.target.value)}></TextareaAutosize>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} rowsMin={6} maxLength={5000} onFocus={handleContentFocus} onBlur={handleBlur} onChange={(e) => setContent(e.target.value)} style={isContentFocused ?
+          { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid black', borderRadius: '4px', outline: 'none', resize: 'vertical' } :
+          { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid #eeeff1', borderRadius: '4px', resize: 'vertical' }
+        }></TextareaAutosize>
         {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea> */}
       </div>
 
       {/* <form onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>*/}
-      <form>
-        {voteFormRender()}
-      </form>
+      <div>
+        <form>
+          {voteFormRender()}
+        </form>
+        <div>
+          {/* <button style={{ backgroundColor: 'white', border: 'none', outline: 'none' }} onClick={e => props.editParentHandle(e, false)}><CloseIcon /></button> */}
+        </div>
+      </div>
     </div>
   )
 }
