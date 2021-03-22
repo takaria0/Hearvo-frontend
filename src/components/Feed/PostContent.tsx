@@ -263,7 +263,6 @@ const VoteCandidateForm = (props: any) => {
       <div style={{ marginTop: '1ch', marginLeft: '.5ch' }}>
         <Button disableRipple style={{ borderRadius: '100px', color: '#3477cc' }} type="button" onClick={e => addHandle(e)}>
           <b>{i18n.t('newPost.AddOptions')}</b>
-          {/* <AddIcon style={{ fontSize: 24 }}></AddIcon> */}
         </Button>
       </div>
 
