@@ -64,6 +64,8 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
         this.props.history.push("/login"+"?destination="+url[1]+params);
       }else if(url[2]==null){
         this.props.history.push("/login"+"?destination="+url[1]);
+      }else if(url.includes('popular')&&url[2]!==null){
+        this.props.history.push("/login"+"?destination="+url[1]+"&time="+url[2]);
       }else{
         this.props.history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
       }

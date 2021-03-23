@@ -48,6 +48,7 @@ class Login extends React.Component<LoginProps, LoginState> {
       postId: params.get("postId"),
       topic: params.get("tp"),
       search:params.get("q"),
+      time:params.get("time"),
     }
       
     axios.post("/login", { email: this.state.email, password: this.state.password }, { headers: { Country: process.env.REACT_APP_COUNTRY } })
@@ -76,6 +77,8 @@ class Login extends React.Component<LoginProps, LoginState> {
           this.props.history.push("/topic?tp="+`${previousUrl.topic}`);
         }else if(previousUrl.search !== null){
           this.props.history.push("/search?q="+`${previousUrl.search}`);
+        }else if(previousUrl.time !== null){
+          this.props.history.push("/popular/"+`${previousUrl.time}`);
         }else{
           this.props.history.push("/"+`${previousUrl.destination}`);
         }

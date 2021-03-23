@@ -72,6 +72,8 @@ const EachMultipleVote = (props: any) => {
         history.push("/login"+"?destination="+url[1]+params);
       }else if(url[2]==null){
         history.push("/login"+"?destination="+url[1]);
+      }else if(url.includes('popular')&&url[2]!==null){
+        history.push("/login"+"?destination="+url[1]+"&time="+url[2]);
       }else{
         history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
       }
