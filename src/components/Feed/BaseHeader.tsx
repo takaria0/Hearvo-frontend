@@ -9,6 +9,10 @@ import * as styles from '../../css/Feed/PostContent.module.css';
 import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import i18n from "../../helpers/i18n";
 
 export interface BaseHeaderProps extends RouteComponentProps<{}> {
@@ -23,7 +27,7 @@ export interface BaseHeaderState {
   isLoading: boolean;
   userObj: any;
 }
- 
+
 function timeout(delay: number) {
   return new Promise(res => setTimeout(res, delay));
 }
@@ -41,6 +45,29 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
       userObj: {},
     }
   }
+
+  detectSearchTime =() =>{
+    const pathaName = window.location.pathname.split("/");
+    let searchTime = pathaName.pop();
+
+    switch (searchTime){
+      case "now":
+        searchTime= i18n.t("feed.now");
+        break;
+      case "today":
+        searchTime= i18n.t("feed.today");
+        break;
+      case "week":
+        searchTime= i18n.t("feed.thisWeek");
+        break;
+      case "month":
+        searchTime= i18n.t("feed.thisMonth");
+        break;
+      default:
+        searchTime= i18n.t("feed.thisWeek");
+    }
+    return searchTime;
+  } 
 
   componentDidMount = () => {
     const jwt = getJwt();
@@ -89,15 +116,23 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
   headerJSX = () => {
       return (
         <div className={styles.mini_header}>
+          <div className={styles.header_box} onClick={e => this.editHandle(e, true)}>
+            <p>{i18n.t("header.subtitle")}</p>
+          </div>
           <div className={styles.mini_header_inside}>
-            <span>
-                {this.state.userObj ? <Link to="/">{i18n.t("feed.recommend")}</Link> : ""}
-                &nbsp;<Link to="/popular">{i18n.t("feed.popular")}</Link>&nbsp;<Link to="/latest">{i18n.t("feed.latest")}</Link>{"    "} 
+            <span　className={styles.mini_header_item}>
+                {/* {this.state.userObj ? <Link to="/"><PersonOutlineIcon></PersonOutlineIcon>{i18n.t("feed.recommend")}</Link> : ""} */}
+                {/* &nbsp;<Link to="/popular"><TrendingUpIcon></TrendingUpIcon>{i18n.t("feed.popular")}</Link>&nbsp;<Link to="/latest"><NewReleasesIcon></NewReleasesIcon>{i18n.t("feed.latest")}</Link>{"  "}  */}
+                <Button href="/latest" color={window.location.pathname.includes("latest")?"primary":"inherit"}><NewReleasesIcon></NewReleasesIcon>{i18n.t("feed.latest")}</Button>
+                &nbsp;{this.state.userObj ? <Button href="/" color={window.location.pathname==="/"?"primary":"inherit"}><PersonOutlineIcon></PersonOutlineIcon>{i18n.t("feed.recommend")}</Button> : ""}
+                &nbsp;<Button href="/popular" color={window.location.pathname.includes("popular")?"primary":"inherit"}><TrendingUpIcon></TrendingUpIcon>{i18n.t("feed.popular")}</Button> 
+                &nbsp; 
             </span>
 
             {(window.location.pathname.split("/")[1] === "popular"|| window.location.pathname === "/") ?
               <b><button style={{ textDecoration: "none"}}　aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-                 <TodayIcon style={{fontSize: 16}}/>
+                 {/* <TodayIcon style={{fontSize: 16}}/> */}
+                 {this.detectSearchTime()}   {/* default = thisWeek */}
               </button>
                 <Menu
                   id="simple-menu"
@@ -113,12 +148,12 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
                 </Menu></b>
             : ""}
             
-            {this.state.edit ? 
+            {/* {this.state.edit ? 
               <span style={{ float: "right", textAlign: "right" }}><button onClick={e => this.editHandle(e, false)}><CloseIcon style={{ fontSize: 16 }}></CloseIcon></button></span>
               :
               <span style={{ float: "right", textAlign: "right" }}>
                 <button onClick={e => this.editHandle(e, true)}><CreateIcon style={{ fontSize: 16 }}></CreateIcon></button></span>
-              }
+              } */}
           </div>
         </div>
       )
@@ -136,4 +171,4 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
   }
 }
 
-export default withRouter(BaseHeader);
+  export default withRouter(BaseHeader);

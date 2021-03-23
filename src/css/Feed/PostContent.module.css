@@ -58,13 +58,34 @@
 
 .mini_header_inside {
     border: solid;
-    border-width: 2px;
+    background-color: white;
+    border-width: 1px;
     padding: 5px;
     border-radius: 3px;
     margin-bottom: 10px;
     font-size: 16px;
 }
 
+.header_box{
+    white-space:nowrap;
+    background-color:white;
+    padding-left: 1em;
+    text-align:left;
+    border: 1px solid;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.header_box :hover{
+    color: hsl(0, 0, 0);
+    font-weight: bold;
+}
+
+.mini_header_item{
+
+}
 
 .search_bar {
     width: 50%
@@ -140,11 +161,33 @@
 
 .mini_header_inside {
     border: solid;
-    border-width: 2px;
+    background-color: white;
+    border-width: 1px;
     padding: 5px;
     border-radius: 3px;
     margin-bottom: 10px;
     font-size: 16px;
+}
+
+.header_box{
+    white-space:nowrap;
+    background-color:white;
+    padding-left: 1em;
+    text-align:left;
+    border: 1px solid;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.header_box :hover{
+    color: hsl(0, 0, 0);
+    font-weight: bold;
+}
+
+.mini_header_item{
+
 }
 
 .search_bar {
@@ -211,12 +254,36 @@
 
 .mini_header_inside {
     white-space:nowrap;
+    background-color: white;
     border: solid;
-    border-width: 2px;
-    padding: 5px;
+    border-width: 1px;
+    padding: 10px;
     border-radius: 3px;
     margin-bottom: 10px;
     font-size: 16px;
+}
+
+.header_box{
+    white-space:nowrap;
+    background-color:white;
+    padding-left: 1em;
+    text-align:left;
+    border: 1px solid;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.header_box :hover{
+    color: hsl(0, 0, 0);
+    font-weight: bold;
+}
+.header_inner{
+    padding: .5em;
+}
+
+.mini_header_item{
+
 }
 
 .search_bar {

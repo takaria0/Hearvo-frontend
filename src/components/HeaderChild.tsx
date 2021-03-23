@@ -9,6 +9,7 @@ import ListIcon from '@material-ui/icons/List';
 import i18n from "../helpers/i18n";
 
 import BaseHeader from '../components/Feed/BaseHeader';
+import PostContent from '../components/Feed/PostContent';
 
 import SearchIcon from '@material-ui/icons/Search';
 import CreateIcon from '@material-ui/icons/Create';
@@ -19,6 +20,10 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import HelpIcon from '@material-ui/icons/Help';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 
 
@@ -43,6 +48,7 @@ interface HeaderChildState {
   isLoaded: boolean;
   searchValue: string;
   mediaQuery: any;
+  edit:boolean;
 }
  
 class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
@@ -56,6 +62,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
       isLoaded: false,
       searchValue: "",
       mediaQuery: {},
+      edit:false,
     }
     
   }
@@ -132,15 +139,26 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     }
   };
 
+  editHandle = (e: any, edit: boolean) => {
+    e.preventDefault();
+    if(this.state.isLogin) {
+      this.setState({
+        edit: edit,
+      })
+    } else {
+      this.props.history.push("/login");
+    }
+  }
+
   searchBar = () => {
     const display = this.state.mediaQuery.matches ? "inline" : "none";
     // const searchWidth = this.state.mediaQuery.matches ? "60ch" : "60%" ;
     return (
       <form onSubmit={e => this.searchSubmit(e)}>
-        <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 10, padding: 6}}>
+        <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 5, padding: 6}}>
           {/* <SearchIcon style={{padding: 0}} /> */}
         <input maxLength={50} type="text" 
-            style={{ border: 'none', width: "60ch", outline: 'none', backgroundColor: 'white' }}
+            style={{ border: 'none', width: "50ch", outline: 'none', backgroundColor: 'white' }}
          className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
         ></input>
         </span>
@@ -148,6 +166,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     )
   }
 
+  
   listBar = () => {
     return (
       <b>
@@ -222,15 +241,26 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
           <Link to="/" className={styles.hearvo}>
             <b style={{ fontSize: 20, marginLeft: 10 }}>{i18n.t("header.title")}</b>
           </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></span>
-          <Button　href="/">{i18n.t("feed.recommend")}</Button>
-          <Button　href="/popular">{i18n.t("feed.popular")}</Button>
-          <Button　href="/latest">{i18n.t("feed.latest")}</Button>
-
+          <Button　href="/latest" className={window.location.pathname==="/latest"?styles.now:styles.normal}>
+            <NewReleasesIcon style={{transform: 'translateY(-3px)'}}></NewReleasesIcon>
+            {/* {i18n.t("feed.latest")} */}
+          </Button>
+          <Button　href="/" className={window.location.pathname==="/"?styles.now:styles.normal}>
+             <PersonOutlineIcon style={{transform: 'translateY(-3px)'}}></PersonOutlineIcon>
+             {/* {i18n.t("feed.recommend")} */}
+          </Button>
+          <Button　href="/popular" className={window.location.pathname.includes("popular")?styles.now:styles.normal}>
+            <TrendingUpIcon style={{transform: 'translateY(-3px)'}}></TrendingUpIcon>
+            {/* {i18n.t("feed.popular")} */}
+          </Button>
           {/* <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} > */}
           <span style={{ transform: 'translateY(5px)'}}>
             {this.searchBar()}
           </span>
-          
+          <Button onClick={e => this.editHandle(e, true)}>
+          <CreateIcon style={{transform: 'translateY(-4px)'}}></CreateIcon>
+          {/* <PostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle}></PostContent> */}
+          </Button>
           <span style={{ transform: 'translateY(-3px)' }}>
             {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar()}
           </span>
