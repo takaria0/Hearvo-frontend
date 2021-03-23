@@ -147,13 +147,14 @@ i18next
             topicDescription: '一つ以上、読点で区切って入力',
             topicPlaceholder: 'トピック1、トピック2、・・・',
             vote: '投票',
-            titlePlaceholder: 'タイトルを入力',
-            contentPlaceholder: '本文を入力',
-            voteCandidate: '投票候補',
+            titlePlaceholder: 'タイトル',
+            contentPlaceholder: '本文',
+            voteCandidate: '候補',
             parentTitle: '表題',
             MatrixNum: '回答の種類',
             MatrixAnswer: '回答',
-            AddOptions: '選択肢を追加',
+            AddOptions: '候補を追加',
+            Cancel: 'キャンセル'
           },
           group: {
             groupCreateTitle1: '新たなグループ、「',
@@ -393,6 +394,7 @@ i18next
             MatrixNum: 'Answer Option',
             MatrixAnswer: 'Answer',
             AddOptions: 'Add Option',
+            Cancel: 'Cancel'
           },
           group: {
             groupCreateTitle1: 'Created a new group "',

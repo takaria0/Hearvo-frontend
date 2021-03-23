@@ -200,22 +200,21 @@ const VoteCandidateForm = (props: any) => {
         return (
           <div>
             <Button disabled={true} style={{
-              fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px",
-              // padding: 10, paddingLeft: 30, paddingRight: 30,
-              backgroundColor: "#D7DCDE"
-            }}>{i18n.t("newPost.post")}</Button>
+              border: 'none', color: 'white', borderRadius: "100px",
+              backgroundColor: "#d4d4d4", outline: 'none'
+            }}>
+              {i18n.t("newPost.post")}
+            </Button>
           </div>)
       case false:
         return (
           <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
             <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
-              fontSize: 16, border: 'none', color: 'gray', borderRadius: "100px",
-              // padding: 10, paddingLeft: 30, paddingRight: 30,
-              backgroundColor: "#D7DCDE"
+              border: 'none', color: 'white', borderRadius: "100px",
+              backgroundColor: "#d4d4d4", outline: 'none'
             } : {
-              outline: "none", fontSize: 16, border: 'none', color: 'white', borderRadius: "100px",
-              // padding: 10, paddingLeft: 30, paddingRight: 30,
-              backgroundColor: "#01B1F8"
+              outline: "none", border: 'none', color: 'white', borderRadius: "100px",
+              backgroundColor: "#3477cc",
             }}>
               {i18n.t("newPost.post")}
             </Button>
@@ -242,6 +241,30 @@ const VoteCandidateForm = (props: any) => {
     )
   }
 
+  const voteFooter = () => {
+    return (
+      <div>
+        <hr style={{ marginTop: '5ch' }}></hr>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
+          <div style={{ position: 'absolute', left: '0', fontSize: 16 }}>
+            {i18n.t("newPost.end")}
+          N
+          {/* <input className={styles.date_button} value={props.endAt} min={24} max={168} type="number" onChange={e => props.changeEndAt(e)}></input> */}
+            {i18n.t("newPost.hourLater")}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
+            <div>
+              <Button style={{ borderRadius: 100, }} className={styles.cancel_button} disableRipple onClick={e => props.editParentHandle(e, false)}>{i18n.t('newPost.Cancel')}</Button>
+            </div>
+            <div>
+              {props.voteTypeId === 3 ? '' : submitButton()}
+            </div>
+          </div>
+        </div>
+        <div style={{ color: 'red' }}>{errorMessage ? errorMessage : ''}</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -266,32 +289,12 @@ const VoteCandidateForm = (props: any) => {
         </Button>
       </div>
 
-
-
-
-      <hr style={{ marginTop: '5ch' }}></hr>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
-        <div style={{ position: 'absolute', left: '0', fontSize: 16 }}>
-          {i18n.t("newPost.end")}
-          N
-          {/* <input className={styles.date_button} value={props.endAt} min={24} max={168} type="number" onChange={e => props.changeEndAt(e)}></input> */}
-          {i18n.t("newPost.hourLater")}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
-          <div>
-            <Button disableRipple style={{ backgroundColor: '#f5f5f5', border: 'none', outline: 'none', fontSize: 16, borderRadius: '100px', position: 'relative', right: '2ch' }} onClick={e => props.editParentHandle(e, false)}>キャンセル</Button>
-          </div>
-          <div>
-            {props.voteTypeId === 3 ? '' : submitButton()}
-          </div>
-        </div>
+      <div>
+          {props.voteTypeId === 3 ? '' : voteFooter()}
       </div>
-
-      <div style={{ color: 'red' }}>{errorMessage ? errorMessage : ''}</div>
 
     </div>
   )
-
 }
 
 const MultipleVoteFormEach = (props: any) => {
@@ -312,6 +315,7 @@ const MultipleVoteFormEach = (props: any) => {
     props.setContentList(updateContentList);
   }
 
+
   return (
     <div>
       <hr></hr>
@@ -330,6 +334,9 @@ const MultipleVoteFormEach = (props: any) => {
         setVoteDataList={props.setVoteDataList}
         setIsVoteDateListOk={props.setIsVoteDateListOk}
       ></VoteCandidateForm></div>
+      <div>
+
+      </div>
     </div>
   )
 }
@@ -359,18 +366,33 @@ const SubmitButtonMultiple = (props: any) => {
 
   switch (invalid) {
     case true:
-      return (<div><br></br><br></br><br></br><span style={{ border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" }}>{i18n.t("newPost.post")}</span></div>)
+      return (
+        <div>
+          <Button disabled={true} style={{
+            border: 'none', color: 'white', borderRadius: "100px",
+            backgroundColor: "#d4d4d4", outline: 'none'
+          }}>
+            {i18n.t("newPost.post")}
+          </Button>
+        </div>)
     case false:
       return (
         <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
-          <br></br><br></br><br></br>
-          <button onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? { border: 'none', color: 'gray', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#D7DCDE" } : { fontSize: 16, border: 'none', color: 'white', borderRadius: "100px", padding: 10, paddingLeft: 30, paddingRight: 30, backgroundColor: "#01B1F8" }}>
-            <b>{i18n.t("newPost.post")}</b>
-          </button>
+          <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
+            border: 'none', color: 'white', borderRadius: "100px",
+            backgroundColor: "#d4d4d4", outline: 'none'
+          } : {
+            outline: "none", border: 'none', color: 'white', borderRadius: "100px",
+            backgroundColor: "#3477cc",
+          }}>
+            {i18n.t("newPost.post")}
+          </Button>
         </div>)
-    // return (<div><br></br><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => {e.preventDefault();setIsConfirm(true)}} >{i18n.t("newPost.post")}</button></div>)
+    // return (<div><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => { e.preventDefault();setIsConfirm(true)}}>{i18n.t("newPost.post")}</button></div>)
   }
 }
+
+
 
 
 const MultipleVoteForm = (props: any) => {
@@ -882,7 +904,7 @@ const VoteForm = (props: any) => {
         {/* <b>{i18n.t("newPost.voteType")}</b>&nbsp;&nbsp; */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <div style={{ position: 'absolute', left: '0', borderRadius: '100px' }}>
-            <button style={{ backgroundColor: 'white', border: 'none', outline: 'none' }} onClick={e => props.editParentHandle(e, false)}><CloseIcon /></button>
+            <button className={styles.close_button} onClick={e => props.editParentHandle(e, false)}><CloseIcon /></button>
           </div>
           <div style={{ margin: '0' }}>
             <Button value={1} onClick={e => setVoteTypeId(1)} disableRipple
@@ -938,21 +960,14 @@ const VoteForm = (props: any) => {
 
       {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : ''}
 
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <input required placeholder={i18n.t("newPost.titlePlaceholder")} minLength={1} maxLength={150} type="text" onFocus={handleTitleFocus} onBlur={handleBlur} onChange={(e) => setTitle(e.target.value)}
-          style={isTitleFocused ?
-            { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid black', borderRadius: '4px', outline: 'none' } :
-            { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid #eeeff1', borderRadius: '4px' }
-          }></input><br></br>
-        <div>
-          {/* {title.l ength}/150 */}
+      <div style={{ color: '#888a8c', textAlign: 'right', marginRight: '10px', fontSize: 12, fontWeight: 'bold' }}>
+        {title.length}/150
         </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <TextareaAutosize required className={styles.title} placeholder={i18n.t("newPost.titlePlaceholder")} rowsMin={1} minLength={1} maxLength={150} onChange={(e) => setTitle(e.target.value)}></TextareaAutosize>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} rowsMin={6} maxLength={5000} onFocus={handleContentFocus} onBlur={handleBlur} onChange={(e) => setContent(e.target.value)} style={isContentFocused ?
-          { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid black', borderRadius: '4px', outline: 'none', resize: 'vertical' } :
-          { padding: 10, width: '95%', marginBottom: '10px', border: '1px solid #eeeff1', borderRadius: '4px', resize: 'vertical' }
-        }></TextareaAutosize>
+        <TextareaAutosize className={styles.content} placeholder={i18n.t("newPost.contentPlaceholder")} rowsMin={6} maxLength={5000} onChange={(e) => setContent(e.target.value)}></TextareaAutosize>
         {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rows={6} maxLength={5000} onChange={e => setContent(e.target.value)}></textarea> */}
       </div>
 
