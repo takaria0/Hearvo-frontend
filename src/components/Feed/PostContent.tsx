@@ -101,6 +101,12 @@ const VoteCandidateForm = (props: any) => {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const history = useHistory();
 
+  // const currentDate = new Date();
+  // const defaultEndAt = new Date(currentDate.setHours(currentDate.getHours() + 72)).toISOString().slice(0, -8);
+
+  // const [endAt, setEndAt] = useState(72);
+  // const [endAtDate, setEndAtDate] = useState(defaultEndAt);
+
 
   const voteSelectChange = (e: any, idx: number) => {
     e.preventDefault();
@@ -129,6 +135,7 @@ const VoteCandidateForm = (props: any) => {
         return
     }
   }
+
   const callAxios = (e: any, postObj: any) => {
     e.preventDefault();
     const jwt = getJwt();
@@ -180,6 +187,20 @@ const VoteCandidateForm = (props: any) => {
     values.splice(idx, 1);
     setVoteData(values);
   }
+
+  // const changeEndAt = (e: any) => {
+  //   const dt = new Date();
+  //   const endHour = e.target.value ? parseInt(e.target.value) : 0;
+
+  //   // setEndAt(endHour);
+
+  //   if (endHour > 0 && endHour < 36000) {
+  //     const endDate = new Date(dt.setHours(dt.getHours() + endHour));
+  //     const endDateString = endDate.toISOString().slice(0, -8);
+  //     setEndAtDate(endDateString);
+  //   }
+  // }
+
 
   const addHandle = (e: any) => {
     if (voteData.length > 6) { return };
@@ -241,16 +262,28 @@ const VoteCandidateForm = (props: any) => {
     )
   }
 
-  const voteFooter = () => {
+
+  const VoteFooter = () => {
     return (
       <div>
         <hr style={{ marginTop: '5ch' }}></hr>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
-          <div style={{ position: 'absolute', left: '0', fontSize: 16 }}>
-            {i18n.t("newPost.end")}
+          <div style={{ position: 'absolute', left: '0', }}>
+
+            <select size={1} onChange={(e) => { props.changeEndAt(e) }}>
+              <option value={24}>1</option>
+              <option value={48}>2</option>
+              <option value={72} selected>3</option>
+              <option value={96}>4</option>
+              <option value={120}>5</option>
+              <option value={144}>6</option>
+              <option value={168}>7</option>
+            </select>
+
+            {/* {i18n.t("newPost.end")}
           N
-          {/* <input className={styles.date_button} value={props.endAt} min={24} max={168} type="number" onChange={e => props.changeEndAt(e)}></input> */}
-            {i18n.t("newPost.hourLater")}
+          <input className={styles.date_button} value={props.endAt} min={24} max={168} type="number" onChange={e => props.changeEndAt(e)}></input>
+            {i18n.t("newPost.hourLater")} */}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
             <div>
@@ -290,14 +323,17 @@ const VoteCandidateForm = (props: any) => {
       </div>
 
       <div>
-          {props.voteTypeId === 3 ? '' : voteFooter()}
+        {props.voteTypeId === 3 ? '' : VoteFooter()}
       </div>
 
     </div>
   )
 }
 
+
 const MultipleVoteFormEach = (props: any) => {
+
+  const [title, setTitle] = useState('');
 
   const addTitle = (e: any) => {
     let updateTitleList = props.titleList;
@@ -315,16 +351,22 @@ const MultipleVoteFormEach = (props: any) => {
     props.setContentList(updateContentList);
   }
 
+  const handleTitleChange = (e: any) => {
+    addTitle(e);
+    setTitle(e.target.value);
+  }
 
   return (
     <div>
       <hr></hr>
-      <h2>{i18n.t("newPost.vote")} {props.idx + 1}</h2>
-      <div>
-        <input required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} minLength={1} maxLength={150} type="text" onChange={e => addTitle(e)}></input><br></br>
+      <div style={{ color: '#888a8c', textAlign: 'right', marginRight: '10px', fontSize: 12, fontWeight: 'bold' }}>
+        {title.length}/150
       </div>
       <div>
-        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} style={{ padding: 7 }} className={styles.content} rowsMin={6} maxLength={5000} onChange={e => addContent(e)}></TextareaAutosize>
+        <TextareaAutosize required placeholder={i18n.t("newPost.titlePlaceholder")} className={styles.title} minLength={1} maxLength={150} onChange={e => handleTitleChange(e)}></TextareaAutosize><br></br>
+      </div>
+      <div>
+        <TextareaAutosize placeholder={i18n.t("newPost.contentPlaceholder")} className={styles.content} rowsMin={6} maxLength={5000} onChange={e => addContent(e)}></TextareaAutosize>
         {/* <textarea placeholder={i18n.t("newPost.contentPlaceholder")} className={styles.content} rows={6} maxLength={5000} onChange={e => addContent(e)}></textarea> */}
       </div>
       <div><VoteCandidateForm
@@ -333,10 +375,8 @@ const MultipleVoteFormEach = (props: any) => {
         voteDataList={props.voteDataList}
         setVoteDataList={props.setVoteDataList}
         setIsVoteDateListOk={props.setIsVoteDateListOk}
+        changeEndAt={props.changeEndAt}
       ></VoteCandidateForm></div>
-      <div>
-
-      </div>
     </div>
   )
 }
@@ -391,8 +431,6 @@ const SubmitButtonMultiple = (props: any) => {
     // return (<div><br></br><br></br><br></br><button style={{ border: 'none', borderRadius: 5, padding: 10, paddingLeft: 10, paddingRight: 10, backgroundColor: "#B7D4FF" }} onClick={e => { e.preventDefault();setIsConfirm(true)}}>{i18n.t("newPost.post")}</button></div>)
   }
 }
-
-
 
 
 const MultipleVoteForm = (props: any) => {
@@ -517,35 +555,59 @@ const MultipleVoteForm = (props: any) => {
 
   return (
     <div>
-      {isConfirm ? confirmDialogBaseMultiple() : ""}
-      {titleList.map((_: any, idx: number) => {
-        return (<MultipleVoteFormEach
-          idx={idx}
-          titleList={titleList}
-          setTitleList={setTitleList}
-          contentList={contentList}
-          setContentList={setContentList}
-          voteDataList={voteDataList}
-          setVoteDataList={setVoteDataList}
-          topicList={props.topicList}
-          setIsTitleListOk={setIsTitleListOk}
-          setIsVoteDateListOk={setIsVoteDateListOk}
-        ></MultipleVoteFormEach>)
-      })}
-      <div style={{ textAlign: 'right', paddingRight: 10, marginBottom: 20 }}>
-        <SubmitButtonMultiple
-          title={props.title}
-          content={props.content}
-          targetGroupId={props.targetGroupId}
-          endAt={props.end_at}
-          titleList={titleList}
-          contentList={contentList}
-          voteDataList={voteDataList}
-          topicList={props.topicList}
-          submit={submit}
-          isTitleListOk={isTitleListOk}
-          isVoteDateListOk={isVoteDateListOk}
-        />
+      <div>
+        {isConfirm ? confirmDialogBaseMultiple() : ""}
+        {titleList.map((_: any, idx: number) => {
+          return (<MultipleVoteFormEach
+            idx={idx}
+            titleList={titleList}
+            setTitleList={setTitleList}
+            contentList={contentList}
+            setContentList={setContentList}
+            voteDataList={voteDataList}
+            setVoteDataList={setVoteDataList}
+            topicList={props.topicList}
+            setIsTitleListOk={setIsTitleListOk}
+            setIsVoteDateListOk={setIsVoteDateListOk}
+          ></MultipleVoteFormEach>)
+        })}
+      </div>
+
+      <hr style={{ marginTop: '5ch' }}></hr>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
+        <div style={{ position: 'absolute', left: '0', fontSize: 16 }}>
+          <select size={1} onChange={(e) => { props.changeEndAt(e) }}>
+            <option value={24}>1</option>
+            <option value={48}>2</option>
+            <option value={72} selected>3</option>
+            <option value={96}>4</option>
+            <option value={120}>5</option>
+            <option value={144}>6</option>
+            <option value={168}>7</option>
+          </select>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
+          <div>
+            <Button style={{ borderRadius: 100, }} className={styles.cancel_button} disableRipple onClick={e => props.editParentHandle(e, false)}>{i18n.t('newPost.Cancel')}</Button>
+          </div>
+          <div>
+            <div>
+              <SubmitButtonMultiple
+                title={props.title}
+                content={props.content}
+                targetGroupId={props.targetGroupId}
+                endAt={props.end_at}
+                titleList={titleList}
+                contentList={contentList}
+                voteDataList={voteDataList}
+                topicList={props.topicList}
+                submit={submit}
+                isTitleListOk={isTitleListOk}
+                isVoteDateListOk={isVoteDateListOk}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div>{errorMessage ? errorMessage : ''}</div>
@@ -604,6 +666,7 @@ const MatrixVoteForm = (props: any) => {
           targetGroupId={props.targetGroupId}
           matrixCandidateList={matrixCandidateList}
           editParentHandle={props.editParentHandle}
+          changeEndAt={props.changeEndAt}
         ></VoteCandidateForm></div>
       </div>
     )
@@ -653,16 +716,14 @@ const TopicCandidates = (props: any) => {
     </div>)
 }
 
-
-
 const VoteForm = (props: any) => {
   const currentDate = new Date();
-  const defaultEndAt = new Date(currentDate.setHours(currentDate.getHours() + 24)).toISOString().slice(0, -8);
+  const defaultEndAt = new Date(currentDate.setHours(currentDate.getHours() + 72)).toISOString().slice(0, -8);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [voteTypeId, setVoteTypeId] = useState(1);
-  const [endAt, setEndAt] = useState(24);
+  const [endAt, setEndAt] = useState(72);
   const [endAtDate, setEndAtDate] = useState(defaultEndAt);
   const [maxTopicNum, setMaxTopicNum] = useState(10);
   const [topicString, setTopicString] = useState("");
@@ -684,17 +745,6 @@ const VoteForm = (props: any) => {
       }).catch((res: any) => { });
   }, []);
 
-  const changeEndAt = (e: any) => {
-    const dt = new Date();
-    const endHour = e.target.value ? parseInt(e.target.value) : 0;
-    setEndAt(endHour);
-    if (endHour > 0 && endHour < 36000) {
-      const endDate = new Date(dt.setHours(dt.getHours() + endHour));
-      const endDateString = endDate.toISOString().slice(0, -8);
-      setEndAtDate(endDateString);
-    }
-    return;
-  }
 
   const doContainDelim = (topics: string) => {
     const delims = [',', '，', '、'];
@@ -782,7 +832,19 @@ const VoteForm = (props: any) => {
     }
   }
 
+  const changeEndAt = (e: any) => {
+    const dt = new Date();
+    const endHour = e.target.value ? parseInt(e.target.value) : 0;
 
+    // setEndAt(endHour);
+
+    if (endHour > 0 && endHour < 36000) {
+      const endDate = new Date(dt.setHours(dt.getHours() + endHour));
+      const endDateString = endDate.toISOString().slice(0, -8);
+      setEndAtDate(endDateString);
+    }
+    return endAtDate;
+  }
 
   const editTopic = (e: any) => {
     const rawTopicString = e.target.value;
@@ -821,6 +883,7 @@ const VoteForm = (props: any) => {
           targetGroupId={targetGroupId}
           topicList={topicList}
           editParentHandle={props.editParentHandle}
+          changeEndAt={changeEndAt}
         ></VoteCandidateForm>)
 
       case 2:
@@ -858,25 +921,13 @@ const VoteForm = (props: any) => {
   }
 
   const [isTopicFocused, setIsTopicFocused] = useState(false);
-  const [isTitleFocused, setIsTitleFocused] = useState(false);
-  const [isContentFocused, setIsContentFocused] = useState(false);
 
   const handleTopicFocus = () => {
     setIsTopicFocused(true);
   };
 
-  const handleTitleFocus = () => {
-    setIsTitleFocused(true);
-  };
-
-  const handleContentFocus = () => {
-    setIsContentFocused(true);
-  };
-
   const handleBlur = () => {
     setIsTopicFocused(false);
-    setIsTitleFocused(false);
-    setIsContentFocused(false);
   };
 
   return (
@@ -923,7 +974,18 @@ const VoteForm = (props: any) => {
         </div>
 
         <br></br>
-        <b>{i18n.t("newPost.end")}</b> <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(e)}></input> <b>{i18n.t("newPost.hourLater")}</b>
+        {/* 
+        <select size={1} onChange={(e) => { changeEndAt(e) }}>
+          <option value={24}>1</option>
+          <option value={48}>2</option>
+          <option value={72} selected>3</option>
+          <option value={96}>4</option>
+          <option value={120}>5</option>
+          <option value={144}>6</option>
+          <option value={168}>7</option>
+        </select> */}
+
+        {/* <b>{i18n.t("newPost.end")}</b> <input className={styles.date_button} value={endAt} min={24} max={168} type="number" onChange={e => changeEndAt(e)}></input> <b>{i18n.t("newPost.hourLater")}</b>  */}
 
         {/* <select style={{ padding: '3px' }} onChange={e => setVoteTypeId(parseInt(e.target.value))}>
         <option value={1}>{i18n.t("newPost.normalVote")}</option>
@@ -958,7 +1020,7 @@ const VoteForm = (props: any) => {
       </div>
       <hr></hr>
 
-      {voteTypeId === 3 ? <h2>{i18n.t("newPost.parentTitle")}</h2> : ''}
+      {voteTypeId === 3 ? <h3 style={{ textAlign: 'center' }}>{i18n.t("newPost.parentTitle")}</h3> : ''}
 
       <div style={{ color: '#888a8c', textAlign: 'right', marginRight: '10px', fontSize: 12, fontWeight: 'bold' }}>
         {title.length}/150

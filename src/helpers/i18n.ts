@@ -154,7 +154,9 @@ i18next
             MatrixNum: '回答の種類',
             MatrixAnswer: '回答',
             AddOptions: '候補を追加',
-            Cancel: 'キャンセル'
+            Cancel: 'キャンセル',
+            VoteDuration: '投票期間',
+            Day: '日',
           },
           group: {
             groupCreateTitle1: '新たなグループ、「',
