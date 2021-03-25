@@ -19,6 +19,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 /*
 If the values are incorrect,
@@ -270,20 +271,17 @@ const VoteCandidateForm = (props: any) => {
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
           <div style={{ position: 'absolute', left: '0', }}>
 
-            <select size={1} onChange={(e) => { props.changeEndAt(e) }}>
-              <option value={24}>1</option>
-              <option value={48}>2</option>
-              <option value={72} selected>3</option>
-              <option value={96}>4</option>
-              <option value={120}>5</option>
-              <option value={144}>6</option>
-              <option value={168}>7</option>
+            <span style={{ fontSize: 14 }}>{i18n.t('newPost.VotingLength')}</span>
+            <select className={styles.vote_number_selector} size={1} onChange={(e) => { props.changeEndAt(e) }}>
+              <option value={24}>1&nbsp;{i18n.t('newPost.Day')}</option>
+              <option value={48}>2&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={72} selected>3&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={96}>4&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={120}>5&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={144}>6&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={168}>7&nbsp;{i18n.t('newPost.Days')}</option>
             </select>
 
-            {/* {i18n.t("newPost.end")}
-          N
-          <input className={styles.date_button} value={props.endAt} min={24} max={168} type="number" onChange={e => props.changeEndAt(e)}></input>
-            {i18n.t("newPost.hourLater")} */}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
             <div>
@@ -451,7 +449,12 @@ const MultipleVoteForm = (props: any) => {
 
     if (titleList.length < multipleVoteNum) {
       setIsTitleListOk(false);
-      setTitleList([...titleList, '']);
+
+      // setTitleList([...titleList, '']); 
+      // when you want to use "+ button" to add only 1 voteform, then you must use this.
+
+      setTitleList(Array(multipleVoteNum).fill(''));
+      // when you want to use numbers to add voteforms, then you must use this.
     }
 
     if (titleList.length > multipleVoteNum) {
@@ -459,7 +462,10 @@ const MultipleVoteForm = (props: any) => {
       const result = decreaseTitleList.filter((elem: any) => (elem.length === 0))
       if (result.length === 0) { setIsTitleListOk(true) } else { setIsTitleListOk(false) };
 
-      setTitleList(titleList.slice(0, titleList.length - 1));
+      // setTitleList(titleList.slice(0, titleList.length - 1));
+
+      setTitleList(Array(multipleVoteNum).fill(''));
+      // same as above
     }
 
     if (contentList.length < multipleVoteNum) {
@@ -569,6 +575,7 @@ const MultipleVoteForm = (props: any) => {
             topicList={props.topicList}
             setIsTitleListOk={setIsTitleListOk}
             setIsVoteDateListOk={setIsVoteDateListOk}
+            changeEndAt={props.changeEndAt}
           ></MultipleVoteFormEach>)
         })}
       </div>
@@ -576,16 +583,18 @@ const MultipleVoteForm = (props: any) => {
       <hr style={{ marginTop: '5ch' }}></hr>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
         <div style={{ position: 'absolute', left: '0', fontSize: 16 }}>
-          <select size={1} onChange={(e) => { props.changeEndAt(e) }}>
-            <option value={24}>1</option>
-            <option value={48}>2</option>
-            <option value={72} selected>3</option>
-            <option value={96}>4</option>
-            <option value={120}>5</option>
-            <option value={144}>6</option>
-            <option value={168}>7</option>
-          </select>
+        <span style={{ fontSize: 14 }}>{i18n.t('newPost.VotingLength')}</span>
+            <select className={styles.vote_number_selector} size={1} onChange={(e) => { props.changeEndAt(e) }}>
+              <option value={24}>1&nbsp;{i18n.t('newPost.Day')}</option>
+              <option value={48}>2&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={72} selected>3&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={96}>4&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={120}>5&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={144}>6&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={168}>7&nbsp;{i18n.t('newPost.Days')}</option>
+            </select>
         </div>
+
         <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
           <div>
             <Button style={{ borderRadius: 100, }} className={styles.cancel_button} disableRipple onClick={e => props.editParentHandle(e, false)}>{i18n.t('newPost.Cancel')}</Button>
@@ -905,6 +914,7 @@ const VoteForm = (props: any) => {
           targetGroupId={targetGroupId}
           topicList={topicList}
           editParentHandle={props.editParentHandle}
+          changeEndAt={changeEndAt}
         ></MultipleVoteForm>)
 
       default:
@@ -971,7 +981,21 @@ const VoteForm = (props: any) => {
               {i18n.t("newPost.continuasVote")}
             </Button>
           </div>
+
+          {voteTypeId === 3 ?
+            <span style={{ marginLeft: '1ch', position: 'absolute', right: 70 }}>
+              <span style={{ fontSize: 14 }}>{i18n.t('newPost.NumberOfVotes')}</span>
+              <select className={styles.vote_number_selector} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>z
+                <option value={2}>2&nbsp;</option>
+                <option value={3}>3&nbsp;</option>
+                <option value={4}>4&nbsp;</option>
+                <option value={5}>5&nbsp;</option>
+              </select>
+            </span>
+            : ''}
         </div>
+
+
 
         <br></br>
         {/* 
@@ -993,12 +1017,6 @@ const VoteForm = (props: any) => {
         <option value={2}>{i18n.t("newPost.matrixVote")}</option>
       </select> */}
 
-        {voteTypeId === 3 ? <span><select style={{ padding: '3px' }} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-        </select></span> : ''}
       </div>
       <br></br>
 
@@ -1020,7 +1038,7 @@ const VoteForm = (props: any) => {
       </div>
       <hr></hr>
 
-      {voteTypeId === 3 ? <h3 style={{ textAlign: 'center' }}>{i18n.t("newPost.parentTitle")}</h3> : ''}
+      {voteTypeId === 3 ? <div style={{ textAlign: 'center',color: '#888a8c' }}>{i18n.t("newPost.parentTitle")}</div> : ''}
 
       <div style={{ color: '#888a8c', textAlign: 'right', marginRight: '10px', fontSize: 12, fontWeight: 'bold' }}>
         {title.length}/150

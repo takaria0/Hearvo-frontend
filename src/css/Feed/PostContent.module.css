@@ -283,7 +283,24 @@
     outline: none;
 }
 
+.vote_number_selector {
+    border: none;
+    margin-left: 1ch;
+    outline: none;
+    font-size: 14px;
+}
 
+/* .vote_number_selector:hover {
+    background-color: #f5f5f5;
+    border: none;
+    margin-left: 1ch;
+    outline: none;
+    border-radius: 100px;
+    line-height: 1.75;
+    padding: 10px;
+    padding-left: 16px;
+
+} */
 
 }
 

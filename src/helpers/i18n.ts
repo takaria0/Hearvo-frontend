@@ -155,8 +155,11 @@ i18next
             MatrixAnswer: '回答',
             AddOptions: '候補を追加',
             Cancel: 'キャンセル',
-            VoteDuration: '投票期間',
+            VotingLength: '投票期間',
             Day: '日',
+            Days: '日',
+            NumberOfVotes: '投票の数'
+            
           },
           group: {
             groupCreateTitle1: '新たなグループ、「',
@@ -366,7 +369,7 @@ i18next
             done: 'Done',
             groupDoesntExist: "<This group doesn't exist>",
             topic: 'Topic',
-            group: 'Group　',
+            group: 'Group',
             searchResult: ' results',
             noContent: 'No content',
             more: 'More',
@@ -396,7 +399,11 @@ i18next
             MatrixNum: 'Answer Option',
             MatrixAnswer: 'Answer',
             AddOptions: 'Add Option',
-            Cancel: 'Cancel'
+            Cancel: 'Cancel',
+            VotingLength: 'Voting Length',
+            Day: 'day',
+            Days: 'days',
+            NumberOfVotes: 'Number of Votes'
           },
           group: {
             groupCreateTitle1: 'Created a new group "',
