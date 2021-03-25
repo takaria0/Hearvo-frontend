@@ -45,11 +45,12 @@ class Login extends React.Component<LoginProps, LoginState> {
     const params = new URLSearchParams(window.location.search);
     const previousUrl = {
       destination: params.get("destination"),
-      postId: params.get("postId"),
-      topic: params.get("tp"),
-      search:params.get("q"),
-      time:params.get("time"),
+      value: params.get("value"),
     }
+    // const previousUrl = {
+    //   destination: posts ,
+    //   value: 777 ,
+    // }
       
     axios.post("/login", { email: this.state.email, password: this.state.password }, { headers: { Country: process.env.REACT_APP_COUNTRY } })
     .then((res: any) => {
@@ -69,20 +70,13 @@ class Login extends React.Component<LoginProps, LoginState> {
           name: res.data.name,
         });
         
-        if (previousUrl.destination === null){
+        if ( previousUrl.destination === null ){
           this.props.history.push("/");
-        }else if(previousUrl.destination !== null && previousUrl.postId !==null){
-          this.props.history.push("/"+`${previousUrl.destination}`+"/"+`${previousUrl.postId}`);
-        }else if(previousUrl.topic !== null){
-          this.props.history.push("/topic?tp="+`${previousUrl.topic}`);
-        }else if(previousUrl.search !== null){
-          this.props.history.push("/search?q="+`${previousUrl.search}`);
-        }else if(previousUrl.time !== null){
-          this.props.history.push("/popular/"+`${previousUrl.time}`);
-        }else{
-          this.props.history.push("/"+`${previousUrl.destination}`);
+        } else if ( previousUrl.destination !== null && previousUrl.value !== null ){
+          this.props.history.push("/"+`${previousUrl.destination}`+"/"+`${previousUrl.value}`);
+        } else {
+          this.props.history.push("/");
         }
-        // this.props.history.push("/");
 
 
       }).catch((err: any) => {
@@ -106,8 +100,12 @@ class Login extends React.Component<LoginProps, LoginState> {
     const params = new URLSearchParams(window.location.search);
     const previousUrl = {
       destination: params.get("destination"),
-      postId: params.get("postId")
+      value: params.get("value")
     }
+    // const previousUrl = {
+    //   destination: posts ,
+    //   value: 777 ,
+    // }
 
     axios.post("/login?google_login=true", { }, { headers: { googleTokenId: res.tokenId, Country: process.env.REACT_APP_COUNTRY } })
       .then((res: any) => {
@@ -124,13 +122,13 @@ class Login extends React.Component<LoginProps, LoginState> {
           Mixpanel.people.set({
             name: res.data.name,
           });
-          // this.props.history.push("/");
-          if (previousUrl.destination === null && previousUrl.postId === null){
+
+          if ( previousUrl.destination === null ){
             this.props.history.push("/");
-          }else if(previousUrl.destination !== null && previousUrl.postId ===null){
-            this.props.history.push("/"+`${previousUrl.destination}`);
-          }else{
-            this.props.history.push("/"+`${previousUrl.destination}`+"/"+`${previousUrl.postId}`);
+          } else if ( previousUrl.destination !== null && previousUrl.value !== null ){
+            this.props.history.push("/"+`${previousUrl.destination}`+"/"+`${previousUrl.value}`);
+          } else {
+            this.props.history.push("/");
           }
 
         }).catch((err: any) => {

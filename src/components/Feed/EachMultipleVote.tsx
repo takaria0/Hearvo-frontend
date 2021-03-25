@@ -60,24 +60,11 @@ const EachMultipleVote = (props: any) => {
 
   const startClick = (e: any) => {
     e.preventDefault();
-    const url = window.location.pathname.split("/");
-    let params = window.location.search;
+    const post_id = props.postId;
 
     if (props.isLogin === false) {
-      // history.push("/login");
-      if (url[1]===""){
-        history.push("/login");
-      }else if(params!==""){
-        params=params.replace('?','&');
-        history.push("/login"+"?destination="+url[1]+params);
-      }else if(url[2]==null){
-        history.push("/login"+"?destination="+url[1]);
-      }else if(url.includes('popular')&&url[2]!==null){
-        history.push("/login"+"?destination="+url[1]+"&time="+url[2]);
-      }else{
-        history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
-      }
-      return
+      history.push("/login"+"?destination="+"posts"+"&value="+post_id)  //ログイン後、投稿詳細ページに飛ぶ     
+      return;
     }
 
     // if a user accesed from different countries, stop voting.

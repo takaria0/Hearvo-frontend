@@ -38,9 +38,9 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
 
   submit(e: any) {
     const url = window.location.pathname.split("/");
+    // hearvo.com/posts/777 => url = { ,posts,777}
     if (this.props.isLogin === false) {
-      // this.props.history.push("/login");
-      this.props.history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
+      this.props.history.push("/login"+"?destination="+url[1]+'&value='+url[2]);
       return
     }
 

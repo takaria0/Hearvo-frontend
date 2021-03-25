@@ -115,40 +115,29 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
 
 
     const url = window.location.pathname.split("/");
-    let params = window.location.search;
+    // hearvo.com/posts/777 => url = { ,posts,777}
 
     if(val === "/login") {
       if (typeof window !== 'undefined') {localStorage.removeItem("jwt")};
       if (typeof window !== 'undefined') {localStorage.removeItem("user")};
 
-      if (url[1]===""){
+      if (url[1] === ""){
         this.props.history.push(`${val}`);
-      }else if(params!==""){
-        params = params.replace('?','&');
-        this.props.history.push(`${val}`+"?destination="+url[1]+params);
-      }else if(url[2]==null){
-        this.props.history.push(`${val}`+"?destination="+url[1]);
-      }else if(url.includes('popular')&&url[2]!==null){
-        this.props.history.push(`${val}`+"?destination="+url[1]+"&time="+url[2]);
-      }else{
-        this.props.history.push(`${val}`+"?destination="+url[1]+'&postId='+url[2]);
+      } else if (url[2] != null){
+        this.props.history.push(`${val}`+"?destination="+url[1]+'&value='+url[2]);
+      } else {
+        this.props.history.push(`${val}`);
       }
       return
     }
 
     if (val !== "none") {
-      // this.props.history.push(`${val}`);
       if (url[1]===""){
         this.props.history.push(`${val}`);
-      }else if(params!==""){
-        params = params.replace('?','&');
-        this.props.history.push(`${val}`+"?destination="+url[1]+params);
-      }else if(url[2]==null){
-        this.props.history.push(`${val}`+"?destination="+url[1]);
-      }else if(url.includes('popular')&&url[2]!==null){
-        this.props.history.push(`${val}`+"?destination="+url[1]+"&time="+url[2]);
-      }else{
-        this.props.history.push(`${val}`+"?destination="+url[1]+'&postId='+url[2]);
+      }else if (url[2] != null){
+        this.props.history.push(`${val}`+"?destination="+url[1]+'&value='+url[2]);
+      } else {
+        this.props.history.push(`${val}`);
       }
       return
     }

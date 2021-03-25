@@ -53,23 +53,11 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
 
   change(e: any, id: number, context: any) {
     e.preventDefault();
-    const url = window.location.pathname.split("/");
-    let params = window.location.search;
+    const post_id = this.props.postId;
 
     if (this.props.isLogin === false) {
-      if (url[1]===""){
-        this.props.history.push("/login");
-      }else if(params!==""){
-        params=params.replace('?','&');
-        this.props.history.push("/login"+"?destination="+url[1]+params);
-      }else if(url[2]==null){
-        this.props.history.push("/login"+"?destination="+url[1]);
-      }else if(url.includes('popular')&&url[2]!==null){
-        this.props.history.push("/login"+"?destination="+url[1]+"&time="+url[2]);
-      }else{
-        this.props.history.push("/login"+"?destination="+url[1]+'&postId='+url[2]);
-      }
-      return
+      this.props.history.push("/login"+"?destination="+"posts"+"&value="+post_id)  //ログイン後、投稿詳細ページに飛ぶ
+      return;
     }
 
     // if a user accesed from different countries, stop voting.

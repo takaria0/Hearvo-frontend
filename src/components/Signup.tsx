@@ -48,6 +48,8 @@ class Signup extends React.Component<SignupProps, SignupState> {
   submit(e: any) {
     e.preventDefault();
     const params = window.location.search;
+    // hearvo.com/login?destination=posts&value=777 => params = ?destination=posts&value=777
+
     // need more elavorate password verification this.state.password === this.state.passwordVerify
     if(this.state.password.length < 8) {
       this.setState({
