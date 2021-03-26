@@ -13,7 +13,7 @@ import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-do
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
-import i18n from "../../helpers/i18n";
+import i18n from '../../helpers/i18n';
 import { Mixpanel } from '../../helpers/mixpanel';
 import CountryContext from '../../helpers/context';
 
@@ -53,10 +53,11 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
 
   change(e: any, id: number, context: any) {
     e.preventDefault();
-    
+    const post_id = this.props.postId;
+
     if (this.props.isLogin === false) {
-      this.props.history.push("/login");
-      return
+      this.props.history.push("/login"+"?destination="+"posts"+"&value="+post_id)  //ログイン後、投稿詳細ページに飛ぶ
+      return;
     }
 
     // if a user accesed from different countries, stop voting.

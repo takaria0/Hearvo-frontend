@@ -60,10 +60,11 @@ const EachMultipleVote = (props: any) => {
 
   const startClick = (e: any) => {
     e.preventDefault();
+    const post_id = props.postId;
 
     if (props.isLogin === false) {
-      history.push("/login");
-      return
+      history.push("/login"+"?destination="+"posts"+"&value="+post_id)  //ログイン後、投稿詳細ページに飛ぶ     
+      return;
     }
 
     // if a user accesed from different countries, stop voting.

@@ -8,7 +8,7 @@ import ReplyComment from './ReplyComment';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import i18n from "../helpers/i18n";
+import i18n from '../helpers/i18n';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -295,9 +295,12 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
 
   baseSubmit(e: any) {
+    const url = window.location.pathname.split("/");
+    // hearvo.com/posts/777 => url = { ,posts,777}
     
     if (this.props.isLogin === false) {
-      this.props.history.push("/login");
+      // this.props.history.push("/login");
+      this.props.history.push("/login"+"?destination="+url[1]+'&value='+url[2]);
       return
     }
 
