@@ -158,7 +158,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
         <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 5, padding: 6}}>
           {/* <SearchIcon style={{padding: 0}} /> */}
         <input maxLength={50} type="text" 
-            style={{ border: 'none', width: "50ch", outline: 'none', backgroundColor: 'white' }}
+            style={{ border: 'none', width: "100%", outline: 'none', backgroundColor: 'white' }}
          className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
         ></input>
         </span>
@@ -236,35 +236,38 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     return (
       <div style={{ transform: 'translateY(10px)' }}>
         <span style={{height: '10px'}}></span>
-        <span style={{ display: 'flex', justifyContent: 'space-between'}}>
-          <span>
+        <div style={{ display: 'flex', flexWrap:'nowrap', marginRight:'100px'}}>
+          <div>
           <Link to="/" className={styles.hearvo}>
             <b style={{ fontSize: 20, marginLeft: 10 }}>{i18n.t("header.title")}</b>
-          </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></span>
-          <Button　href="/latest" className={window.location.pathname==="/latest"?styles.now:styles.normal}>
-            <NewReleasesIcon style={{transform: 'translateY(-3px)'}}></NewReleasesIcon>
-            {/* {i18n.t("feed.latest")} */}
-          </Button>
-          <Button　href="/" className={window.location.pathname==="/"?styles.now:styles.normal}>
-             <PersonOutlineIcon style={{transform: 'translateY(-3px)'}}></PersonOutlineIcon>
-             {/* {i18n.t("feed.recommend")} */}
-          </Button>
-          <Button　href="/popular" className={window.location.pathname.includes("popular")?styles.now:styles.normal}>
-            <TrendingUpIcon style={{transform: 'translateY(-3px)'}}></TrendingUpIcon>
-            {/* {i18n.t("feed.popular")} */}
-          </Button>
+          </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></div>
           {/* <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} > */}
-          <span style={{ transform: 'translateY(5px)'}}>
-            {this.searchBar()}
-          </span>
-          <Button onClick={e => this.editHandle(e, true)}>
-          <CreateIcon style={{transform: 'translateY(-4px)'}}></CreateIcon>
-          {/* <PostContent isLogin={this.state.isLogin} edit={this.state.edit} editParentHandle={this.editHandle}></PostContent> */}
-          </Button>
-          <span style={{ transform: 'translateY(-3px)' }}>
-            {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar()}
-          </span>
-        </span>
+          <div style={{display:'flex',position:'fixed',right:'0px'}}>
+            <div style={{ transform: 'translateY(5px)',marginRight:'30px',paddingRight:'30px',width:'40ch'}}>
+              {this.searchBar()}
+            </div>
+            <div className={styles.header_items}>
+            <Button　href="/latest" className={window.location.pathname==="/latest"?styles.now:styles.normal}>
+              <NewReleasesIcon style={{transform: 'translateY(-3px)'}}></NewReleasesIcon>
+              {/* {i18n.t("feed.latest")} */}
+            </Button>
+            <Button　href="/" className={window.location.pathname==="/"?styles.now:styles.normal}>
+              <PersonOutlineIcon style={{transform: 'translateY(-3px)'}}></PersonOutlineIcon>
+              {/* {i18n.t("feed.recommend")} */}
+            </Button>
+            <Button　href="/popular" className={window.location.pathname.includes("popular")?styles.now:styles.normal}>
+              <TrendingUpIcon style={{transform: 'translateY(-3px)'}}></TrendingUpIcon>
+              {/* {i18n.t("feed.popular")} */}
+            </Button>
+            </div>
+            {/* <Button>
+            <CreateIcon style={{transform: 'translateY(-4px)'}}></CreateIcon>
+            </Button> */}
+            <span style={{ transform: 'translateY(-3px)'}}>
+              {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar()}
+            </span>
+          </div>
+        </div>
         {/* </span> */}
       </div>
     )

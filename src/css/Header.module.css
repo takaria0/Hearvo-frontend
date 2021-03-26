@@ -20,10 +20,11 @@
   background-color: hsl(115, 70%, 55%);
   margin-bottom: 10px;
   margin-top: -5px;
-  padding-bottom: -10px;
+  padding-bottom: 20px;
   position: fixed;
   z-index: 10;
   width: 100%;
+  flex-wrap: nowrap;
 }
 
 .hearvo {
@@ -64,16 +65,19 @@
 .profile:visited {
   color: red,
 }
-}
 
 .now{
   color: hsl(221, 84%, 57%) !important;
 }
 
 .normal{
-
+  
 }
 
+.header_items{
+  display: flex;
+}
+}
 
 /* @media screen and (min-width:750px) {
   .body {
@@ -97,10 +101,11 @@
   /* background-color: hsl(116, 49%, 45%); */
   background-color: hsl(115, 70%, 55%);
   margin-bottom: 40px;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   position: fixed;
   z-index: 10;
   width: 100%;
+  flex-wrap: nowrap;
 }
 
 .remark {
@@ -144,14 +149,17 @@
 .profile:visited {
   color: red,
 }
-}
 
 .now{
   color: hsl(221, 84%, 57%) !important;
 }
 
 .normal{
-
+  
+}
+.header_items{
+  display: flex;
+}
 }
 
 
@@ -166,18 +174,20 @@
   background-color: hsl(115, 70%, 55%);
   box-shadow: 0 2px 3px -3px rgb(120, 120, 120);
   margin-bottom: 80px;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   position: fixed;
   z-index: 10;
   width: 100%;
+  flex-wrap: nowrap;
 }
 
 .now{
   color: hsl(221, 84%, 57%) !important;
+  /* transform: translateX(30px) translateY(-5px); */
 }
 
 .normal{
-  
+  /* transform: translateX(30px) translateY(-5px); */
 }
 
 .remark {
@@ -220,7 +230,6 @@
 .profile:visited {
   color: red,
 }
-}
 
 
 .profile_span {
@@ -228,4 +237,8 @@
   margin-right: 20;
 }
 
-
+.header_items{
+  margin-right:15px;
+  padding-right:15px;
+}
+}

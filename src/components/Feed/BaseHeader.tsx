@@ -103,6 +103,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
 
   editHandle = (e: any, edit: boolean) => {
     e.preventDefault();
+    const element = document.getElementById('form');
     if(this.state.isLogin) {
       this.setState({
         edit: edit,
@@ -110,6 +111,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     } else {
       this.props.history.push("/login");
     }
+    element?.blur();　//inputのfocusをはずす
   }
 
 
@@ -117,7 +119,7 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
       return (
         <div className={styles.mini_header}>
           <div className={styles.header_box} onClick={e => this.editHandle(e, true)}>
-            <p>{i18n.t("header.subtitle")}</p>
+            <input placeholder={i18n.t("newPost.create")} type='text' id='form'></input>
           </div>
           <div className={styles.mini_header_inside}>
             <span　className={styles.mini_header_item}>

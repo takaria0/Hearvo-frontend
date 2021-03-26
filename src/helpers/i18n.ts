@@ -129,6 +129,7 @@ i18next
             required: '* 必須',
           },
           newPost: {
+            create:'投稿を作成',
             post: '投稿',
             add: '追加',
             title: 'タイトル',
@@ -370,6 +371,7 @@ i18next
             required: 'required *'
           },
           newPost: {
+            create:'Create Post',
             post: 'Post',
             cancel: 'Cancel',
             groupPost: 'Submit to a group',

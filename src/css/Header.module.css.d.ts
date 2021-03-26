@@ -7,3 +7,4 @@ export const remark: string;
 export const search_bar: string;
 export const normal: string;
 export const now: string;
+export const header_items: string;

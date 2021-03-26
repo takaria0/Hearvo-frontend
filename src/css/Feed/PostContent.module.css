@@ -76,11 +76,26 @@
     margin-bottom: 15px;
     font-size: 14px;
     cursor: pointer;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
-
+.header_box input{
+    font-size: 14px;
+    background-color: #F6F7F8;
+    border:1px solid #EDEFF1;
+    border-radius: 4px;
+    padding: 8px;
+    padding-top: 5px;
+    width: 93%;
+}
+.header_box input:hover{
+    font-size: 14px;
+    border: 1px solid #0079D3;
+    border-radius: 4px;
+    background-color: white;
+}
 .header_box :hover{
     color: hsl(0, 0, 0);
-    font-weight: bold;
 }
 
 .mini_header_item{
@@ -179,11 +194,28 @@
     margin-bottom: 15px;
     font-size: 14px;
     cursor: pointer;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.header_box input{
+    font-size: 14px;
+    background-color: #F6F7F8;
+    border:1px solid #EDEFF1;
+    border-radius: 4px;
+    padding: 8px;
+    width: 92%;
+}
+
+.header_box input:hover{
+    font-size: 14px;
+    border: 1px solid #0079D3;
+    border-radius: 4px;
+    background-color: white;
 }
 
 .header_box :hover{
     color: hsl(0, 0, 0);
-    font-weight: bold;
 }
 
 .mini_header_item{
@@ -273,10 +305,25 @@
     margin-bottom: 15px;
     font-size: 14px;
     cursor: pointer;
+    padding: 10px;
 }
+.header_box input{
+    font-size: 14px;
+    background-color: #F6F7F8;
+    border:1px solid #EDEFF1;
+    border-radius: 4px;
+    padding: 8px;
+    width: 97%;
+}
+.header_box input:hover{
+    font-size: 14px;
+    border: 1px solid #0079D3;
+    border-radius: 4px;
+    background-color: white;
+}
+
 .header_box :hover{
     color: hsl(0, 0, 0);
-    font-weight: bold;
 }
 .header_inner{
     padding: .5em;
