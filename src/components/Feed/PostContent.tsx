@@ -1020,7 +1020,7 @@ const VoteForm = (props: any) => {
       <br></br>
 
       <div>
-        <b>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</b>
+        <div style={{color:'#888a8c'}}>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <input ref={inputRef} required placeholder={i18n.t("newPost.topicPlaceholder")} onFocus={handleTopicFocus} onBlur={handleBlur} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}
             style={isTopicFocused ?
