@@ -61,9 +61,10 @@ class EachVoteSelect extends React.Component<EachVoteSelectProps, EachVoteSelect
     }
 
     // if a user accesed from different countries, stop voting.
-    if (context.country !== process.env.REACT_APP_COUNTRY) {
-      return;
-    }
+    
+    // if (context.country !== process.env.REACT_APP_COUNTRY) {
+    //   return;
+    // }
 
     this.setState({
       isClicked: true,

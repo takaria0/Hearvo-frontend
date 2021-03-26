@@ -8,3 +8,8 @@ export const date_button: string;
 export const mini_header: string;
 export const mini_header_inside: string;
 export const search_bar: string;
+export const vote_option: string;
+export const cancel_button: string;
+export const close_button: string;
+export const vote_number_selector: string;
+export const vote_length_selector: string;
