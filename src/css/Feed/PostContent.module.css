@@ -12,20 +12,41 @@
 }
 
 .title {
-    width: 100%;
-    /* height: 120%; */
-    /* padding: 12px 20px; */
+    padding: 10px;
+    width: 95%;
     margin-bottom: 10px;
-    display: inline-block;
-    padding: 5px;
+    border: 1px solid #eeeff1;
+    border-radius: 4px;
+    resize: none;
+    /* font-size: 13.33px; */
+}
+
+.title:focus {
+    padding: 10px;
+    width: 95%; 
+    margin-bottom: 10px; 
+    border: 1px solid black;
+    border-radius: 4px;
+    outline: none;
 }
 
 .content {
-    width: 100%;
-    /* padding: 12px 20px; */
-    /* margin: 10px 0; */
-    display: inline-block;
-    padding: 5px;
+    padding: 10px;
+    width: 95%;
+    margin-bottom: 10px;
+    border: 1px solid #eeeff1;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.content:focus {
+    padding: 10px;
+    width: 95%;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    resize: vertical;
+    outline: none;
 }
 
 .vote_select {
@@ -65,9 +86,64 @@
     font-size: 16px;
 }
 
-
 .search_bar {
     width: 50%
+}
+
+.vote_option {
+    padding: 10px;
+    width: 50ch;
+    margin-bottom: 5px;
+    border: 1px solid #eeeff1; 
+    border-radius: 4px;
+}
+
+.vote_option:focus {
+    padding: 10px;
+    width: 50ch;
+    margin-bottom: 5px;
+    border: 1px solid black; 
+    border-radius: 4px;
+    outline: none;
+}
+
+.cancel_button {
+    background-color: white;
+    border: none;
+    outline: none;
+    font-size: 16;
+    border-radius: 100px;
+    position: relative;
+    right: 2ch;
+    text-transform: none;
+}
+
+.cancel_button:hover {
+    background-color: #f5f5f5;
+    border: none;
+    outline: none;
+    border-radius: 100px;
+    transition: 0;
+}
+
+.close_button {
+    background-color: white;
+    border: none;
+    outline: none;
+}
+
+.vote_number_selector {
+    border: none;
+    margin-left: 1ch;
+    outline: none;
+    font-size: 14px;
+}
+
+.vote_length_selector {
+    border: none;
+    margin-left: 1ch;
+    outline: none;
+    font-size: 14px;
 }
 
 }
@@ -96,19 +172,41 @@
 }
 
 .title {
-    width: 100%;
-    /* padding: 12px 20px; */
+    padding: 10px;
+    width: 95%;
     margin-bottom: 10px;
-    display: inline-block;
-    padding: 5px;
+    border: 1px solid #eeeff1;
+    border-radius: 4px;
+    resize: none;
+    /* font-size: 13.33px; */
+}
+
+.title:focus {
+    padding: 10px;
+    width: 95%; 
+    margin-bottom: 10px; 
+    border: 1px solid black;
+    border-radius: 4px;
+    outline: none;
 }
 
 .content {
-    width: 100%;
-    /* padding: 12px 20px; */
-    /* margin: 10px 0; */
-    display: inline-block;
-    padding: 5px;
+    padding: 10px;
+    width: 95%;
+    margin-bottom: 10px;
+    border: 1px solid #eeeff1;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.content:focus {
+    padding: 10px;
+    width: 95%;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    resize: vertical;
+    outline: none;
 }
 
 .vote_select {
@@ -149,6 +247,62 @@
 
 .search_bar {
     width: 60%
+}
+
+.vote_option {
+    padding: 10px;
+    width: 50ch;
+    margin-bottom: 5px;
+    border: 1px solid #eeeff1; 
+    border-radius: 4px;
+}
+
+.vote_option:focus {
+    padding: 10px;
+    width: 50ch;
+    margin-bottom: 5px;
+    border: 1px solid black; 
+    border-radius: 4px;
+    outline: none;
+}
+
+.cancel_button {
+    background-color: white;
+    border: none;
+    outline: none;
+    font-size: 16;
+    border-radius: 100px;
+    position: relative;
+    right: 2ch;
+    text-transform: none;
+}
+
+.cancel_button:hover {
+    background-color: #f5f5f5;
+    border: none;
+    outline: none;
+    border-radius: 100px;
+    transition: 0;
+}
+
+.close_button {
+    background-color: white;
+    border: none;
+    outline: none;
+}
+
+.vote_number_selector {
+    border: none;
+    margin-left: 1ch;
+    outline: none;
+    font-size: 14px;
+}
+
+.vote_length_selector {
+    border: none;
+    margin-left: 1ch;
+    outline: none;
+    font-size: 14px;
 }
 
 }
@@ -284,6 +438,13 @@
 }
 
 .vote_number_selector {
+    border: none;
+    margin-left: 1ch;
+    outline: none;
+    font-size: 14px;
+}
+
+.vote_length_selector {
     border: none;
     margin-left: 1ch;
     outline: none;

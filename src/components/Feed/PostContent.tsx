@@ -223,7 +223,7 @@ const VoteCandidateForm = (props: any) => {
           <div>
             <Button disabled={true} style={{
               border: 'none', color: 'white', borderRadius: "100px",
-              backgroundColor: "#d4d4d4", outline: 'none'
+              backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
             }}>
               {i18n.t("newPost.post")}
             </Button>
@@ -233,10 +233,10 @@ const VoteCandidateForm = (props: any) => {
           <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
             <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
               border: 'none', color: 'white', borderRadius: "100px",
-              backgroundColor: "#d4d4d4", outline: 'none'
+              backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
             } : {
               outline: "none", border: 'none', color: 'white', borderRadius: "100px",
-              backgroundColor: "#3477cc",
+              backgroundColor: "#3477cc", textTransform: 'none'
             }}>
               {i18n.t("newPost.post")}
             </Button>
@@ -285,7 +285,7 @@ const VoteCandidateForm = (props: any) => {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
             <div>
-              <Button style={{ borderRadius: 100, }} className={styles.cancel_button} disableRipple onClick={e => props.editParentHandle(e, false)}>{i18n.t('newPost.Cancel')}</Button>
+              <Button style={{ borderRadius: 100, textTransform: 'none' }} className={styles.cancel_button} disableRipple onClick={e => props.editParentHandle(e, false)}>{i18n.t('newPost.Cancel')}</Button>
             </div>
             <div>
               {props.voteTypeId === 3 ? '' : submitButton()}
@@ -315,7 +315,7 @@ const VoteCandidateForm = (props: any) => {
       </div>
 
       <div style={{ marginTop: '1ch', marginLeft: '.5ch' }}>
-        <Button disableRipple style={{ borderRadius: '100px', color: '#3477cc' }} type="button" onClick={e => addHandle(e)}>
+        <Button disableRipple style={{ borderRadius: '100px', color: '#3477cc', textTransform: 'none' }} type="button" onClick={e => addHandle(e)}>
           <b>{i18n.t('newPost.AddOptions')}</b>
         </Button>
       </div>
@@ -408,7 +408,7 @@ const SubmitButtonMultiple = (props: any) => {
         <div>
           <Button disabled={true} style={{
             border: 'none', color: 'white', borderRadius: "100px",
-            backgroundColor: "#d4d4d4", outline: 'none'
+            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
           }}>
             {i18n.t("newPost.post")}
           </Button>
@@ -418,10 +418,10 @@ const SubmitButtonMultiple = (props: any) => {
         <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
           <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
             border: 'none', color: 'white', borderRadius: "100px",
-            backgroundColor: "#d4d4d4", outline: 'none'
+            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
           } : {
             outline: "none", border: 'none', color: 'white', borderRadius: "100px",
-            backgroundColor: "#3477cc",
+            backgroundColor: "#3477cc", textTransform: 'none'
           }}>
             {i18n.t("newPost.post")}
           </Button>
@@ -583,21 +583,21 @@ const MultipleVoteForm = (props: any) => {
       <hr style={{ marginTop: '5ch' }}></hr>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', margin: '3ch 0' }}>
         <div style={{ position: 'absolute', left: '0', fontSize: 16 }}>
-        <span style={{ fontSize: 14 }}>{i18n.t('newPost.VotingLength')}</span>
-            <select className={styles.vote_number_selector} size={1} onChange={(e) => { props.changeEndAt(e) }}>
-              <option value={24}>1&nbsp;{i18n.t('newPost.Day')}</option>
-              <option value={48}>2&nbsp;{i18n.t('newPost.Days')}</option>
-              <option value={72} selected>3&nbsp;{i18n.t('newPost.Days')}</option>
-              <option value={96}>4&nbsp;{i18n.t('newPost.Days')}</option>
-              <option value={120}>5&nbsp;{i18n.t('newPost.Days')}</option>
-              <option value={144}>6&nbsp;{i18n.t('newPost.Days')}</option>
-              <option value={168}>7&nbsp;{i18n.t('newPost.Days')}</option>
-            </select>
+          <span style={{ fontSize: 14 }}>{i18n.t('newPost.VotingLength')}</span>
+          <select className={styles.vote_length_selector} size={1} onChange={(e) => { props.changeEndAt(e) }}>
+            <option value={24}>1&nbsp;{i18n.t('newPost.Day')}</option>
+            <option value={48}>2&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={72} selected>3&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={96}>4&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={120}>5&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={144}>6&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={168}>7&nbsp;{i18n.t('newPost.Days')}</option>
+          </select>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '0' }}>
           <div>
-            <Button style={{ borderRadius: 100, }} className={styles.cancel_button} disableRipple onClick={e => props.editParentHandle(e, false)}>{i18n.t('newPost.Cancel')}</Button>
+            <Button style={{ borderRadius: 100, textTransform: 'none' }} className={styles.cancel_button} disableRipple onClick={e => props.editParentHandle(e, false)}>{i18n.t('newPost.Cancel')}</Button>
           </div>
           <div>
             <div>
@@ -969,34 +969,33 @@ const VoteForm = (props: any) => {
           </div>
           <div style={{ margin: '0' }}>
             <Button value={1} onClick={e => setVoteTypeId(1)} disableRipple
-              style={voteTypeId === 1 ? { borderRadius: '100px', backgroundColor: '#f5f5f5', marginRight: '.5ch' } : { borderRadius: '100px', marginRight: '.5ch' }}>
+              style={voteTypeId === 1 ? { borderRadius: '100px', backgroundColor: '#f5f5f5', marginRight: '.5ch', textTransform: 'none' } : { borderRadius: '100px', marginRight: '.5ch', textTransform: 'none' }}>
               <InsertDriveFileIcon style={{ fontSize: 20 }} />
               &nbsp;
               {i18n.t("newPost.normalVote")}
             </Button>
             <Button value={3} onClick={e => setVoteTypeId(3)} disableRipple
-              style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#f5f5f5', marginLeft: '.5ch' } : { borderRadius: '100px', marginLeft: '.5ch' }}>
+              style={voteTypeId === 3 ? { borderRadius: '100px', backgroundColor: '#f5f5f5', marginLeft: '.5ch', textTransform: 'none' } : { borderRadius: '100px', marginLeft: '.5ch', textTransform: 'none' }}>
               <FileCopyIcon style={{ fontSize: 20 }} />
               &nbsp;
               {i18n.t("newPost.continuasVote")}
             </Button>
           </div>
-
-          {voteTypeId === 3 ?
-            <span style={{ marginLeft: '1ch', position: 'absolute', right: 70 }}>
-              <span style={{ fontSize: 14 }}>{i18n.t('newPost.NumberOfVotes')}</span>
-              <select className={styles.vote_number_selector} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>z
-                <option value={2}>2&nbsp;</option>
-                <option value={3}>3&nbsp;</option>
-                <option value={4}>4&nbsp;</option>
-                <option value={5}>5&nbsp;</option>
-              </select>
-            </span>
-            : ''}
         </div>
-
-
-
+      </div>
+      <br></br>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        {voteTypeId === 3 ?
+          <span>
+            <span style={{ fontSize: 14 }}>{i18n.t('newPost.NumberOfVotes')}</span>
+            <select className={styles.vote_number_selector} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>z
+                  <option value={2}>2&nbsp;</option>
+              <option value={3}>3&nbsp;</option>
+              <option value={4}>4&nbsp;</option>
+              <option value={5}>5&nbsp;</option>
+            </select>
+          </span>
+          : ''}
         <br></br>
         {/* 
         <select size={1} onChange={(e) => { changeEndAt(e) }}>
@@ -1038,7 +1037,7 @@ const VoteForm = (props: any) => {
       </div>
       <hr></hr>
 
-      {voteTypeId === 3 ? <div style={{ textAlign: 'center',color: '#888a8c' }}>{i18n.t("newPost.parentTitle")}</div> : ''}
+      {voteTypeId === 3 ? <div style={{ textAlign: 'center', color: '#888a8c' }}>{i18n.t("newPost.parentTitle")}</div> : ''}
 
       <div style={{ color: '#888a8c', textAlign: 'right', marginRight: '10px', fontSize: 12, fontWeight: 'bold' }}>
         {title.length}/150
