@@ -125,7 +125,7 @@ const VoteCandidateForm = (props: any) => {
             allLength += 1;
             try { if (inside.length === 0) { count = count + 1 } } catch (err: any) { }
           })));
-        if (count === 0 && allLength > 3) { props.setIsVoteDateListOk(true) } else { props.setIsVoteDateListOk(false) };
+        if (count === 0 && allLength > 3) { props.setIsVoteDataListOk(true) } else { props.setIsVoteDataListOk(false) };
 
         props.setVoteDataList(updateVoteDataList);
         return
@@ -206,7 +206,7 @@ const VoteCandidateForm = (props: any) => {
   const addHandle = (e: any) => {
     if (voteData.length > 6) { return };
     setVoteData([...voteData, '']);
-    if (props.voteTypeId === 3) { props.setIsVoteDateListOk(false) };
+    if (props.voteTypeId === 3) { props.setIsVoteDataListOk(false) };
   }
 
   const handleClick = (e: any) => {
@@ -372,7 +372,7 @@ const MultipleVoteFormEach = (props: any) => {
         idx={props.idx}
         voteDataList={props.voteDataList}
         setVoteDataList={props.setVoteDataList}
-        setIsVoteDateListOk={props.setIsVoteDateListOk}
+        setIsVoteDataListOk={props.setIsVoteDataListOk}
         changeEndAt={props.changeEndAt}
       ></VoteCandidateForm></div>
     </div>
@@ -388,7 +388,7 @@ const SubmitButtonMultiple = (props: any) => {
       props.title.length !== 0 &&
       props.topicList.length !== 0 &&
       props.isTitleListOk &&
-      props.isVoteDateListOk
+      props.isVoteDataListOk
     ) {
       setInvalid(false);
     } else {
@@ -441,61 +441,85 @@ const MultipleVoteForm = (props: any) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirm, setIsConfirm] = useState(false);
   const [isTitleListOk, setIsTitleListOk] = useState(false);
-  const [isVoteDateListOk, setIsVoteDateListOk] = useState(false);
+  const [isVoteDataListOk, setIsVoteDataListOk] = useState(false);
+
+
+  // How to use .map
+  const someArray = ["a", "b", "c"];
+  const answer = someArray.map((element: string) => { return element + " with something" });
+  // ['a with something', 'b with something', 'c with something']
+
 
   useEffect(() => {
-
-
+    let nowContentList = contentList;
+    let nowVoteDataList = voteDataList;
 
     if (titleList.length < multipleVoteNum) {
       setIsTitleListOk(false);
-
+      // Initialize an array with size of multipleVoteNum - titleList.length filled with '';
+      const addNum = multipleVoteNum - titleList.length
+      const addList = Array.apply(null, Array(addNum)).map(() => '');
+      setTitleList([...titleList, ...addList]);
+      // when you want to use numbers to add voteforms, then you must use this.
       // setTitleList([...titleList, '']); 
       // when you want to use "+ button" to add only 1 voteform, then you must use this.
-
-      setTitleList(Array(multipleVoteNum).fill(''));
-      // when you want to use numbers to add voteforms, then you must use this.
     }
 
     if (titleList.length > multipleVoteNum) {
-      const decreaseTitleList = titleList.slice(0, titleList.length - 1);
-      const result = decreaseTitleList.filter((elem: any) => (elem.length === 0))
+
+      const reduceNum = titleList.length - multipleVoteNum;
+
+      const reducedTitleList = titleList.slice(0, titleList.length - reduceNum)
+      const result = reducedTitleList.filter((elem: any) => (elem.length === 0))
       if (result.length === 0) { setIsTitleListOk(true) } else { setIsTitleListOk(false) };
-
+      //same as above.
       // setTitleList(titleList.slice(0, titleList.length - 1));
+      // same as above.
 
-      setTitleList(Array(multipleVoteNum).fill(''));
-      // same as above
+      setTitleList(reducedTitleList);
     }
 
     if (contentList.length < multipleVoteNum) {
-      setContentList([...contentList, '']);
+      const addNum = multipleVoteNum - contentList.length
+      const addList = Array.apply(null, Array(addNum)).map(() => '');
+      setContentList([...contentList, ...addList]);
     }
 
     if (contentList.length > multipleVoteNum) {
-      setContentList(contentList.slice(0, contentList.length - 1));
+      const reduceNum = contentList.length - multipleVoteNum;
+      setContentList(contentList.slice(0, contentList.length - reduceNum));
     }
 
+
     if (voteDataList.length < multipleVoteNum) {
-      setIsVoteDateListOk(false);
-      setVoteDataList([...voteDataList, ['', '']]);
+      setIsVoteDataListOk(false);
+      const addNum = multipleVoteNum - voteDataList.length
+      const addList = Array.apply(null, Array(addNum)).map(() => ['', '']);
+      setVoteDataList([...voteDataList, ...addList]);
+
+      // for (; multipleVoteNum - nowVoteDataList.length > 0; nowVoteDataList.length++) {
+      //   setVoteDataList([...voteDataList, ['', '']]);
+      // }
     }
 
     if (voteDataList.length > multipleVoteNum) {
-      const decreaseVoteDataList = voteDataList.slice(0, voteDataList.length - 1);
-      let count = 0; let allLength = 0;
-      const result = decreaseVoteDataList.map((elem: any) => (
+      const reduceNum = voteDataList.length - multipleVoteNum;
+      const reducedDataList = voteDataList.slice(0, voteDataList.length - reduceNum);
+      let count = 0;
+      let allLength = 0;
+      const result = reducedDataList.map((elem: any) => (
         elem.map((inside: any) => {
           allLength += 1;
           try { if (inside.length === 0) { count = count + 1 } } catch (err: any) { }
         })));
-      if (count === 0 && allLength > 3) { setIsVoteDateListOk(true) } else { setIsVoteDateListOk(false) };
-
-      setVoteDataList(voteDataList.slice(0, voteDataList.length - 1));
+      if (count === 0 && allLength > 3) { setIsVoteDataListOk(true) } else { setIsVoteDataListOk(false) };
+        setVoteDataList(reducedDataList)
     }
-
   }, [props.multipleVoteNum]);
-  // });
+
+  console.log(titleList);
+  console.log(contentList);
+  console.log(voteDataList);
 
   const submit = (e: any) => {
     const parentTitle = props.title;
@@ -574,7 +598,7 @@ const MultipleVoteForm = (props: any) => {
             setVoteDataList={setVoteDataList}
             topicList={props.topicList}
             setIsTitleListOk={setIsTitleListOk}
-            setIsVoteDateListOk={setIsVoteDateListOk}
+            setIsVoteDataListOk={setIsVoteDataListOk}
             changeEndAt={props.changeEndAt}
           ></MultipleVoteFormEach>)
         })}
@@ -612,7 +636,7 @@ const MultipleVoteForm = (props: any) => {
                 topicList={props.topicList}
                 submit={submit}
                 isTitleListOk={isTitleListOk}
-                isVoteDateListOk={isVoteDateListOk}
+                isVoteDataListOk={isVoteDataListOk}
               />
             </div>
           </div>
@@ -1020,7 +1044,7 @@ const VoteForm = (props: any) => {
       <br></br>
 
       <div>
-        <div style={{color:'#888a8c'}}>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</div>
+        <div style={{ color: '#888a8c' }}>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <input ref={inputRef} required placeholder={i18n.t("newPost.topicPlaceholder")} onFocus={handleTopicFocus} onBlur={handleBlur} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}
             style={isTopicFocused ?
