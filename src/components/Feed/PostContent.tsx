@@ -307,7 +307,7 @@ const VoteCandidateForm = (props: any) => {
             return (
               <div key={idx} style={{ display: 'flex', alignItems: 'center' }}>
                 <input className={styles.vote_option} maxLength={25} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
-                {idx > 1 ? <span style={{ marginLeft: 5 }}><button type="button" onClick={e => deleteHandle(e, idx)} style={{ outline: 'none', border: 'none', backgroundColor: 'white' }}><DeleteForeverIcon style={{ fontSize: 24 }} /></button></span> : ''}
+                {idx > 1 ? <span style={{ marginLeft: 5 }}><div onClick={e => deleteHandle(e, idx)} style={{ outline: 'none', border: 'none', backgroundColor: 'white' }}><DeleteForeverIcon style={{ fontSize: 24 }} /></div></span> : ''}
               </div>
             )
           })}
@@ -494,7 +494,7 @@ const MultipleVoteForm = (props: any) => {
     if (voteDataList.length < multipleVoteNum) {
       setIsVoteDataListOk(false);
       const addNum = multipleVoteNum - voteDataList.length
-      const addList = Array.apply(null, Array(addNum)).map(() => ['', '']);
+      const addList = Array.apply(null, Array(addNum)).map(() => ['', 'x']);
       setVoteDataList([...voteDataList, ...addList]);
 
       // for (; multipleVoteNum - nowVoteDataList.length > 0; nowVoteDataList.length++) {
@@ -1044,7 +1044,7 @@ const VoteForm = (props: any) => {
       <br></br>
 
       <div>
-        <div style={{ color: '#888a8c' }}>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</div>
+        <div style={{ color: '#888a8c', fontSize: 14 }}>{i18n.t("newPost.topic")}  {i18n.t("newPost.topicDescription")}</div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <input ref={inputRef} required placeholder={i18n.t("newPost.topicPlaceholder")} onFocus={handleTopicFocus} onBlur={handleBlur} value={topicString} type="text" maxLength={200} onChange={e => editTopic(e)}
             style={isTopicFocused ?
