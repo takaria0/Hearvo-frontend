@@ -437,7 +437,7 @@ const MultipleVoteForm = (props: any) => {
 
   const [titleList, setTitleList] = useState(Array(multipleVoteNum).fill(''));
   const [contentList, setContentList] = useState(Array(multipleVoteNum).fill(''));
-  const [voteDataList, setVoteDataList] = useState<any>(Array(multipleVoteNum).fill([]));
+  const [voteDataList, setVoteDataList] = useState<any>(Array(multipleVoteNum).fill(['', '']));
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirm, setIsConfirm] = useState(false);
   const [isTitleListOk, setIsTitleListOk] = useState(false);
@@ -451,8 +451,6 @@ const MultipleVoteForm = (props: any) => {
 
 
   useEffect(() => {
-    let nowContentList = contentList;
-    let nowVoteDataList = voteDataList;
 
     if (titleList.length < multipleVoteNum) {
       setIsTitleListOk(false);
@@ -468,15 +466,17 @@ const MultipleVoteForm = (props: any) => {
     if (titleList.length > multipleVoteNum) {
 
       const reduceNum = titleList.length - multipleVoteNum;
-
       const reducedTitleList = titleList.slice(0, titleList.length - reduceNum)
-      const result = reducedTitleList.filter((elem: any) => (elem.length === 0))
+
+      setTitleList(reducedTitleList);
+
+      const result = titleList.filter((elem: any) => (elem.length === 0))
       if (result.length === 0) { setIsTitleListOk(true) } else { setIsTitleListOk(false) };
       //same as above.
       // setTitleList(titleList.slice(0, titleList.length - 1));
       // same as above.
 
-      setTitleList(reducedTitleList);
+
     }
 
     if (contentList.length < multipleVoteNum) {
@@ -494,7 +494,7 @@ const MultipleVoteForm = (props: any) => {
     if (voteDataList.length < multipleVoteNum) {
       setIsVoteDataListOk(false);
       const addNum = multipleVoteNum - voteDataList.length
-      const addList = Array.apply(null, Array(addNum)).map(() => ['', 'x']);
+      const addList = Array.apply(null, Array(addNum)).map(() => ['', '']);
       setVoteDataList([...voteDataList, ...addList]);
 
       // for (; multipleVoteNum - nowVoteDataList.length > 0; nowVoteDataList.length++) {
@@ -504,22 +504,22 @@ const MultipleVoteForm = (props: any) => {
 
     if (voteDataList.length > multipleVoteNum) {
       const reduceNum = voteDataList.length - multipleVoteNum;
-      const reducedDataList = voteDataList.slice(0, voteDataList.length - reduceNum);
+      const reducedVoteDataList = voteDataList.slice(0, voteDataList.length - reduceNum);
+
+      setVoteDataList(reducedVoteDataList);
+
       let count = 0;
       let allLength = 0;
-      const result = reducedDataList.map((elem: any) => (
+      const result = voteDataList.map((elem: any) => (
         elem.map((inside: any) => {
           allLength += 1;
           try { if (inside.length === 0) { count = count + 1 } } catch (err: any) { }
         })));
       if (count === 0 && allLength > 3) { setIsVoteDataListOk(true) } else { setIsVoteDataListOk(false) };
-        setVoteDataList(reducedDataList)
-    }
-  }, [props.multipleVoteNum]);
 
-  console.log(titleList);
-  console.log(contentList);
-  console.log(voteDataList);
+    }
+
+  }, [props.multipleVoteNum]);
 
   const submit = (e: any) => {
     const parentTitle = props.title;
