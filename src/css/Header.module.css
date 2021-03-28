@@ -5,8 +5,6 @@
 
 .search_bar {
   border-radius: 2px;
-  /* display: inline; */
-  /* width: 70%; */
 }
 
 .remark {
@@ -76,6 +74,7 @@
 
 .header_items{
   display: flex;
+  transform: translateY(-3px);
 }
 }
 
@@ -159,13 +158,14 @@
 }
 .header_items{
   display: flex;
+  transform: translateY(-3px);
 }
 }
 
 
 @media screen and (min-width:1000px) {
 .search_bar {
-  border-radius: 1px
+  border-radius: 1px;
 }
 
 .header {
@@ -240,5 +240,6 @@
 .header_items{
   margin-right:15px;
   padding-right:15px;
+  transform: translateY(-3px);
 }
 }

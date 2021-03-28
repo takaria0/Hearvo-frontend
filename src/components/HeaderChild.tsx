@@ -22,7 +22,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import HelpIcon from '@material-ui/icons/Help';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import NewReleasesOutlinedIcon from '@material-ui/icons/NewReleasesOutlined';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 
 
@@ -243,20 +243,20 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
           </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></div>
           {/* <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} > */}
           <div style={{display:'flex',position:'fixed',right:'0px'}}>
-            <div style={{ transform: 'translateY(5px)',marginRight:'30px',paddingRight:'30px',width:'40ch'}}>
+            <div style={{ transform: 'translateY(5px)',marginRight:'30px',paddingRight:'30px',width:'20vw'}}>
               {this.searchBar()}
             </div>
             <div className={styles.header_items}>
             <Button　href="/latest" className={window.location.pathname==="/latest"?styles.now:styles.normal}>
-              <NewReleasesIcon style={{transform: 'translateY(-3px)'}}></NewReleasesIcon>
+              <NewReleasesOutlinedIcon/>
               {/* {i18n.t("feed.latest")} */}
             </Button>
             <Button　href="/" className={window.location.pathname==="/"?styles.now:styles.normal}>
-              <PersonOutlineIcon style={{transform: 'translateY(-3px)'}}></PersonOutlineIcon>
+              <PersonOutlineIcon/>
               {/* {i18n.t("feed.recommend")} */}
             </Button>
             <Button　href="/popular" className={window.location.pathname.includes("popular")?styles.now:styles.normal}>
-              <TrendingUpIcon style={{transform: 'translateY(-3px)'}}></TrendingUpIcon>
+              <TrendingUpIcon/>
               {/* {i18n.t("feed.popular")} */}
             </Button>
             </div>

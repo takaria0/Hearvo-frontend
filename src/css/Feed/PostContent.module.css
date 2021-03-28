@@ -76,8 +76,7 @@
     margin-bottom: 15px;
     font-size: 14px;
     cursor: pointer;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 10px;
 }
 .header_box input{
     font-size: 14px;
@@ -86,7 +85,8 @@
     border-radius: 4px;
     padding: 8px;
     padding-top: 5px;
-    width: 93%;
+    width: 100%;
+    box-sizing: border-box;
 }
 .header_box input:hover{
     font-size: 14px;
@@ -101,11 +101,6 @@
 .mini_header_item{
 
 }
-
-.search_bar {
-    width: 50%
-}
-
 }
 
 
@@ -194,8 +189,7 @@
     margin-bottom: 15px;
     font-size: 14px;
     cursor: pointer;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 10px;
 }
 
 .header_box input{
@@ -204,7 +198,8 @@
     border:1px solid #EDEFF1;
     border-radius: 4px;
     padding: 8px;
-    width: 92%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .header_box input:hover{
@@ -221,11 +216,6 @@
 .mini_header_item{
 
 }
-
-.search_bar {
-    width: 60%
-}
-
 }
 
 
@@ -313,7 +303,10 @@
     border:1px solid #EDEFF1;
     border-radius: 4px;
     padding: 8px;
-    width: 97%;
+    box-sizing: border-box;
+    width: 100%;
+
+
 }
 .header_box input:hover{
     font-size: 14px;
@@ -332,11 +325,6 @@
 .mini_header_item{
 
 }
-
-.search_bar {
-    width: 70%
-}
-
 }
 
 
