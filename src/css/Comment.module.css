@@ -45,6 +45,15 @@
   margin-left: 15px;
   margin-right: 2px;
 }
+
+.comment_button {
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 100px;
+  background-color: #3477cc;
+  text-transform: none;
+}
 }
 
 
@@ -93,6 +102,15 @@
 .reply {
   width: 100%;
 }
+
+.comment_button {
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 100px;
+  background-color: #3477cc;
+  text-transform: none;
+}
 }
 
 @media screen and (max-width: 1200px) and (min-width: 1000px) {
@@ -138,6 +156,15 @@
 
 .reply {
   width: 100%;
+}
+
+.comment_button {
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 100px;
+  background-color: #3477cc;
+  text-transform: none;
 }
 }
 
@@ -188,6 +215,15 @@
 
 .reply {
   width: 100%;
+}
+
+.comment_button {
+    outline: none;
+    border: none;
+    color: white;
+    border-radius: 100px;
+    background-color: #3477cc;
+    text-transform: none;
 }
 }
 
