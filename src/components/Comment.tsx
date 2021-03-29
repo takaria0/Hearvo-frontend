@@ -10,7 +10,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import i18n from '../helpers/i18n';
 import { FormatColorResetOutlined } from '@material-ui/icons';
-import { StylesProvider } from "@material-ui/core/styles"
+import ReplyIcon from '@material-ui/icons/Reply';
 
 
 const moment = require('moment-timezone');
@@ -357,7 +357,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
-              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, 0)}>{i18n.t("eachPost.cancel")}</Button></span>
+              <span style={{ textAlign: 'right' }}><Button className={styles.reply_cancel} onClick={e => this.click(e, 0)}>{i18n.t("eachPost.cancel")}</Button></span>
               <ReplyComment isLogin={this.props.isLogin} commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
             </div>
             <ul className={styles.com_ul}>
@@ -372,7 +372,11 @@ class Comment extends React.Component<CommentProps, CommentState> {
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
               <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
-              <span style={{ textAlign: 'right' }}><Button style={{ fontSize: 12 }} onClick={e => this.click(e, props.id)}>{i18n.t("eachPost.reply")}</Button></span>
+              <span style={{ textAlign: 'right' }}>
+                <Button disableRipple className={styles.reply_icon} onClick={e => this.click(e, props.id)}>
+                    <ReplyIcon style={{fontSize: 18}}/>{i18n.t("eachPost.reply")}
+                </Button>
+              </span>
             </div>
 
             <ul className={styles.com_ul}>
@@ -393,25 +397,24 @@ class Comment extends React.Component<CommentProps, CommentState> {
     if (this.state.isLoaded) {
       return (
         // <StylesProvider injectFirst>
-          <div className={styles.comment_body}>
-            <div>
-              <form onSubmit={e => this.baseSubmit(e)}>
-                <div style={{ textAlign: 'center' }}>
-                  <TextareaAutosize maxLength={1000} placeholder={i18n.t("eachPost.commentPlaceholder")} rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></TextareaAutosize>
-                  <div className={styles.submit}>
-                    <Button disableRipple type="submit" value="Submit" disabled={!this.state.isCommentEntered}
-                      // className={styles.comment_button}
-                      style={!this.state.isCommentEntered ?
-                        { outline: "none", border: 'none', color: 'white', borderRadius: "100px", backgroundColor: "#d4d4d4", textTransform: 'none' } :
-                        { outline: "none", border: 'none', color: 'white', borderRadius: "100px", backgroundColor: "#3477cc", textTransform: 'none' }}
-                    >
-                      {i18n.t("eachPost.commentButton")}</Button>
-                  </div>
+        <div className={styles.comment_body}>
+          <div>
+            <form onSubmit={e => this.baseSubmit(e)}>
+              <div style={{ textAlign: 'center' }}>
+                <TextareaAutosize maxLength={1000} placeholder={i18n.t("eachPost.commentPlaceholder")} rows={5} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></TextareaAutosize>
+                <div className={styles.submit}>
+                  <Button disableRipple type="submit" value="Submit" disabled={!this.state.isCommentEntered}
+                    className={this.state.isCommentEntered ? styles.comment_button : styles.disabled_comment_button}
+                  >
+                    {i18n.t("eachPost.commentButton")}</Button>
                 </div>
-              </form>
-            </div>
-            <ListComment comments={this.state.nestedComments} />
+              </div>
+
+            </form>
+
           </div>
+          <ListComment comments={this.state.nestedComments} />
+        </div>
         // </StylesProvider>
       )
     }
@@ -420,16 +423,15 @@ class Comment extends React.Component<CommentProps, CommentState> {
       <div className={styles.comment_body}>
         <div>
           <form onSubmit={e => this.baseSubmit(e)}>
-            <div style={{ textAlign: 'center' }}>
+            <div>
               <TextareaAutosize maxLength={1000} rows={5} placeholder={i18n.t("eachPost.commentPlaceholder")} className={styles.base} onChange={e => this.baseChange(e)} value={this.state.baseCommentContent}></TextareaAutosize>
               <div className={styles.submit}>
                 <Button disableRipple type="submit" value="Submit" disabled={true}
-                  style={{ outline: "none", border: 'none', color: 'white', borderRadius: "100px", backgroundColor: "#d4d4d4", textTransform: 'none' }}
+                  className={styles.disabled_comment_button}
                 >
                   {i18n.t("eachPost.commentButton")}</Button>
               </div>
             </div>
-
           </form>
         </div>
         <div>

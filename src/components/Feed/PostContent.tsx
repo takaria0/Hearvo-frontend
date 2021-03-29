@@ -280,6 +280,14 @@ const VoteCandidateForm = (props: any) => {
               <option value={120}>5&nbsp;{i18n.t('newPost.Days')}</option>
               <option value={144}>6&nbsp;{i18n.t('newPost.Days')}</option>
               <option value={168}>7&nbsp;{i18n.t('newPost.Days')}</option>
+
+              <option value={192}>8&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={216}>9&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={240}>10&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={264}>11&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={288}>12&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={312}>13&nbsp;{i18n.t('newPost.Days')}</option>
+              <option value={336}>14&nbsp;{i18n.t('newPost.Days')}</option>
             </select>
 
           </div>
@@ -616,6 +624,14 @@ const MultipleVoteForm = (props: any) => {
             <option value={120}>5&nbsp;{i18n.t('newPost.Days')}</option>
             <option value={144}>6&nbsp;{i18n.t('newPost.Days')}</option>
             <option value={168}>7&nbsp;{i18n.t('newPost.Days')}</option>
+
+            <option value={192}>8&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={216}>9&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={240}>10&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={264}>11&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={288}>12&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={312}>13&nbsp;{i18n.t('newPost.Days')}</option>
+            <option value={336}>14&nbsp;{i18n.t('newPost.Days')}</option>
           </select>
         </div>
 

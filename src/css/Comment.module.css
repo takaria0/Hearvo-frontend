@@ -33,6 +33,8 @@
   margin-top: 20px;
   padding: 10px;
   border-radius: 5px;
+
+  resize: vertical;
 }
 
 .submit {
@@ -41,9 +43,9 @@
 }
 
 .reply {
-  width: 80%;
-  margin-left: 15px;
-  margin-right: 2px;
+  width: 95%;
+  border-radius: 4px;
+  resize: vertical;
 }
 
 .comment_button {
@@ -53,6 +55,33 @@
   border-radius: 100px;
   background-color: #3477cc;
   text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.comment_button:hover {
+outline: none;
+border: none;
+color: white;
+border-radius: 100px;
+background-color: #3477cc;
+text-transform: none;
+transition: none;
+font-size: 0.75em;
+font-weight: bold;
+}
+
+.disabled_comment_button {
+outline: none;
+border: none;
+color: white !important;
+border-radius: 100px;
+background-color: #d4d4d4;
+text-transform: none;
+transition: none;
+font-size: 0.75em;
+font-weight: bold;
 }
 }
 
@@ -92,6 +121,8 @@
   margin-top: 20px;
   padding: 10px;
   border-radius: 5px;
+
+  resize: vertical;
 }
 
 .submit {
@@ -100,7 +131,9 @@
 }
 
 .reply {
-  width: 100%;
+  width: 95%;
+  border-radius: 4px;
+  resize: vertical;
 }
 
 .comment_button {
@@ -110,6 +143,33 @@
   border-radius: 100px;
   background-color: #3477cc;
   text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.comment_button:hover {
+outline: none;
+border: none;
+color: white;
+border-radius: 100px;
+background-color: #3477cc;
+text-transform: none;
+transition: none;
+font-size: 0.75em;
+font-weight: bold;
+}
+
+.disabled_comment_button {
+outline: none;
+border: none;
+color: white !important;
+border-radius: 100px;
+background-color: #d4d4d4;
+text-transform: none;
+transition: none;
+font-size: 0.75em;
+font-weight: bold;
 }
 }
 
@@ -147,6 +207,8 @@
   margin-top: 20px;
   padding: 10px;
   border-radius: 5px;
+
+  resize: vertical;
 }
 
 .submit {
@@ -155,16 +217,45 @@
 }
 
 .reply {
-  width: 100%;
+  width: 95%;
+  border-radius: 4px;
+  resize: vertical;
 }
 
 .comment_button {
+    outline: none;
+    border: none;
+    color: white;
+    border-radius: 100px;
+    background-color: #3477cc;
+    text-transform: none;
+    transition: none;
+    font-size: 0.75em;
+    font-weight: bold;
+}
+
+.comment_button:hover {
   outline: none;
   border: none;
   color: white;
   border-radius: 100px;
   background-color: #3477cc;
   text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.disabled_comment_button {
+  outline: none;
+  border: none;
+  color: white !important;
+  border-radius: 100px;
+  background-color: #d4d4d4;
+  text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
 }
 }
 
@@ -175,9 +266,8 @@
 
 .comment_body {
   background-color: white;
-    /* border: solid; */
-    border-width: thin;
-    border-radius: 5px;
+  border-width: thin;
+  border-radius: 4px;
 }
 
 .body {
@@ -202,19 +292,41 @@
 }
 
 .base {
-  width: 70ch;
+  width: 95%;
   margin-top: 20px;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 4px;
+  resize: vertical;
+  border: 1px solid #eeeff1;
+}
+
+.base:focus {
+  width: 95%;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 4px;
+  resize: vertical;
+  border: 1px solid black;
+  outline: none;
 }
 
 .submit {
   text-align: right;
-  transform: translateX(-30px);
 }
 
 .reply {
-  width: 100%;
+  width: 95%;
+  border-radius: 4px;
+  resize: vertical;
+  border: 1px solid #eeeff1;
+}
+
+.reply:focus {
+  width: 95%;
+  border-radius: 4px;
+  resize: vertical;
+  border: 1px solid black;
+  outline: none;
 }
 
 .comment_button {
@@ -224,7 +336,120 @@
     border-radius: 100px;
     background-color: #3477cc;
     text-transform: none;
+    transition: none;
+    font-size: 0.75em;
+    font-weight: bold;
+    position: relative;
+    right: 6px;
 }
+
+.comment_button:hover {
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 100px;
+  background-color: #3477cc;
+  text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.disabled_comment_button {
+  outline: none;
+  border: none;
+  color: white !important;
+  border-radius: 100px;
+  background-color: #d4d4d4;
+  text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+  position: relative;
+  right: 6px;
+}
+
+.reply_submit_button {
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 100px;
+  background-color: #3477cc;
+  text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.disabled_reply_submit_button {
+  outline: none;
+  border: none;
+  color: white !important;
+  border-radius: 100px;
+  background-color: #d4d4d4;
+  text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.reply_submit_button:hover {
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 100px;
+  background-color: #3477cc;
+  text-transform: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.reply_icon {
+  margin-left: .5ch;
+  border-radius: 100px;
+  background-color: transparent;
+  color: #888a8c;
+  outline: none;
+  border: none;
+  font-weight: bold;
+  transition: none;
+  font-size: 0.75em;
+}
+
+.reply_icon:hover {
+  margin-left: .5ch;
+  border-radius: 100px;
+  color: #888a8c;
+  outline: none;
+  border: none;
+  transition: none;
+  font-size: 0.75em;
+}
+
+.reply_cancel {
+  margin-left: .5ch;
+  border-radius: 100px;
+  background-color: transparent;
+  color: #888a8c;
+  outline: none;
+  border: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.reply_cancel:hover {
+  margin-left: .5ch;
+  border-radius: 100px;
+  color: #888a8c;
+  outline: none;
+  border: none;
+  transition: none;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
 }
 
 
