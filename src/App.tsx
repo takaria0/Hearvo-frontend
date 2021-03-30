@@ -18,6 +18,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import GroupCreate from './components/GroupCreate';
 import GroupInvite from './components/GroupInvite';
 import GroupList from './components/GroupList';
+import CustomizedSnackbars from './components/Alert/Alert'
 import Help from './components/Help/Content';
 import { HomeOutlined } from '@material-ui/icons';
 import { Helmet } from "react-helmet";
@@ -74,6 +75,7 @@ function App() {
           </Auth>
         </Switch>
         </BrowserRouter>
+        <CustomizedSnackbars />
       </CountryContext.Provider>
     </div>
   );

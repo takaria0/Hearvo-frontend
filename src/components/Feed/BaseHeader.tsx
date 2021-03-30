@@ -9,11 +9,14 @@ import * as styles from '../../css/Feed/PostContent.module.css';
 import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';
+
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import NewReleasesOutlinedIcon from '@material-ui/icons/NewReleasesOutlined';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import i18n from "../../helpers/i18n";
+
+
 
 export interface BaseHeaderProps extends RouteComponentProps<{}> {
   // keyword: string;

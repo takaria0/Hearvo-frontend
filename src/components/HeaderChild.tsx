@@ -126,15 +126,32 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
       anchorEl: 0
     })
 
+
+    const url = window.location.pathname.split("/");
+    // hearvo.com/posts/777 => url = { ,posts,777}
+
     if(val === "/login") {
       if (typeof window !== 'undefined') {localStorage.removeItem("jwt")};
       if (typeof window !== 'undefined') {localStorage.removeItem("user")};
-      this.props.history.push(`${val}`);
+
+      if (url[1] === ""){
+        this.props.history.push(`${val}`);
+      } else if (url[2] != null){
+        this.props.history.push(`${val}`+"?destination="+url[1]+'&value='+url[2]);
+      } else {
+        this.props.history.push(`${val}`);
+      }
       return
     }
 
     if (val !== "none") {
-      this.props.history.push(`${val}`);
+      if (url[1]===""){
+        this.props.history.push(`${val}`);
+      }else if (url[2] != null){
+        this.props.history.push(`${val}`+"?destination="+url[1]+'&value='+url[2]);
+      } else {
+        this.props.history.push(`${val}`);
+      }
       return
     }
   };
