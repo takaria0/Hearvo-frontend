@@ -115,6 +115,7 @@
     border: 1px solid #0079D3;
     border-radius: 4px;
     background-color: white;
+}
 
 .search_bar {
     width: 50%
@@ -125,6 +126,7 @@
 }
 
 .mini_header_item{
+}
 
 .vote_option {
     padding: 10px;
@@ -182,7 +184,7 @@
     font-size: 14px;
 }
 
-}
+
 }
 
 
