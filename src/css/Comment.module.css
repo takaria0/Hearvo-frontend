@@ -633,6 +633,7 @@
 
 .reply {
   width: 95%;
+  padding: 10px;
   border-radius: 4px;
   resize: vertical;
   border: 1px solid #eeeff1;
@@ -640,6 +641,7 @@
 
 .reply:focus {
   width: 95%;
+  padding: 10px;
   border-radius: 4px;
   resize: vertical;
   border: 1px solid black;
