@@ -172,7 +172,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     // const searchWidth = this.state.mediaQuery.matches ? "60ch" : "60%" ;
     return (
       <form onSubmit={e => this.searchSubmit(e)}>
-        <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 5, padding: 6}}>
+        <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 5, padding: 6, marginLeft:'10px'}}>
           {/* <SearchIcon style={{padding: 0}} /> */}
         <input maxLength={50} type="text" 
             style={{ border: 'none', width: "100%", outline: 'none', backgroundColor: 'white' }}
@@ -254,25 +254,25 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
       <div style={{ transform: 'translateY(10px)' }}>
         <span style={{height: '10px'}}></span>
         <div style={{ display: 'flex', flexWrap:'nowrap', marginRight:'100px'}}>
-          <div>
+          <div style={{zIndex: 3}}>
           <Link to="/" className={styles.hearvo}>
             <b style={{ fontSize: 20, marginLeft: 10 }}>{i18n.t("header.title")}</b>
           </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></div>
           {/* <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} > */}
           <div style={{display:'flex',position:'fixed',right:'0px'}}>
-            <div style={{ transform: 'translateY(5px)',marginRight:'30px',paddingRight:'30px',width:'20vw'}}>
+            <div style={{ transform: 'translateY(5px)',marginRight:'4vw',paddingRight:'4vw',width:'25vw'}}>
               {this.searchBar()}
             </div>
             <div className={styles.header_items}>
-            <Button　href="/latest" className={window.location.pathname==="/latest"?styles.now:styles.normal}>
+            <Button　href="/latest" className={window.location.pathname==="/latest"?styles.now:styles.normal} disableRipple={true}>
               <NewReleasesOutlinedIcon/>
               {/* {i18n.t("feed.latest")} */}
             </Button>
-            <Button　href="/" className={window.location.pathname==="/"?styles.now:styles.normal}>
+            <Button　href="/" className={window.location.pathname==="/"?styles.now:styles.normal} disableRipple={true}>
               <PersonOutlineIcon/>
               {/* {i18n.t("feed.recommend")} */}
             </Button>
-            <Button　href="/popular" className={window.location.pathname.includes("popular")?styles.now:styles.normal}>
+            <Button　href="/popular" className={window.location.pathname.includes("popular")?styles.now:styles.normal}  disableRipple={true}>
               <TrendingUpIcon/>
               {/* {i18n.t("feed.popular")} */}
             </Button>

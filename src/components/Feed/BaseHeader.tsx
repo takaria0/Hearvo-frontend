@@ -128,17 +128,17 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
             <span　className={styles.mini_header_item}>
                 {/* {this.state.userObj ? <Link to="/"><PersonOutlineIcon></PersonOutlineIcon>{i18n.t("feed.recommend")}</Link> : ""} */}
                 {/* &nbsp;<Link to="/popular"><TrendingUpIcon></TrendingUpIcon>{i18n.t("feed.popular")}</Link>&nbsp;<Link to="/latest"><NewReleasesIcon></NewReleasesIcon>{i18n.t("feed.latest")}</Link>{"  "}  */}
-                <Button href="/latest" color={window.location.pathname.includes("latest")?"primary":"inherit"}><NewReleasesOutlinedIcon/>&nbsp;{i18n.t("feed.latest")}</Button>
-                &nbsp;{this.state.userObj ? <Button href="/" color={window.location.pathname==="/"?"primary":"inherit"}><PersonOutlineIcon/>&nbsp;{i18n.t("feed.recommend")}</Button> : ""}
-                &nbsp;<Button href="/popular" color={window.location.pathname.includes("popular")?"primary":"inherit"}><TrendingUpIcon/>&nbsp;{i18n.t("feed.popular")}</Button> 
+                <Button href="/latest" color={window.location.pathname.includes("latest")?"primary":"inherit"} disableRipple={true}><NewReleasesOutlinedIcon/>&nbsp;{i18n.t("feed.latest")}</Button>
+                &nbsp;{this.state.userObj ? <Button href="/" color={window.location.pathname==="/"?"primary":"inherit"} disableRipple={true}><PersonOutlineIcon/>&nbsp;{i18n.t("feed.recommend")}</Button> : ""}
+                &nbsp;<Button href="/popular" color={window.location.pathname.includes("popular")?"primary":"inherit"} disableRipple={true}><TrendingUpIcon/>&nbsp;{i18n.t("feed.popular")}</Button> 
                 &nbsp; 
             </span>
 
             {(window.location.pathname.split("/")[1] === "popular"|| window.location.pathname === "/") ?
-              <b><button style={{ textDecoration: "none"}}　aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+              <b><Button size="small" variant="outlined" color="inherit" onClick={this.handleClick} disableRipple={true}>
                  {/* <TodayIcon style={{fontSize: 16}}/> */}
                  {this.searchTime()}   {/* default = thisWeek */}
-              </button>
+              </Button>
                 <Menu
                   id="simple-menu"
                   anchorEl={this.state.anchorEl}
