@@ -26,6 +26,9 @@ import AttributePlotBar from './AttributePlotBar';
 import { Mixpanel } from '../../helpers/mixpanel';
 import CountryContext from '../../helpers/context';
 
+// import FileCopyIcon from '@material-ui/icons/FileCopy';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+
 const moment = require('moment-timezone');
 moment.tz.setDefault('Etc/UTC');
 
@@ -174,7 +177,7 @@ const EachMultipleVote = (props: any) => {
         return (
         <div>
             <h2><NoteIcon style={{ marginBottom: -5, padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-          <Link to={`/posts/${props.postId}`}><button style={{ border: 'solid', borderWidth: 1, borderRadius: 5, padding: 10 }}>{i18n.t("eachPost.seeResult")}</button></Link>
+          <Link to={`/posts/${props.postId}`} style={{textDecoration: 'none'}}><Button style={{ border: 'solid', fontSize:16, backgroundColor: '#ff5525', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, fontWeight: 'bold' }}>{i18n.t("eachPost.seeResult")}</Button></Link>
           </div>
           )
     }
@@ -184,8 +187,8 @@ const EachMultipleVote = (props: any) => {
 
   if (!doesVoteStart) { return (
     <div>
-      <h2><NoteIcon style={{ marginBottom: -5,  padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-      <button style={{ border: 'solid', fontSize:16, backgroundColor: '#01B1F8', color: 'white', borderWidth: 1, borderRadius: 5, padding: 10 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></button>
+      <h2><InsertDriveFileIcon style={{ marginBottom: -5,  padding: 0 }}></InsertDriveFileIcon><ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
+      <Button style={{ border: 'solid', fontSize:16, backgroundColor: '#3477cc', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></Button>
   </div>
   ) }
 

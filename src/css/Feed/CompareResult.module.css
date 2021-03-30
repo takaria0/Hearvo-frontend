@@ -115,6 +115,11 @@
     background-color: transparent;
 }
 
+.compare_checkbox:checked:hover {
+    box-shadow: none;
+    background-color: transparent;
+}
+
 .close_button {
     background-color: transparent;
     border: none;

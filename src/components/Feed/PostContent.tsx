@@ -223,7 +223,7 @@ const VoteCandidateForm = (props: any) => {
           <div>
             <Button disabled={true} style={{
               border: 'none', color: 'white', borderRadius: "100px",
-              backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
+              backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none', fontWeight: 'bold'
             }}>
               {i18n.t("newPost.post")}
             </Button>
@@ -236,7 +236,7 @@ const VoteCandidateForm = (props: any) => {
               backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
             } : {
               outline: "none", border: 'none', color: 'white', borderRadius: "100px",
-              backgroundColor: "#3477cc", textTransform: 'none'
+              backgroundColor: "#3477cc", textTransform: 'none', fontWeight: 'bold'
             }}>
               {i18n.t("newPost.post")}
             </Button>
@@ -416,7 +416,7 @@ const SubmitButtonMultiple = (props: any) => {
         <div>
           <Button disabled={true} style={{
             border: 'none', color: 'white', borderRadius: "100px",
-            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
+            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none', fontWeight: 'bold'
           }}>
             {i18n.t("newPost.post")}
           </Button>
@@ -429,7 +429,7 @@ const SubmitButtonMultiple = (props: any) => {
             backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
           } : {
             outline: "none", border: 'none', color: 'white', borderRadius: "100px",
-            backgroundColor: "#3477cc", textTransform: 'none'
+            backgroundColor: "#3477cc", textTransform: 'none', fontWeight: 'bold',
           }}>
             {i18n.t("newPost.post")}
           </Button>
