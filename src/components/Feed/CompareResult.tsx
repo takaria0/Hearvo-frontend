@@ -5,6 +5,8 @@ import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 import { MyResponsivePie, MyResponsiveBar } from '../../helpers/NivoPlots';
 import i18n from "../../helpers/i18n";
+import { createMuiTheme } from '@material-ui/core/styles'
+import {MuiThemeProvider} from '@material-ui/core/styles'
 
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -35,7 +37,6 @@ const CompareResult = (props: any) => {
 
   }, []);
 
-
   const change = (e: any, elem: any) => {
 
     switch (e.target.checked) {
@@ -58,6 +59,17 @@ const CompareResult = (props: any) => {
 
     }
   }
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        main: '#3477cc',
+        light: '#70a5ff',
+        dark: '#004c9a',
+        contrastText: '#ffffff'
+      }
+    }
+  })
 
   const submit = (e: any) => {
     e.preventDefault();
@@ -112,19 +124,21 @@ const CompareResult = (props: any) => {
             return (
               <div>
                 {/* <input type="checkbox" id="scales" name="scales" onChange={e => change(e, elem)} ></input><label htmlFor={elem.title}>{elem.title}</label> */}
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      // checked={state.checkedB}
-                      className={styles.compare_checkbox}
-                      disableRipple
-                      onChange={e => change(e, elem)}
-                      name="check"
-                      color="primary"
-                    />
-                  }
-                  label={elem.title}
-                />
+                <MuiThemeProvider theme={theme}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        // checked={state.checkedB}
+                        className={styles.compare_checkbox}
+                        disableRipple
+                        onChange={e => change(e, elem)}
+                        name="check"
+                        color='primary'
+                      />
+                    }
+                    label={elem.title}
+                  />
+                </MuiThemeProvider>
               </div>
             )
           })}

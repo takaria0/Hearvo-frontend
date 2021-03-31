@@ -22,6 +22,12 @@
     font-weight: bold;
 }
 
+.close_button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
 }
 
 @media screen and (max-width: 1000px) and (min-width: 700px) {
@@ -48,6 +54,12 @@
     font-weight: bold;
 }
 
+.close_button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
 }
 
 @media screen and (max-width: 1200px) and (min-width: 1000px) {
@@ -72,6 +84,12 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
+}
+
+.close_button {
+    background-color: transparent;
+    border: none;
+    outline: none;
 }
 
 }
@@ -111,12 +129,7 @@
 }
 
 .compare_checkbox:checked {
-    box-shadow: none;
-    background-color: transparent;
-}
-
-.compare_checkbox:checked:hover {
-    box-shadow: none;
+    color: 'red';
     background-color: transparent;
 }
 

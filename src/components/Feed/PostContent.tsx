@@ -233,7 +233,7 @@ const VoteCandidateForm = (props: any) => {
           <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
             <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
               border: 'none', color: 'white', borderRadius: "100px",
-              backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
+              backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none', fontWeight: 'bold'
             } : {
               outline: "none", border: 'none', color: 'white', borderRadius: "100px",
               backgroundColor: "#3477cc", textTransform: 'none', fontWeight: 'bold'
@@ -426,7 +426,7 @@ const SubmitButtonMultiple = (props: any) => {
         <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
           <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
             border: 'none', color: 'white', borderRadius: "100px",
-            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none'
+            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none',  fontWeight: 'bold'
           } : {
             outline: "none", border: 'none', color: 'white', borderRadius: "100px",
             backgroundColor: "#3477cc", textTransform: 'none', fontWeight: 'bold',
