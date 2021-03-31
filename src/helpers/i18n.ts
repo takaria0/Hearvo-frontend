@@ -469,10 +469,10 @@ i18next
             no: 'No',
           },
           tos: {
-            sorry:'An English version of ToS and Privacy policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+            sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
           },
           privacy:{
-            sorry:'An English version of ToS and Privacy policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+            sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
           },
         },
       },
