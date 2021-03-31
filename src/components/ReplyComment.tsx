@@ -2,7 +2,7 @@ import React from 'react';
 import { getJwt } from '../helpers/jwt';
 import axios from './Api';
 import { Button } from '@material-ui/core';
-import {  withRouter, RouteComponentProps } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 import * as styles from '../css/Comment.module.css';
 import i18n from '../helpers/i18n';
 
@@ -16,6 +16,7 @@ interface ReplyCommentProps extends RouteComponentProps<{}> {
 
 interface ReplyCommentState {
   commentContent: string;
+  isReplyEntered: boolean;
 }
 
 class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState> {
@@ -25,6 +26,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
 
     this.state = {
       commentContent: "",
+      isReplyEntered: false,
     }
   }
 
@@ -33,6 +35,15 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     this.setState({
       commentContent: e.target.value,
     })
+    if (e.target.value.length === 0) {
+      this.setState({
+        isReplyEntered: false,
+      })
+    } else {
+      this.setState({
+        isReplyEntered: true,
+      })
+    }
   }
 
 
@@ -40,7 +51,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     const url = window.location.pathname.split("/");
     // hearvo.com/posts/777 => url = { ,posts,777}
     if (this.props.isLogin === false) {
-      this.props.history.push("/login"+"?destination="+url[1]+'&value='+url[2]);
+      this.props.history.push("/login" + "?destination=" + url[1] + '&value=' + url[2]);
       return
     }
 
@@ -76,9 +87,11 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     return (
       <div>
         <form onSubmit={e => this.submit(e)}>
-          <div><textarea maxLength={1000} rows={5} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea></div>
-          <div>
-            <Button type="submit" value="Submit" variant="contained" color="primary">{i18n.t("eachPost.reply")}</Button>
+          <div style={{ textAlign: 'right' }}>
+            <textarea maxLength={1000} rows={5} className={styles.reply} onChange={e => this.change(e)} value={this.state.commentContent}></textarea>
+          </div>
+          <div className={styles.submit}>
+            <Button disableRipple disabled={!this.state.isReplyEntered} type="submit" value="Submit" className={this.state.isReplyEntered ? styles.reply_submit_button : styles.disabled_reply_submit_button}>{i18n.t("eachPost.sendReply")}</Button>
           </div>
         </form>
       </div>

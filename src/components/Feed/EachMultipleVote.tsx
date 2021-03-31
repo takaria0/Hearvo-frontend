@@ -26,6 +26,9 @@ import AttributePlotBar from './AttributePlotBar';
 import { Mixpanel } from '../../helpers/mixpanel';
 import CountryContext from '../../helpers/context';
 
+// import FileCopyIcon from '@material-ui/icons/FileCopy';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+
 const moment = require('moment-timezone');
 moment.tz.setDefault('Etc/UTC');
 
@@ -45,16 +48,16 @@ const EachMultipleVote = (props: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const context = useContext(CountryContext);
 
-  useEffect(()=> {
-    
+  useEffect(() => {
+
     axios.get(`/posts?parent_id=${props.postId}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
-    .then(res => {
-      setData(res.data);
-      setIsLoading(false);
-    })
-    .catch(err => {
-      setIsLoading(false);
-    })
+      .then(res => {
+        setData(res.data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        setIsLoading(false);
+      })
 
   }, []);
 
@@ -63,12 +66,12 @@ const EachMultipleVote = (props: any) => {
     const post_id = props.postId;
 
     if (props.isLogin === false) {
-      history.push("/login"+"?destination="+"posts"+"&value="+post_id)  //ログイン後、投稿詳細ページに飛ぶ     
+      history.push("/login" + "?destination=" + "posts" + "&value=" + post_id)  //ログイン後、投稿詳細ページに飛ぶ     
       return;
     }
 
     // if a user accesed from different countries, stop voting.
-    
+
     // if (context.country !== process.env.REACT_APP_COUNTRY) {
     //   return;
     // }
@@ -82,16 +85,16 @@ const EachMultipleVote = (props: any) => {
       const voteObj = { parent_id: props.postId, result: [...voteResult, { vote_select_id, post_id }] }
 
       axios.post("/multiple_vote_users", voteObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
-      .then(res => {
-        Mixpanel.track('Successful Multiple Vote', { ...voteObj });
-        setDoesVoteEnd(true);
-        history.push(`/posts/${props.postId}`);
-      })
-      .catch(err => {
-        Mixpanel.track('Unsuccessful Multiple Vote', { ...voteObj });
-        setDoesVoteEnd(true);
-        history.push(`/posts/${props.postId}`);
-      });
+        .then(res => {
+          Mixpanel.track('Successful Multiple Vote', { ...voteObj });
+          setDoesVoteEnd(true);
+          history.push(`/posts/${props.postId}`);
+        })
+        .catch(err => {
+          Mixpanel.track('Unsuccessful Multiple Vote', { ...voteObj });
+          setDoesVoteEnd(true);
+          history.push(`/posts/${props.postId}`);
+        });
 
       return
     }
@@ -103,17 +106,19 @@ const EachMultipleVote = (props: any) => {
     const currentData = data[dataIdx];
     return (
       <div className={styles.content}>
-          <div style={{ padding: 50, }}>
-          <h2>{i18n.t("newPost.continuasVote")} {dataIdx+1}</h2>
+        <div style={{ padding: 50, }}>
+          <h2>{i18n.t("newPost.continuasVote")} {dataIdx + 1}</h2>
           <div>{currentData.title}</div>
           <div>{currentData.content}</div>
-            {currentData.vote_selects.map((each: any) => { return (
+          {currentData.vote_selects.map((each: any) => {
+            return (
               <div style={{ border: 'solid 1px', borderRadius: '5px', margin: '5px', padding: '5px' }} className={styles.vote_button}>
                 <div onClick={e => addResult(e, each.id, currentData.id)}>{each.content}</div>
-            </div>
-            ) })}
-          </div>
-    </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     )
   }
 
@@ -146,48 +151,50 @@ const EachMultipleVote = (props: any) => {
 
 
     return (
-    <div>
-      {resultJSX}
-      <AttributePlotPie ageDist={ageDist} genderDist={genderDist}/>
-      {/* <AttributePlotBar
+      <div>
+        {resultJSX}
+        <AttributePlotPie ageDist={ageDist} genderDist={genderDist} />
+        {/* <AttributePlotBar
       ageDist={ageDist}
       genderDist={genderDist}
       total_vote={totalVote}
         /> */}
-    </div>
-      );
+      </div>
+    );
   }
 
   if (isLoading) { return (<div>...</div>) }
 
   const currentFirstURL = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
 
-  if (props.hasVoted || props.alreadyEnd) { 
+  if (props.hasVoted || props.alreadyEnd) {
     switch (currentFirstURL) {
       case "posts":
         return (
-        <div>
+          <div>
             <div><CompareResult data={data} parentId={props.postId}></CompareResult></div>
             <div>{voteSelectResult()}</div>
-        </div>);
+          </div>);
       default:
         return (
-        <div>
-            <h2><NoteIcon style={{ marginBottom: -5, padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-          <Link to={`/posts/${props.postId}`}><button style={{ border: 'solid', borderWidth: 1, borderRadius: 5, padding: 10 }}>{i18n.t("eachPost.seeResult")}</button></Link>
+          <div>
+            <h2><InsertDriveFileIcon style={{ marginBottom: -5, padding: 0 }}></InsertDriveFileIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
+            <Link to={`/posts/${props.postId}`} style={{ textDecoration: 'none' }}><Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#ff5525', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, fontWeight: 'bold' }}>{i18n.t("eachPost.seeResult")}</Button></Link>
           </div>
-          )
+        )
     }
   }
 
-  
 
-  if (!doesVoteStart) { return (
-    <div>
-      <h2><NoteIcon style={{ marginBottom: -5,  padding: 0 }}></NoteIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-      <button style={{ border: 'solid', fontSize:16, backgroundColor: '#01B1F8', color: 'white', borderWidth: 1, borderRadius: 5, padding: 10 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></button>
-  </div>
-  ) }
+
+  if (!doesVoteStart) {
+    return (
+      <div>
+        <h2><InsertDriveFileIcon style={{ marginBottom: -5, padding: 0 }}></InsertDriveFileIcon><ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
+        <Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#3477cc', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></Button>
+      </div>
+    )
+  }
 
   if (doesVoteEnd) { history.push(`/posts/${props.postId}`); }
 

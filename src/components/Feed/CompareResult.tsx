@@ -5,6 +5,12 @@ import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 import { MyResponsivePie, MyResponsiveBar } from '../../helpers/NivoPlots';
 import i18n from "../../helpers/i18n";
+import { createMuiTheme } from '@material-ui/core/styles'
+import {MuiThemeProvider} from '@material-ui/core/styles'
+
+import CloseIcon from '@material-ui/icons/Close';
+
+import * as styles from "../../css/Feed/CompareResult.module.css"
 
 const CompareResult = (props: any) => {
   let initialSelectOption: any;
@@ -31,7 +37,6 @@ const CompareResult = (props: any) => {
 
   }, []);
 
-
   const change = (e: any, elem: any) => {
 
     switch (e.target.checked) {
@@ -54,6 +59,17 @@ const CompareResult = (props: any) => {
 
     }
   }
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        main: '#3477cc',
+        light: '#70a5ff',
+        dark: '#004c9a',
+        contrastText: '#ffffff'
+      }
+    }
+  })
 
   const submit = (e: any) => {
     e.preventDefault();
@@ -102,29 +118,33 @@ const CompareResult = (props: any) => {
     return (
       <Dialog open={openDialog}>
         <div style={{ margin: 30 }}>
-          <button onClick={e => closeDialog()}>{i18n.t("compare.cancel")}</button>
+          <button className={styles.close_button}onClick={e => closeDialog()}><CloseIcon /></button>
           <div style={{ padding: 10 }}>{i18n.t("compare.description")}</div>
           {selectOption.map((elem: any) => {
             return (
               <div>
                 {/* <input type="checkbox" id="scales" name="scales" onChange={e => change(e, elem)} ></input><label htmlFor={elem.title}>{elem.title}</label> */}
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      // checked={state.checkedB}
-                      onChange={e => change(e, elem)}
-                      name="check"
-                      color="primary"
-                    />
-                  }
-                  label={elem.title}
-                />
+                <MuiThemeProvider theme={theme}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        // checked={state.checkedB}
+                        className={styles.compare_checkbox}
+                        disableRipple
+                        onChange={e => change(e, elem)}
+                        name="check"
+                        color='primary'
+                      />
+                    }
+                    label={elem.title}
+                  />
+                </MuiThemeProvider>
               </div>
             )
           })}
           <div style={{ marginTop: 20 }}>{errorMessage ? "" : 
           // <button onClick={e => submit(e)}>{i18n.t("compare.compare")}</button>
-          <Button variant="contained" color="primary" onClick={e => submit(e)}>
+          <Button disableRipple disableElevation className={styles.compare_button} variant="contained" onClick={e => submit(e)}>
           {i18n.t("compare.compare")}
           </Button>
           }</div>
@@ -161,7 +181,7 @@ const CompareResult = (props: any) => {
     <div>
       {/* <button style={{ border: 'solid', borderRadius: 20, borderWidth: 1, marginTop: 20, marginBottom: 10, color: 'white', backgroundColor: '#01B1F8', padding: 10, paddingRight: 20, paddingLeft: 20 }} onClick={e => setOpenDialog(true)}>{i18n.t("compare.compare")}</button> */}
       <div style={{marginBottom: 10, textAlign: 'right', marginRight: 20}}>
-        <Button variant="contained" color="primary" onClick={e => setOpenDialog(true)}>
+        <Button disableRipple disableElevation className={styles.compare_button} variant="contained" onClick={e => setOpenDialog(true)}>
           {i18n.t("compare.compare")}
         </Button>
       </div>
