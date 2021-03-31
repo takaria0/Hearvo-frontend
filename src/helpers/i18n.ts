@@ -129,6 +129,7 @@ i18next
             required: '* 必須',
           },
           newPost: {
+            create:'投稿を作成',
             post: '投稿',
             add: '追加',
             title: 'タイトル',
@@ -240,8 +241,14 @@ i18next
             yes: 'はい',
             no: 'いいえ',
           },
+          tos: {
+            sorry:'',
+          },
+          privacy:{
+            sorry:'',
           alert: {
             outside: 'You are accessing Hearvo from outside Japan. Some actions are limited. Learn more.',
+
           },
         },
       },
@@ -381,6 +388,7 @@ i18next
             required: 'required *'
           },
           newPost: {
+            create:'Create Post',
             post: 'Post',
             cancel: 'Cancel',
             groupPost: 'Submit to a group',
@@ -480,8 +488,15 @@ i18next
             yes: 'Yes',
             no: 'No',
           },
+          tos: {
+            sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+          },
+          privacy:{
+            sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+
           alert: {
             outside: 'You are accessing Hearvo from outside the United States. Some actions are limited. Learn more.',
+
           },
         },
       },

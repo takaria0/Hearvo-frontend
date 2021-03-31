@@ -1,11 +1,13 @@
 import React from 'react';
 import * as styles from '../css/Home.module.css';
+import i18n from "../helpers/i18n";
 
 const TermsOfService = (props: any) => {
   return (
     <div className={styles.body}>
       <div style={{}}>
       <div style={{  margin: 10}}>
+      <span style={{ color:'red',fontWeight:'bold',fontSize:'15pt',paddingBottom:'1pt',borderBottom:'1.5pt solid ' }}>{i18n.t('tos.sorry')}</span>
       <h1>利用規約</h1>
     
 
