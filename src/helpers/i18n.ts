@@ -129,6 +129,7 @@ i18next
             required: '* 必須',
           },
           newPost: {
+            create:'投稿を作成',
             post: '投稿',
             add: '追加',
             title: 'タイトル',
@@ -147,12 +148,19 @@ i18next
             topicDescription: '一つ以上、読点で区切って入力',
             topicPlaceholder: 'トピック1、トピック2、・・・',
             vote: '投票',
-            titlePlaceholder: 'タイトルを入力',
-            contentPlaceholder: '本文を入力',
-            voteCandidate: '投票候補',
+            titlePlaceholder: 'タイトル',
+            contentPlaceholder: '本文',
+            voteCandidate: '候補',
             parentTitle: '表題',
             MatrixNum: '回答の種類',
             MatrixAnswer: '回答',
+            AddOptions: '候補を追加',
+            Cancel: 'キャンセル',
+            VotingLength: '投票期間',
+            Day: '日',
+            Days: '日',
+            NumberOfVotes: '投票の数'
+            
           },
           group: {
             groupCreateTitle1: '新たなグループ、「',
@@ -237,6 +245,9 @@ i18next
           },
           privacy:{
             sorry:'',
+          alert: {
+            outside: 'You are accessing Hearvo from outside Japan. Some actions are limited. Learn more.',
+
           },
         },
       },
@@ -368,7 +379,7 @@ i18next
             done: 'Done',
             groupDoesntExist: "<This group doesn't exist>",
             topic: 'Topic',
-            group: 'Group　',
+            group: 'Group',
             searchResult: ' results',
             noContent: 'No content',
             more: 'More',
@@ -376,6 +387,7 @@ i18next
             required: 'required *'
           },
           newPost: {
+            create:'Create Post',
             post: 'Post',
             cancel: 'Cancel',
             groupPost: 'Submit to a group',
@@ -391,12 +403,18 @@ i18next
             topicDescription: 'Enter at least one topic, separate topics with a comma',
             topicPlaceholder: 'Topic 1, Topic 2, ...',
             vote: 'Poll',
-            titlePlaceholder: 'Enter title',
-            contentPlaceholder: 'Enter content',
-            voteCandidate: 'Vote option',
+            titlePlaceholder: 'Title',
+            contentPlaceholder: 'Content',
+            voteCandidate: 'Option',
             parentTitle: 'Heading',
             MatrixNum: 'Answer Option',
             MatrixAnswer: 'Answer',
+            AddOptions: 'Add Option',
+            Cancel: 'Cancel',
+            VotingLength: 'Voting Length',
+            Day: 'day',
+            Days: 'days',
+            NumberOfVotes: 'Number of Votes'
           },
           group: {
             groupCreateTitle1: 'Created a new group "',
@@ -473,6 +491,10 @@ i18next
           },
           privacy:{
             sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+
+          alert: {
+            outside: 'You are accessing Hearvo from outside the United States. Some actions are limited. Learn more.',
+
           },
         },
       },

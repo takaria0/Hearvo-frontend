@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@material-ui/core';
 import axios from '../Api';
@@ -92,14 +91,17 @@ class EachVoteMj extends React.Component<EachVoteMjProps, EachVoteMjState> {
 
   submit = (e: any) => {
     e.preventDefault();
+    const post_id = this.props.postId;
+
     if (this.props.isLogin === false) {
-      this.props.history.push("/login");
-      return
+      // this.props.history.push("/login");
+      this.props.history.push("/login"+"?destination="+"posts"+"&value="+post_id)  //ログイン後、投稿詳細ページに飛ぶ
+      return;
     }
 
     if (this.props.voteContent.length !== this.state.voteMjCount.length) {
       this.setState({ errorMessage: i18n.t("eachPost.selectAllCandidate")})
-      return
+      return;
     }
 
     this.setState({
