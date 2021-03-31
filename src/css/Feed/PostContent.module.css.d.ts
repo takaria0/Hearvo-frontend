@@ -18,4 +18,5 @@ export const cancel_button: string;
 export const close_button: string;
 export const vote_number_selector: string;
 export const vote_length_selector: string;
+export const menu_button: string;
 

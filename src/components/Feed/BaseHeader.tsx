@@ -117,8 +117,17 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
     element?.blur();　//inputのfocusをはずす
   }
 
+   
 
   headerJSX = () => {
+    const usualStyle = {
+      border: 'none', color: 'black', borderRadius: "100px",
+      backgroundColor: "white", outline: 'none', textTransform: 'none'
+    } as React.CSSProperties;
+    const pushedStyle = {
+      border: 'none', color: 'black', borderRadius: "100px",
+      backgroundColor: "#ebebeb", outline: 'none', textTransform: 'none'
+    } as React.CSSProperties;
       return (
         <div className={styles.mini_header}>
           <div className={styles.header_box} onClick={e => this.editHandle(e, true)}>
@@ -126,19 +135,28 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
           </div>
           <div className={styles.mini_header_inside}>
             <span　className={styles.mini_header_item}>
-                {/* {this.state.userObj ? <Link to="/"><PersonOutlineIcon></PersonOutlineIcon>{i18n.t("feed.recommend")}</Link> : ""} */}
-                {/* &nbsp;<Link to="/popular"><TrendingUpIcon></TrendingUpIcon>{i18n.t("feed.popular")}</Link>&nbsp;<Link to="/latest"><NewReleasesIcon></NewReleasesIcon>{i18n.t("feed.latest")}</Link>{"  "}  */}
-                <Button href="/latest" color={window.location.pathname.includes("latest")?"primary":"inherit"}><NewReleasesOutlinedIcon/>&nbsp;{i18n.t("feed.latest")}</Button>
-                &nbsp;{this.state.userObj ? <Button href="/" color={window.location.pathname==="/"?"primary":"inherit"}><PersonOutlineIcon/>&nbsp;{i18n.t("feed.recommend")}</Button> : ""}
-                &nbsp;<Button href="/popular" color={window.location.pathname.includes("popular")?"primary":"inherit"}><TrendingUpIcon/>&nbsp;{i18n.t("feed.popular")}</Button> 
+                <Button href="/latest" 
+                style={window.location.pathname.includes("latest") ? pushedStyle : usualStyle }
+                disableRipple={true}><NewReleasesOutlinedIcon/>&nbsp;{i18n.t("feed.latest")}</Button>
+
+                &nbsp;{this.state.userObj ? <Button href="/" 
+                style={window.location.pathname === "/" ? pushedStyle : usualStyle }
+                disableRipple={true}><PersonOutlineIcon/>&nbsp;{i18n.t("feed.recommend")}</Button> : ""}
+
+                &nbsp;<Button href="/popular" 
+                style={window.location.pathname.includes("popular") ? pushedStyle : usualStyle }
+                disableRipple={true}><TrendingUpIcon/>&nbsp;{i18n.t("feed.popular")}</Button> 
                 &nbsp; 
             </span>
 
-            {(window.location.pathname.split("/")[1] === "popular"|| window.location.pathname === "/") ?
-              <b><button style={{ textDecoration: "none"}}　aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-                 {/* <TodayIcon style={{fontSize: 16}}/> */}
+            {(window.location.pathname.split("/")[1] === "popular") ?
+              <b><Button 
+                onClick={this.handleClick} 
+                disableRipple={true}
+                style={pushedStyle}
+              >
                  {this.searchTime()}   {/* default = thisWeek */}
-              </button>
+              </Button>
                 <Menu
                   id="simple-menu"
                   anchorEl={this.state.anchorEl}
