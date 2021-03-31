@@ -468,6 +468,7 @@ i18next
             cancel: 'Cancel',
             compareDescription: 'Plot a stacked bar chart of the results. Select two results to compare. ',
             commentButton: 'Comment',
+            commentPlaceholder: 'What are your thoughts?',
             reply: 'Reply',
             sendReply: 'Reply',
             seeResult: 'See the result',
