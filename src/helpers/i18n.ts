@@ -240,8 +240,14 @@ i18next
             yes: 'はい',
             no: 'いいえ',
           },
+          tos: {
+            sorry:'',
+          },
+          privacy:{
+            sorry:'',
           alert: {
             outside: 'You are accessing Hearvo from outside Japan. Some actions are limited. Learn more.',
+
           },
         },
       },
@@ -480,8 +486,15 @@ i18next
             yes: 'Yes',
             no: 'No',
           },
+          tos: {
+            sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+          },
+          privacy:{
+            sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',
+
           alert: {
             outside: 'You are accessing Hearvo from outside the United States. Some actions are limited. Learn more.',
+
           },
         },
       },

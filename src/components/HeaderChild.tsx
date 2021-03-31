@@ -202,7 +202,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
                 <MenuItem onClick={e => this.handleClose(e, "/profile/following")}><AccountCircleIcon />&nbsp;{i18n.t('settingBar.profile')}</MenuItem>
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/list")}>{i18n.t('settingBar.groupList')}</MenuItem> */}
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/create")}>{i18n.t('settingBar.groupCreate')}</MenuItem> */}
-                <MenuItem onClick={e => this.handleClose(e, "/help")}><HelpIcon />&nbsp;{i18n.t('settingBar.help')}</MenuItem>
+                {/* <MenuItem onClick={e => this.handleClose(e, "/help")}><HelpIcon />&nbsp;{i18n.t('settingBar.help')}</MenuItem> */}
                 <MenuItem onClick={e => this.handleClose(e, "/tos")}><DescriptionIcon />&nbsp;{i18n.t('settingBar.tos')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/privacy")}><AssignmentIndIcon />&nbsp;{i18n.t('settingBar.privacy')}</MenuItem>
                 {/* <MenuItem onClick={e => this.handleClose(e, "/settings")}><SettingsIcon />&nbsp;{i18n.t('settingBar.settings')}</MenuItem> */}
@@ -219,7 +219,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
               keepMounted
               open={Boolean(this.state.anchorEl)}
               onClose={e => this.handleClose(e, "none")}>
-                <MenuItem onClick={e => this.handleClose(e, "/help")}><HelpIcon />&nbsp;{i18n.t('settingBar.help')}</MenuItem>
+                {/* <MenuItem onClick={e => this.handleClose(e, "/help")}><HelpIcon />&nbsp;{i18n.t('settingBar.help')}</MenuItem> */}
                 <MenuItem onClick={e => this.handleClose(e, "/tos")}><DescriptionIcon />&nbsp;{i18n.t('settingBar.tos')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/privacy")}><AssignmentIndIcon />&nbsp;{i18n.t('settingBar.privacy')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/login")}><AccountCircleIcon />&nbsp;{i18n.t('settingBar.login')}</MenuItem>
