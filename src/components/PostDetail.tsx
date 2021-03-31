@@ -8,6 +8,7 @@ import Comment from './Comment';
 import Header from './Header';
 import SideBar from './SideBar';
 import EachPostHelmet from './Feed/EachPostHelmet';
+import InitialForm from './InitialForm';
 
 type VoteSelectType = {
   id: number;
@@ -104,6 +105,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
     if(this.state.isLoaded) {
       return (
         <div>
+          <InitialForm></InitialForm>
           <Header></Header>
           <EachPostHelmet data={this.state.data}></EachPostHelmet>
         <div className={styles.body}>

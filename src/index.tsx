@@ -4,12 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { render } from 'react-snapshot';
+import { StylesProvider } from "@material-ui/core/styles"
 
 ReactDOM.render(
 // render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  ,
   
   document.getElementById('root')
 );
