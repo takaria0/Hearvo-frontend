@@ -55,7 +55,7 @@ const PostHeader = (props: any) => {
       return (
         <div>
           <div style={{ marginTop: 10, marginBottom: 10, marginRight: 10 }}>
-            <span className={styles.title}>{props.data.title}</span>
+            <div className={styles.title}>{props.data.title}</div>
             <span>{createdAtJSX}</span>
           </div>
 
@@ -74,8 +74,8 @@ const PostHeader = (props: any) => {
       return (
         <div>
           <div style={{ marginTop: 10, marginBottom: 10, marginRight: 10 }}>
-            <span className={styles.title}>
-              <Link to={`/posts/${props.data?.id}`} className={styles.each_post_link}>{props.data.title}</Link></span>
+            <div className={styles.title}>
+              <Link to={`/posts/${props.data?.id}`} className={styles.each_post_link}>{props.data.title}</Link></div>
             <span>{createdAtJSX}</span>
           </div>
 

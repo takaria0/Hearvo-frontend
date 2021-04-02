@@ -179,7 +179,7 @@ const EachMultipleVote = (props: any) => {
         return (
           <div>
             <h2><InsertDriveFileIcon style={{ marginBottom: -5, padding: 0 }}></InsertDriveFileIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-            <Link to={`/posts/${props.postId}`} style={{ textDecoration: 'none' }}><Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#ff5525', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, fontWeight: 'bold' }}>{i18n.t("eachPost.seeResult")}</Button></Link>
+            <Link to={`/posts/${props.postId}`} style={{ textDecoration: 'none' }}><Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#ff5525', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, fontWeight: 'bold', textTransform: 'none' }}>{i18n.t("eachPost.seeResult")}</Button></Link>
           </div>
         )
     }
@@ -191,7 +191,7 @@ const EachMultipleVote = (props: any) => {
     return (
       <div>
         <h2><InsertDriveFileIcon style={{ marginBottom: -5, padding: 0 }}></InsertDriveFileIcon><ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-        <Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#3477cc', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></Button>
+        <Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#3477cc', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, textTransform: 'none' }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></Button>
       </div>
     )
   }
