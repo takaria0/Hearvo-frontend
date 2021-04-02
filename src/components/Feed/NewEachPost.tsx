@@ -542,7 +542,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
             <div className={styles.vote_section}>
               <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
             </div>
-            <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+            <div className={styles.footer}>
               <PostFooter data={this.props.data}></PostFooter>
             </div>
           </li>
@@ -557,7 +557,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
               <div className={styles.vote_section}>
                 <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
               </div>
-              <div className={styles.footer}><div>{getDiffTime(this.props.data.created_at.slice(0, -7).replace("T", " "))}</div >
+              <div className={styles.footer}>
                 <PostFooter data={this.props.data}></PostFooter>
               </div>
             </li>

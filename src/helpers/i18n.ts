@@ -474,6 +474,13 @@ i18next
             seeResult: 'See the result',
             startContinuasVote: 'Start Vote',
             selectAllCandidate: 'Vote all options',
+            report: 'Report',
+            reportAnIssue: 'Report an issue',
+            tellUsDetail: 'Please let us know the details of the problem regarding this post.',
+            notInterested: 'I\'m not interested in this post',
+            suspiciousOrSpam: 'It\'s suspicious or spam',
+            abusiveOrHarmful: 'It\'s abusive or harmful',
+            selfharmOrSuicide: 'It expresses intentions of self-harm or suicide',
           },
           settings: {
             settings: 'Settings',
