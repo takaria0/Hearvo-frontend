@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button, Dialog } from '@material-ui/core';
+import { Button, Dialog, useMediaQuery, useTheme } from '@material-ui/core';
 import { useHistory } from "react-router";
 import axios from '../Api';
 // import { ResponsivePie } from '@nivo/pie'
@@ -47,6 +47,8 @@ const EachMultipleVote = (props: any) => {
   const [dataIdx, setDataIdx] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const context = useContext(CountryContext);
+  
+  const fullScreen = useMediaQuery('(max-width:700px)');
 
   useEffect(() => {
 
@@ -112,8 +114,9 @@ const EachMultipleVote = (props: any) => {
           <div>{currentData.content}</div>
           {currentData.vote_selects.map((each: any) => {
             return (
-              <div style={{ border: 'solid 1px', borderRadius: '5px', margin: '5px', padding: '5px' }} className={styles.vote_button}>
-                <div onClick={e => addResult(e, each.id, currentData.id)}>{each.content}</div>
+              <div >
+                <div style={{ border: 'solid 1px', borderRadius: '4px', margin: '5px', padding: '5px', }} className={styles.vote_button}
+                onClick={e => addResult(e, each.id, currentData.id)}>{each.content}</div>
               </div>
             )
           })}
@@ -198,7 +201,7 @@ const EachMultipleVote = (props: any) => {
 
   if (doesVoteEnd) { history.push(`/posts/${props.postId}`); }
 
-  return (<div><Dialog open={true}>{voteSelectInput()}</Dialog></div>);
+  return (<div><Dialog open={true} fullScreen={fullScreen}>{voteSelectInput()}</Dialog></div>);
 };
 
 
