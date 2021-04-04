@@ -314,7 +314,7 @@ const VoteCandidateForm = (props: any) => {
           {voteData.map((val: any, idx: number) => {
             return (
               <div key={idx} style={{ display: 'flex', alignItems: 'center' }}>
-                <input className={styles.vote_option} maxLength={25} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
+                <input className={styles.vote_option} maxLength={45} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
                 {idx > 1 ? <span style={{ marginLeft: 5 }}><div onClick={e => deleteHandle(e, idx)} style={{ outline: 'none', border: 'none', backgroundColor: 'white' }}><DeleteForeverIcon style={{ fontSize: 24 }} /></div></span> : ''}
               </div>
             )
