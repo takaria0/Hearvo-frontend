@@ -362,8 +362,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   feedList = () => {
     let feedArray = this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost> });
-    feedArray.splice(1, 0, <GoogleAdTimeLine />);
-    feedArray.splice(10, 0, <GoogleAdTimeLine />);
+    // feedArray.splice(1, 0, <GoogleAdTimeLine />);
+    // feedArray.splice(10, 0, <GoogleAdTimeLine />);
+    // Adsを非表示
     return (
       <span>
         {feedArray}
@@ -398,19 +399,11 @@ class Feed extends React.Component<FeedProps, FeedState> {
           </div>
           <ul className={styles.ul}>
 
-            {/* {this.state.dataArray.length > 0 ?
+            {this.state.dataArray.length > 0 ?
               this.feedList()
               :
               <div><div>{i18n.t("feed.noContent")}</div><div>{i18n.t("feed.followMore")}</div></div>
-            } */}
-            {/* Adsあり */}
-
-            {this.state.dataArray.length > 0 ?
-              ''
-              :
-              <div><div>{i18n.t("feed.noContent")}</div><div>{i18n.t("feed.followMore")}</div></div>
             }
-            {/* Adsなし */}
 
           </ul>
 
