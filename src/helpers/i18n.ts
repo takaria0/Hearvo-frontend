@@ -464,7 +464,7 @@ i18next
             age: 'Age',
             male: 'Male',
             female: 'Female',
-            other: 'Other',
+            others: 'Other',
             cancel: 'Cancel',
             compareDescription: 'Plot a stacked bar chart of the results. Select two results to compare. ',
             commentButton: 'Comment',
