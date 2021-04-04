@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo, } from 'react';
 import { useTheme } from '@material-ui/core/styles';
-import { Button, Dialog, Checkbox, MenuItem, FormControl, Select, InputLabel, makeStyles, Theme, createStyles, TextField, FormHelperText, List, ListItem, ListItemText, useMediaQuery} from '@material-ui/core';
+import { Button, Dialog, Checkbox, MenuItem, FormControl, Select, InputLabel, makeStyles, Theme, createStyles, TextField, FormHelperText, List, ListItem, ListItemText, useMediaQuery } from '@material-ui/core';
 import axios from '../Api';
 
 import CommentIcon from '@material-ui/icons/Comment';
@@ -398,11 +398,19 @@ class Feed extends React.Component<FeedProps, FeedState> {
           </div>
           <ul className={styles.ul}>
 
-            {this.state.dataArray.length > 0 ?
+            {/* {this.state.dataArray.length > 0 ?
               this.feedList()
               :
               <div><div>{i18n.t("feed.noContent")}</div><div>{i18n.t("feed.followMore")}</div></div>
+            } */}
+            {/* Adsあり */}
+
+            {this.state.dataArray.length > 0 ?
+              ''
+              :
+              <div><div>{i18n.t("feed.noContent")}</div><div>{i18n.t("feed.followMore")}</div></div>
             }
+            {/* Adsなし */}
 
           </ul>
 
