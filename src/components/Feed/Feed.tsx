@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo, } from 'react';
 import { useTheme } from '@material-ui/core/styles';
-import { Button, Dialog, Checkbox, MenuItem, FormControl, Select, InputLabel, makeStyles, Theme, createStyles, TextField, FormHelperText, List, ListItem, ListItemText, useMediaQuery} from '@material-ui/core';
+import { Button, Dialog, Checkbox, MenuItem, FormControl, Select, InputLabel, makeStyles, Theme, createStyles, TextField, FormHelperText, List, ListItem, ListItemText, useMediaQuery } from '@material-ui/core';
 import axios from '../Api';
 
 import CommentIcon from '@material-ui/icons/Comment';
@@ -362,8 +362,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   feedList = () => {
     let feedArray = this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost> });
-    feedArray.splice(1, 0, <GoogleAdTimeLine />);
-    feedArray.splice(10, 0, <GoogleAdTimeLine />);
+    // feedArray.splice(1, 0, <GoogleAdTimeLine />);
+    // feedArray.splice(10, 0, <GoogleAdTimeLine />);
+    // Adsを非表示
     return (
       <span>
         {feedArray}

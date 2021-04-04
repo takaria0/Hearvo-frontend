@@ -188,7 +188,7 @@ const SideBar = (props: any) => {
       return (
         <span>
           <RelatedPosts postId={postId} />
-          <GoogleAdSideBar />
+          {/* <GoogleAdSideBar /> */}
         </span>
       )
     break;
@@ -197,7 +197,7 @@ const SideBar = (props: any) => {
       return (
         <span>
           <TrendingTopics />
-          <GoogleAdSideBar />
+          {/* <GoogleAdSideBar /> */}
         </span>
       )
     break;
