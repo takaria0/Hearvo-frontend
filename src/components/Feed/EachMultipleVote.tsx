@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button, Dialog } from '@material-ui/core';
+import { Button, Dialog, useMediaQuery, useTheme } from '@material-ui/core';
 import { useHistory } from "react-router";
 import axios from '../Api';
 // import { ResponsivePie } from '@nivo/pie'
@@ -47,6 +47,8 @@ const EachMultipleVote = (props: any) => {
   const [dataIdx, setDataIdx] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const context = useContext(CountryContext);
+  
+  const fullScreen = useMediaQuery('(max-width:700px)');
 
   useEffect(() => {
 
@@ -106,14 +108,15 @@ const EachMultipleVote = (props: any) => {
     const currentData = data[dataIdx];
     return (
       <div className={styles.content}>
-        <div style={{ padding: 50, }}>
+        <div style={{ padding: 10, }}>
           <h2>{i18n.t("newPost.continuasVote")} {dataIdx + 1}</h2>
           <div>{currentData.title}</div>
           <div>{currentData.content}</div>
           {currentData.vote_selects.map((each: any) => {
             return (
-              <div style={{ border: 'solid 1px', borderRadius: '5px', margin: '5px', padding: '5px' }} className={styles.vote_button}>
-                <div onClick={e => addResult(e, each.id, currentData.id)}>{each.content}</div>
+              <div >
+                <div style={{ border: 'solid 1px', borderRadius: '4px', margin: '5px', padding: '5px', }} className={styles.vote_button}
+                onClick={e => addResult(e, each.id, currentData.id)}>{each.content}</div>
               </div>
             )
           })}
@@ -179,7 +182,7 @@ const EachMultipleVote = (props: any) => {
         return (
           <div>
             <h2><InsertDriveFileIcon style={{ marginBottom: -5, padding: 0 }}></InsertDriveFileIcon> <ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-            <Link to={`/posts/${props.postId}`} style={{ textDecoration: 'none' }}><Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#ff5525', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, fontWeight: 'bold' }}>{i18n.t("eachPost.seeResult")}</Button></Link>
+            <Link to={`/posts/${props.postId}`} style={{ textDecoration: 'none' }}><Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#ff5525', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, fontWeight: 'bold', textTransform: 'none' }}>{i18n.t("eachPost.seeResult")}</Button></Link>
           </div>
         )
     }
@@ -191,14 +194,14 @@ const EachMultipleVote = (props: any) => {
     return (
       <div>
         <h2><InsertDriveFileIcon style={{ marginBottom: -5, padding: 0 }}></InsertDriveFileIcon><ClearIcon style={{ marginBottom: -5, padding: 0 }}></ClearIcon> {data.length}</h2>
-        <Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#3477cc', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9 }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></Button>
+        <Button style={{ border: 'solid', fontSize: 16, backgroundColor: '#3477cc', color: 'white', borderWidth: 1, borderRadius: 100, padding: 9, textTransform: 'none' }} onClick={e => startClick(e)}><b>{i18n.t("eachPost.startContinuasVote")}</b></Button>
       </div>
     )
   }
 
   if (doesVoteEnd) { history.push(`/posts/${props.postId}`); }
 
-  return (<div><Dialog open={true}>{voteSelectInput()}</Dialog></div>);
+  return (<div><Dialog open={true} fullScreen={fullScreen}>{voteSelectInput()}</Dialog></div>);
 };
 
 

@@ -314,7 +314,7 @@ const VoteCandidateForm = (props: any) => {
           {voteData.map((val: any, idx: number) => {
             return (
               <div key={idx} style={{ display: 'flex', alignItems: 'center' }}>
-                <input className={styles.vote_option} maxLength={25} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
+                <input className={styles.vote_option} maxLength={32} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
                 {idx > 1 ? <span style={{ marginLeft: 5 }}><div onClick={e => deleteHandle(e, idx)} style={{ outline: 'none', border: 'none', backgroundColor: 'white' }}><DeleteForeverIcon style={{ fontSize: 24 }} /></div></span> : ''}
               </div>
             )
@@ -426,7 +426,7 @@ const SubmitButtonMultiple = (props: any) => {
         <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
           <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
             border: 'none', color: 'white', borderRadius: "100px",
-            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none',  fontWeight: 'bold'
+            backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none', fontWeight: 'bold'
           } : {
             outline: "none", border: 'none', color: 'white', borderRadius: "100px",
             backgroundColor: "#3477cc", textTransform: 'none', fontWeight: 'bold',
@@ -1028,8 +1028,8 @@ const VoteForm = (props: any) => {
         {voteTypeId === 3 ?
           <span>
             <span style={{ fontSize: 14 }}>{i18n.t('newPost.NumberOfVotes')}</span>
-            <select className={styles.vote_number_selector} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>z
-                  <option value={2}>2&nbsp;</option>
+            <select className={styles.vote_number_selector} onChange={e => setMultipleVoteNum(parseInt(e.target.value))}>
+              <option value={2}>2&nbsp;</option>
               <option value={3}>3&nbsp;</option>
               <option value={4}>4&nbsp;</option>
               <option value={5}>5&nbsp;</option>
