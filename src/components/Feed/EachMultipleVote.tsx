@@ -108,7 +108,7 @@ const EachMultipleVote = (props: any) => {
     const currentData = data[dataIdx];
     return (
       <div className={styles.content}>
-        <div style={{ padding: 50, }}>
+        <div style={{ padding: 10, }}>
           <h2>{i18n.t("newPost.continuasVote")} {dataIdx + 1}</h2>
           <div>{currentData.title}</div>
           <div>{currentData.content}</div>
