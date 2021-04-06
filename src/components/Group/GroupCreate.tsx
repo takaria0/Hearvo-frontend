@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import axios from './Api';
+import axios from '../Api';
 
-import * as styles from '../css/Home.module.css';
-import { getJwt } from '../helpers/jwt';
+import * as styles from '../../css/Home.module.css';
+import { getJwt } from '../../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
-import Header from './Header';
-import SideBar from './SideBar';
-import i18n from "../helpers/i18n";
+import Header from '../Header/Header';
+import SideBar from '../SideBar';
+import i18n from "../../helpers/i18n";
 interface GroupCreateProps {
 
 }

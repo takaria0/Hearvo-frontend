@@ -5,7 +5,7 @@ import { getJwt } from '../../helpers/jwt';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import { Button, TextField, Fab, Input, Menu, MenuItem } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import * as styles from '../../css/Feed/PostContent.module.css';
+import * as styles from '../../css/PostContent.module.css';
 import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';

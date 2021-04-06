@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
 import { useParams } from 'react-router-dom'
-import Header from './Header';
-import i18n from "../helpers/i18n";
+import Header from '../Header/Header';
+import i18n from "../../helpers/i18n";
 
 interface GroupInviteProps {
 

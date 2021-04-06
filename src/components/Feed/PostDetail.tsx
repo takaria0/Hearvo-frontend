@@ -1,14 +1,14 @@
 import {  withRouter, RouteComponentProps } from 'react-router';
 import React from 'react';
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
-import * as styles from '../css/Home.module.css';
-import NewEachPost from './Feed/NewEachPost';
-import Comment from './Comment';
-import Header from './Header';
-import SideBar from './SideBar';
-import EachPostHelmet from './Feed/EachPostHelmet';
-import InitialForm from './InitialForm';
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
+import * as styles from '../../css/Home.module.css';
+import NewEachPost from './EachPost';
+import Comment from '../Comment/Comment';
+import Header from '../Header/Header';
+import SideBar from '../SideBar';
+import EachPostHelmet from './EachPostHelmet';
+import InitialForm from '../InitialForm';
 
 type VoteSelectType = {
   id: number;

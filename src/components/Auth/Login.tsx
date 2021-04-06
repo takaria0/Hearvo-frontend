@@ -1,11 +1,11 @@
 import React from 'react';
-import axios from './Api';
+import axios from '../Api';
 import { RouteComponentProps, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
-import * as styles from '../css/Login.module.css';
-import i18n from '../helpers/i18n';
+import * as styles from '../../css/Login.module.css';
+import i18n from '../../helpers/i18n';
 import { GoogleLogin } from 'react-google-login';
-import { Mixpanel } from '../helpers/mixpanel';
+import { Mixpanel } from '../../helpers/mixpanel';
 export interface LoginProps extends RouteComponentProps<{}>{
 }
 

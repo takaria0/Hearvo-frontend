@@ -24,7 +24,7 @@ import i18n from "../../helpers/i18n";
 import AttributePlotPie from './AttributePlotPie';
 import AttributePlotBar from './AttributePlotBar';
 import { Mixpanel } from '../../helpers/mixpanel';
-import CountryContext from '../../helpers/context';
+import CountryContext from '../../contexts';
 
 // import FileCopyIcon from '@material-ui/icons/FileCopy';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';

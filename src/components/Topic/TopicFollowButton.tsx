@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
-import i18n from "../helpers/i18n";
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
+import i18n from "../../helpers/i18n";
 
 
 const TopicFollowButton = (props: any) => {

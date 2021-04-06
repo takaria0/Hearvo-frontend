@@ -15,7 +15,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
 import i18n from '../../helpers/i18n';
 import { Mixpanel } from '../../helpers/mixpanel';
-import CountryContext from '../../helpers/context';
+import CountryContext from '../../contexts';
 
 const moment = require('moment-timezone');
 // moment.locale('ja');

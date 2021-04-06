@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from './Api';
-import * as styles from '../css/Home.module.css';
+import axios from '../Api';
+import * as styles from '../../css/Home.module.css';
 import { Link } from 'react-router-dom'
-import { getJwt } from '../helpers/jwt';
-import Header from './Header';
-import SideBar from './SideBar';
+import { getJwt } from '../../helpers/jwt';
+import Header from '../Header/Header';
+import SideBar from '../SideBar';
 import ProfileDetail from './ProfileDetail';
-import TopicFollowButtonLoaded from './TopicFollowButtonLoaded';
+import TopicFollowButtonLoaded from '../Topic/TopicFollowButtonLoaded';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'; 
-import i18n from "../helpers/i18n";
+import i18n from "../../helpers/i18n";
 
 
 const Profile = (props: any) => {

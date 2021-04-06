@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axios from './Api';
+import axios from '../Api';
 
-import * as styles from '../css/Home.module.css';
-import { getJwt } from '../helpers/jwt';
+import * as styles from '../../css/Home.module.css';
+import { getJwt } from '../../helpers/jwt';
 import { Link, useParams } from 'react-router-dom'
-import Header from './Header';
-import SideBar from './SideBar';
+import Header from '../Header/Header';
+import SideBar from '../SideBar';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import i18n from "../helpers/i18n";
+import i18n from "../../helpers/i18n";
 interface GroupListProps {
 
 }

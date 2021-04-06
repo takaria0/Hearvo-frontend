@@ -1,6 +1,6 @@
 import React from 'react';
-import * as styles from '../css/Home.module.css';
-import i18n from "../helpers/i18n";
+import * as styles from '../../css/Home.module.css';
+import i18n from "../../helpers/i18n";
 
 const TermsOfService = (props: any) => {
   return (

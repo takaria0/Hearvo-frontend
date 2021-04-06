@@ -1,13 +1,13 @@
 import React from 'react';
 import * as styles from '../../css/Home.module.css';
-import Header from '../Header';
-import timeline from './timeline.png';
-import following from './following.png';
-import result1 from './result1.png';
-import result2 from './result2.png';
-import result3 from './result3.png';
-import result4 from './result4.png';
-import compare from './compare.png';
+import Header from '../Header/Header';
+import timeline from './static/timeline.png';
+import following from './static/following.png';
+import result1 from './static/result1.png';
+import result2 from './static/result2.png';
+import result3 from './static/result3.png';
+import result4 from './static/result4.png';
+import compare from './static/compare.png';
 import { Helmet } from "react-helmet";
 
 const HowToUseContent = (props: any) => {

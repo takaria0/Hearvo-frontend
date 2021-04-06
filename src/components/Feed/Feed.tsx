@@ -10,8 +10,8 @@ import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 
-import NewEachPost from './NewEachPost';
-import TopicFollowButton from '../TopicFollowButton';
+import NewEachPost from './EachPost';
+import TopicFollowButton from '../Topic/TopicFollowButton';
 import i18n from "../../helpers/i18n";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { BorderColor } from '@material-ui/icons';

@@ -3,27 +3,27 @@ import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'; 
 import * as styles from './App.module.css';
 
-import Intro from './components/Intro';
+import Intro from './components/Info/Intro';
 import Home from './components/Home';
-import Auth from './components/Auth';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import PostDetail from './components/PostDetail';
-import Header from './components/Header';
+import Auth from './components/Auth/Auth';
+import Login from './components/Auth/Login';
+import Signup from './components/Auth/Signup';
+import PostDetail from './components/Feed/PostDetail';
+import Header from './components/Header/Header';
 import Settings from './components/Settings';
-import Profile from './components/Profile';
-import ProfileDetail from './components/ProfileDetail';
-import TermsOfService from './components/TermsOfService';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import GroupCreate from './components/GroupCreate';
-import GroupInvite from './components/GroupInvite';
-import GroupList from './components/GroupList';
+import Profile from './components/Profile/Profile';
+import ProfileDetail from './components/Profile/ProfileDetail';
+import TermsOfService from './components/Info/TermsOfService';
+import PrivacyPolicy from './components/Info/PrivacyPolicy';
+import GroupCreate from './components/Group/GroupCreate';
+import GroupInvite from './components/Group/GroupInvite';
+import GroupList from './components/Group/GroupList';
 import CustomizedSnackbars from './components/Alert/Alert'
-import Help from './components/Help/Content';
+import Help from './components/Info/Content';
 import { HomeOutlined } from '@material-ui/icons';
 import { Helmet } from "react-helmet";
 import CLOUDFLARE_TO_SUBDOMAIN from './helpers/countryMap';
-import CountryContext from './helpers/context';
+import CountryContext from './contexts';
 import { StylesProvider } from "@material-ui/core/styles";
 
 function App() {
@@ -71,10 +71,10 @@ function App() {
             <Route path="/posts/:post_id" render={(props) => <PostDetail key={Math.random().toString(36)} />} />
             <Auth>
                 <Route path="/profile" component={Profile} />
-                <Route path="/group/:group_id/feed" exact component={Home} />
+                {/* <Route path="/group/:group_id/feed" exact component={Home} />
                 <Route path="/group/list" exact component={GroupList} />
                 <Route path="/group/create" exact component={GroupCreate} />
-                <Route path="/group/invite/:link" exact component={GroupInvite} />
+                <Route path="/group/invite/:link" exact component={GroupInvite} /> */}
                 <Route path="/settings" exact component={Settings} key="settings" />
             </Auth>
           </Switch>

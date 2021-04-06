@@ -1,10 +1,10 @@
 import React from 'react';
-import axios from './Api';
+import axios from '../Api';
 import { RouteComponentProps, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
-import * as styles from '../css/Login.module.css';
-import i18n from '../helpers/i18n';
-import { Mixpanel } from '../helpers/mixpanel';
+import * as styles from '../../css/Login.module.css';
+import i18n from '../../helpers/i18n';
+import { Mixpanel } from '../../helpers/mixpanel';
 export interface SignupProps extends RouteComponentProps<{}> {
 }
 

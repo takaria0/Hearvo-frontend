@@ -1,15 +1,15 @@
 import React from 'react';
-import * as styles from '../css/Header.module.css';
+import * as styles from '../../css/Header.module.css';
 import { Button, Menu, MenuItem,Paper,Tab,Tabs } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
-import { getJwt } from '../helpers/jwt';
-import axios from './Api';
+import { getJwt } from '../../helpers/jwt';
+import axios from '../Api';
 import ListIcon from '@material-ui/icons/List';
-import i18n from "../helpers/i18n";
+import i18n from "../../helpers/i18n";
 
-import BaseHeader from '../components/Feed/BaseHeader';
-import PostContent from '../components/Feed/PostContent';
+import BaseHeader from '../Feed/BaseHeader';
+import PostContent from '../Feed/PostContent';
 
 import SearchIcon from '@material-ui/icons/Search';
 import CreateIcon from '@material-ui/icons/Create';

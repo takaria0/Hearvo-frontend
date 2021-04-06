@@ -10,7 +10,7 @@ import {MuiThemeProvider} from '@material-ui/core/styles'
 
 import CloseIcon from '@material-ui/icons/Close';
 
-import * as styles from "../../css/Feed/CompareResult.module.css"
+import * as styles from "../../css/CompareResult.module.css"
 
 const CompareResult = (props: any) => {
   let initialSelectOption: any;

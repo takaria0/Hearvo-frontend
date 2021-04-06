@@ -3,7 +3,7 @@ import axios from './Api';
 import { RouteComponentProps } from 'react-router-dom'
 import { getJwt } from '../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
-import Header from './Header';
+import Header from './Header/Header';
 import i18n from "../helpers/i18n";
 
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import { getJwt } from '../helpers/jwt';
-import axios from './Api';
+import { getJwt } from '../../helpers/jwt';
+import axios from '../Api';
 import { Button } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from 'react-router';
-import * as styles from '../css/Comment.module.css';
-import i18n from '../helpers/i18n';
+import * as styles from '../../css/Comment.module.css';
+import i18n from '../../helpers/i18n';
 
 
 interface ReplyCommentProps extends RouteComponentProps<{}> {

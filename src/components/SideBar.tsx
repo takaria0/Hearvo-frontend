@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
 import i18n from "../helpers/i18n";
-import TopicFollowButton from './TopicFollowButton';
+import TopicFollowButton from './Topic/TopicFollowButton';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import RenderTopic from './Feed/RenderTopic';

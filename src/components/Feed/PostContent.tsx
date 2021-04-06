@@ -4,7 +4,7 @@ import { getJwt } from '../../helpers/jwt';
 import { useHistory } from "react-router";
 
 import { withRouter, RouteComponentProps } from 'react-router-dom'
-import * as styles from '../../css/Feed/PostContent.module.css';
+import * as styles from '../../css/PostContent.module.css';
 import Feed from './Feed';
 import { Dialog, DialogContent, DialogTitle, NativeSelect, Button, Menu, MenuItem, Grid, DialogActions } from '@material-ui/core';
 import i18n from "../../helpers/i18n";

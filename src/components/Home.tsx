@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import * as styles from '../css/Home.module.css';
 import BaseHeader from './Feed/BaseHeader';
 import { withRouter } from 'react-router-dom'
-import Header from './Header';
+import Header from './Header/Header';
 import SideBar from './SideBar'
 
 const Home = (props: any) => {

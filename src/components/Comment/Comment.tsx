@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { getJwt } from '../helpers/jwt';
-import axios from './Api';
+import { getJwt } from '../../helpers/jwt';
+import axios from '../Api';
 import { Button } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from 'react-router';
-import * as styles from '../css/Comment.module.css';
+import * as styles from '../../css/Comment.module.css';
 import ReplyComment from './ReplyComment';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import i18n from '../helpers/i18n';
+import i18n from '../../helpers/i18n';
 import { FormatColorResetOutlined } from '@material-ui/icons';
 import ReplyIcon from '@material-ui/icons/Reply';
 
@@ -133,7 +133,7 @@ const CommentItem = (props: any) => {
 
   return (
     <span style={{ wordWrap: "break-word", whiteSpace: 'pre-wrap' }}>
-      <div>&nbsp;{deleteLastNewline(props.data.content)}</div>
+      <div>{deleteLastNewline(props.data.content)}</div>
       <span>
         <span>&nbsp;&nbsp;
             <ThumbUpIcon onClick={e => onGoodClick(e)} style={goodStyle}></ThumbUpIcon>
