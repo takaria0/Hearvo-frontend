@@ -74,8 +74,13 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
 
   componentDidMount = () => {
     const jwt = getJwt();
-
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/users`, options).then((res: any) => {
       this.setState({
         isLogin: true,
         isLoading: false,

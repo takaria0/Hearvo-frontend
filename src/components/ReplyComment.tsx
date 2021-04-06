@@ -60,6 +60,12 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     }
 
     const jwt = getJwt();
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
     axios.post(
       "/comments",
       {
@@ -67,11 +73,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
         content: this.state.commentContent,
         parent_id: this.props.commentId,
       },
-      {
-        headers: {
-          'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY,
-        }
-      }
+      options
     )
       .then((res: any) => {
         this.props.handleParentPosted(e);

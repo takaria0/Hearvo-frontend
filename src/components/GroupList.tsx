@@ -16,6 +16,12 @@ interface GroupListProps {
 
 const GroupList = (props: GroupListProps) => {
   const jwt = getJwt();
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
   const [groupList, setGroupList] = useState([]);
   const [success, setSuccess] = useState(false);
   const [groupLink, setGroupLink] = useState("");
@@ -28,7 +34,7 @@ const GroupList = (props: GroupListProps) => {
 
   const submit = (e: any, groupId: number) => {
     e.preventDefault();
-    // axios.delete("/groups/users", { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
+    // axios.delete("/groups/users", options)
     // .then(res => {
 
     // })
@@ -42,7 +48,7 @@ const GroupList = (props: GroupListProps) => {
   let maxWidth:any;
   
   useEffect(() => {
-    axios.get(`/groups?order_by=latest`, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
+    axios.get(`/groups?order_by=latest`, options)
       .then((res: any) => {
         const groupList = res.data;
         setGroupList(groupList);

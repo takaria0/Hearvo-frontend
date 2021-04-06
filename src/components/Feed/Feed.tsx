@@ -237,18 +237,24 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const keyword = keywordArray.includes("popular") ? "popular" : (keywordArray.pop() || "");
     const time = this.getTimeQuery(keyword, keywordArray);
     const jwt = getJwt();
-
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
 
 
     let newpage; let queryUrl = "";
     newpage = page === 0 ? 1 : page;
+
 
     switch (feedType) {
       case "search":
         const searchWord = urlParams.get('q') || "";
         const type = urlParams.get('type') || "";
         queryUrl = orderType ? `/posts?search=${searchWord}&type=${type}&page=${page}&keyword=${orderType}` : `/posts?search=${searchWord}&type=${type}&page=${page}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(queryUrl, options)
           .then(res => {
             this.setState({ dataArray: res.data, isLoaded: true, searchQuery: window.location.search, searchWord: searchWord });
           }).catch((err) => { this.setState({ isLoaded: true, searchWord: searchWord, searchQuery: window.location.search }) })
@@ -257,7 +263,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       case "topic":
         const topicWord = urlParams.get('tp') || "";
         queryUrl = orderType ? `/posts?topic=${topicWord}&page=${newpage}&keyword=${orderType}` : `/posts?topic=${topicWord}&page=${newpage}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(queryUrl, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data.posts : [...this.state.dataArray, ...res.data.posts], isLoaded: true, topicTitle: topicWord, topicNumPosts: res.data.topic.num_of_posts, topicNumUsers: res.data.topic.num_of_users })
           })
@@ -268,12 +274,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
         const tempArray = window.location.pathname.split("/");
         const groupId = tempArray[tempArray.length - 2];
         queryUrl = orderType ? `/posts?group_id=${groupId}&page=${newpage}&keyword=${orderType}` : `/posts?group_id=${groupId}&page=${newpage}`;
-        axios.get(`/groups?id=${groupId}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(`/groups?id=${groupId}`, options)
           .then(res => {
             this.setState({ groupTitle: res.data.already_joined ? res.data.title : i18n.t("feed.groupDoesntExist") })
             // show the content if the user has joined the group
             if (res.data.already_joined) {
-              axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+              axios.get(queryUrl, options)
                 .then(res => {
                   this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true })
 
@@ -285,7 +291,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         break;
 
       case "popular":
-        axios.get(`/posts?keyword=popular&page=${newpage}&time=${time}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(`/posts?keyword=popular&page=${newpage}&time=${time}`, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, });
           })
@@ -293,7 +299,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         break;
 
       case "latest":
-        axios.get(`/posts?keyword=latest&page=${newpage}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(`/posts?keyword=latest&page=${newpage}`, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, });
           })
@@ -302,7 +308,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
       case "myposts":
         queryUrl = `/posts?keyword=myposts&page=${newpage}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(queryUrl, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
@@ -311,7 +317,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
       case "voted":
         queryUrl = `/posts?keyword=voted&page=${newpage}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(queryUrl, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })
@@ -320,7 +326,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
       case "recommend":
         queryUrl = `/posts?keyword=recommend&page=${newpage}`;
-        axios.get(queryUrl, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+        axios.get(queryUrl, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })
           })

@@ -101,7 +101,14 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     let userObj = {};
     if (typeof window !== 'undefined') { userObj = JSON.parse(localStorage.getItem("user") || "{}") };
     this.setState({ user: userObj});
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
+
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/users`, options).then((res: any) => {
       this.setState({
         isLogin: true,
         isLoaded: true

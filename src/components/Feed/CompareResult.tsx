@@ -94,9 +94,14 @@ const CompareResult = (props: any) => {
     
     setFirstTitle(rawPostObj[0].title);
     setSecondTitle(rawPostObj[1].title);
-    // console.log("compare_Post_Obj", postObj);
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
 
-    axios.post(`/vote_selects/compare`, postObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+    axios.post(`/vote_selects/compare`, postObj, options)
       .then(res => {
         setCompareData(res.data);
         setIsLoading(false);

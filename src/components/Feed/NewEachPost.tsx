@@ -381,63 +381,11 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
   }
 
-  // occupationForm = () => {
-  //   return (
-  //     <div>
-  //       <select name="job" onChange={e => this.change(e, "occupation")}>
-  //         <option value="">選択してください</option>
-  //         <option value="公務員">公務員</option>
-  //         <option value="経営者・役員">経営者・役員</option>
-  //         <option value="会社員">会社員</option>
-  //         <option value="自営業">自営業</option>
-  //         <option value="自由業">自由業</option>
-  //         <option value="専業主婦">専業主婦</option>
-  //         <option value="パート・アルバイト">パート・アルバイト</option>
-  //         <option value="学生">学生</option>
-  //         <option value="その他">その他</option>
-  //       </select>
-  //     </div>
-  //   )
-  // }
-
-
   change(e: any, field: string) {
     this.setState({
       [field]: e.target.value,
     } as unknown as NewEachPostState)
   }
-
-
-
-  // submit = (e: any) => {
-  //   e.preventDefault();
-  //   const jwt = getJwt();
-  //   axios.get(`/posts?id=${this.props.data.id}&do_filter=yes&gender=${this.state.genderSelect}&min_age=${this.state.minAge}&max_age=${this.state.maxAge}&occupation=${this.state.occupation}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
-  //     .then((res: any) => {
-  //       const data = res.data;
-  //       this.setState({ 
-  //         data: data,
-  //         doFilter: false,
-  //        });
-  //     }).catch((err) => {
-  //     })
-  // }
-
-  // resetClick = (e: any) => {
-  //   e.preventDefault();
-  //   const jwt = getJwt();
-  //   axios.get(`/posts?id=${this.props.data.id}&do_filter=no`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
-  //     .then((res: any) => {
-  //       const data = res.data;
-  //       this.setState({ data });
-
-  //     }).catch((err) => {
-  //     })
-  // }
-
-  // filterClick = (e: any, val: boolean) => {
-  // this.setState({doFilter: val});
-  // }
 
 
 

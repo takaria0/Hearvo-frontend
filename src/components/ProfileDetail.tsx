@@ -13,11 +13,17 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const FollowingTopicList = (props: any) => {
   const jwt = getJwt();
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
   const [topicList, setTopicList] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("/topics/users", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    axios.get("/topics/users", options)
       .then(res => {
         setTopicList(res.data);
         setIsLoading(false);

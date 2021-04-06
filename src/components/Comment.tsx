@@ -56,14 +56,26 @@ const CommentItem = (props: any) => {
     const comment_id = data.id;
     const good_or_bad = value;
     const jwt = getJwt();
-    axios.post("/comments/fav", { comment_id, good_or_bad }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.post("/comments/fav", { comment_id, good_or_bad }, options)
       .then(res => { }).catch(err => { })
   };
 
   const likeDelete = (data: any) => {
     const comment_id = data.id;
     const jwt = getJwt();
-    axios.delete("/comments/fav", { data: { comment_id }, headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.delete("/comments/fav", { data: { comment_id }, ...options })
       .then(res => { }).catch(err => { })
   }
 
@@ -229,7 +241,13 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
   updateData = () => {
     const jwt = getJwt();
-    axios.get(`/comments?post_id=${this.props.postId}&order_by=popular`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/comments?post_id=${this.props.postId}&order_by=popular`, options)
       .then((res: any) => {
         const commentData = res.data;
         this.setState({ commentData });
@@ -285,7 +303,13 @@ class Comment extends React.Component<CommentProps, CommentState> {
     const good_or_bad = 1;
     e.preventDefault();
     const jwt = getJwt();
-    axios.post("/comments/fav", { comment_id, good_or_bad }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.post("/comments/fav", { comment_id, good_or_bad }, options)
       .then(res => {
 
       }).catch(err => {
@@ -298,7 +322,13 @@ class Comment extends React.Component<CommentProps, CommentState> {
     const good_or_bad = 1;
     e.preventDefault();
     const jwt = getJwt();
-    axios.post("/comments/fav", { comment_id }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.post("/comments/fav", { comment_id }, options)
       .then(res => {
 
       }).catch(err => {
@@ -324,11 +354,16 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
 
     const jwt = getJwt();
-    // // console.log("postObj", postObj)
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
     axios.post(
       "/comments",
       { post_id: this.props.postId, content: this.state.baseCommentContent, parent_id: this.state.commentId },
-      { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+      options)
       .then((res: any) => {
         this.handlePosted(e)
         this.setState({ baseCommentContent: "" });

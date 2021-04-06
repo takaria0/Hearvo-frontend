@@ -13,6 +13,12 @@ import i18n from "../helpers/i18n";
 
 const Profile = (props: any) => {
   const jwt = getJwt();
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
   const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem("user") || "{}"));
   const [isLoading, setIsLoading] = useState(true);
   const urlParams = new URLSearchParams(window.location.search);
@@ -21,7 +27,7 @@ const Profile = (props: any) => {
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user") || "{}"));
-    axios.get("/users?profile_detail=true", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    axios.get("/users?profile_detail=true", options)
       .then(res => {
         setUser(res.data);
         setIsLoading(false);
