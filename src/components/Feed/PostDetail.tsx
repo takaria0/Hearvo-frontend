@@ -1,14 +1,14 @@
 import {  withRouter, RouteComponentProps } from 'react-router';
 import React from 'react';
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
-import * as styles from '../css/Home.module.css';
-import NewEachPost from './Feed/NewEachPost';
-import Comment from './Comment';
-import Header from './Header';
-import SideBar from './SideBar';
-import EachPostHelmet from './Feed/EachPostHelmet';
-import InitialForm from './InitialForm';
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
+import * as styles from '../../css/Home.module.css';
+import NewEachPost from './EachPost';
+import Comment from '../Comment/Comment';
+import Header from '../Header/Header';
+import SideBar from '../SideBar';
+import EachPostHelmet from './EachPostHelmet';
+import InitialForm from '../InitialForm';
 
 type VoteSelectType = {
   id: number;
@@ -70,8 +70,13 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
   componentDidMount = () => {
     const jwt = getJwt();
-    // console.log(this.props.match.params.post_id);
-    axios.get(`/posts?id=${this.props.match.params.post_id}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/posts?id=${this.props.match.params.post_id}`, options)
       .then(res => {
         this.setState({
           data: res.data,
@@ -80,7 +85,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
       }).catch((err) => {
       })
 
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
+    axios.get(`/users`, options).then((res: any) => {
       this.setState({
         isLogin: true,
         isLoginLoaded: true,

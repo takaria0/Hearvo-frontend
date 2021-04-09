@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import axios from './Api';
+import axios from '../Api';
 
-import * as styles from '../css/Home.module.css';
-import { getJwt } from '../helpers/jwt';
+import * as styles from '../../css/Home.module.css';
+import { getJwt } from '../../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
-import Header from './Header';
-import SideBar from './SideBar';
-import i18n from "../helpers/i18n";
+import Header from '../Header/Header';
+import SideBar from '../SideBar';
+import i18n from "../../helpers/i18n";
 interface GroupCreateProps {
 
 }
@@ -54,7 +54,13 @@ const GroupCreate = (props: GroupCreateProps) => {
       return
     }
     const jwt = getJwt();
-    axios.post("/groups",{title: groupName},{headers: {'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY,}})
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.post("/groups", { title: groupName }, options)
       .then((res: any) => {
         const link = res.data.link;
         const baseLink = window.location.hostname === "localhost" ? 

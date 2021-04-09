@@ -290,7 +290,7 @@ i18next
             login: 'Log in',
             email: 'Email',
             password: 'Password',
-            createAccount: 'Signup',
+            createAccount: 'Sign up',
             successToLogin: 'Logged in',
             failedToLogin: 'Failed to Log in',
             confirmText1: 'By continuing, you agree to our ',

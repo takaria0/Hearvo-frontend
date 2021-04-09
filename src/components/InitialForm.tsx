@@ -37,7 +37,13 @@ const InitialUserInfoForm = (props: any) => {
 
     const postObj = { gender: gender, birth_year: year, gender_detail: genderDetail };
     const jwt = getJwt();
-    axios.put("/users?initial_setting=true", postObj, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.put("/users?initial_setting=true", postObj, options)
       .then((res: any) => {
         const resUser = res.data;
         userObj.gender = resUser.gender;
@@ -113,7 +119,7 @@ const InitialUserInfoForm = (props: any) => {
               <form className={classes.root} noValidate autoComplete="off">
                 <FormHelperText>
                   <TextField onChange={e => setGenderDetail(e.target.value)} />
-                  {i18n.t("feed.freeform")}
+                  {i18n.t("feed.freeForm")}
                 </FormHelperText></form>
             </div>
             : ''}
@@ -219,8 +225,14 @@ const InitialTopicForm = (props: any) => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const jwt = getJwt();
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
   useEffect(() => {
-    axios.get(`/topics?initial_topics=${JSON.stringify(INITIAL_TOPICS)}`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    axios.get(`/topics?initial_topics=${JSON.stringify(INITIAL_TOPICS)}`, options)
       .then(res => {
         const addChecked = res.data.map((elem: any) => { return { ...elem, checked: false } });
         setTopicList(addChecked);
@@ -257,7 +269,13 @@ const InitialTopicForm = (props: any) => {
     }
 
     const jwt = getJwt();
-    axios.post("/topics/users", { topic_id_list }, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.post("/topics/users", { topic_id_list }, options)
       .then((res: any) => {
         props.setFinish(true);
       }).catch((res: any) => {
@@ -341,7 +359,13 @@ const InitialForm = () => {
 
     // if (typeof window !== 'undefined') {};
     const jwt = getJwt();
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/users`, options)
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data));
       }).catch((err) => {

@@ -24,7 +24,7 @@ import i18n from "../../helpers/i18n";
 import AttributePlotPie from './AttributePlotPie';
 import AttributePlotBar from './AttributePlotBar';
 import { Mixpanel } from '../../helpers/mixpanel';
-import CountryContext from '../../helpers/context';
+import CountryContext from '../../contexts';
 
 // import FileCopyIcon from '@material-ui/icons/FileCopy';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
@@ -51,8 +51,13 @@ const EachMultipleVote = (props: any) => {
   const fullScreen = useMediaQuery('(max-width:700px)');
 
   useEffect(() => {
-
-    axios.get(`/posts?parent_id=${props.postId}`, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/posts?parent_id=${props.postId}`, options)
       .then(res => {
         setData(res.data);
         setIsLoading(false);
@@ -85,8 +90,13 @@ const EachMultipleVote = (props: any) => {
     // e.preventDefault();
     if (data.length - 1 === dataIdx) {
       const voteObj = { parent_id: props.postId, result: [...voteResult, { vote_select_id, post_id }] }
-
-      axios.post("/multiple_vote_users", voteObj, { headers: { 'Authorization': 'Bearer ' + jwt, Country: process.env.REACT_APP_COUNTRY } })
+      let options = {};
+      if (!jwt) {
+        options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+      } else {
+        options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+      }
+      axios.post("/multiple_vote_users", voteObj, options)
         .then(res => {
           Mixpanel.track('Successful Multiple Vote', { ...voteObj });
           setDoesVoteEnd(true);

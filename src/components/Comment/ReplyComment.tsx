@@ -1,10 +1,10 @@
 import React from 'react';
-import { getJwt } from '../helpers/jwt';
-import axios from './Api';
+import { getJwt } from '../../helpers/jwt';
+import axios from '../Api';
 import { Button } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from 'react-router';
-import * as styles from '../css/Comment.module.css';
-import i18n from '../helpers/i18n';
+import * as styles from '../../css/Comment.module.css';
+import i18n from '../../helpers/i18n';
 
 
 interface ReplyCommentProps extends RouteComponentProps<{}> {
@@ -60,6 +60,12 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
     }
 
     const jwt = getJwt();
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
     axios.post(
       "/comments",
       {
@@ -67,11 +73,7 @@ class ReplyComment extends React.Component<ReplyCommentProps, ReplyCommentState>
         content: this.state.commentContent,
         parent_id: this.props.commentId,
       },
-      {
-        headers: {
-          'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY,
-        }
-      }
+      options
     )
       .then((res: any) => {
         this.props.handleParentPosted(e);

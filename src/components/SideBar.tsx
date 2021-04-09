@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from './Api';
 import { getJwt } from '../helpers/jwt';
 import i18n from "../helpers/i18n";
-import TopicFollowButton from './TopicFollowButton';
+import TopicFollowButton from './Topic/TopicFollowButton';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import RenderTopic from './Feed/RenderTopic';
@@ -26,7 +26,13 @@ const TrendingTopics = (props: any) => {
 
   useEffect(() => {
     const jwt = getJwt();
-    axios.get("/topics?sidebar=true", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get("/topics?sidebar=true", options)
       .then(res => {
         setPopularTopic(res.data);
         setIsLoading(false);
@@ -75,7 +81,13 @@ const RelatedPosts = (props: any) => {
 
   useEffect(() => {
     const jwt = getJwt();
-    axios.get(`/posts?related_post_id=${props.postId}`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/posts?related_post_id=${props.postId}`, options)
       .then(res => {
         setRelatedPosts(res.data.posts);
         setIsLoading(false);

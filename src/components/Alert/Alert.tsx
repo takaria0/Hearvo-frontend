@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import CountryContext from '../../helpers/context';
+import CountryContext from '../../contexts';
 import i18n from "../../helpers/i18n";
 
 import Button from '@material-ui/core/Button';

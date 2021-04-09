@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
-import i18n from "../helpers/i18n";
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
+import i18n from "../../helpers/i18n";
 
 interface TopicFollowButtonLoadedProps {
   isFollowed: boolean;
@@ -15,10 +15,15 @@ const TopicFollowButtonLoaded = (props: TopicFollowButtonLoadedProps) => {
   const [topicId, setTopicId] = useState(0);
   const [resData, setResData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
   useEffect(() => {
 
-    axios.get(`/topics/users?topic_word=${props.topicWord}`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    axios.get(`/topics/users?topic_word=${props.topicWord}`, options)
       .then(res => {
         setIsFollowed(false);
         if (res.data.following) {
@@ -34,7 +39,7 @@ const TopicFollowButtonLoaded = (props: TopicFollowButtonLoadedProps) => {
   }, [props.topicWord]);
 
   const follow = (e: any) => {
-    axios.post("/topics/users", { topic_id_list: [topicId] }, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    axios.post("/topics/users", { topic_id_list: [topicId] }, options)
       .then(res => {
         setIsFollowed(true);
       })
@@ -44,7 +49,7 @@ const TopicFollowButtonLoaded = (props: TopicFollowButtonLoadedProps) => {
   }
 
   const unfollow = (e: any) => {
-    axios.delete("/topics/users", { data: { topic_id_list: [topicId] }, headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } })
+    axios.delete("/topics/users", { data: { topic_id_list: [topicId] }, ...options})
       .then(res => {
         setIsFollowed(false);
       })

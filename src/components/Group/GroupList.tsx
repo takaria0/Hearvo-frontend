@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axios from './Api';
+import axios from '../Api';
 
-import * as styles from '../css/Home.module.css';
-import { getJwt } from '../helpers/jwt';
+import * as styles from '../../css/Home.module.css';
+import { getJwt } from '../../helpers/jwt';
 import { Link, useParams } from 'react-router-dom'
-import Header from './Header';
-import SideBar from './SideBar';
+import Header from '../Header/Header';
+import SideBar from '../SideBar';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import i18n from "../helpers/i18n";
+import i18n from "../../helpers/i18n";
 interface GroupListProps {
 
 }
@@ -16,6 +16,12 @@ interface GroupListProps {
 
 const GroupList = (props: GroupListProps) => {
   const jwt = getJwt();
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
   const [groupList, setGroupList] = useState([]);
   const [success, setSuccess] = useState(false);
   const [groupLink, setGroupLink] = useState("");
@@ -28,7 +34,7 @@ const GroupList = (props: GroupListProps) => {
 
   const submit = (e: any, groupId: number) => {
     e.preventDefault();
-    // axios.delete("/groups/users", { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
+    // axios.delete("/groups/users", options)
     // .then(res => {
 
     // })
@@ -42,7 +48,7 @@ const GroupList = (props: GroupListProps) => {
   let maxWidth:any;
   
   useEffect(() => {
-    axios.get(`/groups?order_by=latest`, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
+    axios.get(`/groups?order_by=latest`, options)
       .then((res: any) => {
         const groupList = res.data;
         setGroupList(groupList);

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
 import { useParams } from 'react-router-dom'
-import Header from './Header';
-import i18n from "../helpers/i18n";
+import Header from '../Header/Header';
+import i18n from "../../helpers/i18n";
 
 interface GroupInviteProps {
 
@@ -13,6 +13,13 @@ interface GroupInviteProps {
 
 const GroupInvite = (props: GroupInviteProps) => {
   const jwt = getJwt();
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
+  
   const [groupName, setGroupName] = useState("");
   const [success, setSuccess] = useState(false);
   const [groupLink, setGroupLink] = useState("");
@@ -22,6 +29,7 @@ const GroupInvite = (props: GroupInviteProps) => {
   const [alreadyJoined, setAlreadyJoined] = useState(false);
   const { link } = useParams<string>();
 
+
   const submit = (e: any) => {
     e.preventDefault();
     setSuccess(false); setError(""); setMessage("");
@@ -30,7 +38,8 @@ const GroupInvite = (props: GroupInviteProps) => {
       setSuccess(false);
       return
     }
-    axios.post(`/groups/users`, { link }, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
+    
+    axios.post(`/groups/users`, { link }, options)
       .then((res: any) => {
         const title = res.data.title;
         setGroupName(title);
@@ -43,7 +52,7 @@ const GroupInvite = (props: GroupInviteProps) => {
   };
 
   useEffect(() => {
-    axios.get(`/groups?link=${link}`, { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, } })
+    axios.get(`/groups?link=${link}`, options)
       .then((res: any) => {
         const title = res.data.title;
         setGroupName(title);

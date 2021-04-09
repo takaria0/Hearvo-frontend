@@ -5,7 +5,7 @@ import { getJwt } from '../../helpers/jwt';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import { Button, TextField, Fab, Input, Menu, MenuItem } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import * as styles from '../../css/Feed/PostContent.module.css';
+import * as styles from '../../css/PostContent.module.css';
 import PostContent from './PostContent';
 import CloseIcon from '@material-ui/icons/Close';
 import TodayIcon from '@material-ui/icons/Today';
@@ -74,8 +74,13 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
 
   componentDidMount = () => {
     const jwt = getJwt();
-
-    axios.get(`/users`, { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }).then((res: any) => {
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/users`, options).then((res: any) => {
       this.setState({
         isLogin: true,
         isLoading: false,

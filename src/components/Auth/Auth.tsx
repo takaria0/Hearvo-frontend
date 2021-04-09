@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 export interface AuthProps extends RouteComponentProps<{}>{
@@ -26,8 +26,9 @@ class Auth extends React.Component<AuthProps, AuthState> {
     if(!jwt) {
       this.props.history.push("/login");
     }
+    const options = { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
 
-    axios.get(`/users`, { headers: {Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY}}).then((res: any) => {
+    axios.get(`/users`, options).then((res: any) => {
       this.setState({
         user: res.data,
       });
