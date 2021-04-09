@@ -119,7 +119,7 @@ const InitialUserInfoForm = (props: any) => {
               <form className={classes.root} noValidate autoComplete="off">
                 <FormHelperText>
                   <TextField onChange={e => setGenderDetail(e.target.value)} />
-                  {i18n.t("feed.freeform")}
+                  {i18n.t("feed.freeForm")}
                 </FormHelperText></form>
             </div>
             : ''}
