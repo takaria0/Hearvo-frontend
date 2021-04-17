@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import * as styles from '../../css/Feed.module.css';
+import * as poststyles from '../../css/PostContent.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import CommentIcon from '@material-ui/icons/Comment';
@@ -36,19 +37,103 @@ import {
   // TwitterIcon
 } from "react-share";
 import { render } from '@testing-library/react';
+import { ChangeHistory } from '@material-ui/icons';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
 moment.tz.setDefault('UTC');
 
+const VotingLengthSelector = (props: any) => {
+  return (
+    <div style={{ }}>
+      <span style={{ fontSize: 14 }}>{i18n.t('newPost.VotingLength')}</span>
+      <select className={poststyles.vote_length_selector} size={1} onChange={(e) => { props.changeEndAt(e) }}>
+        <option value={24}>1&nbsp;{i18n.t('newPost.Day')}</option>
+        <option value={48}>2&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={72} selected>3&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={96}>4&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={120}>5&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={144}>6&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={168}>7&nbsp;{i18n.t('newPost.Days')}</option>
+
+        <option value={192}>8&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={216}>9&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={240}>10&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={264}>11&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={288}>12&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={312}>13&nbsp;{i18n.t('newPost.Days')}</option>
+        <option value={336}>14&nbsp;{i18n.t('newPost.Days')}</option>
+      </select>
+    </div>
+  )
+}
+
+const PollRecord = (props: any) => {
+  const initPostDetailObj = props.postDetailType === "target" ? props.data.target_post_detail : props.data.current_post_detail;
+  const [postDetailObj, setPostDetailObj] = useState<any>(initPostDetailObj);
+
+  useEffect(() => {
+  }, [postDetailObj]);
+
+  return (
+    <span>
+      <div>
+        投票期間 {postDetailObj.start_at.slice(0, 10)} ~ {postDetailObj.end_at.slice(0, 10)}
+      </div>
+      過去の投票  {props.data.post_details.map((each: any, idx: number) => { return <Link to={`/posts/${props.data.id}/record/${each.id}`}>{ (idx + 1) + " | " }</Link> })}
+    </span>
+    )
+}
+
+const RecreatePollButton = (props: any) => {
+  const currentDate = new Date();
+  const defaultEndAt = new Date(currentDate.setHours(currentDate.getHours() + 72)).toISOString().slice(0, -8);
+  const [modal, setModal] = useState(false);
+  const [endAt, setEndAt] = useState(defaultEndAt);
+
+  const submit = (e: any) => {
+    e.preventDefault();
+    const url = '/posts';
+    const data = { id: props.data.id, end_at: endAt };
+    const jwt = getJwt();
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.post(url, data, options)
+    .then(res => {
+      setModal(false);
+    })
+    .catch(err => {
+      setModal(true);
+    });
+  };
+
+
+  return (
+    <span>
+      <Dialog open={modal}>
+        <Button onClick={() => setModal(false)} disableRipple disableElevation className={styles.recreate_poll_button}>キャンセル</Button>
+        <div>再投票を開始</div>
+        <div>投票期間</div>
+        <VotingLengthSelector />
+        <Button onClick={(e) => submit(e)} disableRipple disableElevation className={styles.recreate_poll_button}>開始する</Button>
+      </Dialog>
+      <Button onClick={() => setModal(true)} disableRipple disableElevation className={styles.recreate_poll_button}>再投票</Button>
+    </span>
+  )
+};
 
 const PostHeader = (props: any) => {
-
+  const postDetailObj = props.postDetailType === "target" ? props.data.target_post_detail : props.data.current_post_detail;
   const createdAtJSX = (
     <span style={{ fontSize: 16, float: 'right', textAlign: 'right' }}>
-      {getDiffTime(props.data.created_at.slice(0, -7).replace("T", " "))}&nbsp;
+      {getDiffTime(postDetailObj.created_at.slice(0, -7).replace("T", " "))}&nbsp;
     </span >
   )
+
 
   switch (props.link) {
     case "posts":
@@ -95,6 +180,7 @@ const PostFooter = (props: any) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDialog, setopenDialog] = useState(false);
+  const postDetailObj = props.postDetailType === "target" ? props.data.target_post_detail : props.data.current_post_detail;
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -141,7 +227,7 @@ const PostFooter = (props: any) => {
       <div>
         {/* <div className={styles.footer}> */}
         <div style={{ marginLeft: 15, fontSize: 12, color: '#404040', marginBottom: 10 }}>
-          {getEndTime(props.data.end_at.slice(0, -3).replace("T", " "))}
+          {getEndTime(postDetailObj.end_at.slice(0, -3).replace("T", " "))}
         </div>
         {/* </div> */}
       </div>
@@ -331,12 +417,13 @@ const renderVoteMjResult = (baseData: any) => {
 }
 
 
-export interface NewEachPostProps {
+export interface EachPostProps {
   data: any;
   isLogin: boolean;
+  post_detail_id: string;
 }
 
-export interface NewEachPostState {
+export interface EachPostState {
   minAge: number;
   maxAge: number;
   genderSelect: string;
@@ -346,9 +433,10 @@ export interface NewEachPostState {
   voteTypeId: number;
   dataArray: any;
   filterArray: any;
+  postDetailType: string;
 }
 
-class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
+class EachPost extends React.Component<EachPostProps, EachPostState> {
 
 
   constructor(props: any) {
@@ -370,6 +458,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         genderSelect: "",
         occupation: "",
       }],
+      postDetailType: this.props.data.target_post_detail ? 'target' :  'current',
     }
   }
 
@@ -384,7 +473,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
   change(e: any, field: string) {
     this.setState({
       [field]: e.target.value,
-    } as unknown as NewEachPostState)
+    } as unknown as EachPostState)
   }
 
 
@@ -415,8 +504,12 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         const baseItem = (
           <div>
             <li className={styles.li} key={this.props.data.id}>
-              <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
-              {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}><CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
+              <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
+              {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}>
+                {/* TODO: Add recreate a poll component here */}
+                <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType}/>
+                <RecreatePollButton data={this.props.data} postDetailType={this.state.postDetailType} />
+                <CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
 
               <div className={styles.vote_section}>
                 {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
@@ -427,7 +520,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
               genderDist={this.props.data.gender_distribution}
               total_vote={this.props.data.total_vote}
                /> */}
-              <PostFooter data={this.props.data}></PostFooter>
+              <PostFooter data={this.props.data} postDetailType={this.state.postDetailType}></PostFooter>
             </li>
           </div>
         )
@@ -440,11 +533,11 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
       default:
         return (
           <li className={styles.li} key={this.props.data.id}>
-            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
+            <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
             <div className={styles.vote_section}>
               {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
             </div>
-            <PostFooter data={this.props.data}></PostFooter>
+            <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
 
           </li>
         )
@@ -456,6 +549,7 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
   render() {
     const currentFirstURL = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
+    const postDetailObj = this.state.postDetailType === "target" ? this.props.data.target_post_detail : this.props.data.current_post_detail;
 
     switch (this.state.voteTypeId) {
 
@@ -468,11 +562,12 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
         return (
           <li className={styles.li} key={this.props.data.id}>
-            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
+            <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
+            <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType} />
             <div className={styles.vote_section}>
-              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
+              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={postDetailObj.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
             </div>
-            <PostFooter data={this.props.data}></PostFooter>
+            <PostFooter data={this.props.data} postDetailType={this.state.postDetailType}></PostFooter>
           </li>
         )
 
@@ -486,12 +581,12 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
 
         return (
           <li className={styles.li} key={this.props.data.id}>
-            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
+            <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
             <div className={styles.vote_section}>
               <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
             </div>
             <div className={styles.footer}>
-              <PostFooter data={this.props.data}></PostFooter>
+              <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
             </div>
           </li>
         )
@@ -501,27 +596,27 @@ class NewEachPost extends React.Component<NewEachPostProps, NewEachPostState> {
         if (currentFirstURL === 'posts') {
           return (
             <li className={styles.li} key={this.props.data.id}>
-              <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
+              <PostHeader postDetailType={this.state.postDetailType} link={currentFirstURL} data={this.props.data}></PostHeader>
               <div className={styles.vote_section}>
-                <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
+                <EachMultipleVote postDetailType={this.state.postDetailType} hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
               </div>
               <div className={styles.footer}>
-                <PostFooter data={this.props.data}></PostFooter>
+                <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
               </div>
             </li>
           )
         }
         return (
           <li className={styles.li} key={this.props.data.id}>
-            <PostHeader link={currentFirstURL} data={this.props.data}></PostHeader>
+            <PostHeader postDetailType={this.state.postDetailType} link={currentFirstURL} data={this.props.data}></PostHeader>
             <div className={styles.vote_section}>
-              <EachMultipleVote hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
+              <EachMultipleVote postDetailType={this.state.postDetailType} hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
             </div>
-            <PostFooter data={this.props.data}></PostFooter>
+            <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
           </li>
         )
     }
   }
 }
 
-export default NewEachPost;
+export default EachPost;

@@ -10,7 +10,7 @@ import * as styles from '../../css/Feed.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 
-import NewEachPost from './EachPost';
+import EachPost from './EachPost';
 import TopicFollowButton from '../Topic/TopicFollowButton';
 import i18n from "../../helpers/i18n";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
@@ -367,7 +367,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
 
   feedList = () => {
-    let feedArray = this.state.dataArray.map((data: any, idx: number) => { return <NewEachPost isLogin={this.props.isLogin} data={data} ></NewEachPost> });
+    let feedArray = this.state.dataArray.map((data: any, idx: number) => { return <EachPost post_detail_id={""} isLogin={this.props.isLogin} data={data} ></EachPost> });
     // feedArray.splice(1, 0, <GoogleAdTimeLine />);
     // feedArray.splice(10, 0, <GoogleAdTimeLine />);
     // Adsを非表示
