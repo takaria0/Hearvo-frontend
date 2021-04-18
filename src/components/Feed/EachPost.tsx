@@ -10,9 +10,9 @@ import * as poststyles from '../../css/PostContent.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom'
 import CommentIcon from '@material-ui/icons/Comment';
-import EachVoteSelect from './EachVoteSelect';
-import EachVoteMj from './EachVoteMj';
-import EachMultipleVote from './EachMultipleVote';
+import VoteSelect from './Vote/VoteSelect';
+import EachVoteMj from './Vote/VoteMj';
+import MultipleVote from './Vote/MultipleVote';
 import CheckIcon from '@material-ui/icons/Check';
 import { renderVoteSelectResult } from '../../helpers/renderVoteSelectResult';
 import { MyResponsivePie } from '../../helpers/NivoPlots';
@@ -27,8 +27,9 @@ import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import AttributePlotPie from './AttributePlotPie';
-import AttributePlotBar from './AttributePlotBar';
+import CloseIcon from '@material-ui/icons/Close';
+import AttributePlotPie from './Vote/AttributePlotPie';
+import AttributePlotBar from './Vote/AttributePlotBar';
 import RenderTopic from './RenderTopic';
 import {
   EmailShareButton,
@@ -47,7 +48,7 @@ const VotingLengthSelector = (props: any) => {
   return (
     <div style={{ }}>
       <span style={{ fontSize: 14 }}>{i18n.t('newPost.VotingLength')}</span>
-      <select className={poststyles.vote_length_selector} size={1} onChange={(e) => { props.changeEndAt(e) }}>
+      <select className={poststyles.vote_length_selector} size={1} onChange={(e) => { props.changeEndAt(e.target.value) }}>
         <option value={24}>1&nbsp;{i18n.t('newPost.Day')}</option>
         <option value={48}>2&nbsp;{i18n.t('newPost.Days')}</option>
         <option value={72} selected>3&nbsp;{i18n.t('newPost.Days')}</option>
@@ -75,26 +76,49 @@ const PollRecord = (props: any) => {
   useEffect(() => {
   }, [postDetailObj]);
 
+  const style = { marginLeft: 10, marginTop: 5, backgroundColor: 'white' };
+  const linkStyle = { textDecoration: 'none' };
+  const recreatePollStyle = { marginLeft: 5 };
+
   return (
-    <span>
+    <div style={style}>
       <div>
-        投票期間 {postDetailObj.start_at.slice(0, 10)} ~ {postDetailObj.end_at.slice(0, 10)}
+        {i18n.t('pollRecord.votingLength')} {postDetailObj.start_at.slice(0, 10)} ~ {postDetailObj.end_at.slice(0, 10)}
+        <span style={recreatePollStyle}>
+          <RecreatePollButton data={props.data} postDetailType={props.postDetailType} />
+        </span>
       </div>
-      過去の投票  {props.data.post_details.map((each: any, idx: number) => { return <Link to={`/posts/${props.data.id}/record/${each.id}`}>{ (idx + 1) + " | " }</Link> })}
-    </span>
+      { props.data.post_details.length > 1 ? 
+        <span>
+          {i18n.t('pollRecord.pastPolls')}  {props.data.post_details.map((each: any, idx: number) => {
+          return <span>
+            <Link style={linkStyle} to={`/posts/${props.data.id}/record/${each.id}`}>{(idx + 1)}</Link> | </span>
+        })}
+        </span> 
+        :
+        <span></span>
+      }
+    </div>
     )
 }
 
 const RecreatePollButton = (props: any) => {
-  const currentDate = new Date();
-  const defaultEndAt = new Date(currentDate.setHours(currentDate.getHours() + 72)).toISOString().slice(0, -8);
   const [modal, setModal] = useState(false);
-  const [endAt, setEndAt] = useState(defaultEndAt);
+  const [endAtPlus, setEndAtPlus] = useState(72);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const onClose = () => {
+    setModal(false);
+    setErrorMessage("");
+  };
 
   const submit = (e: any) => {
     e.preventDefault();
+    // Set End At Datetime. Add XX days to current date.
+    const currentDate = new Date();
+    const end_at = new Date(currentDate.setHours(currentDate.getHours() + endAtPlus)).toISOString().slice(0, -8); 
     const url = '/posts';
-    const data = { id: props.data.id, end_at: endAt };
+    const data = { id: props.data.id, end_at: end_at };
     const jwt = getJwt();
     let options = {};
     if (!jwt) {
@@ -107,21 +131,34 @@ const RecreatePollButton = (props: any) => {
       setModal(false);
     })
     .catch(err => {
+      setErrorMessage(i18n.t('pollRecord.error'));
       setModal(true);
     });
   };
 
+  const closeStyle = { textAlign: 'left' as const };
+  const dialogStyle = { padding: 10, marginRight: 70, marginLeft: 70, marginBottom: 70 };
+  const titleStyle = { padding: 10, textAlign: 'center' as const };
+  const errorStyle = { padding: 10, textAlign: 'center' as const, color: 'red' };
 
   return (
     <span>
-      <Dialog open={modal}>
-        <Button onClick={() => setModal(false)} disableRipple disableElevation className={styles.recreate_poll_button}>キャンセル</Button>
-        <div>再投票を開始</div>
-        <div>投票期間</div>
-        <VotingLengthSelector />
-        <Button onClick={(e) => submit(e)} disableRipple disableElevation className={styles.recreate_poll_button}>開始する</Button>
+      <Dialog open={modal} >
+        <div style={closeStyle}>
+          <Button onClick={() => onClose()} disableRipple disableElevation ><CloseIcon /></Button>
+        </div>
+        <div style={dialogStyle}>
+          <div style={titleStyle}>{i18n.t('pollRecord.rePoll')}</div>
+          <div style={titleStyle}><VotingLengthSelector changeEndAt={setEndAtPlus} /></div>
+        </div>
+        <div>
+          <div style={titleStyle}>
+            <div style={errorStyle}>{errorMessage ? errorMessage : ""}</div>
+            <Button onClick={(e) => submit(e)} disableRipple disableElevation className={styles.recreate_poll_button}>{i18n.t('pollRecord.start')}</Button>
+          </div>
+        </div>
       </Dialog>
-      <Button onClick={() => setModal(true)} disableRipple disableElevation className={styles.recreate_poll_button}>再投票</Button>
+      <Button onClick={() => setModal(true)} disableRipple disableElevation className={styles.recreate_poll_button}>{i18n.t('pollRecord.rePoll')}</Button>
     </span>
   )
 };
@@ -458,91 +495,86 @@ class EachPost extends React.Component<EachPostProps, EachPostState> {
         genderSelect: "",
         occupation: "",
       }],
-      postDetailType: this.props.data.target_post_detail ? 'target' :  'current',
+      postDetailType: this.props.post_detail_id ? 'target' :  'current',
     }
   }
 
-  componentDidUpdate = (prevProps: any, prevState: any) => {
+  // componentDidUpdate = (prevProps: any, prevState: any) => {
+  //   if (prevProps.data !== this.props.data) {
+  //     return true;
+  //   }
+  // }
 
-    if (prevProps.data !== this.props.data) {
-      return true;
-    }
-
-  }
-
-  change(e: any, field: string) {
-    this.setState({
-      [field]: e.target.value,
-    } as unknown as EachPostState)
-  }
+  // change(e: any, field: string) {
+  //   this.setState({
+  //     [field]: e.target.value,
+  //   } as unknown as EachPostState)
+  // }
 
 
 
-  renderEachData = (data: any, vote_type_id: number, currentFirstURL: string) => {
+  // renderEachData = (data: any, vote_type_id: number, currentFirstURL: string) => {
 
-    // plot result data
-    let x, y, plotData, layout;
-    if (vote_type_id === 1) {
-      x = data.vote_selects_count.map((da: any) => {
-        return (da.count * 100) / data.total_vote
-      });
-      y = data.vote_selects_count.map((da: any) => {
-        return da.content
-      });
-      const voteIdList = data.vote_selects_count.map((da: any) => { return da.vote_select_id });
-      plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: this.props.data.my_vote, voteIdList: voteIdList }];
-      layout = { title: `${i18n.t("eachPost.totalVote")}: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
-    }
+  //   // plot result data
+  //   let x, y, plotData, layout;
+  //   if (vote_type_id === 1) {
+  //     x = data.vote_selects_count.map((da: any) => {
+  //       return (da.count * 100) / data.total_vote
+  //     });
+  //     y = data.vote_selects_count.map((da: any) => {
+  //       return da.content
+  //     });
+  //     const voteIdList = data.vote_selects_count.map((da: any) => { return da.vote_select_id });
+  //     plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: this.props.data.my_vote, voteIdList: voteIdList }];
+  //     layout = { title: `${i18n.t("eachPost.totalVote")}: ${data.total_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
+  //   }
 
-    // plot gender data
+  //   // plot gender data
 
-    switch (currentFirstURL) {
-      // post detail page. posts/id 
-      case "posts":
-        const mobStyle = { paddingBottom: '10px' }
+  //   switch (currentFirstURL) {
+  //     // post detail page. posts/id 
+  //     case "posts":
+  //       const mobStyle = { paddingBottom: '10px' }
 
-        const baseItem = (
-          <div>
-            <li className={styles.li} key={this.props.data.id}>
-              <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
-              {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}>
-                {/* TODO: Add recreate a poll component here */}
-                <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType}/>
-                <RecreatePollButton data={this.props.data} postDetailType={this.state.postDetailType} />
-                <CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
+  //       const baseItem = (
+  //         <div>
+  //           <li className={styles.li} key={this.props.data.id}>
+  //             <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
+  //             {data.vote_type.id === 1 ? <div style={{ textAlign: 'center' }}>
+  //             <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType}/>
+  //             <RecreatePollButton data={this.props.data} postDetailType={this.state.postDetailType} />
+  //             <CompareResult data={data} parentId={data.id}></CompareResult></div> : ''}
 
-              <div className={styles.vote_section}>
-                {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}
-              </div>
-              <AttributePlotPie ageDist={this.props.data.age_distribution} genderDist={this.props.data.gender_distribution} />
-              {/* <AttributePlotBar
-              ageDist={this.props.data.age_distribution}
-              genderDist={this.props.data.gender_distribution}
-              total_vote={this.props.data.total_vote}
-               /> */}
-              <PostFooter data={this.props.data} postDetailType={this.state.postDetailType}></PostFooter>
-            </li>
-          </div>
-        )
+  //             <div className={styles.vote_section}>{vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(this.props.data)}</div>
+  //             <AttributePlotPie ageDist={this.props.data.age_distribution} genderDist={this.props.data.gender_distribution} />
+  //             {/* <AttributePlotBar
+  //             ageDist={this.props.data.age_distribution}
+  //             genderDist={this.props.data.gender_distribution}
+  //             total_vote={this.props.data.total_vote}
+  //              /> */}
+  //             <PostFooter data={this.props.data} postDetailType={this.state.postDetailType}></PostFooter>
+  //           </li>
+  //         </div>
+  //       )
 
-        let itemArray = [];
-        itemArray.push(baseItem);
-        return (<div>{itemArray.map((item: any) => (item))}</div>)
+  //       let itemArray = [];
+  //       itemArray.push(baseItem);
+  //       return (<div>{itemArray.map((item: any) => (item))}</div>)
 
-      // default feed
-      default:
-        return (
-          <li className={styles.li} key={this.props.data.id}>
-            <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
-            <div className={styles.vote_section}>
-              {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
-            </div>
-            <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
+  //     // default feed
+  //     default:
+  //       return (
+  //         <li className={styles.li} key={this.props.data.id}>
+  //           <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
+  //           <div className={styles.vote_section}>
+  //             {vote_type_id === 1 ? renderVoteSelectResult(plotData, layout) : renderVoteMjResult(data)}
+  //           </div>
+  //           <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
 
-          </li>
-        )
-    }
-  }
+  //         </li>
+  //       )
+  //   }
+  // }
 
 
 
@@ -553,66 +585,83 @@ class EachPost extends React.Component<EachPostProps, EachPostState> {
 
     switch (this.state.voteTypeId) {
 
+      // VOTE SELECT 
       case 1:
-        if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
+        // if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
+        //   return (
+        //     <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id, currentFirstURL)}</div>
+        //   );
+        // }
+        // DETAIL PAGE
+        if (currentFirstURL === 'posts') {
           return (
-            <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id, currentFirstURL)}</div>
-          );
+            <li className={styles.li} key={this.props.data.id}>
+              <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
+              <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType} />
+              <CompareResult data={this.props.data} parentId={this.props.data.id} />
+              <div className={styles.vote_section}>
+                <VoteSelect hasVoted={this.props.data.already_voted} periodEnd={this.props.data.vote_period_end} isLogin={this.props.isLogin} voteContent={postDetailObj.vote_selects} postId={this.props.data.id} data={this.props.data} postDetailType={this.state.postDetailType}></VoteSelect>
+              </div>
+              <PostFooter data={this.props.data} postDetailType={this.state.postDetailType}></PostFooter>
+            </li>
+          )
         }
-
+        // TIMELINE
         return (
           <li className={styles.li} key={this.props.data.id}>
             <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
-            <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType} />
             <div className={styles.vote_section}>
-              <EachVoteSelect hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={postDetailObj.vote_selects} postId={this.props.data.id} data={this.props.data}></EachVoteSelect>
+              <VoteSelect hasVoted={this.props.data.already_voted} periodEnd={this.props.data.vote_period_end} isLogin={this.props.isLogin} voteContent={postDetailObj.vote_selects} postId={this.props.data.id} data={this.props.data} postDetailType={this.state.postDetailType}></VoteSelect>
             </div>
             <PostFooter data={this.props.data} postDetailType={this.state.postDetailType}></PostFooter>
           </li>
         )
 
+      // VOTE MJ
+      // case 2:  
+      //   if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
+      //     return (
+      //       <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id, currentFirstURL)}</div>
+      //     );
+      //   }
 
-      case 2:
-        if (this.props.data.already_voted === true || this.props.data.vote_period_end === true) {
-          return (
-            <div>{this.renderEachData(this.props.data, this.props.data.vote_type.id, currentFirstURL)}</div>
-          );
-        }
+      //   return (
+      //     <li className={styles.li} key={this.props.data.id}>
+      //       <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
+      //       <div className={styles.vote_section}>
+      //         <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
+      //       </div>
+      //       <div className={styles.footer}>
+      //         <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
+      //       </div>
+      //     </li>
+      //   )
 
-        return (
-          <li className={styles.li} key={this.props.data.id}>
-            <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
-            <div className={styles.vote_section}>
-              <EachVoteMj hasVoted={this.props.data.already_voted} isLogin={this.props.isLogin} voteContent={this.props.data.vote_mjs} mjOptions={this.props.data.mj_options} postId={this.props.data.id}></EachVoteMj>
-            </div>
-            <div className={styles.footer}>
-              <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
-            </div>
-          </li>
-        )
-
-
+      // MULTIPLE VOTE
       case 3:
+        // post detail page: hearvo.com/posts/
         if (currentFirstURL === 'posts') {
           return (
             <li className={styles.li} key={this.props.data.id}>
-              <PostHeader postDetailType={this.state.postDetailType} link={currentFirstURL} data={this.props.data}></PostHeader>
+              <PostHeader postDetailType={this.state.postDetailType} link={currentFirstURL} data={this.props.data} />
               <div className={styles.vote_section}>
-                <EachMultipleVote postDetailType={this.state.postDetailType} hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
+                <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType} />
+                <MultipleVote post_detail_id={this.props.post_detail_id} postDetailType={this.state.postDetailType} hasVoted={this.props.data.already_voted} periodEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin} />
               </div>
               <div className={styles.footer}>
-                <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
+                <PostFooter postDetailType={this.state.postDetailType} data={this.props.data} />
               </div>
             </li>
           )
         }
+        // post timeline: hearvo.com/latest, popular
         return (
           <li className={styles.li} key={this.props.data.id}>
-            <PostHeader postDetailType={this.state.postDetailType} link={currentFirstURL} data={this.props.data}></PostHeader>
+            <PostHeader postDetailType={this.state.postDetailType} link={currentFirstURL} data={this.props.data} />
             <div className={styles.vote_section}>
-              <EachMultipleVote postDetailType={this.state.postDetailType} hasVoted={this.props.data.already_voted} alreadyEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin}></EachMultipleVote>
+              <MultipleVote post_detail_id={this.props.post_detail_id} postDetailType={this.state.postDetailType} hasVoted={this.props.data.already_voted} periodEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin} />
             </div>
-            <PostFooter postDetailType={this.state.postDetailType} data={this.props.data}></PostFooter>
+            <PostFooter postDetailType={this.state.postDetailType} data={this.props.data} />
           </li>
         )
     }
