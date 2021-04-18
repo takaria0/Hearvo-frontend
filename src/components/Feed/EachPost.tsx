@@ -644,8 +644,8 @@ class EachPost extends React.Component<EachPostProps, EachPostState> {
           return (
             <li className={styles.li} key={this.props.data.id}>
               <PostHeader postDetailType={this.state.postDetailType} link={currentFirstURL} data={this.props.data} />
+              <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType} />
               <div className={styles.vote_section}>
-                <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType} />
                 <MultipleVote post_detail_id={this.props.post_detail_id} postDetailType={this.state.postDetailType} hasVoted={this.props.data.already_voted} periodEnd={this.props.data.vote_period_end} postId={this.props.data.id} isLogin={this.props.isLogin} />
               </div>
               <div className={styles.footer}>
