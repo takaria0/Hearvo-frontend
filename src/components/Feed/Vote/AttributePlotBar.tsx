@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import i18n from "../../helpers/i18n";
-import * as styles from '../../css/Feed.module.css';
+import i18n from "../../../helpers/i18n";
+import * as styles from '../../../css/Feed.module.css';
 
 interface AttributePlotBarPlops  {
   genderDist: any;
