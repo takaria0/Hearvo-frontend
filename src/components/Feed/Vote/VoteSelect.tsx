@@ -16,6 +16,7 @@ import { renderVoteSelectResult } from '../../../helpers/renderVoteSelectResult'
 import i18n from '../../../helpers/i18n';
 import { Mixpanel } from '../../../helpers/mixpanel';
 import CountryContext from '../../../contexts';
+import AttributePlotPie from './AttributePlotPie';
 
 const moment = require('moment-timezone');
 // moment.locale('ja');
@@ -63,8 +64,10 @@ const VoteSelect = (props: any) => {
     callApi(voteSelectPostObj, config);
   };
 
+
   // Loading
   if (isLoading) return (<div></div>);
+
 
   // Vote Result
   if (periodEnd || hasVoted) {
@@ -74,9 +77,23 @@ const VoteSelect = (props: any) => {
     const voteIdList = postDetailObj.vote_selects.map((da: any) => { return da.id });
     let plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: props.data.my_vote, voteIdList: voteIdList }];
     let layout = { title: `${i18n.t("eachPost.totalVote")}: ${postDetailObj.num_vote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
-    return (<div className={styles.vote_section} > { renderVoteSelectResult(plotData, layout)}</div>)
+    const currentFirstURL = window.location.pathname.split("/").length > 1 ? window.location.pathname.split("/")[1] : "";
+    if (currentFirstURL === "posts") {
+      return (
+        <div className={styles.vote_section}>
+          { renderVoteSelectResult(plotData, layout)}
+          <AttributePlotPie ageDist={props.data.age_distribution} genderDist={props.data.gender_distribution} />
+        </div>
+      )
+    }
+    return (
+    <div className={styles.vote_section}>
+      { renderVoteSelectResult(plotData, layout)}
+    </div>
+    )
   }
   
+
   // Vote Input 
   return (
     <div style={{ width: "100%" }} className={styles.content}>

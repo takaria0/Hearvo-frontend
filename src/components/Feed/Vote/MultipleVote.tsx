@@ -136,10 +136,7 @@ const MultipleVote = (props: any) => {
 
   const voteSelectResult = () => {
     let ageDist: any; let genderDist: any; let totalVote: any;
-    console.log('data', data);
     const resultJSX = data.map((each: any, idx: number) => {
-      console.log('idx', idx);
-      console.log('each', each);
       const postDetailObj = props.postDetailType === "target" ? each.target_post_detail : each.current_post_detail;
       let x, y, plotData, layout;
       ageDist = each.age_distribution;
@@ -148,7 +145,6 @@ const MultipleVote = (props: any) => {
       x = postDetailObj.vote_selects.map((da: any) => { return (da.count * 100) / totalVote });
       y = postDetailObj.vote_selects.map((da: any) => { return da.content });
 
-      console.log('postDetailObj', postDetailObj);
       const voteIdList = postDetailObj.vote_selects.map((da: any) => { return da.vote_select_id });
       plotData = [{ type: 'bar', x: x, y: y, orientation: 'h', myVote: each.my_vote, voteIdList: voteIdList }];
       layout = { title: `${i18n.t("eachPost.totalVote")}: ${totalVote}`, xaxis: { range: [0, 100], title: "%" }, yaxis: { automargin: true }, annotations: [], autosize: true }
@@ -166,11 +162,6 @@ const MultipleVote = (props: any) => {
       <div>
         {resultJSX}
         <AttributePlotPie ageDist={ageDist} genderDist={genderDist} />
-        {/* <AttributePlotBar
-      ageDist={ageDist}
-      genderDist={genderDist}
-      total_vote={totalVote}
-        /> */}
       </div>
     );
   }
