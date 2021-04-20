@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@material-ui/core';
-import axios from '../Api';
+import axios from '../../Api';
 // import 'bootstrap/dist/css/bootstrap.css';
 // import CanvasJSReact from '../canvasjs.react';
 
 
 import ProgressBar from 'react-bootstrap/ProgressBar'
 // import { withRouter, RouteComponentProps } from 'react-router-dom'
-import * as styles from '../../css/Feed.module.css';
-import { getJwt } from '../../helpers/jwt';
+import * as styles from '../../../css/Feed.module.css';
+import { getJwt } from '../../../helpers/jwt';
 import { RouteComponentProps, Link, Redirect, withRouter } from 'react-router-dom'
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import CommentIcon from '@material-ui/icons/Comment';
-import i18n from "../../helpers/i18n";
+import i18n from "../../../helpers/i18n";
 
 const moment = require('moment-timezone');
 // moment.locale('ja');

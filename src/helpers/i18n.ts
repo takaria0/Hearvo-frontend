@@ -251,6 +251,13 @@ i18next
             outside: 'You are accessing Hearvo from outside Japan. Some actions are limited. Learn more.',
 
           },
+          pollRecord: {
+            votingLength: '投票期間',
+            rePoll: '再投票',
+            start: '開始する',
+            pastPolls: '過去の投票',
+            error: '投票は、30日の間隔を空ける必要があります',
+          }
         },
       },
 
@@ -505,8 +512,14 @@ i18next
           },
           alert: {
             outside: 'You are accessing Hearvo from outside the United States. Some actions are limited. Learn more.',
-
           },
+          pollRecord: {
+            votingLength: 'Poll Date',
+            rePoll: 'Repoll',
+            start: 'Start',
+            pastPolls: 'Past polls',
+            error: 'Polls should be 30 days apart',
+          }
         },
       },
 

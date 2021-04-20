@@ -3,7 +3,7 @@ import React from 'react';
 import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 import * as styles from '../../css/Home.module.css';
-import NewEachPost from './EachPost';
+import EachPost from './EachPost';
 import Comment from '../Comment/Comment';
 import Header from '../Header/Header';
 import SideBar from '../SideBar';
@@ -46,6 +46,7 @@ interface State {
 interface Params {
   user_name: string;
   post_id: string;
+  post_detail_id: string;
 }
 
 
@@ -70,13 +71,19 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
   componentDidMount = () => {
     const jwt = getJwt();
+    let url = '';
     let options = {};
     if (!jwt) {
       options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
     } else {
       options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
     }
-    axios.get(`/posts?id=${this.props.match.params.post_id}`, options)
+    if (this.props.match.params.post_detail_id) {
+      url = `/posts?id=${this.props.match.params.post_id}&post_detail_id=${this.props.match.params.post_detail_id}`
+    } else {
+      url = `/posts?id=${this.props.match.params.post_id}`
+    }
+    axios.get(url, options)
       .then(res => {
         this.setState({
           data: res.data,
@@ -117,7 +124,7 @@ class PostDetail extends React.Component<Props & RouteComponentProps<Params>, St
 
             <div className={styles.feed}>
               <div>
-                <NewEachPost isLogin={this.state.isLogin} data={this.state.data!}></NewEachPost>
+                <EachPost post_detail_id={this.props.match.params.post_detail_id} isLogin={this.state.isLogin} data={this.state.data!}></EachPost>
               </div>
               <div>
                 <Comment userObj={this.state.userObj} isLogin={this.state.isLogin} postId={this.state.data.id}></Comment>

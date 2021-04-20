@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MyResponsivePie, MyResponsiveBar } from '../../helpers/NivoPlots';
-import i18n from "../../helpers/i18n";
+import { MyResponsivePie, MyResponsiveBar } from '../../../helpers/NivoPlots';
+import i18n from "../../../helpers/i18n";
 import { CollectionsBookmarkRounded } from '@material-ui/icons';
 import { Bar, HorizontalBar } from 'react-chartjs-2';
 

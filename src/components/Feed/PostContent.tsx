@@ -204,7 +204,7 @@ const VoteCandidateForm = (props: any) => {
 
 
   const addHandle = (e: any) => {
-    if (voteData.length > 6) { return };
+    if (voteData.length > 9) { return };
     setVoteData([...voteData, '']);
     if (props.voteTypeId === 3) { props.setIsVoteDataListOk(false) };
   }
@@ -450,12 +450,6 @@ const MultipleVoteForm = (props: any) => {
   const [isConfirm, setIsConfirm] = useState(false);
   const [isTitleListOk, setIsTitleListOk] = useState(false);
   const [isVoteDataListOk, setIsVoteDataListOk] = useState(false);
-
-
-  // How to use .map
-  const someArray = ["a", "b", "c"];
-  const answer = someArray.map((element: string) => { return element + " with something" });
-  // ['a with something', 'b with something', 'c with something']
 
 
   useEffect(() => {
@@ -820,20 +814,12 @@ const VoteForm = (props: any) => {
 
     const commaIdx = getCommaIdx(topicString);
 
-    // console.log('cursor', cursor);
-    // console.log('topicString', topicString);
-    // console.log('beforeTopicList', beforeTopicList);
-    // console.log('commaIdx', commaIdx);
-
-
     let currentTopicIdx: number;
     // if duplicate
     // commaIdx [5, 10, 17], cursor 10
     // currentTopicIdx -> 2
     if (commaIdx.includes(cursor)) {
       currentTopicIdx = commaIdx.indexOf(cursor);
-      // console.log('currentTopicIdx', currentTopicIdx);
-      // console.log('duplicate', beforeTopicList[currentTopicIdx]);
       setCurrentTopicIdx(currentTopicIdx);
       return beforeTopicList[currentTopicIdx];
     }
@@ -847,9 +833,6 @@ const VoteForm = (props: any) => {
     numArray = numArray.sort();
     currentTopicIdx = numArray.indexOf(cursor);
     setCurrentTopicIdx(currentTopicIdx);
-    // console.log('numArray', numArray);
-    // console.log('currentTopicIdx', currentTopicIdx);
-    // console.log('not duplicate', beforeTopicList[currentTopicIdx]);
     if (beforeTopicList.length < currentTopicIdx) { return beforeTopicList[beforeTopicList.length] }
     return beforeTopicList[currentTopicIdx];
   };
