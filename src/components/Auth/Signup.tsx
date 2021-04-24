@@ -5,6 +5,8 @@ import { Button } from '@material-ui/core';
 import * as styles from '../../css/Login.module.css';
 import i18n from '../../helpers/i18n';
 import { Mixpanel } from '../../helpers/mixpanel';
+import { GoogleLogin } from 'react-google-login';
+
 export interface SignupProps extends RouteComponentProps<{}> {
 }
 
@@ -13,7 +15,7 @@ export interface SignupState {
   email: string;
   password: string;
   passwordVerify: string;
-  signupSuccessMessage: string;
+  successMessage: string;
   errorMessage: string;
 }
 
@@ -27,7 +29,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
       email: "",
       password: "",
       passwordVerify: "",
-      signupSuccessMessage: "",
+      successMessage: "",
       errorMessage: "",
     };
     this.change = this.change.bind(this);
@@ -98,7 +100,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
       Mixpanel.track('Successful Signup', {});
 
       this.setState({
-        signupSuccessMessage: i18n.t("signup.createdAccount"),
+        successMessage: i18n.t("signup.createdAccount"),
       })
       function timeout(delay: number) {
         return new Promise(res => setTimeout(res, delay));
@@ -113,6 +115,60 @@ class Signup extends React.Component<SignupProps, SignupState> {
     })
     }
 
+  responseGoogle = (res: any) => {
+
+    // send tokenId to backend and get response (get jwt) and save it to localStorage
+    // then history.push("/")
+
+    const params = new URLSearchParams(window.location.search);
+    const previousUrl = {
+      destination: params.get("destination"),
+      value: params.get("value")
+    }
+    // const previousUrl = {
+    //   destination: posts ,
+    //   value: 777 ,
+    // }
+
+    axios.post("/login?google_login=true", { }, { headers: { googleTokenId: res.tokenId, Country: process.env.REACT_APP_COUNTRY } })
+      .then((res: any) => {
+        if (typeof window !== 'undefined') { localStorage.setItem("jwt", res.data.token) };
+        
+        this.setState({ successMessage: i18n.t("login.successToLogin")})
+
+        axios.get(`/users`, { headers: { Authorization: `Bearer ${res.data.token}`, Country: process.env.REACT_APP_COUNTRY } })
+        .then((res: any) => {
+
+          if (typeof window !== 'undefined') { localStorage.setItem("user", JSON.stringify(res.data)) };
+          Mixpanel.identify(res.data.id);
+          Mixpanel.track('Successful Google login', {});
+          Mixpanel.people.set({
+            name: res.data.name,
+          });
+
+          if ( previousUrl.destination === null ){
+            this.props.history.push("/");
+          } else if ( previousUrl.destination !== null && previousUrl.value !== null ){
+            this.props.history.push("/" + `${previousUrl.destination}` + "/" + `${previousUrl.value}`);
+          } else {
+            this.props.history.push("/");
+          }
+
+        }).catch((err: any) => {
+          Mixpanel.track('Unsuccessful Google login', {});
+          this.props.history.push("/login");
+        })
+
+
+      }).catch((err: any) => {
+        Mixpanel.track('Unsuccessful Google login', {});
+        this.setState({
+          errorMessage: i18n.t("login.failedToLogin"),
+        })
+      })
+  };
+
+
   render() {
     return (
       <div className={styles.body}>
@@ -123,21 +179,33 @@ class Signup extends React.Component<SignupProps, SignupState> {
         <form onSubmit={e => this.submit(e)}>
           <div>
               <div>{i18n.t("signup.userName")}</div>
-              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={1} maxLength={20} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
+              <input style={inlineStyles.inputText} className={styles.email} minLength={1} maxLength={20} type="string" onChange={e => this.change(e, "userName")} value={this.state.userName} />
           </div>
           <div>
               <div>{i18n.t("signup.email")}</div>
-              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={1} maxLength={300} type="email" onChange={e => this.change(e, "email")} value={this.state.email} />
+              <input style={inlineStyles.inputText} className={styles.email} minLength={1} maxLength={300} type="email" onChange={e => this.change(e, "email")} value={this.state.email} />
           </div>
           <div>
               <div>{i18n.t("signup.password")}</div>
-              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
+              <input style={inlineStyles.inputText} className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "password")} value={this.state.password} />
           </div>
 
           <div>
               <div>{i18n.t("signup.confirmPassword")}</div>
-              <input style={{ padding: 5, width: '23ch' }} className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
+              <input style={inlineStyles.inputText} className={styles.email} minLength={8} maxLength={32} type="password" onChange={e => this.change(e, "passwordVerify")} value={this.state.passwordVerify} />
           </div>
+
+          <div style={{marginBottom: 20, marginTop: 20}}>
+              <GoogleLogin
+                clientId="984877314328-2kvinv2q3o9bgstfjherl42t7gf1rc05.apps.googleusercontent.com"
+                buttonText="Continue with Google"
+                onSuccess={this.responseGoogle}
+                // onFailure={}
+                cookiePolicy={'single_host_origin'}
+              />
+            </div>
+
+
           <div style={{ fontSize: 14, marginBottom: 10}}>
               {i18n.t("signup.confirmText1")}<br></br><Link to="/tos" target="_blank">{i18n.t("signup.confirmText2")}</Link>{i18n.t("signup.confirmText3")}<Link to="/privacy" target="_blank">{i18n.t("signup.confirmText4")}</Link>{i18n.t("signup.confirmText5")}<br></br>
           </div>
@@ -150,7 +218,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
           {this.state.errorMessage ? this.state.errorMessage : ''}
         </div>
         <div>
-          {this.state.signupSuccessMessage}
+          {this.state.successMessage}
         </div>
           <div className={styles.footer}>
           <Link to={"/login"+window.location.search}>{i18n.t("signup.login")}</Link>
@@ -158,6 +226,14 @@ class Signup extends React.Component<SignupProps, SignupState> {
         </div>
       </div>
     );
+  }
+}
+
+
+const inlineStyles = {
+  inputText: {
+    padding: 5,
+    width: '25ch'
   }
 }
 
