@@ -19,6 +19,9 @@ const InitialUserInfoForm = (props: any) => {
   const [genderDetail, setGenderDetail] = useState<string>("");
   const [yearOpen, setYearOpen] = useState<any>(false);
   const [year, setYear] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [middleName, setMiddleName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [initialSettingMessage, setInitialSettingMessage] = useState("");
 
   const submit = (e: any) => {
@@ -35,7 +38,12 @@ const InitialUserInfoForm = (props: any) => {
       return
     }
 
-    const postObj = { gender: gender, birth_year: year, gender_detail: genderDetail };
+    if (firstName.length === 0 || lastName.length === 0) {
+      setInitialSettingMessage(i18n.t("feed.enterName"));
+      return
+    }
+
+    const postObj = { gender: gender, birth_year: year, gender_detail: genderDetail, first_name: firstName, middle_name: middleName, last_name: lastName };
     const jwt = getJwt();
     let options = {};
     if (!jwt) {
@@ -55,6 +63,24 @@ const InitialUserInfoForm = (props: any) => {
         setInitialSettingMessage(i18n.t("feed.confirmContent"));
       });
   }
+
+
+
+  const userNameForm = () => {
+    return (
+      <div>
+        <div>
+          <input style={inlineStyles.inputName} placeholder={"First Name"} maxLength={100} onChange={(e) => setFirstName(e.target.value as string)}></input>
+        </div>
+        <div>
+          <input style={inlineStyles.inputName} placeholder={"Last Name"} maxLength={100} onChange={(e) => setLastName(e.target.value as string)}></input>
+        </div>
+        <div>
+          <input style={inlineStyles.inputName} placeholder={"Middle Name (Optional)"} maxLength={100} onChange={(e) => setMiddleName(e.target.value as string)}></input>
+        </div>
+      </div>
+    )
+  };
 
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,28 +107,16 @@ const InitialUserInfoForm = (props: any) => {
 
   const genderForm = () => {
 
-    const handleChange = (e: any) => {
-      setGender(e.target.value)
-    };
-
-    const handleClose = () => {
-      setGenderOpen(false);
-    };
-
-    const handleOpen = () => {
-      setGenderOpen(true);
-    };
-
     return (
       <div>
         <FormControl className={classes.formControl}>
           <InputLabel>{i18n.t("feed.gender")}</InputLabel>
           <Select
             open={genderOpen}
-            onClose={handleClose}
-            onOpen={handleOpen}
+            onClose={() => setGenderOpen(false)}
+            onOpen={() => setGenderOpen(true)}
             value={gender}
-            onChange={handleChange}
+            onChange={(e) => setGender(e.target.value as string)}
           // displayEmpty
           // className={classes.selectEmpty_gender}
           >
@@ -146,52 +160,32 @@ const InitialUserInfoForm = (props: any) => {
 
     yearOption = yearOption.reverse();
 
-    const handleChange = (e: any) => {
-      setYear(e.target.value)
-    };
-
-    const handleClose = () => {
-      setYearOpen(false);
-    };
-
-    const handleOpen = () => {
-      setYearOpen(true);
-    };
-
     return (
       <FormControl className={classes.formControl}>
         <InputLabel>{i18n.t("feed.birthYear")}</InputLabel>
         <Select
           open={yearOpen}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          // value={year}
-          onChange={handleChange}
+          onClose={() => setYearOpen(false)}
+          onOpen={() => setYearOpen(true)}
+          onChange={(e) => setYear(e.target.value as string)}
         >
           <MenuItem value="">{i18n.t("feed.year")}</MenuItem>
           {yearOption}
         </Select>
       </FormControl>
-
-      // <div>
-      //   <label htmlFor="dob-day" >{i18n.t("feed.birthYear")}</label>
-      //   <div>
-      //     <select name="dob-year" id="dob-year" onChange={e => setYear(e.target.value)}>
-      //       <option value="">{i18n.t("feed.year")}</option>
-      //       {yearOption}
-      //     </select>
-      //   </div>
-      // </div>
     )
   }
 
   return (
     <div>
-      {/* <Dialog open={parseInt(props.data.userObj.login_count) === 1 && props.data.editInitialUserInfoForm}> */}
       <Dialog open={userObj.gender === null || userObj.birth_year === null}>
         <div style={{ padding: '10px', margin: '10px' }}>
           <h1>{i18n.t("feed.inputUserInfo")}</h1>
           <form onSubmit={e => submit(e)}>
+            <div>
+              {userNameForm()}
+            </div>
+            <br></br>
             <div>
               {genderForm()}
             </div>
@@ -202,7 +196,6 @@ const InitialUserInfoForm = (props: any) => {
             <br></br>
             <br></br>
             <span style={{ float: 'right', textAlign: 'right', }}>
-              {/* <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }}>{i18n.t("feed.done")}</button> */}
               <Button type="submit" variant="contained" color="primary">{i18n.t("feed.done")}</Button>
             </span>
           </form>
@@ -263,10 +256,10 @@ const InitialTopicForm = (props: any) => {
     e.preventDefault();
     const topic_id_list = saveTopicList.map((elem: any) => (elem.id));
 
-    if (topic_id_list.length < 3) {
-      setErrorMessage(i18n.t("feed.selectThreeTopics"));
-      return
-    }
+    // if (topic_id_list.length < 3) {
+    //   setErrorMessage(i18n.t("feed.selectThreeTopics"));
+    //   return
+    // }
 
     const jwt = getJwt();
     let options = {};
@@ -312,30 +305,6 @@ const InitialTopicForm = (props: any) => {
           </div>
         </form>
       </Dialog>
-
-
-      {/* <Dialog open={true}>
-        <div>
-          <h2 style={{ textAlign: "center" }}>{i18n.t("feed.chooseTopic")}</h2>
-          <form onSubmit={e => submit(e)} style={{ width: '50ch' }}>
-            <ul style={{ columnCount: 3 }}>
-              {topicList.map((topic: any, idx: number) => {
-                return (
-                  <div>
-                    <input type="checkbox" id="" onChange={e => change(e, topic.id, topic.topic, idx)} name={topic.topic} value={topic.id}></input>
-                    <label htmlFor="subscribeNews">{topic.topic}</label>
-                  </div>
-                )
-              })}
-            </ul>
-            <div style={{ float: 'right', textAlign: 'right', marginRight: 20, marginBottom: 30, marginTop: 20 }}>
-              <button style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 5, paddingTop: 5 }} >{i18n.t("feed.save")}</button>
-            </div>
-
-          </form>
-          <div style={{ color: 'red' }}>{errorMessage ? errorMessage : ''}</div>
-        </div>
-      </Dialog> */}
     </div>
   )
 };
@@ -383,5 +352,17 @@ const InitialForm = () => {
 
   return (<InitialUserInfoForm  setFinish={setIsUserInfoFinished}></InitialUserInfoForm>);
 }
+
+
+
+const inlineStyles = {
+  inputName: {
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: 5,
+    padding: 7,
+  }
+};
+
 
 export default InitialForm;

@@ -6,6 +6,8 @@ import * as styles from '../../css/Login.module.css';
 import i18n from '../../helpers/i18n';
 import { GoogleLogin } from 'react-google-login';
 import { Mixpanel } from '../../helpers/mixpanel';
+
+
 export interface LoginProps extends RouteComponentProps<{}>{
 }
 
@@ -126,7 +128,7 @@ class Login extends React.Component<LoginProps, LoginState> {
           if ( previousUrl.destination === null ){
             this.props.history.push("/");
           } else if ( previousUrl.destination !== null && previousUrl.value !== null ){
-            this.props.history.push("/"+`${previousUrl.destination}`+"/"+`${previousUrl.value}`);
+            this.props.history.push("/" + `${previousUrl.destination}` + "/" + `${previousUrl.value}`);
           } else {
             this.props.history.push("/");
           }
