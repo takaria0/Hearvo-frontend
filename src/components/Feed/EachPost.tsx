@@ -598,7 +598,9 @@ class EachPost extends React.Component<EachPostProps, EachPostState> {
             <li className={styles.li} key={this.props.data.id}>
               <PostHeader link={currentFirstURL} data={this.props.data} postDetailType={this.state.postDetailType}></PostHeader>
               <PollRecord post_detail_id={this.props.post_detail_id} data={this.props.data} postDetailType={this.state.postDetailType} />
-              <CompareResult data={this.props.data} parentId={this.props.data.id} />
+              <div style={inlineStyles.compareTitle}>
+                <CompareResult data={this.props.data} parentId={this.props.data.id} />
+              </div>
               <div className={styles.vote_section}>
                 <VoteSelect hasVoted={this.props.data.already_voted} periodEnd={this.props.data.vote_period_end} isLogin={this.props.isLogin} voteContent={postDetailObj.vote_selects} postId={this.props.data.id} data={this.props.data} postDetailType={this.state.postDetailType}></VoteSelect>
               </div>
@@ -665,6 +667,12 @@ class EachPost extends React.Component<EachPostProps, EachPostState> {
           </li>
         )
     }
+  }
+}
+
+const inlineStyles = {
+  compareTitle: {
+    textAlign: 'center' as const,
   }
 }
 
