@@ -7,7 +7,7 @@ import Header from '../Header/Header';
 import SideBar from '../SideBar';
 import ProfileDetail from './ProfileDetail';
 import TopicFollowButtonLoaded from '../Topic/TopicFollowButtonLoaded';
-import { BrowserRouter, Switch, Route } from 'react-router-dom'; 
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import i18n from "../../helpers/i18n";
 
 
@@ -50,7 +50,7 @@ const Profile = (props: any) => {
       <Header></Header>
       <div className={styles.body}>
         <div className={styles.feed}>
-          <h2>{user.profile_name}</h2>
+          <h2>{user.profile_name} / {user.first_name} {user.middle_name} {user.last_name}</h2>
 
           <span><Link style={{ textDecoration: 'none' }} to="/profile/following">{i18n.t("profile.following")} {user.num_of_following_topics}</Link></span>&nbsp;&nbsp;&nbsp;
 

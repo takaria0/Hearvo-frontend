@@ -1,6 +1,6 @@
 import React from 'react';
 import * as styles from '../../css/Header.module.css';
-import { Button, Menu, MenuItem,Paper,Tab,Tabs } from '@material-ui/core';
+import { Button, Menu, MenuItem, Paper, Tab, Tabs } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
 import { getJwt } from '../../helpers/jwt';
@@ -35,7 +35,7 @@ type userObject = {
   string_id: string;
   created_at: string;
   updated_at: string;
-} 
+}
 
 interface HeaderChildProps extends RouteComponentProps<{}> {
 
@@ -48,9 +48,9 @@ interface HeaderChildState {
   isLoaded: boolean;
   searchValue: string;
   mediaQuery: any;
-  edit:boolean;
+  edit: boolean;
 }
- 
+
 class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
   constructor(props: HeaderChildProps) {
     super(props);
@@ -62,9 +62,9 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
       isLoaded: false,
       searchValue: "",
       mediaQuery: {},
-      edit:false,
+      edit: false,
     }
-    
+
   }
 
 
@@ -96,11 +96,11 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
   }
 
   componentDidMount = () => {
-    this.setState({ mediaQuery: window.matchMedia('(min-width: 800px)')});
+    this.setState({ mediaQuery: window.matchMedia('(min-width: 800px)') });
     const jwt = getJwt();
     let userObj = {};
     if (typeof window !== 'undefined') { userObj = JSON.parse(localStorage.getItem("user") || "{}") };
-    this.setState({ user: userObj});
+    this.setState({ user: userObj });
 
     let options = {};
     if (!jwt) {
@@ -137,14 +137,14 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     const url = window.location.pathname.split("/");
     // hearvo.com/posts/777 => url = { ,posts,777}
 
-    if(val === "/login") {
-      if (typeof window !== 'undefined') {localStorage.removeItem("jwt")};
-      if (typeof window !== 'undefined') {localStorage.removeItem("user")};
+    if (val === "/login") {
+      if (typeof window !== 'undefined') { localStorage.removeItem("jwt") };
+      if (typeof window !== 'undefined') { localStorage.removeItem("user") };
 
-      if (url[1] === ""){
+      if (url[1] === "") {
         this.props.history.push(`${val}`);
-      } else if (url[2] != null){
-        this.props.history.push(`${val}`+"?destination="+url[1]+'&value='+url[2]);
+      } else if (url[2] != null) {
+        this.props.history.push(`${val}` + "?destination=" + url[1] + '&value=' + url[2]);
       } else {
         this.props.history.push(`${val}`);
       }
@@ -152,10 +152,10 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     }
 
     if (val !== "none") {
-      if (url[1]===""){
+      if (url[1] === "") {
         this.props.history.push(`${val}`);
-      }else if (url[2] != null){
-        this.props.history.push(`${val}`+"?destination="+url[1]+'&value='+url[2]);
+      } else if (url[2] != null) {
+        this.props.history.push(`${val}` + "?destination=" + url[1] + '&value=' + url[2]);
       } else {
         this.props.history.push(`${val}`);
       }
@@ -165,7 +165,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
 
   editHandle = (e: any, edit: boolean) => {
     e.preventDefault();
-    if(this.state.isLogin) {
+    if (this.state.isLogin) {
       this.setState({
         edit: edit,
       })
@@ -179,34 +179,34 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
     // const searchWidth = this.state.mediaQuery.matches ? "60ch" : "60%" ;
     return (
       <form onSubmit={e => this.searchSubmit(e)}>
-        <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 5, padding: 6, marginLeft:'10px'}}>
+        <span style={{ display: display, border: 'solid', borderWidth: 1, backgroundColor: 'white', borderRadius: 5, padding: 6, marginLeft: '10px' }}>
           {/* <SearchIcon style={{padding: 0}} /> */}
-        <input maxLength={50} type="text" 
+          <input maxLength={50} type="text"
             style={{ border: 'none', width: "100%", outline: 'none', backgroundColor: 'white' }}
-         className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
-        ></input>
+            className={styles.search_bar} value={this.state.searchValue} onChange={e => this.searchChange(e)} placeholder={i18n.t("header.search")}
+          ></input>
         </span>
       </form>
     )
   }
 
-  
+
   listBar = () => {
     return (
       <b>
-      {
-        this.state.isLogin
-          ?
-          <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+        {
+          this.state.isLogin
+            ?
+            <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
               <ListIcon style={{ padding: 0 }} ></ListIcon>
-          </Button>
-            <Menu
-              id="simple-menu"
-              anchorEl={this.state.anchorEl}
-              keepMounted
-              open={Boolean(this.state.anchorEl)}
-              onClose={e => this.handleClose(e, "none")}>
-                <MenuItem onClick={e => this.handleClose(e, "/profile/following")}><AccountCircleIcon />&nbsp;{i18n.t('settingBar.profile')}</MenuItem>
+            </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={this.state.anchorEl}
+                keepMounted
+                open={Boolean(this.state.anchorEl)}
+                onClose={e => this.handleClose(e, "none")}>
+                <MenuItem onClick={e => this.handleClose(e, "/profile/following")}><AccountCircleIcon />&nbsp;{this.state.user.profile_name} / {this.state.user.first_name} {this.state.user.middle_name} {this.state.user.last_name}</MenuItem>
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/list")}>{i18n.t('settingBar.groupList')}</MenuItem> */}
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/create")}>{i18n.t('settingBar.groupCreate')}</MenuItem> */}
                 {/* <MenuItem onClick={e => this.handleClose(e, "/help")}><HelpIcon />&nbsp;{i18n.t('settingBar.help')}</MenuItem> */}
@@ -214,27 +214,27 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
                 <MenuItem onClick={e => this.handleClose(e, "/privacy")}><AssignmentIndIcon />&nbsp;{i18n.t('settingBar.privacy')}</MenuItem>
                 {/* <MenuItem onClick={e => this.handleClose(e, "/settings")}><SettingsIcon />&nbsp;{i18n.t('settingBar.settings')}</MenuItem> */}
                 <MenuItem onClick={e => this.handleClose(e, "/login")}><ExitToAppIcon />&nbsp;{i18n.t('settingBar.logout')}</MenuItem>
-            </Menu>
-          </b>
-          :
+              </Menu>
+            </b>
+            :
             <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-            <ListIcon ></ListIcon>
-          </Button>
-            <Menu
-              id="simple-menu"
-              anchorEl={this.state.anchorEl}
-              keepMounted
-              open={Boolean(this.state.anchorEl)}
-              onClose={e => this.handleClose(e, "none")}>
+              <ListIcon ></ListIcon>
+            </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={this.state.anchorEl}
+                keepMounted
+                open={Boolean(this.state.anchorEl)}
+                onClose={e => this.handleClose(e, "none")}>
                 {/* <MenuItem onClick={e => this.handleClose(e, "/help")}><HelpIcon />&nbsp;{i18n.t('settingBar.help')}</MenuItem> */}
                 <MenuItem onClick={e => this.handleClose(e, "/tos")}><DescriptionIcon />&nbsp;{i18n.t('settingBar.tos')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/privacy")}><AssignmentIndIcon />&nbsp;{i18n.t('settingBar.privacy')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/login")}><AccountCircleIcon />&nbsp;{i18n.t('settingBar.login')}</MenuItem>
                 <MenuItem onClick={e => this.handleClose(e, "/signup")}><PersonAddIcon />&nbsp;{i18n.t('settingBar.signup')}</MenuItem>
-            </Menu>
-          </b>
+              </Menu>
+            </b>
           // <Link to='/login' className={styles.profile}>ログイン</Link>
-      }
+        }
       </b>
     )
   }
@@ -242,7 +242,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
   beforeLoginListbar = () => {
     return (
       <b><Button className={styles.profile} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-        <ListIcon style={{padding: 0}}></ListIcon>
+        <ListIcon style={{ padding: 0 }}></ListIcon>
       </Button>
         <Menu
           id="simple-menu"
@@ -259,35 +259,35 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
 
     return (
       <div style={{ transform: 'translateY(10px)' }}>
-        <span style={{height: '10px'}}></span>
-        <div style={{ display: 'flex', flexWrap:'nowrap', marginRight:'100px'}}>
-          <div style={{zIndex: 3}}>
-          <Link to="/" className={styles.hearvo}>
-            <b style={{ fontSize: 20, marginLeft: 10 }}>{i18n.t("header.title")}</b>
-          </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></div>
+        <span style={{ height: '10px' }}></span>
+        <div style={{ display: 'flex', flexWrap: 'nowrap', marginRight: '100px' }}>
+          <div style={{ zIndex: 3 }}>
+            <Link to="/" className={styles.hearvo}>
+              <b style={{ fontSize: 20, marginLeft: 10 }}>{i18n.t("header.title")}</b>
+            </Link><span>&nbsp;&nbsp;&nbsp;</span><small className={styles.remark} >{i18n.t("header.subtitle")}</small></div>
           {/* <span style={{ float: "right", textAlign: 'right', marginTop: -4 }} > */}
-          <div style={{display:'flex',position:'fixed',right:'0px'}}>
-            <div style={{ transform: 'translateY(5px)',marginRight:'4vw',paddingRight:'4vw',width:'25vw'}}>
+          <div style={{ display: 'flex', position: 'fixed', right: '0px' }}>
+            <div style={{ transform: 'translateY(5px)', marginRight: '4vw', paddingRight: '4vw', width: '25vw' }}>
               {this.searchBar()}
             </div>
             <div className={styles.header_items}>
-            <Button　href="/latest" className={window.location.pathname==="/latest"?styles.now:styles.normal} disableRipple={true}>
-              <NewReleasesOutlinedIcon/>
-              {/* {i18n.t("feed.latest")} */}
-            </Button>
-            <Button　href="/" className={window.location.pathname==="/"?styles.now:styles.normal} disableRipple={true}>
-              <PersonOutlineIcon/>
-              {/* {i18n.t("feed.recommend")} */}
-            </Button>
-            <Button　href="/popular" className={window.location.pathname.includes("popular")?styles.now:styles.normal}  disableRipple={true}>
-              <TrendingUpIcon/>
-              {/* {i18n.t("feed.popular")} */}
-            </Button>
+              <Button href="/latest" className={window.location.pathname === "/latest" ? styles.now : styles.normal} disableRipple={true}>
+                <NewReleasesOutlinedIcon />
+                {/* {i18n.t("feed.latest")} */}
+              </Button>
+              <Button href="/" className={window.location.pathname === "/" ? styles.now : styles.normal} disableRipple={true}>
+                <PersonOutlineIcon />
+                {/* {i18n.t("feed.recommend")} */}
+              </Button>
+              <Button href="/popular" className={window.location.pathname.includes("popular") ? styles.now : styles.normal} disableRipple={true}>
+                <TrendingUpIcon />
+                {/* {i18n.t("feed.popular")} */}
+              </Button>
             </div>
             {/* <Button>
             <CreateIcon style={{transform: 'translateY(-4px)'}}></CreateIcon>
             </Button> */}
-            <span style={{ transform: 'translateY(-3px)'}}>
+            <span style={{ transform: 'translateY(-3px)' }}>
               {this.state.isLoaded ? this.listBar() : this.beforeLoginListbar()}
             </span>
           </div>
@@ -298,7 +298,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
   }
 }
 
- 
+
 
 
 export default withRouter(HeaderChild);
