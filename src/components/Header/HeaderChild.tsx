@@ -206,7 +206,12 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
                 keepMounted
                 open={Boolean(this.state.anchorEl)}
                 onClose={e => this.handleClose(e, "none")}>
-                <MenuItem onClick={e => this.handleClose(e, "/profile/following")}><AccountCircleIcon />&nbsp;{this.state.user.profile_name} / {this.state.user.first_name} {this.state.user.middle_name} {this.state.user.last_name}</MenuItem>
+                <button style={inlineStyles.profileSection} onClick={e => this.handleClose(e, "/profile/following")}>
+                  <div style={inlineStyles.realName}>{this.state.user.first_name} {this.state.user.middle_name} {this.state.user.last_name}</div>
+                  <div style={inlineStyles.profileName}>@{this.state.user.profile_name}</div>
+                </button>
+                {/* <MenuItem onClick={e => this.handleClose(e, "/profile/following")}><AccountCircleIcon />&nbsp; */}
+                {/* <div>{this.state.user.profile_name}</div> / {this.state.user.first_name} {this.state.user.middle_name} {this.state.user.last_name}</MenuItem> */}
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/list")}>{i18n.t('settingBar.groupList')}</MenuItem> */}
                 {/* <MenuItem onClick={e => this.handleClose(e, "/group/create")}>{i18n.t('settingBar.groupCreate')}</MenuItem> */}
                 {/* <MenuItem onClick={e => this.handleClose(e, "/help")}><HelpIcon />&nbsp;{i18n.t('settingBar.help')}</MenuItem> */}
@@ -299,6 +304,24 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
 }
 
 
-
+const inlineStyles = {
+  profileSection: {
+    margin: 10,
+    backgroundColor: 'white',
+    border: 'none',
+    textAlign: 'left' as const,
+    outline: 'none'
+  },
+  realName: {
+    fontSize: '1.5em',
+    fontWeight: 'bold' as const,
+    marginBottom: 1,
+  },
+  profileName: {
+    fontSize: 'small',
+    color: 'dimgray',
+    marginBottom: 10,
+  }
+}
 
 export default withRouter(HeaderChild);

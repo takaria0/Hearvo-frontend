@@ -50,7 +50,8 @@ const Profile = (props: any) => {
       <Header></Header>
       <div className={styles.body}>
         <div className={styles.feed}>
-          <h2>{user.profile_name} / {user.first_name} {user.middle_name} {user.last_name}</h2>
+          <div style={inlineStyles.realName}>{user.first_name} {user.middle_name} {user.last_name}</div>
+          <div style={inlineStyles.profileName}>@{user.profile_name}</div>
 
           <span><Link style={{ textDecoration: 'none' }} to="/profile/following">{i18n.t("profile.following")} {user.num_of_following_topics}</Link></span>&nbsp;&nbsp;&nbsp;
 
@@ -73,6 +74,19 @@ const Profile = (props: any) => {
   )
 }
 
+
+const inlineStyles = {
+  realName: {
+    fontSize: '1.5em',
+    fontWeight: 'bold' as const,
+    marginBottom: 1,
+  },
+  profileName: {
+    fontSize: 'small',
+    color: 'dimgray',
+    marginBottom: 10,
+  }
+}
 
 
 export default Profile;
