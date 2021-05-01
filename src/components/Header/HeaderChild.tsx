@@ -278,15 +278,12 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
             <div className={styles.header_items}>
               <Button href="/latest" className={window.location.pathname === "/latest" ? styles.now : styles.normal} disableRipple={true}>
                 <NewReleasesOutlinedIcon />
-                {/* {i18n.t("feed.latest")} */}
               </Button>
-              <Button href="/" className={window.location.pathname === "/" ? styles.now : styles.normal} disableRipple={true}>
+              <Button href="/recommend" className={window.location.pathname.includes("recommend") ? styles.now : styles.normal} disableRipple={true}>
                 <PersonOutlineIcon />
-                {/* {i18n.t("feed.recommend")} */}
               </Button>
               <Button href="/popular" className={window.location.pathname.includes("popular") ? styles.now : styles.normal} disableRipple={true}>
                 <TrendingUpIcon />
-                {/* {i18n.t("feed.popular")} */}
               </Button>
             </div>
             {/* <Button>
