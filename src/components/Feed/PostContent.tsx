@@ -20,7 +20,8 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 /*
 If the values are incorrect,
 return true
@@ -95,20 +96,14 @@ const ConfirmDialog = (props: any) => {
 
 const VoteCandidateForm = (props: any) => {
 
-  const [voteData, setVoteData] = useState<any>(['', '']);
+  const [voteData, setVoteData] = useState<any>([{ id: 1, content: '' }, { id: 2, content: '' }]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirm, setIsConfirm] = useState(false);
   const [isVoteFormFocused, setIsVoteFormFocused] = useState(false);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const history = useHistory();
 
-  // const currentDate = new Date();
-  // const defaultEndAt = new Date(currentDate.setHours(currentDate.getHours() + 72)).toISOString().slice(0, -8);
-
-  // const [endAt, setEndAt] = useState(72);
-  // const [endAtDate, setEndAtDate] = useState(defaultEndAt);
-
-
+ 
   const voteSelectChange = (e: any, idx: number) => {
     e.preventDefault();
     let values;
@@ -131,7 +126,7 @@ const VoteCandidateForm = (props: any) => {
         return
       default:
         values = [...voteData];
-        values[idx] = e.target.value;
+        values[idx].content = e.target.value;
         setVoteData(values);
         return
     }
@@ -166,12 +161,12 @@ const VoteCandidateForm = (props: any) => {
     let postObj;
     switch (props.voteTypeId) {
       case 1:
-        postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "1", vote_obj: voteData.map((elem: any) => { return { content: elem } }) }
+        postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "1", vote_obj: voteData.map((elem: any) => { return { content: elem.content } }) }
         callAxios(e, postObj);
         return
 
       case 2:
-        postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "2", vote_obj: voteData.map((elem: any) => { return { content: elem } }), mj_option_list: props.matrixCandidateList };
+        postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "2", vote_obj: voteData.map((elem: any) => { return { content: elem.content } }), mj_option_list: props.matrixCandidateList };
         callAxios(e, postObj);
         return
 
@@ -182,40 +177,26 @@ const VoteCandidateForm = (props: any) => {
 
   };
 
-  const deleteHandle = (e: any, idx: number) => {
+  const deleteVoteOption = (e: any, idx: number) => {
     if (voteData.length <= 2) { return }
     let values = [...voteData];
     values.splice(idx, 1);
     setVoteData(values);
   }
 
-  // const changeEndAt = (e: any) => {
-  //   const dt = new Date();
-  //   const endHour = e.target.value ? parseInt(e.target.value) : 0;
-
-  //   // setEndAt(endHour);
-
-  //   if (endHour > 0 && endHour < 36000) {
-  //     const endDate = new Date(dt.setHours(dt.getHours() + endHour));
-  //     const endDateString = endDate.toISOString().slice(0, -8);
-  //     setEndAtDate(endDateString);
-  //   }
-  // }
-
-
-  const addHandle = (e: any) => {
+  const addVoteOption = (e: any) => {
     if (voteData.length > 9) { return };
-    setVoteData([...voteData, '']);
+    setVoteData([...voteData, { id: voteData[voteData.length - 1].id + 1, content: '' }]);
     if (props.voteTypeId === 3) { props.setIsVoteDataListOk(false) };
   }
 
-  const handleClick = (e: any) => {
+  const handleSubmit = (e: any) => {
     setIsClicked(true);
     submit(e)
   }
 
   const submitButton = () => {
-    const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData, props.matrixCandidateList);
+    const invalid = hasIncorrectInput(props.title, props.content, props.topicList, props.voteTypeId, props.endAt, props.targetGroupId, voteData.map((elem: any) => elem.content), props.matrixCandidateList);
 
     switch (invalid) {
       case true:
@@ -231,7 +212,7 @@ const VoteCandidateForm = (props: any) => {
       case false:
         return (
           <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
-            <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
+            <Button disableRipple onClick={handleSubmit} disabled={isClicked ? true : false} style={isClicked ? {
               border: 'none', color: 'white', borderRadius: "100px",
               backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none', fontWeight: 'bold'
             } : {
@@ -245,23 +226,23 @@ const VoteCandidateForm = (props: any) => {
     }
   }
 
-  const confirmDialogBase = () => {
-    let postObj;
-    switch (props.voteTypeId) {
-      case 1:
-        postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "1", vote_obj: voteData.map((elem: any) => { return { content: elem } }) }
-        break;
-      case 2:
-        postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "2", vote_obj: voteData.map((elem: any) => { return { content: elem } }), mj_option_list: props.matrixCandidateList };
-        break;
-      case 3:
-        // does nothing
-        break;
-    }
-    return (
-      <div><ConfirmDialog submit={submit} setIsConfirm={setIsConfirm} postObj={postObj} /></div>
-    )
-  }
+  // const confirmDialogBase = () => {
+  //   let postObj;
+  //   switch (props.voteTypeId) {
+  //     case 1:
+  //       postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "1", vote_obj: voteData.map((elem: any) => { return { content: elem.content } }) }
+  //       break;
+  //     case 2:
+  //       postObj = { title: props.title, content: props.content, end_at: props.endAt, topic: props.topicList, group_id: props.targetGroupId, vote_type_id: "2", vote_obj: voteData.map((elem: any) => { return { content: elem.content } }), mj_option_list: props.matrixCandidateList };
+  //       break;
+  //     case 3:
+  //       // does nothing
+  //       break;
+  //   }
+  //   return (
+  //     <div><ConfirmDialog submit={submit} setIsConfirm={setIsConfirm} postObj={postObj} /></div>
+  //   )
+  // }
 
 
   const VoteFooter = () => {
@@ -305,25 +286,72 @@ const VoteCandidateForm = (props: any) => {
     );
   }
 
+
+  const onDragEnd = (result: any) => {
+
+    const reorder = (list: any, startIndex: number, endIndex: number) => {
+      const result = Array.from(list);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      return result;
+    };
+
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const orderedVoteData = reorder(
+      voteData,
+      result.source.index,
+      result.destination.index
+    );
+
+    setVoteData(orderedVoteData);
+  }
+
   return (
     <div>
       <div style={{ textAlign: 'left', paddingLeft: 3, marginTop: 10 }}>
-        {isConfirm ? confirmDialogBase() : ""}
-        {/* <b>{i18n.t("newPost.voteCandidate")}</b> */}
+        {/* {isConfirm ? confirmDialogBase() : ""} */}
+        
         <div style={{ marginTop: 10 }}>
-          {voteData.map((val: any, idx: number) => {
-            return (
-              <div key={idx} style={{ display: 'flex', alignItems: 'center' }}>
-                <input className={styles.vote_option} maxLength={32} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
-                {idx > 1 ? <span style={{ marginLeft: 5 }}><div onClick={e => deleteHandle(e, idx)} style={{ outline: 'none', border: 'none', backgroundColor: 'white' }}><DeleteForeverIcon style={{ fontSize: 24 }} /></div></span> : ''}
-              </div>
-            )
-          })}
+          {/* TODO: here we will add drag and drop functionality */}
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="vote_selects">
+              {(provided: any) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {voteData.map((val: any, idx: number) => {
+                    return (
+                      <Draggable key={val.id.toString()} draggableId={val.id.toString()} index={idx} style={{ display: 'flex', alignItems: 'center' }}>
+                        {(provided: any) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                          <DragIndicatorIcon style={{ fontSize: 24, transform: 'translateY(7px)' }}/>
+                          <input className={styles.vote_option}  maxLength={32} required placeholder={`${i18n.t("newPost.voteCandidate")} ${idx + 1}`} onChange={e => voteSelectChange(e, idx)}></input>
+                          {idx > 1 ? 
+                          <span style={{ marginLeft: 5 }}>
+                            <span 
+                              onClick={e => deleteVoteOption(e, idx)}
+                              style={{ outline: 'none', border: 'none', backgroundColor: 'white',  }}>
+                                  <DeleteForeverIcon style={{ fontSize: 24, transform: 'translateY(7px)' }} />
+                            </span>
+                            </span> : ''
+                          }
+                        </div>
+                        )}
+                      </Draggable>
+                    )
+                  })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </div>
 
       <div style={{ marginTop: '1ch', marginLeft: '.5ch' }}>
-        <Button disableRipple style={{ borderRadius: '100px', color: '#3477cc', textTransform: 'none' }} type="button" onClick={e => addHandle(e)}>
+        <Button disableRipple style={{ borderRadius: '100px', color: '#3477cc', textTransform: 'none' }} type="button" onClick={e => addVoteOption(e)}>
           <b>{i18n.t('newPost.AddOptions')}</b>
         </Button>
       </div>
@@ -405,7 +433,7 @@ const SubmitButtonMultiple = (props: any) => {
 
   })
 
-  const handleClick = (e: any) => {
+  const handleSubmit = (e: any) => {
     setIsClicked(true);
     props.submit(e);
   }
@@ -424,7 +452,7 @@ const SubmitButtonMultiple = (props: any) => {
     case false:
       return (
         <div onKeyPress={e => { if (e.key === 'Enter') { e.preventDefault() } }}>
-          <Button disableRipple onClick={handleClick} disabled={isClicked ? true : false} style={isClicked ? {
+          <Button disableRipple onClick={handleSubmit} disabled={isClicked ? true : false} style={isClicked ? {
             border: 'none', color: 'white', borderRadius: "100px",
             backgroundColor: "#d4d4d4", outline: 'none', textTransform: 'none', fontWeight: 'bold'
           } : {
