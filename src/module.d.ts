@@ -10,3 +10,4 @@ declare module 'react-loading-skeleton';
 declare module 'react-share';
 declare module 'react-google-login';
 declare module 'mixpanel-browser';
+declare module 'react-beautiful-dnd';
