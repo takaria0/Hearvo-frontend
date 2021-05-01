@@ -382,6 +382,13 @@ class Comment extends React.Component<CommentProps, CommentState> {
     })
   }
 
+  showName(userInfo: any) {
+    return (
+      // <span>{userInfo.first_name} {userInfo.middle_name} {userInfo.last_name}</span>
+      <span>{userInfo.profile_name}</span>
+    )
+  }
+
 
   render() {
     const CommentView = (props: any) => {
@@ -390,7 +397,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
           <li className={styles.com_li} key={props.id}>
             <div className={styles.body}>
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
-              <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
+              <span style={{ fontSize: "10px", textAlign: "right" }}>by {this.showName(props.user_info)}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
               <span style={{ textAlign: 'right' }}><Button className={styles.reply_cancel} onClick={e => this.click(e, 0)}>{i18n.t("eachPost.cancel")}</Button></span>
               <ReplyComment isLogin={this.props.isLogin} commentId={props.id} postId={this.state.postId} handleParentPosted={this.handlePosted}></ReplyComment>
@@ -405,7 +412,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
           <li className={styles.com_li} key={props.id}>
             <div className={styles.body}>
               <CommentItem userObj={this.props.userObj} data={props}></CommentItem>
-              <span style={{ fontSize: "10px", textAlign: "right" }}>by {props.user_info?.name}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
+              <span style={{ fontSize: "10px", textAlign: "right" }}>by {this.showName(props.user_info)}, {this.getDiffTime(props.created_at.slice(0, -7).replace("T", " "))}</span>
 
               <span style={{ textAlign: 'right' }}>
                 <Button disableRipple className={styles.reply_icon} onClick={e => this.click(e, props.id)}>

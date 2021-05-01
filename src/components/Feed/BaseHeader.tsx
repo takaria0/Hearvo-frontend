@@ -144,8 +144,8 @@ class BaseHeader extends React.Component<BaseHeaderProps, BaseHeaderState> {
                 style={window.location.pathname.includes("latest") ? pushedStyle : usualStyle }
                 disableRipple={true}><NewReleasesOutlinedIcon/>&nbsp;{i18n.t("feed.latest")}</Button>
 
-                &nbsp;{this.state.userObj ? <Button href="/" 
-                style={window.location.pathname === "/" ? pushedStyle : usualStyle }
+                &nbsp;{this.state.userObj ? <Button href="/recommend"
+                style={window.location.pathname.includes("recommend") ? pushedStyle : usualStyle }
                 disableRipple={true}><PersonOutlineIcon/>&nbsp;{i18n.t("feed.recommend")}</Button> : ""}
 
                 &nbsp;<Button href="/popular" 

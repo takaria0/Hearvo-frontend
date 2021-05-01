@@ -10,7 +10,7 @@ import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import PostDetail from './components/Feed/PostDetail';
 import Header from './components/Header/Header';
-import Settings from './components/Settings';
+import Settings from './components/Settings/Settings';
 import Profile from './components/Profile/Profile';
 import ProfileDetail from './components/Profile/ProfileDetail';
 import TermsOfService from './components/Info/TermsOfService';
@@ -63,6 +63,7 @@ function App() {
             <Route path="/privacy" exact component={PrivacyPolicy} key="privacypolicy" />
             <Route path="/help" exact component={Help} key="help" />
             <Route path="/" exact component={Home} />
+            <Route path="/recommend" exact component={Home} />
             <Route path="/latest" exact component={Home}  />
             <Route path="/topic" exact component={Home}  />
             <Route path="/popular" exact component={Home}/>
