@@ -88,6 +88,7 @@ i18next
             Bio: 'Bio',
             save: '保存',
             enterBio: 'Bioを入力',
+            nameInUse: 'このユーザーネームは既に使われています',
           },
           compare: {
             age: '年齢',
@@ -362,6 +363,7 @@ i18next
             Bio: 'Bio',
             save: 'Save',
             enterBio: 'Enter your Bio',
+            nameInUse: 'This name is already in use',
           },
           compare: {
             age: 'Age',

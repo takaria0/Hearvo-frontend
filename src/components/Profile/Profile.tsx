@@ -32,7 +32,7 @@ const EditProfile = (props: any) => {
       setModal(false);
     })
     .catch(err => {
-      setErrorMessage("This name is already in use");
+      setErrorMessage(i18n.t("profile.nameInUse"));
     })
   }
 
