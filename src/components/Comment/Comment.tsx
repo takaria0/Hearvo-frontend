@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { getJwt } from '../../helpers/jwt';
 import axios from '../Api';
 import { Button } from '@material-ui/core';
+import { Link } from 'react-router-dom'
 import { withRouter, RouteComponentProps } from 'react-router';
 import * as styles from '../../css/Comment.module.css';
 import ReplyComment from './ReplyComment';
@@ -385,7 +386,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
   showName(userInfo: any) {
     return (
       // <span>{userInfo.first_name} {userInfo.middle_name} {userInfo.last_name}</span>
-      <span>{userInfo.profile_name}</span>
+      <Link to={"/profile/" + userInfo.name + "/myposts"}>{userInfo.profile_name}</Link>
     )
   }
 
