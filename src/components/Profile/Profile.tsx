@@ -16,16 +16,41 @@ const EditProfile = (props: any) => {
   const [modal, setModal] = useState(false);
   const [profileName, setProfileName] = useState(props.user.profile_name);
   const [description, setDescription] = useState(props.user.description);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmit = () => {
-    // axios.put();
+    const data = { profile_name: profileName, description: description };
+    const jwt = getJwt();
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.put("/users?edit_profile=true", data, options)
+    .then(res => {
+      setModal(false);
+    })
+    .catch(err => {
+      setErrorMessage("This name is already in use");
+    })
   }
+
+  const onClose = () => {
+    setModal(false);
+    setErrorMessage("");
+    setProfileName(props.user.profile_name);
+    setDescription(props.user.description);
+  }
+
+  useEffect(() => {
+  }, [errorMessage])
 
   return (
     <div>
       <button onClick={() => setModal(true)} style={inlineStyles.editProfile}>{i18n.t("profile.editProfile")}</button>
 
-      <Dialog open={modal} onClose={() => setModal(false)}>
+      <Dialog open={modal} onClose={onClose}>
         <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent>
           <div style={inlineStyles.editProfileItem}>
@@ -41,7 +66,10 @@ const EditProfile = (props: any) => {
             <TextareaAutosize style={inlineStyles.editProfileTextArea} rows={5} value={description} onChange={(e) => setDescription(e.target.value)}></TextareaAutosize>
           </div>
           <div style={inlineStyles.editProfileItem}>
-            <button>Save</button>
+            <button onClick={onSubmit} style={inlineStyles.saveButton}>Save</button>
+          </div>
+          <div style={inlineStyles.editProfileItemError}>
+            {errorMessage}
           </div>
         </DialogContent>
       </Dialog>
@@ -66,7 +94,6 @@ const Profile = (props: any) => {
 
   useEffect(() => {
     // setUser(JSON.parse(localStorage.getItem("user") || "{}"));
-    console.log("props.match", props.match);
     axios.get(`/users?name=${props.match.params.name}`, options)
       .then(res => {
         setUser(res.data);
@@ -75,7 +102,7 @@ const Profile = (props: any) => {
       .catch(err => {
         setIsLoading(false);
       })
-  }, []);
+  }, [props.match.params.name]);
 
   if (isLoading) {
     return (<span><Header></Header>
@@ -93,7 +120,8 @@ const Profile = (props: any) => {
           <div style={inlineStyles.realName}>{user.first_name} {user.middle_name} {user.last_name}</div>
           {user.myprofile ? <EditProfile user={user}/> : "" }
           <div style={inlineStyles.profileName}>@{user.profile_name}</div>
-
+          <div style={inlineStyles.description}>{user.description}</div>
+          <div style={inlineStyles.noDescription}>{!user.description && user.myprofile ? "bioを入力" : ""}</div>
 
           {user.myprofile ? 
             <div>
@@ -115,11 +143,16 @@ const Profile = (props: any) => {
           : 
 
             <div>
-              <span>{i18n.t("profile.following")} {user.num_of_following_topics}</span>&nbsp;&nbsp;&nbsp;
+              {/* <span>{i18n.t("profile.following")} {user.num_of_following_topics}</span>&nbsp;&nbsp;&nbsp; */}
 
               <span>{i18n.t("profile.numOfVotes")} {user.num_of_votes}</span>
 
               <div style={{ float: 'right', textAlign: 'right' }}><small>{i18n.t("profile.joined")} {user.created_at.slice(0, 10)}</small></div>
+
+              {/* <Switch>
+                <Route path={props.match.url + "/"} key="myposts" component={ProfileDetail} />
+                <Route path={props.match.url + "/myposts"} key="myposts" component={ProfileDetail} />
+              </Switch> */}
             </div>
           }
         </div>
@@ -143,18 +176,54 @@ const inlineStyles = {
     color: 'dimgray',
     marginBottom: 10,
   },
+  description: {
+    color: 'black',
+    marginTop: 20
+  },
+  noDescription: {
+    color: 'dimgray',
+    marginTop: 20
+  },
   editProfile: {
     // border: '',
     fontSize: 16,
+    borderRadius: 20,
+    padding: 5,
+    paddingRight: 20,
+    paddingLeft: 20,
+    border: 'none',
+    outline: 'none',
     transform: 'translateY(-20px)',
-    backgroudColor: 'blue',
+    backgroundColor: '#3477cc',
+    color: 'white',
     float: 'right' as const,
     textAlign: 'right' as const,
+  },
+  saveButton: {
+    // border: '',
+    fontSize: 16,
+    borderRadius: 20,
+    padding: 5,
+    paddingRight: 20,
+    paddingLeft: 20,
+    border: 'none',
+    outline: 'none',
+    transform: 'translateY(-20px)',
+    backgroundColor: '#3477cc',
+    color: 'white',
+    float: 'left' as const,
+    textAlign: 'left' as const,
   },
   editProfileItem: {
     margin: 10,
     padding: 10,
     width: '40ch'
+  },
+  editProfileItemError: {
+    margin: 10,
+    padding: 10,
+    width: '40ch',
+    color: 'red'
   },
   editProfileTextArea: {
     width: '80%'
