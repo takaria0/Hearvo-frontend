@@ -10,7 +10,7 @@ import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import PostDetail from './components/Feed/PostDetail';
 import Header from './components/Header/Header';
-import Settings from './components/Settings';
+import Settings from './components/Settings/Settings';
 import Profile from './components/Profile/Profile';
 import ProfileDetail from './components/Profile/ProfileDetail';
 import TermsOfService from './components/Info/TermsOfService';
@@ -63,6 +63,7 @@ function App() {
             <Route path="/privacy" exact component={PrivacyPolicy} key="privacypolicy" />
             <Route path="/help" exact component={Help} key="help" />
             <Route path="/" exact component={Home} />
+            <Route path="/recommend" exact component={Home} />
             <Route path="/latest" exact component={Home}  />
             <Route path="/topic" exact component={Home}  />
             <Route path="/popular" exact component={Home}/>
@@ -70,8 +71,9 @@ function App() {
             <Route path="/search" component={Home} />
             <Route exact path="/posts/:post_id" render={(props) => <PostDetail key={Math.random().toString(36)} />} />
             <Route path="/posts/:post_id/record/:post_detail_id?" render={(props) => <PostDetail key={Math.random().toString(36)} />} />
+            <Route path="/profile/:name" component={Profile} key={Math.random().toString(36)} />
             <Auth>
-                <Route path="/profile" component={Profile} />
+                {/* <Route path="/profile/:name" component={Profile} key={Math.random().toString(36)}/> */}
                 {/* <Route path="/group/:group_id/feed" exact component={Home} />
                 <Route path="/group/list" exact component={GroupList} />
                 <Route path="/group/create" exact component={GroupCreate} />

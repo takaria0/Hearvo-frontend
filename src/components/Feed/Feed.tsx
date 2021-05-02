@@ -216,6 +216,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
     if (keywordArray.includes("latest")) {
       feedType = "latest";
     }
+    if (keywordArray.includes("recommend")) {
+      feedType = "recommend";
+    }
     if (keywordArray.includes("myposts")) {
       feedType = "myposts";
     }
@@ -229,7 +232,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
       orderType = "latest";
     }
     if (window.location.pathname === "/") {
-      feedType = "recommend";
+      // feedType = "recommend"; // set latest as default instead for a while
+      feedType = "latest";
     }
 
 
