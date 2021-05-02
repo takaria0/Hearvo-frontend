@@ -71,8 +71,9 @@ function App() {
             <Route path="/search" component={Home} />
             <Route exact path="/posts/:post_id" render={(props) => <PostDetail key={Math.random().toString(36)} />} />
             <Route path="/posts/:post_id/record/:post_detail_id?" render={(props) => <PostDetail key={Math.random().toString(36)} />} />
+            <Route path="/profile/:name" component={Profile} key={Math.random().toString(36)} />
             <Auth>
-                <Route path="/profile/:name" component={Profile} key={Math.random().toString(36)}/>
+                {/* <Route path="/profile/:name" component={Profile} key={Math.random().toString(36)}/> */}
                 {/* <Route path="/group/:group_id/feed" exact component={Home} />
                 <Route path="/group/list" exact component={GroupList} />
                 <Route path="/group/create" exact component={GroupCreate} />
