@@ -81,7 +81,8 @@ i18next
             myPost: '投稿',
             joined: '作成日',
             topicFollowings: 'フォロー',
-            topicPosts: '投稿数'
+            topicPosts: '投稿数',
+            editProfile: '編集'
           },
           compare: {
             age: '年齢',
@@ -348,7 +349,8 @@ i18next
             myPost: 'Posts',
             joined: 'Joined',
             topicFollowings: 'Following',
-            topicPosts: 'Posts'
+            topicPosts: 'Posts',
+            editProfile: 'Edit Profile'
           },
           compare: {
             age: 'Age',

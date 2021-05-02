@@ -83,7 +83,7 @@ const ProfileDetail = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const urlParams = new URLSearchParams(window.location.search);
   const keywordArray = window.location.pathname.split("/");
-
+  console.log("keywordArray", keywordArray);
 
 
   const voteRecordStyle = keywordArray.includes("voted") ?
@@ -99,10 +99,10 @@ const ProfileDetail = (props: any) => {
 
           <div style={{ marginTop:10, backgroundColor: 'white', borderRadius: 5, border: 'solid', borderWidth: 1, paddingTop: 10, paddingBottom: 10, display: 'flex', justifyContent: 'space-evenly'}}>
             <span style={{backgroundColor: 'white'}}>
-              <Link style={voteRecordStyle} to="/profile/voted">{i18n.t("profile.voteRecord")}</Link>
+          <Link style={voteRecordStyle} to={"/profile/" + keywordArray[2] + "/voted"}>{i18n.t("profile.voteRecord")}</Link>
             </span>&nbsp;
             <span>
-              <Link style={myPostsStyle} to="/profile/myposts">{i18n.t("profile.myPost")}</Link>
+              <Link style={myPostsStyle} to={"/profile/" + keywordArray[2] + "/myposts"}>{i18n.t("profile.myPost")}</Link>
             </span>
           </div>
 

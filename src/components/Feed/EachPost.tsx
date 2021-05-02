@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Dialog, DialogTitle, DialogContent, Divider, Menu, MenuItem, List, ListItem } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, Divider, Menu, MenuItem, List, ListItem, MenuList } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import axios from '../Api';
 import { Helmet } from "react-helmet";
@@ -213,6 +213,62 @@ const PostHeader = (props: any) => {
   }
 }
 
+const PollUserList = (props: any) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [userList, setUserList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [modal, setModal] = useState(false);
+
+  useEffect(() => {
+    const jwt = getJwt();
+    let options = {};
+    if (!jwt) {
+      options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+    } else {
+      options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+    }
+    axios.get(`/users?post_detail_id=${props.post_detail_id}`, options)
+    .then(res => { 
+      setUserList(res.data);
+      setIsLoading(false);
+    }).catch(err => {
+      setIsLoading(false);
+     })
+  }, [anchorEl]);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event: any) => {
+    setAnchorEl(null);
+  };
+  
+  return (
+    <div>
+      <div onClick={handleClick}>
+        <EqualizerIcon style={{ fontSize: 20 }} />
+        {props.data.total_vote}
+      </div>
+      <Menu
+        id="userlist-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        disableBackdropClick={false}
+      >
+        <MenuItem>投票者</MenuItem>
+          {isLoading ? "" : userList.map((user: any) => {
+            return (
+              <MenuItem><Link to={"/profile/" + user.name + "/myposts"}>{user.profile_name}</Link></MenuItem>
+            )
+          })}
+      </Menu>
+    </div>
+
+  )
+}
+
 const PostFooter = (props: any) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -262,30 +318,21 @@ const PostFooter = (props: any) => {
   return (
     <div>
       <div>
-        {/* <div className={styles.footer}> */}
         <div style={{ marginLeft: 15, fontSize: 12, color: '#404040', marginBottom: 10 }}>
           {getEndTime(postDetailObj.end_at.slice(0, -3).replace("T", " "))}
         </div>
-        {/* </div> */}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 10 }}>
-        {/* <span>
-          <StarIcon style={{ fontSize: 20 }}/>
-        </span > */}
         <span>
-          <EqualizerIcon style={{ fontSize: 20 }} />
-          {props.data.total_vote}
+          <PollUserList post_detail_id={postDetailObj.id} data={props.data} />
         </span>
         <span>
           <ChatBubbleIcon style={{ fontSize: 20 }} />&nbsp;{props.data.comments.length}
         </span >
         <span>
           <TwitterShareButton title={"Hearvo | " + props.data.title} url={"https://" + window.location.hostname + "/posts/" + props.data.id} >
-            {/* <TwitterIcon size={20} round={true} iconFillColor='white' /> */} 
-            {/* 上はreact-shareのもの */}
             <TwitterIcon />
           </TwitterShareButton>
-          {/* <ShareIcon style={{ fontSize: 20 }} /> */}
         </span >
         <span>
           <div>
