@@ -257,7 +257,7 @@ const PollUserList = (props: any) => {
         onClose={handleClose}
         disableBackdropClick={false}
       >
-        <MenuItem>投票者</MenuItem>
+        <MenuItem>{i18n.t("eachPost.voters")}</MenuItem>
           {isLoading ? "" : userList.map((user: any) => {
             return (
               <MenuItem><Link to={"/profile/" + user.name + "/myposts"}>{user.profile_name}</Link></MenuItem>

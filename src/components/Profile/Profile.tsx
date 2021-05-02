@@ -51,22 +51,22 @@ const EditProfile = (props: any) => {
       <button onClick={() => setModal(true)} style={inlineStyles.editProfile}>{i18n.t("profile.editProfile")}</button>
 
       <Dialog open={modal} onClose={onClose}>
-        <DialogTitle>Edit Profile</DialogTitle>
+        <DialogTitle>{i18n.t("profile.editProfile")}</DialogTitle>
         <DialogContent>
           <div style={inlineStyles.editProfileItem}>
-            <div>Name</div>
+            <div>{i18n.t("profile.realName")}</div>
             {props.user.first_name} {props.user.middle_name} {props.user.last_name}
           </div>
           <div style={inlineStyles.editProfileItem}>
-            <div>User Name</div>
+            <div>{i18n.t("profile.userName")}</div>
             <input style={inlineStyles.editProfileTextArea} value={profileName} onChange={(e) => setProfileName(e.target.value)}></input>
           </div>
           <div style={inlineStyles.editProfileItem}>
-            <div>Bio</div>
+            <div>{i18n.t("profile.Bio")}</div>
             <TextareaAutosize style={inlineStyles.editProfileTextArea} rows={5} value={description} onChange={(e) => setDescription(e.target.value)}></TextareaAutosize>
           </div>
           <div style={inlineStyles.editProfileItem}>
-            <button onClick={onSubmit} style={inlineStyles.saveButton}>Save</button>
+            <button onClick={onSubmit} style={inlineStyles.saveButton}>{i18n.t("profile.save")}</button>
           </div>
           <div style={inlineStyles.editProfileItemError}>
             {errorMessage}
@@ -121,7 +121,7 @@ const Profile = (props: any) => {
           {user.myprofile ? <EditProfile user={user}/> : "" }
           <div style={inlineStyles.profileName}>@{user.profile_name}</div>
           <div style={inlineStyles.description}>{user.description}</div>
-          <div style={inlineStyles.noDescription}>{!user.description && user.myprofile ? "bioを入力" : ""}</div>
+          <div style={inlineStyles.noDescription}>{!user.description && user.myprofile ? i18n.t("profile.enterBio") : ""}</div>
 
           {user.myprofile ? 
             <div>

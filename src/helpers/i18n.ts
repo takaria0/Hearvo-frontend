@@ -82,7 +82,12 @@ i18next
             joined: '作成日',
             topicFollowings: 'フォロー',
             topicPosts: '投稿数',
-            editProfile: '編集'
+            editProfile: '編集',
+            realName: '名前',
+            userName: 'ユーザーネーム',
+            Bio: 'Bio',
+            save: '保存',
+            enterBio: 'Bioを入力',
           },
           compare: {
             age: '年齢',
@@ -226,6 +231,7 @@ i18next
             suspiciousOrSpam: '不審な内容またはスパムである',
             abusiveOrHarmful: '不適切または攻撃的な内容を含んでいる',
             selfharmOrSuicide: '自傷行為や自殺の意思をほのめかしている',
+            voters: '投票者'
           },
           settings: {
             settings: '設定',
@@ -350,7 +356,12 @@ i18next
             joined: 'Joined',
             topicFollowings: 'Following',
             topicPosts: 'Posts',
-            editProfile: 'Edit Profile'
+            editProfile: 'Edit Profile',
+            realName: 'Your Name',
+            userName: 'Username',
+            Bio: 'Bio',
+            save: 'Save',
+            enterBio: 'Enter your Bio',
           },
           compare: {
             age: 'Age',
@@ -490,6 +501,7 @@ i18next
             suspiciousOrSpam: 'It\'s suspicious or spam',
             abusiveOrHarmful: 'It\'s abusive or harmful',
             selfharmOrSuicide: 'It expresses intentions of self-harm or suicide',
+            voters: 'Voters'
           },
           settings: {
             settings: 'Settings',
