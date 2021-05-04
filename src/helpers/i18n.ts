@@ -134,6 +134,7 @@ i18next
             followMore: 'トピックをたくさんフォローしよう！',
             more: 'さらに見る',
             required: '* 必須',
+            enterName: '名前を入力してください',
           },
           newPost: {
             create:'投稿を作成',
@@ -408,7 +409,8 @@ i18next
             noContent: 'No content',
             more: 'More',
             followMore: 'Follow more topics!',
-            required: 'required *'
+            required: 'required *',
+            enterName: 'Enter your name',
           },
           newPost: {
             create:'Create Post',
