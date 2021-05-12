@@ -4,7 +4,7 @@ import * as styles from '../css/Home.module.css';
 import { Link } from 'react-router-dom'
 import { getJwt } from '../../helpers/jwt';
 import Header from '../Header/Header';
-import SideBar from '../SideBar';
+import SideBar from '../SideBar/SideBar';
 import Feed from '../Feed/Feed';
 import TopicFollowButtonLoaded from '../Topic/TopicFollowButtonLoaded';
 import i18n from "../../helpers/i18n";

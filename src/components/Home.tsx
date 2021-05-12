@@ -5,7 +5,7 @@ import * as styles from '../css/Home.module.css';
 import BaseHeader from './Feed/BaseHeader';
 import { withRouter } from 'react-router-dom'
 import Header from './Header/Header';
-import SideBar from './SideBar'
+import SideBar from './SideBar/SideBar'
 
 const Home = (props: any) => {
 

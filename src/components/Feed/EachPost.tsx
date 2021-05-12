@@ -39,6 +39,7 @@ import {
 } from "react-share";
 import { render } from '@testing-library/react';
 import { ChangeHistory } from '@material-ui/icons';
+import styled from 'styled-components';
 
 const moment = require('moment-timezone');
 moment.locale('ja');
@@ -260,7 +261,15 @@ const PollUserList = (props: any) => {
         <MenuItem>{i18n.t("eachPost.voters")}</MenuItem>
           {isLoading ? "" : userList.map((user: any) => {
             return (
-              <MenuItem><Link to={"/profile/" + user.name + "/myposts"}>{user.profile_name}</Link></MenuItem>
+              <MenuItem><Link to={"/profile/" + user.name + "/myposts"}>
+                <MenuTitle>
+                  {user.profile_name}
+                </MenuTitle>
+                <MenuBio>
+                  {user.description}
+                </MenuBio>
+                </Link>
+              </MenuItem>
             )
           })}
       </Menu>
@@ -268,6 +277,14 @@ const PollUserList = (props: any) => {
 
   )
 }
+
+const MenuTitle = styled.div`
+
+`
+const MenuBio = styled.div`
+  color: gray;
+  font-size: 10px;
+`
 
 const PostFooter = (props: any) => {
 
@@ -330,7 +347,7 @@ const PostFooter = (props: any) => {
           <ChatBubbleIcon style={{ fontSize: 20 }} />&nbsp;{props.data.comments.length}
         </span >
         <span>
-          <TwitterShareButton title={"Hearvo | " + props.data.title} url={"https://" + window.location.hostname + "/posts/" + props.data.id} >
+          <TwitterShareButton title={i18n.t("twitterInvite.detailText") + " | Hearvo | " + props.data.title} url={"https://" + window.location.hostname + "/posts/" + props.data.id} >
             <TwitterIcon />
           </TwitterShareButton>
         </span >

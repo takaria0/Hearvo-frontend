@@ -6,7 +6,7 @@ import * as styles from '../../css/Home.module.css';
 import EachPost from './EachPost';
 import Comment from '../Comment/Comment';
 import Header from '../Header/Header';
-import SideBar from '../SideBar';
+import SideBar from '../SideBar/SideBar';
 import EachPostHelmet from './EachPostHelmet';
 import InitialForm from '../InitialForm';
 

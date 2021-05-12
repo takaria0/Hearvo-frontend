@@ -5,7 +5,7 @@ import * as styles from '../../css/Home.module.css';
 import { getJwt } from '../../helpers/jwt';
 import { Link, useParams } from 'react-router-dom'
 import Header from '../Header/Header';
-import SideBar from '../SideBar';
+import SideBar from '../SideBar/SideBar';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import i18n from "../../helpers/i18n";
 interface GroupListProps {

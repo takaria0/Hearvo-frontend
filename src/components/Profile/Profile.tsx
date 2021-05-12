@@ -4,7 +4,7 @@ import * as styles from '../../css/Home.module.css';
 import { Link } from 'react-router-dom'
 import { getJwt } from '../../helpers/jwt';
 import Header from '../Header/Header';
-import SideBar from '../SideBar';
+import SideBar from '../SideBar/SideBar';
 import ProfileDetail from './ProfileDetail';
 import TopicFollowButtonLoaded from '../Topic/TopicFollowButtonLoaded';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -32,7 +32,7 @@ const EditProfile = (props: any) => {
       setModal(false);
     })
     .catch(err => {
-      setErrorMessage("This name is already in use");
+      setErrorMessage(i18n.t("profile.nameInUse"));
     })
   }
 
