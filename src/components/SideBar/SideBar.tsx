@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom'
-import axios from './Api';
-import { getJwt } from '../helpers/jwt';
-import i18n from "../helpers/i18n";
-import TopicFollowButton from './Topic/TopicFollowButton';
+import axios from '../Api';
+import { getJwt } from '../../helpers/jwt';
+import i18n from "../../helpers/i18n";
+import TopicFollowButton from '../Topic/TopicFollowButton';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
-import RenderTopic from './Feed/RenderTopic';
-
+import RenderTopic from '../Feed/RenderTopic';
+import { InvitePeopleViaTwitterButton, InvitePeopleViaTwitterButtonDetail } from './InviteTwitter';
 
 
 const DetailInfo = (props: any) => {
@@ -201,6 +201,7 @@ const SideBar = (props: any) => {
         <span>
           <RelatedPosts postId={postId} />
           {/* <GoogleAdSideBar /> */}
+          <InvitePeopleViaTwitterButtonDetail id={postId} text={i18n.t("twitterInvite.detailButtonText")} />
         </span>
       )
     break;
@@ -210,6 +211,7 @@ const SideBar = (props: any) => {
         <span>
           <TrendingTopics />
           {/* <GoogleAdSideBar /> */}
+          <InvitePeopleViaTwitterButton text={i18n.t("twitterInvite.buttonText")} />
         </span>
       )
     break;
