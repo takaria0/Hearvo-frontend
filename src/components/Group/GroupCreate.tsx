@@ -5,7 +5,7 @@ import * as styles from '../../css/Home.module.css';
 import { getJwt } from '../../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
 import Header from '../Header/Header';
-import SideBar from '../SideBar';
+import SideBar from '../SideBar/SideBar';
 import i18n from "../../helpers/i18n";
 interface GroupCreateProps {
 

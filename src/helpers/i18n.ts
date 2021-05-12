@@ -266,6 +266,12 @@ i18next
             start: '開始する',
             pastPolls: '過去の投票',
             error: '投票は、30日の間隔を空ける必要があります',
+          },
+          twitterInvite: {
+            text: 'あなたの意見、経験を聞かせてください。Hearvoへ参加しよう！ | Hearvo',
+            detailText: 'あなたはこれについてどう思いますか？意見・経験を聞かせてください！',
+            detailButtonText: '友人にも投票してもらおう！',
+            buttonText: '友人をTwitter経由で招待！',
           }
         },
       },
@@ -537,6 +543,12 @@ i18next
             start: 'Start',
             pastPolls: 'Past polls',
             error: 'Polls should be 30 days apart',
+          },
+          twitterInvite: {
+            buttonText: 'Invite People to Hearvo via Twitter',
+            detailText: 'What do you think about this? Vote on Hearvo!',
+            detailButtonText: 'Invite People to Vote This Poll via Twitter',
+            text: 'Let me hear your opinion and experience. Join Hearvo to vote! | Hearvo',
           }
         },
       },
