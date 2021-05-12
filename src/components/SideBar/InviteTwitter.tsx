@@ -18,6 +18,7 @@ const TwitterShareText = styled.button`
   color: white;
   border-radius: 100px;
   background-color: #3477cc;
+  font-size: 16px;
   text-transform: none;
   transition: none;
   font-weight: bold;
@@ -69,7 +70,7 @@ const InvitePeopleViaTwitterButtonDetail = (props: InvitePeopleViaTwitterButtonD
   if (isLoading) return (<span></span>);
 
   return (
-    <TwitterShareButton title={"Hearvo | " + data.title} url={"https://" + window.location.hostname + "/posts/" + props.id} >
+    <TwitterShareButton title={i18n.t("twitterInvite.detailText") + " | Hearvo | " + data.title } url={"https://" + window.location.hostname + "/posts/" + props.id} >
       <TwitterShareText>
         {props.text}
       </TwitterShareText>

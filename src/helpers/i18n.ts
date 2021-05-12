@@ -269,6 +269,7 @@ i18next
           },
           twitterInvite: {
             text: 'あなたの意見、経験を聞かせてください。Hearvoへ参加しよう！ | Hearvo',
+            detailText: 'あなたはこれについてどう思いますか？意見・経験を聞かせてください！',
             detailButtonText: '友人にも投票してもらおう！',
             buttonText: '友人をTwitter経由で招待！',
           }
@@ -545,6 +546,7 @@ i18next
           },
           twitterInvite: {
             buttonText: 'Invite People to Hearvo via Twitter',
+            detailText: 'What do you think about this? Vote on Hearvo!',
             detailButtonText: 'Invite People to Vote This Poll via Twitter',
             text: 'Let me hear your opinion and experience. Join Hearvo to vote! | Hearvo',
           }
