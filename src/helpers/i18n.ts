@@ -249,6 +249,11 @@ i18next
             confirmMessage: '本当にアカウントを削除しますか？二度と復旧は出来ません。',
             yes: 'はい',
             no: 'いいえ',
+            hideRealName: 'コメント欄、プロフィール、投票者リストに本名を表示しない',
+            hideRealNameDesc: '代わりに、IDが表示されます',
+            saveButton: '保存する',
+            successMessage: '保存しました',
+            errorMessage: '保存に失敗しました',
           },
           tos: {
             sorry:'',
@@ -527,6 +532,11 @@ i18next
             confirmMessage: 'Are you sure?',
             yes: 'Yes',
             no: 'No',
+            hideRealName: 'hide your name from the comment, your profile page and voter list',
+            hideRealNameDesc: 'use your ID instead',
+            saveButton: 'Save',
+            successMessage: 'Saved',
+            errorMessage: 'Failed to save',
           },
           tos: {
             sorry:'An English version of Terms of Service and Privacy Policy is currently unavailable. Please check a Japanese version. Sorry for inconvenience.',

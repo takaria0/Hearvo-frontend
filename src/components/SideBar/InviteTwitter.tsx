@@ -25,8 +25,8 @@ const TwitterShareText = styled.button`
   margin-top: 20px;
   padding-right: 20px;
   padding-left: 20px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 7px;
+  padding-bottom: 7px;
 `;
 
 
