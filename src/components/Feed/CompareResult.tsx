@@ -154,7 +154,7 @@ const CompareResult = (props: any) => {
           <div style={{ padding: 10 }}>{i18n.t("compare.description")}</div>
           {selectOption.map((elem: any) => {
             return (
-              <div>
+              <div key={elem.value} >
                 {/* <input type="checkbox" id="scales" name="scales" onChange={e => change(e, elem)} ></input><label htmlFor={elem.title}>{elem.title}</label> */}
                 <MuiThemeProvider theme={theme}>
                   <FormControlLabel

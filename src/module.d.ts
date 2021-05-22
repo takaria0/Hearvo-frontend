@@ -12,3 +12,4 @@ declare module "react-google-login";
 declare module "mixpanel-browser";
 declare module "react-beautiful-dnd";
 declare module "styled-components";
+declare module "./static/timeline.png";

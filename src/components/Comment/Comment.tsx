@@ -458,7 +458,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
             </div>
             <ul className={styles.com_ul}>
               {props.children.map((child: any) => (
-                <CommentView {...child} />
+                <CommentView {...child} key={child.id} />
               ))}
             </ul>
           </li>
@@ -492,7 +492,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
 
             <ul className={styles.com_ul}>
               {props.children.map((child: any) => (
-                <CommentView {...child} />
+                <CommentView {...child} key={child.id} />
               ))}
             </ul>
           </li>
@@ -503,7 +503,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
     const ListComment = ({ comments }: any) => (
       <ul className={styles.com_ul}>
         {comments.map((comment: any) => (
-          <CommentView {...comment} />
+          <CommentView {...comment} key={comment.id} />
         ))}
       </ul>
     );

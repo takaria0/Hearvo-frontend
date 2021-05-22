@@ -18,7 +18,6 @@ import GroupCreate from "./components/Group/GroupCreate";
 import GroupInvite from "./components/Group/GroupInvite";
 import GroupList from "./components/Group/GroupList";
 import CustomizedSnackbars from "./components/Alert/Alert";
-import Help from "./components/Info/Content";
 import { HomeOutlined } from "@material-ui/icons";
 import { Helmet } from "react-helmet";
 import CLOUDFLARE_TO_SUBDOMAIN from "./helpers/countryMap";
@@ -60,7 +59,6 @@ function App() {
                 component={PrivacyPolicy}
                 key="privacypolicy"
               />
-              <Route path="/help" exact component={Help} key="help" />
               <Route path="/" exact component={Home} />
               <Route path="/recommend" exact component={Home} />
               <Route path="/latest" exact component={Home} />
