@@ -1,31 +1,120 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../Api';
 import { RouteComponentProps } from 'react-router-dom'
 import { getJwt } from '../../helpers/jwt';
 import Dialog from '@material-ui/core/Dialog';
 import Header from '../Header/Header';
 import i18n from "../../helpers/i18n";
-
+import styled from 'styled-components';
 
 
 
 const Settings = (props: any) => {
+  const [loading, setLoading] = useState(true);
+  const [hideName, setHideName] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
+  const jwt = getJwt();
+  let options = {};
+  if (!jwt) {
+    options = { headers: { Country: process.env.REACT_APP_COUNTRY } };
+  } else {
+    options = { headers: { 'Authorization': `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY } }
+  }
+  useEffect(() => {
+    axios.get('/users', options)
+    .then(res => {
+      setHideName(res.data.hide_realname);
+      setLoading(false);
+    })
+    .catch(err => {
+      setLoading(false);
+    })
+  }, [])
+
+  const save = (e: any) => {
+    const postObj = {
+      hideName,
+    };
+    axios.put('/users?edit_settings=true', postObj, options)
+    .then(res => {
+      setSaveMessage(i18n.t("settings.successMessage"))
+    })
+    .catch(err => {
+      setSaveMessage(i18n.t("settings.errorMessage"))
+    });
+  };
+
+  if (loading) return (<div><Header /></div>); 
 
   return (
     <div>
-      This is Settings
+      <div>
+        <Header />
+      </div>
+      <div>
+        <SettingsBody>
+          <Item>
+            <input
+              type="checkbox"
+              id="hideName"
+              name="hideName"
+              checked={hideName}
+              onChange={() => setHideName(!hideName)}
+            />
+            {i18n.t("settings.hideRealName")}
+            <ItemDescription>
+              {i18n.t("settings.hideRealNameDesc")}
+            </ItemDescription>
+          </Item>
+          <SaveDiv>
+            <SaveButton onClick={(e: any) => {save(e);}} >
+              {i18n.t("settings.saveButton")}
+            </SaveButton>
+            <SaveMessage>
+              {saveMessage}
+            </SaveMessage>
+          </SaveDiv>
+        </SettingsBody>
+      </div>
     </div>
   )
 };
 
 
+const SettingsBody = styled.div`
+text-align: center;
+padding-top: 100px;
+`
 
+const Item = styled.div`
+font-size: 20px;
+`
 
-const inlineStyles = {
+const ItemDescription = styled.div`
+color: gray;
+font-size: 12px;
+`
 
-};
+const SaveDiv = styled.div`
+margin-top: 10px;
+`
+const SaveMessage = styled.div`
+margin-top: 10px;
+color: black;
+`
 
-
+const SaveButton = styled.button`
+padding: 10px;
+outline: none;
+border: none;
+color: white;
+border-radius: 100px;
+background-color: #3477cc;
+text-transform: none;
+transition: none;
+font-size: 1em;
+font-weight: bold;
+`
 
 
 

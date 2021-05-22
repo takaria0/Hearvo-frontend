@@ -372,8 +372,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   feedList = () => {
     let feedArray = this.state.dataArray.map((data: any, idx: number) => { return <EachPost post_detail_id={""} isLogin={this.props.isLogin} data={data} ></EachPost> });
-    // feedArray.splice(1, 0, <GoogleAdTimeLine />);
-    // feedArray.splice(10, 0, <GoogleAdTimeLine />);
+    feedArray.splice(1, 0, <GoogleAdTimeLine />);
+    feedArray.splice(10, 0, <GoogleAdTimeLine />);
     // Adsを非表示
     return (
       <span>
