@@ -21,11 +21,14 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "i18next": "^19.8.7",
     "linkifyjs": "^2.1.9",
     "mixpanel-browser": "^2.41.0",
     "moment-timezone": "^0.5.32",
     "plotly.js": "^1.57.1",
+    "prettier": "^2.3.0",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.1.0",
     "react-bootstrap": "^1.4.0",
@@ -47,7 +50,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start DISABLE_ESLINT=1",
     "build": "react-scripts build",
     "build-snapshot": "react-scripts build && react-snapshot",
     "test": "react-scripts test",
@@ -73,5 +76,11 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "eslint": "^7.27.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.23.2"
+  }
 }

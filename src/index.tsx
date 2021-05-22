@@ -1,19 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { render } from 'react-snapshot';
-import { StylesProvider } from "@material-ui/core/styles"
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { render } from "react-snapshot";
+import { StylesProvider } from "@material-ui/core/styles";
 
 ReactDOM.render(
-// render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  ,
-  
-  document.getElementById('root')
+  // render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

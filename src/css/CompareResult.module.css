@@ -1,6 +1,5 @@
 @media screen and (max-width: 700px) and (min-width: 0px) {
-
-.compare_button {
+  .compare_button {
     outline: none;
     border: none;
     color: white;
@@ -9,9 +8,9 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.compare_button:hover {
+  .compare_button:hover {
     outline: none;
     border: none;
     color: white;
@@ -20,19 +19,17 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.close_button {
+  .close_button {
     background-color: transparent;
     border: none;
     outline: none;
-}
-
+  }
 }
 
 @media screen and (max-width: 1000px) and (min-width: 700px) {
-
-.compare_button {
+  .compare_button {
     outline: none;
     border: none;
     color: white;
@@ -41,9 +38,9 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.compare_button:hover {
+  .compare_button:hover {
     outline: none;
     border: none;
     color: white;
@@ -52,19 +49,17 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.close_button {
+  .close_button {
     background-color: transparent;
     border: none;
     outline: none;
-}
-
+  }
 }
 
 @media screen and (max-width: 1200px) and (min-width: 1000px) {
-
-.compare_button {
+  .compare_button {
     outline: none;
     border: none;
     color: white;
@@ -73,9 +68,9 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.compare_button:hover {
+  .compare_button:hover {
     outline: none;
     border: none;
     color: white;
@@ -84,19 +79,17 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.close_button {
+  .close_button {
     background-color: transparent;
     border: none;
     outline: none;
-}
-
+  }
 }
 
 @media screen and (min-width: 1200px) {
-
-.compare_button {
+  .compare_button {
     outline: none;
     border: none;
     color: white;
@@ -105,9 +98,9 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.compare_button:hover {
+  .compare_button:hover {
     outline: none;
     border: none;
     color: white;
@@ -116,27 +109,26 @@
     text-transform: none;
     transition: none;
     font-weight: bold;
-}
+  }
 
-.compare_checkbox {
+  .compare_checkbox {
     box-shadow: none;
     background-color: transparent;
-}
+  }
 
-.compare_checkbox:hover {
+  .compare_checkbox:hover {
     box-shadow: none;
     background-color: transparent;
-}
+  }
 
-.compare_checkbox:checked {
-    color: 'red';
+  .compare_checkbox:checked {
+    color: "red";
     background-color: transparent;
-}
+  }
 
-.close_button {
+  .close_button {
     background-color: transparent;
     border: none;
     outline: none;
-}
-
+  }
 }

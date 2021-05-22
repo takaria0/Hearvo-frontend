@@ -1,10 +1,10 @@
-const mixpanel = require('mixpanel-browser');
+const mixpanel = require("mixpanel-browser");
 
 mixpanel.init(process.env.REACT_APP_MIX_PANEL_TOKEN);
 
-let env_check = process.env.REACT_APP_ENV === 'prod';
+const env_check = process.env.REACT_APP_ENV === "prod";
 
-let actions = {
+const actions = {
   identify: (id: string | number) => {
     if (env_check) mixpanel.identify(id);
   },
@@ -21,4 +21,4 @@ let actions = {
   },
 };
 
-export let Mixpanel = actions;
+export const Mixpanel = actions;

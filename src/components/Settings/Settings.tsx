@@ -1,37 +1,23 @@
-import React from 'react';
-import axios from '../Api';
-import { RouteComponentProps } from 'react-router-dom'
-import { getJwt } from '../../helpers/jwt';
-import Dialog from '@material-ui/core/Dialog';
-import Header from '../Header/Header';
+import React, { useState, useEffect } from "react";
+import axios from "../Api";
+import { RouteComponentProps } from "react-router-dom";
+import { getJwt } from "../../helpers/jwt";
+import Dialog from "@material-ui/core/Dialog";
+import Header from "../Header/Header";
 import i18n from "../../helpers/i18n";
-
-
-
+import styled from "styled-components";
 
 const Settings = (props: any) => {
+  const [realNameSetting, setRealNameSetting] = useState(0);
 
-  return (
-    <div>
-      This is Settings
-    </div>
-  )
+  useEffect(() => {}, []);
+
+  return <Body>This is Settings</Body>;
 };
 
-
-
-
-const inlineStyles = {
-
-};
-
-
-
-
-
-
-
-
+const Body = styled.div`
+  text-align: center;
+`;
 
 // interface SettingsProps extends RouteComponentProps<{}>{
 
@@ -61,7 +47,6 @@ const inlineStyles = {
 
 //   }
 
-
 //   submitAcccountDelete(e: any) {
 //     e.preventDefault();
 //     const jwt = getJwt();
@@ -74,14 +59,12 @@ const inlineStyles = {
 //       return
 //     }
 
-
 //     if (confirmPassword.length < 8) {
 //       this.setState({
 //         responseMessage: i18n.t('settings.passwordLength'),
 //       })
 //       return
 //     }
-
 
 //     axios.delete("/users?", { headers: { Authorization: `Bearer ${jwt}`, Country: process.env.REACT_APP_COUNTRY, confirmPassword: confirmPassword } })
 //       .then((res: any) => {
@@ -186,7 +169,6 @@ const inlineStyles = {
 //     )
 //   }
 
-
 //   render() {
 //     return (
 //       <div>
@@ -200,7 +182,7 @@ const inlineStyles = {
 //           <div style={{textAlign: 'center'}}>
 //               {this.renderAccountDelete()}
 //           </div> */}
-          
+
 //         </ul>
 //         <div>
 //           {/* {this.state.isAccountDelete ? this.renderAccountDelete() : ''} */}
@@ -210,8 +192,5 @@ const inlineStyles = {
 //     )
 //   }
 // }
-
-
-
 
 export default Settings;

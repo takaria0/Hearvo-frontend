@@ -5,6 +5,6 @@ export const getJwt = () => {
   } catch (error) {
     jwt = "";
   }
-  
+
   return jwt;
-}
+};

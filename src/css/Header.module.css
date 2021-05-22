@@ -1,81 +1,73 @@
-
-
-
 @media screen and (max-width: 700px) and (min-width: 0px) {
+  .search_bar {
+    border-radius: 2px;
+  }
 
-.search_bar {
-  border-radius: 2px;
-}
+  .remark {
+    display: none;
+  }
 
-.remark {
-  display: none;
-}
+  .header {
+    top: 0%;
+    color: black;
+    /* background-color: hsl(116, 49%, 45%); */
+    background-color: hsl(115, 70%, 55%);
+    margin-bottom: 10px;
+    margin-top: -5px;
+    padding-bottom: 20px;
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
 
-.header {
-  top: 0%;
-  color: black;
-  /* background-color: hsl(116, 49%, 45%); */
-  background-color: hsl(115, 70%, 55%);
-  margin-bottom: 10px;
-  margin-top: -5px;
-  padding-bottom: 20px;
-  position: fixed;
-  z-index: 2;
-  width: 100%;
-  flex-wrap: nowrap;
-}
+  .hearvo {
+    color: black;
+    text-decoration: none;
+    font-size: 12px;
+  }
 
-.hearvo {
-  color: black;
-  text-decoration: none;
-  font-size: 12px;
-}
+  .hearvo:active {
+    color: blue;
+  }
 
-.hearvo:active {
-  color: blue;
+  .hearvo:hover {
+    color: orange;
+  }
 
-}
+  .hearvo:visited {
+    color: red;
+  }
 
-.hearvo:hover {
-  color: orange;
-}
+  .profile {
+    color: black;
+    text-decoration: none;
+    font-size: 12px;
+  }
 
-.hearvo:visited {
-  color: red,
-}
+  .profile:active {
+    color: blue;
+  }
 
+  .profile:hover {
+    color: orange;
+  }
 
-.profile {
-  color: black;
-  text-decoration: none;
-  font-size: 12px;
-}
+  .profile:visited {
+    color: red;
+  }
 
-.profile:active {
-  color: blue;
+  .now {
+    color: hsl(221, 84%, 57%) !important;
+  }
 
-}
+  .normal {
+  }
 
-.profile:hover {
-  color: orange;
-}
-
-.profile:visited {
-  color: red,
-}
-
-.now{
-  color: hsl(221, 84%, 57%) !important;
-}
-
-.normal{
-  
-}
-
-.header_items{
-  display: flex;
-  transform: translateY(-3px);
-}
+  .header_items {
+    display: flex;
+    transform: translateY(-3px);
+  }
 }
 
 /* @media screen and (min-width:750px) {
@@ -89,157 +81,147 @@
 /* } */
 
 @media screen and (max-width: 1000px) and (min-width: 700px) {
+  .search_bar {
+    border-radius: 2px;
+  }
 
-.search_bar {
-  border-radius: 2px;
+  .header {
+    color: black;
+    /* background-color: hsl(116, 49%, 45%); */
+    background-color: hsl(115, 70%, 55%);
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .remark {
+    /* display: none; */
+  }
+
+  .hearvo {
+    color: black;
+    text-decoration: none;
+  }
+
+  .hearvo:active {
+    color: blue;
+  }
+
+  .hearvo:hover {
+    color: orange;
+  }
+
+  .hearvo:visited {
+    color: red;
+  }
+
+  .profile {
+    color: black;
+    text-decoration: none;
+    /* text-align: right; */
+  }
+
+  .profile:active {
+    color: blue;
+  }
+
+  .profile:hover {
+    color: orange;
+  }
+
+  .profile:visited {
+    color: red;
+  }
+
+  .now {
+    color: hsl(221, 84%, 57%) !important;
+  }
+
+  .normal {
+  }
+  .header_items {
+    display: flex;
+    transform: translateY(-3px);
+  }
 }
 
+@media screen and (min-width: 1000px) {
+  .search_bar {
+    border-radius: 1px;
+  }
 
-.header {
-  color: black;
-  /* background-color: hsl(116, 49%, 45%); */
-  background-color: hsl(115, 70%, 55%);
-  margin-bottom: 40px;
-  padding-bottom: 20px;
-  position: fixed;
-  z-index: 2;
-  width: 100%;
-  flex-wrap: nowrap;
-}
+  .header {
+    color: black;
+    /* background-color: hsl(116, 49%, 45%); */
+    background-color: hsl(115, 70%, 55%);
+    box-shadow: 0 2px 3px -3px rgb(120, 120, 120);
+    margin-bottom: 80px;
+    padding-bottom: 20px;
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
 
-.remark {
-  /* display: none; */
-}
+  .now {
+    color: hsl(221, 84%, 57%) !important;
+    /* transform: translateX(30px) translateY(-5px); */
+  }
 
-.hearvo {
-  color: black;
-  text-decoration: none;
-}
+  .normal {
+    /* transform: translateX(30px) translateY(-5px); */
+  }
 
-.hearvo:active {
-  color: blue;
+  .remark {
+    /* display: none; */
+  }
 
-}
+  .hearvo {
+    color: black;
+    text-decoration: none;
+  }
 
-.hearvo:hover {
-  color: orange;
-}
+  .hearvo:active {
+    color: blue;
+  }
 
-.hearvo:visited {
-  color: red,
-}
+  .hearvo:hover {
+    color: orange;
+  }
 
+  .hearvo:visited {
+    color: red;
+  }
 
-.profile {
-  color: black;
-  text-decoration: none;
-  /* text-align: right; */
-}
+  .profile {
+    color: black;
+    text-decoration: none;
+    /* text-align: right; */
+  }
 
-.profile:active {
-  color: blue;
+  .profile:active {
+    color: blue;
+  }
 
-}
+  .profile:hover {
+    color: orange;
+  }
 
-.profile:hover {
-  color: orange;
-}
+  .profile:visited {
+    color: red;
+  }
 
-.profile:visited {
-  color: red,
-}
+  .profile_span {
+    float: "right";
+    margin-right: 20;
+  }
 
-.now{
-  color: hsl(221, 84%, 57%) !important;
-}
-
-.normal{
-  
-}
-.header_items{
-  display: flex;
-  transform: translateY(-3px);
-}
-}
-
-
-@media screen and (min-width:1000px) {
-.search_bar {
-  border-radius: 1px;
-}
-
-.header {
-  color: black;
-  /* background-color: hsl(116, 49%, 45%); */
-  background-color: hsl(115, 70%, 55%);
-  box-shadow: 0 2px 3px -3px rgb(120, 120, 120);
-  margin-bottom: 80px;
-  padding-bottom: 20px;
-  position: fixed;
-  z-index: 2;
-  width: 100%;
-  flex-wrap: nowrap;
-}
-
-.now{
-  color: hsl(221, 84%, 57%) !important;
-  /* transform: translateX(30px) translateY(-5px); */
-}
-
-.normal{
-  /* transform: translateX(30px) translateY(-5px); */
-}
-
-.remark {
-  /* display: none; */
-}
-
-.hearvo {
-  color: black;
-  text-decoration: none;
-}
-
-.hearvo:active {
-  color: blue;
-
-}
-
-.hearvo:hover {
-  color: orange;
-}
-
-.hearvo:visited {
-  color: red,
-}
-
-.profile {
-  color: black;
-  text-decoration: none;
-  /* text-align: right; */
-}
-
-.profile:active {
-  color: blue;
-
-}
-
-.profile:hover {
-  color: orange;
-}
-
-.profile:visited {
-  color: red,
-}
-
-
-.profile_span {
-  float: "right";
-  margin-right: 20;
-}
-
-.header_items{
-  margin-right:15px;
-  padding-right:15px;
-  transform: translateY(-3px);
-}
+  .header_items {
+    margin-right: 15px;
+    padding-right: 15px;
+    transform: translateY(-3px);
+  }
 }

@@ -1,126 +1,116 @@
 @media screen and (max-width: 700px) and (min-width: 0px) {
-.body {
-  color: black;
-  background-color: white;
-  text-align: center;
-}
+  .body {
+    color: black;
+    background-color: white;
+    text-align: center;
+  }
 
-.body_inside {
-  border: solid;
-  border-radius: 10px;
-  border-width: 1px;
-  margin-right: auto;
-  margin-left: auto;
-  width: 80%;
-}
+  .body_inside {
+    border: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 80%;
+  }
 
-.email {
-  color: black;
-  margin-bottom: 10px;
-}
+  .email {
+    color: black;
+    margin-bottom: 10px;
+  }
 
-.password {
-  color: black;
-  margin-bottom: 10px;
-}
+  .password {
+    color: black;
+    margin-bottom: 10px;
+  }
 
-.button {
-  color: black;
-  margin-bottom: 30px;
-  text-align: center;
-}
+  .button {
+    color: black;
+    margin-bottom: 30px;
+    text-align: center;
+  }
 
-.footer {
-  color: black;
-  text-align: center;
-  margin-bottom: 10px;
+  .footer {
+    color: black;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 }
-
-}
-
 
 @media screen and (max-width: 1000px) and (min-width: 700px) {
-.body {
-  color: black;
-  background-color: white;
-  text-align: center;
+  .body {
+    color: black;
+    background-color: white;
+    text-align: center;
+  }
+
+  .body_inside {
+    border: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 400px;
+  }
+
+  .email {
+    color: black;
+    margin-bottom: 10px;
+  }
+
+  .password {
+    color: black;
+    margin-bottom: 10px;
+  }
+
+  .button {
+    color: black;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .footer {
+    color: black;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 }
 
-.body_inside {
-  border: solid;
-  border-radius: 10px;
-  border-width: 1px;
-  margin-right: auto;
-  margin-left: auto;
-  width: 400px;
+@media screen and (min-width: 1000px) {
+  .body {
+    color: black;
+    background-color: white;
+    text-align: center;
+  }
+
+  .body_inside {
+    border: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 400px;
+  }
+
+  .email {
+    color: black;
+    margin-bottom: 10px;
+  }
+
+  .password {
+    color: black;
+    margin-bottom: 10px;
+  }
+
+  .button {
+    color: black;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .footer {
+    color: black;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 }
-
-.email {
-  color: black;
-  margin-bottom: 10px;
-}
-
-.password {
-  color: black;
-  margin-bottom: 10px;
-}
-
-.button {
-  color: black;
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.footer {
-  color: black;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-}
-
-
-@media screen and (min-width:1000px) {
-.body {
-  color: black;
-  background-color: white;
-  text-align: center;
-}
-
-.body_inside {
-  border: solid;
-  border-radius: 10px;
-  border-width: 1px;
-  margin-right: auto;
-  margin-left: auto;
-  width: 400px;
-}
-
-.email {
-  color: black;
-  margin-bottom: 10px;
-}
-
-.password {
-  color: black;
-  margin-bottom: 10px;
-}
-
-.button {
-  color: black;
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.footer {
-  color: black;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-}
-
-
-
-
-

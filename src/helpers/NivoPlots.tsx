@@ -1,6 +1,6 @@
-import React from 'react';
-import { ResponsivePie } from '@nivo/pie'
-import { ResponsiveBar } from '@nivo/bar'
+import React from "react";
+import { ResponsivePie } from "@nivo/pie";
+import { ResponsiveBar } from "@nivo/bar";
 
 export const MyResponsivePie = ({ data, colors, legends }: any) => (
   <ResponsivePie
@@ -17,116 +17,119 @@ export const MyResponsivePie = ({ data, colors, legends }: any) => (
     radialLabelsSkipAngle={10}
     enableRadialLabels={false}
     radialLabelsTextColor="#33333"
-    radialLabelsLinkColor={{ from: 'color' }}
+    radialLabelsLinkColor={{ from: "color" }}
     sortByValue={true}
     sliceLabelsSkipAngle={10}
     sliceLabelsTextColor="#33333"
     defs={[
       {
-        id: 'dots',
-        type: 'patternDots',
-        background: 'inherit',
-        color: 'rgba(255, 255, 255, 0.3)',
+        id: "dots",
+        type: "patternDots",
+        background: "inherit",
+        color: "rgba(255, 255, 255, 0.3)",
         size: 4,
         padding: 1,
-        stagger: true
+        stagger: true,
       },
       {
-        id: 'lines',
-        type: 'patternLines',
-        background: 'inherit',
-        color: 'rgba(255, 255, 255, 0.3)',
+        id: "lines",
+        type: "patternLines",
+        background: "inherit",
+        color: "rgba(255, 255, 255, 0.3)",
         rotation: -45,
         lineWidth: 6,
-        spacing: 10
-      }
+        spacing: 10,
+      },
     ]}
     fill={[
       {
         match: {
-          id: 'ruby'
+          id: "ruby",
         },
-        id: 'dots'
+        id: "dots",
       },
       {
         match: {
-          id: 'c'
+          id: "c",
         },
-        id: 'dots'
+        id: "dots",
       },
       {
         match: {
-          id: 'go'
+          id: "go",
         },
-        id: 'dots'
+        id: "dots",
       },
       {
         match: {
-          id: 'python'
+          id: "python",
         },
-        id: 'dots'
+        id: "dots",
       },
       {
         match: {
-          id: 'scala'
+          id: "scala",
         },
-        id: 'lines'
+        id: "lines",
       },
       {
         match: {
-          id: 'lisp'
+          id: "lisp",
         },
-        id: 'lines'
+        id: "lines",
       },
       {
         match: {
-          id: 'elixir'
+          id: "elixir",
         },
-        id: 'lines'
+        id: "lines",
       },
       {
         match: {
-          id: 'javascript'
+          id: "javascript",
         },
-        id: 'lines'
-      }
+        id: "lines",
+      },
     ]}
     legends={legends}
   />
-)
+);
 
-
-export const MyResponsiveBar = ({ data, keys, margin /* see data tab */ }: any) => (
+export const MyResponsiveBar = ({
+  data,
+  keys,
+  margin /* see data tab */,
+}: any) => (
   <ResponsiveBar
     data={data}
     keys={keys}
     indexBy="content"
     margin={margin}
     padding={0}
-    valueScale={{ type: 'linear' }}
-    indexScale={{ type: 'band', round: true }}
-    colors={{ scheme: 'set3' }}
+    valueScale={{ type: "linear" }}
+    indexScale={{ type: "band", round: true }}
+    colors={{ scheme: "set3" }}
     enableGridY={false}
-    layout={'horizontal'}
+    layout={"horizontal"}
     defs={[
       {
-        id: 'dots',
-        type: 'patternDots',
-        background: 'inherit',
-        color: '#38bcb2',
+        id: "dots",
+        type: "patternDots",
+        background: "inherit",
+        color: "#38bcb2",
         size: 4,
         padding: 1,
-        stagger: true
+        stagger: true,
       },
       {
-        id: 'lines',
-        type: 'patternLines',
-        background: 'inherit',
-        color: '#eed312',
+        id: "lines",
+        type: "patternLines",
+        background: "inherit",
+        color: "#eed312",
         rotation: -45,
         lineWidth: 6,
-        spacing: 10
-      }
+        spacing: 10,
+      },
     ]}
     // fill={[
     //   {
@@ -142,7 +145,7 @@ export const MyResponsiveBar = ({ data, keys, margin /* see data tab */ }: any) 
     //     id: 'lines'
     //   }
     // ]}
-    borderColor={{ from: 'color', modifiers: [['darker', 3]] }}
+    borderColor={{ from: "color", modifiers: [["darker", 3]] }}
     borderWidth={1}
     axisTop={null}
     axisRight={null}
@@ -161,38 +164,37 @@ export const MyResponsiveBar = ({ data, keys, margin /* see data tab */ }: any) 
       tickRotation: 30,
       // legend: 'food',
       // legendPosition: 'middle',
-      legendOffset: -40
+      legendOffset: -40,
     }}
     labelSkipWidth={12}
     labelSkipHeight={12}
-    labelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
+    labelTextColor={{ from: "color", modifiers: [["darker", 3]] }}
     legends={[
       {
-        dataFrom: 'keys',
-        anchor: 'top-right',
-        direction: 'column',
+        dataFrom: "keys",
+        anchor: "top-right",
+        direction: "column",
         justify: false,
         translateX: 120,
         translateY: 0,
         itemsSpacing: 2,
         itemWidth: 100,
         itemHeight: 20,
-        itemDirection: 'right-to-left',
+        itemDirection: "right-to-left",
         itemOpacity: 0.85,
         symbolSize: 20,
         effects: [
           {
-            on: 'hover',
+            on: "hover",
             style: {
-              itemOpacity: 1
-            }
-          }
-        ]
-      }
+              itemOpacity: 1,
+            },
+          },
+        ],
+      },
     ]}
     animate={true}
     motionStiffness={90}
     motionDamping={15}
   />
-)
-
+);

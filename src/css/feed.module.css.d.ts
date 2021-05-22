@@ -24,4 +24,3 @@ export const topic_link: string;
 export const topic_list: string;
 export const initial_topic: string;
 export const recreate_poll_button: string;
-
