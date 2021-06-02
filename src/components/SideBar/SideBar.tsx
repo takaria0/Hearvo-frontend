@@ -200,8 +200,8 @@ const SideBar = (props: any) => {
       return (
         <span>
           <RelatedPosts postId={postId} />
-          <GoogleAdSideBar />
           <InvitePeopleViaTwitterButtonDetail id={postId} text={i18n.t("twitterInvite.detailButtonText")} />
+          <GoogleAdSideBar />
         </span>
       )
     break;
@@ -210,8 +210,8 @@ const SideBar = (props: any) => {
       return (
         <span>
           <TrendingTopics />
-          <GoogleAdSideBar />
           <InvitePeopleViaTwitterButton text={i18n.t("twitterInvite.buttonText")} />
+          <GoogleAdSideBar />
         </span>
       )
     break;

@@ -12,22 +12,6 @@ import {
 } from "react-share";
 import styled from 'styled-components';
 
-const TwitterShareText = styled.button`
-  outline: none;
-  border: none;
-  color: white;
-  border-radius: 100px;
-  background-color: #3477cc;
-  font-size: 16px;
-  text-transform: none;
-  transition: none;
-  font-weight: bold;
-  margin-top: 20px;
-  padding-right: 20px;
-  padding-left: 20px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-`;
 
 
 interface InvitePeopleViaTwitterButtonProps {
@@ -77,6 +61,25 @@ const InvitePeopleViaTwitterButtonDetail = (props: InvitePeopleViaTwitterButtonD
     </TwitterShareButton>
   )
 }
+
+
+const TwitterShareText = styled.button`
+  outline: none;
+  // text-transform: none;
+  // transition: none;
+  cursor: pointer;
+  border: none;
+  color: white;
+  border-radius: 100px;
+  background-color: #3477cc;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+`;
 
 
 
