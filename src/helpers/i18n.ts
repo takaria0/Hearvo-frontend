@@ -411,7 +411,7 @@ i18next
             male: 'Male',
             female: 'Female',
             other: 'Other',
-            freeForm: 'Specify',
+            freeForm: 'Optional',
             done: 'Done',
             groupDoesntExist: "<This group doesn't exist>",
             topic: 'Topic',
@@ -422,6 +422,7 @@ i18next
             followMore: 'Follow more topics!',
             required: 'required *',
             enterName: 'Enter your name',
+            hideYourName: 'You can hide your name in the settings',
           },
           newPost: {
             create:'Create Post',

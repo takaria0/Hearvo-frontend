@@ -7,6 +7,7 @@ import * as styles from '../css/Feed.module.css';
 import { getJwt } from '../helpers/jwt';
 import i18n from "../helpers/i18n";
 import initialTopics from '../helpers/initialTopics';
+import styled from 'styled-components';
 
 const INITIAL_TOPICS = initialTopics;
 
@@ -78,6 +79,9 @@ const InitialUserInfoForm = (props: any) => {
         <div>
           <input style={inlineStyles.inputName} placeholder={"Middle Name (Optional)"} maxLength={100} onChange={(e) => setMiddleName(e.target.value as string)}></input>
         </div>
+        <HideYourName>
+          {i18n.t("feed.hideYourName")}
+        </HideYourName>
       </div>
     )
   };
@@ -363,6 +367,15 @@ const inlineStyles = {
     padding: 7,
   }
 };
+
+
+
+const HideYourName = styled.div`
+color: gray;
+`
+
+
+
 
 
 export default InitialForm;
