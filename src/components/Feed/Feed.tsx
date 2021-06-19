@@ -219,8 +219,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
     if (keywordArray.includes("recommend")) {
       feedType = "recommend";
     }
-    if (keywordArray.includes("myposts")) {
-      feedType = "myposts";
+    if (keywordArray.includes("posts")) {
+      feedType = "posts";
     }
     if (keywordArray.includes("voted")) {
       feedType = "voted";
@@ -310,8 +310,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
           .catch((err) => { this.setState({ isLoaded: true }) })
         break;
 
-      case "myposts":
-        queryUrl = `/posts?keyword=myposts&page=${newpage}`;
+      case "posts":
+        queryUrl = `/posts?keyword=posts&page=${newpage}`;
         axios.get(queryUrl, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })

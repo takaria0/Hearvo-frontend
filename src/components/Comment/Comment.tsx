@@ -386,7 +386,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
   showName(userInfo: any) {
     return (
       // <span>{userInfo.first_name} {userInfo.middle_name} {userInfo.last_name}</span>
-      <Link to={"/profile/" + userInfo.name + "/myposts"}>{userInfo.profile_name}</Link>
+      <Link to={"/profile/" + userInfo.name + "/posts"}>{userInfo.profile_name}</Link>
     )
   }
 

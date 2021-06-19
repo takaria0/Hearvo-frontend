@@ -21,6 +21,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
+    "firebase": "^8.6.8",
     "i18next": "^19.8.7",
     "linkifyjs": "^2.1.9",
     "mixpanel-browser": "^2.41.0",

@@ -206,7 +206,7 @@ class HeaderChild extends React.Component<HeaderChildProps, HeaderChildState> {
                 keepMounted
                 open={Boolean(this.state.anchorEl)}
                 onClose={e => this.handleClose(e, "none")}>
-                <button style={inlineStyles.profileSection} onClick={e => this.handleClose(e, "/profile/" + this.state.user.name + "/myposts")}>
+                <button style={inlineStyles.profileSection} onClick={e => this.handleClose(e, "/profile/" + this.state.user.name + "/posts")}>
                   <div style={inlineStyles.realName}>{this.state.user.first_name} {this.state.user.middle_name} {this.state.user.last_name}</div>
                   <div style={inlineStyles.profileName}>@{this.state.user.profile_name}</div>
                 </button>

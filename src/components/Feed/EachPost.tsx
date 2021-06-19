@@ -261,7 +261,7 @@ const PollUserList = (props: any) => {
         <MenuItem>{i18n.t("eachPost.voters")}</MenuItem>
           {isLoading ? "" : userList.map((user: any) => {
             return (
-              <MenuItem><Link to={"/profile/" + user.name + "/myposts"}>
+              <MenuItem><Link to={"/profile/" + user.name + "/posts"}>
                 <MenuTitle>
                   {user.profile_name}
                 </MenuTitle>

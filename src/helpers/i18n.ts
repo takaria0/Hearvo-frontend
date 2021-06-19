@@ -75,7 +75,9 @@ i18next
             unfollow: 'フォロー解除'
           },
           profile: {
-            following: 'フォロー',
+            following: 'トピック',
+            followingUsers: 'フォロー',
+            followerUsers: 'フォロワー',
             numOfVotes: '投票数',
             voteRecord: '投票履歴',
             myPost: '投稿',
@@ -362,7 +364,9 @@ i18next
             unfollow: 'Unfollow'
           },
           profile: {
-            following: 'Following',
+            following: 'Topics',
+            followingUsers: 'Following',
+            followerUsers: 'Followers',
             numOfVotes: 'Votes',
             voteRecord: 'Votes',
             myPost: 'Posts',
