@@ -10,14 +10,12 @@ import TopicFollowButtonLoaded from '../Topic/TopicFollowButtonLoaded';
 import i18n from "../../helpers/i18n";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
+import CloseUsers from './CloseUsers';
 
 
 
 const ProfileDetail = (props: any) => {
-  const jwt = getJwt();
-  const urlParams = new URLSearchParams(window.location.search);
   const keywordArray = window.location.pathname.split("/");
-  console.log("keywordArray", keywordArray);
 
 
   const voteRecordStyle = keywordArray.includes("voted") ?
@@ -30,7 +28,7 @@ const ProfileDetail = (props: any) => {
 
   return (
     <div>
-
+        <CloseUsers userInfo={props.userInfo} />
           <div style={{ marginTop:10, backgroundColor: 'white', borderRadius: 5, border: 'solid', borderWidth: 1, paddingTop: 10, paddingBottom: 10, display: 'flex', justifyContent: 'space-evenly'}}>
             <span style={{backgroundColor: 'white'}}>
           <Link style={voteRecordStyle} to={"/profile/" + keywordArray[2] + "/voted"}>{i18n.t("profile.voteRecord")}</Link>

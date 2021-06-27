@@ -53,7 +53,8 @@ const Settings = (props: any) => {
       </div>
       <div>
         <SettingsBody>
-          <Item>
+
+          {/* <Item>
             <input
               type="checkbox"
               id="hideName"
@@ -66,6 +67,7 @@ const Settings = (props: any) => {
               {i18n.t("settings.hideRealNameDesc")}
             </ItemDescription>
           </Item>
+
           <SaveDiv>
             <SaveButton onClick={(e: any) => {save(e);}} >
               {i18n.t("settings.saveButton")}
@@ -73,7 +75,8 @@ const Settings = (props: any) => {
             <SaveMessage>
               {saveMessage}
             </SaveMessage>
-          </SaveDiv>
+          </SaveDiv> */}
+
         </SettingsBody>
       </div>
     </div>

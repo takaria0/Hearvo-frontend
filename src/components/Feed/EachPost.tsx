@@ -31,6 +31,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import AttributePlotPie from './Vote/AttributePlotPie';
 import AttributePlotBar from './Vote/AttributePlotBar';
 import RenderTopic from './RenderTopic';
+import MiniProfileIcon from '../utils/MiniProfileIcon';
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -262,6 +263,7 @@ const PollUserList = (props: any) => {
           {isLoading ? "" : userList.map((user: any) => {
             return (
               <MenuItem><Link to={"/profile/" + user.name + "/posts"}>
+                <MiniProfileIcon imgUrl={user.profile_img_url}/>
                 <MenuTitle>
                   {user.profile_name}
                 </MenuTitle>

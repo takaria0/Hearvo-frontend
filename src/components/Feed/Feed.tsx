@@ -198,7 +198,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     }
 
     const urlParams = new URLSearchParams(window.location.search);
-    const keywordArray = window.location.pathname.split("/");
+    const keywordArray = window.location.pathname.split("/"); //.slice(0,2);
 
     let feedType = ""; let orderType = "";
     if (keywordArray.includes("topic")) {
@@ -329,7 +329,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         break;
 
       case "recommend":
-        queryUrl = `/posts?keyword=recommend&page=${newpage}`;
+        queryUrl = `/posts?keyword=following&page=${newpage}`;
         axios.get(queryUrl, options)
           .then(res => {
             this.setState({ dataArray: page === 1 ? res.data : [...this.state.dataArray, ...res.data], isLoaded: true, miniTitle: "" })

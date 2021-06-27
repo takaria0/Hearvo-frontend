@@ -4,6 +4,8 @@ import axios from '../Api';
 import { getJwt } from '../../helpers/jwt';
 import i18n from "../../helpers/i18n";
 import styled from 'styled-components';
+import MiniProfileIcon from '../utils/MiniProfileIcon';
+import UserFollowButton from '../utils/UserFollowButton';
 
 interface FollowingUserListProps {
   userInfoId: number;
@@ -38,20 +40,44 @@ const FollowingUserList = (props: FollowingUserListProps) => {
     <UserListDiv>
       Following User List
       {userList.followings.map(((user: any) => {
-        return (<ItemDiv>{user.user_info.profile_name}</ItemDiv>)
+        return (
+        <ItemDiv>
+          <ItemInnerDiv>
+            <MiniProfileIcon imgUrl={user.user_info.profile_img_url} />
+            <UserNameSpan>{user.user_info.profile_name}</UserNameSpan>
+            <UserFollowButtonSpan>
+              <UserFollowButton hasFollowed={true} userInfoId={user.user_info.id}/>
+            </UserFollowButtonSpan>
+          </ItemInnerDiv>
+        </ItemDiv>
+        )
       }))}
     </UserListDiv>
   )
 }
 
 
+const UserNameSpan = styled.span`
+margin-left: 10px;
+`
+
+const UserFollowButtonSpan = styled.span`
+text-align: right;
+float: right;
+`
+
 const UserListDiv = styled.div`
-border: none;
-font-size: 20px;
-text-align: left;
 `
 
 const ItemDiv = styled.div`
+border: solid 1px black;
+border-width: 0px 0px 1px 0px;
+font-size: 20px;
+display: block;
+`
+
+const ItemInnerDiv = styled.div`
+padding: 10px 10px 10px 10px;
 `
 
 

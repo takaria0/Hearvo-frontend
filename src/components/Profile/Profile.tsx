@@ -16,11 +16,12 @@ import FollowingUserList from './FollowingUserList';
 import FollowerUserList from './FollowerUserList';
 import FollowingTopicList from './FollowingTopicList';
 import Feed from '../Feed/Feed';
-
+import styled from 'styled-components';
+import CloseIcon from '@material-ui/icons/Close';
 
 const ProfileImage = (props: any) => {
   return (
-      <img width="100px" height="100px" src={props.userInfo.profile_img_url || "http://via.placeholder.com/300"} alt="firebase-image" />
+    <ProfileImg src={props.userInfo.profile_img_url || "http://via.placeholder.com/300"} alt="firebase-image" />
   )
 }
 
@@ -36,7 +37,8 @@ const UploadImage = (props: any) => {
   };
 
   const handleUpload = () => {
-    const uploadTask = storage.ref(`images/${props.userInfo.id}_${image.name}`).put(image);
+    const fileName = `${props.userInfo.id}_${image.name}`.slice(0, 30);
+    const uploadTask = storage.ref(`${process.env.REACT_APP_FIREBASE_STORAGE_IMG_FOLDER}/${fileName}`).put(image);
     uploadTask.on(
       "state_changed",
       snapshot => {
@@ -46,12 +48,11 @@ const UploadImage = (props: any) => {
         setProgress(progress);
       },
       error => {
-        console.log(error);
       },
       () => {
         storage
-          .ref("images")
-          .child(`${props.userInfo.id}_${image.name}`)
+          .ref(`${process.env.REACT_APP_FIREBASE_STORAGE_IMG_FOLDER}`)
+          .child(fileName)
           .getDownloadURL()
           .then(async url => {
             setUrl(url);
@@ -72,21 +73,25 @@ const UploadImage = (props: any) => {
     );
   };
 
-  console.log("image: ", image);
 
   return (
     <div>
-      {/* <progress value={progress} max="100" /> */}
+      <progress value={progress} max="100" /><br></br>
       {props.myprofile ? <span><input type="file" accept="image/*" onChange={handleChange} />
       <button onClick={handleUpload}>Upload</button></span>
       :
       ""}
       <br></br>
-      <img width="100px" height="100px" src={url || props.userInfo.profile_img_url || "http://via.placeholder.com/300"} alt="firebase-image" />
+      <ProfileImg src={url || props.userInfo.profile_img_url || "http://via.placeholder.com/300"} alt="firebase-image" />
     </div>
   );
 };
 
+const ProfileImg = styled.img`
+border-radius: 50%;
+width: 100px;
+height: 100px;
+`
 
 
 const EditProfile = (props: any) => {
@@ -107,6 +112,7 @@ const EditProfile = (props: any) => {
     axios.put("/users?edit_profile=true", data, options)
     .then(res => {
       setModal(false);
+      localStorage.setItem("user", JSON.stringify(res.data));
     })
     .catch(err => {
       setErrorMessage(i18n.t("profile.nameInUse"));
@@ -128,6 +134,7 @@ const EditProfile = (props: any) => {
       <button onClick={() => setModal(true)} style={inlineStyles.editProfile}>{i18n.t("profile.editProfile")}</button>
 
       <Dialog open={modal} onClose={onClose}>
+        <CloseIconDiv><CloseIcon onClick={onClose} /></CloseIconDiv>
         <DialogTitle>{i18n.t("profile.editProfile")}</DialogTitle>
         <DialogContent>
           <UploadImage userInfo={props.userInfo}　myprofile={props.userInfo.myprofile}/>
@@ -156,6 +163,10 @@ const EditProfile = (props: any) => {
   )
 }
 
+const CloseIconDiv = styled.div`
+padding: 10px 0 10px 10px
+`
+
 
 const Profile = (props: any) => {
   const jwt = getJwt();
@@ -177,7 +188,6 @@ const Profile = (props: any) => {
       .then(res => {
         setUser(res.data);
         setIsLoading(false);
-        console.log(res.data);
       })
       .catch(err => {
         setIsLoading(false);
@@ -203,11 +213,13 @@ const Profile = (props: any) => {
           <div style={inlineStyles.profileName}>@{userInfo.profile_name}</div>
           <div style={inlineStyles.description}>{userInfo.description}</div>
           <div style={inlineStyles.noDescription}>{!userInfo.description && userInfo.myprofile ? i18n.t("profile.enterBio") : ""}</div>
+
+
           <div style={{ float: 'right', textAlign: 'right' }}>
             <small>{i18n.t("profile.joined")} {userInfo.created_at.slice(0, 10)}</small>
           </div>
 
-          <div style={{marginTop: 2}}>
+          <div style={{marginTop: 2, marginBottom: 10}}>
             <Link style={{ textDecoration: 'none' }} to={"/profile/" + userInfo.name + "/following"}>
               {userInfo.num_of_following_users} {i18n.t("profile.followingUsers")}
             </Link>&nbsp;&nbsp;&nbsp;
@@ -224,19 +236,21 @@ const Profile = (props: any) => {
 
           {userInfo.myprofile ?　
           <div></div>　:
-          <UserFollowButton userInfoId={userInfo.user_info_id} hasFollowed={userInfo.has_followed}/>}
+          <span><UserFollowButton userInfoId={userInfo.id} hasFollowed={userInfo.has_followed}/></span>
+          }
+          
 
           <ProfileDetail userInfo={userInfo} />
 
           <Switch>
             <Route path={props.match.url + "/following"} key="following" render={(props) => 
-              <FollowingUserList userInfoId={userInfo.user_info_id}  />} 
+              <FollowingUserList userInfoId={userInfo.id}  />} 
             />
             <Route path={props.match.url + "/followers"} key="followers" render={(props) => 
-              <FollowerUserList userInfoId={userInfo.user_info_id}  />} 
+              <FollowerUserList userInfoId={userInfo.id}  />} 
             />
             <Route path={props.match.url + "/topics"} key="topics" render={(props) => 
-              <FollowingTopicList userInfoId={userInfo.user_info_id} />} 
+              <FollowingTopicList userInfoId={userInfo.id} />} 
             />
             <Route path={props.match.url + "/voted"} key="voted" render={(props) => 
               <Feed isLogin={true} isPosted={false} isPostedHandeler={null}></Feed>} 
@@ -269,11 +283,13 @@ const inlineStyles = {
   },
   description: {
     color: 'black',
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 10
   },
   noDescription: {
     color: 'dimgray',
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 10
   },
   editProfile: {
     // border: '',

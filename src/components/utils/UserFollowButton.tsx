@@ -72,11 +72,9 @@ const UserFollowButton = (props: UserFollowButtonProps) => {
 }
 
 
-const FollowButtonDiv = styled.div`
+const FollowButtonDiv = styled.span`
 padding: 10px 0 10px 0;
-border: none;
 font-size: 20px;
-text-align: right;
 `
 
 

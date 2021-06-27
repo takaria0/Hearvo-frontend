@@ -23,6 +23,7 @@
     "chart.js": "^2.9.4",
     "firebase": "^8.6.8",
     "i18next": "^19.8.7",
+    "leaflet": "^1.7.1",
     "linkifyjs": "^2.1.9",
     "mixpanel-browser": "^2.41.0",
     "moment-timezone": "^0.5.32",
@@ -35,6 +36,7 @@
     "react-google-login": "^5.2.2",
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.8.6",
+    "react-leaflet": "^3.2.0",
     "react-linkify": "^1.0.0-alpha",
     "react-loading-skeleton": "^2.1.1",
     "react-plotly.js": "^2.5.0",
@@ -44,7 +46,7 @@
     "react-snapshot": "^1.3.0",
     "reactstrap": "^8.7.1",
     "styled-components": "^5.3.0",
-    "typescript": "^4.0.5",
+    "typescript": "~4.0.5",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
@@ -62,17 +64,12 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {}
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@types/leaflet": "^1.7.3"
+  }
 }
