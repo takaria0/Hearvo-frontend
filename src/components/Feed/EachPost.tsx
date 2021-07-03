@@ -263,9 +263,9 @@ const PollUserList = (props: any) => {
           {isLoading ? "" : userList.map((user: any) => {
             return (
               <MenuItem><Link to={"/profile/" + user.name + "/posts"}>
-                <MiniProfileIcon imgUrl={user.profile_img_url}/>
                 <MenuTitle>
-                  {user.profile_name}
+                  <MiniProfileIcon imgUrl={user.profile_img_url}/>
+                  <UserNameSpan>{user.profile_name}</UserNameSpan>
                 </MenuTitle>
                 <MenuBio>
                   {user.description}
@@ -283,9 +283,15 @@ const PollUserList = (props: any) => {
 const MenuTitle = styled.div`
 
 `
+
+const UserNameSpan = styled.span`
+margin-left: 5px;
+`
+
 const MenuBio = styled.div`
-  color: gray;
-  font-size: 10px;
+color: gray;
+font-size: 10px;
+margin-left: 40px;
 `
 
 const PostFooter = (props: any) => {

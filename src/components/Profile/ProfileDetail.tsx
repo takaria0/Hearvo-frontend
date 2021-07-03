@@ -13,7 +13,6 @@ import styled from 'styled-components';
 import CloseUsers from './CloseUsers';
 
 
-
 const ProfileDetail = (props: any) => {
   const keywordArray = window.location.pathname.split("/");
 

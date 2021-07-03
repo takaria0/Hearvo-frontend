@@ -12,7 +12,7 @@ import i18n from "../../helpers/i18n";
 import { DialogTitle, Dialog, DialogContent, TextareaAutosize } from '@material-ui/core';
 import { storage } from '../../helpers/firebase';
 import UserFollowButton from '../utils/UserFollowButton';
-import FollowingUserList from './FollowingUserList';
+import UserList from './UserList';
 import FollowerUserList from './FollowerUserList';
 import FollowingTopicList from './FollowingTopicList';
 import Feed from '../Feed/Feed';
@@ -77,7 +77,7 @@ const UploadImage = (props: any) => {
   return (
     <div>
       <progress value={progress} max="100" /><br></br>
-      {props.myprofile ? <span><input type="file" accept="image/*" onChange={handleChange} />
+      {props.myprofile ? <span><input type="file" accept="image/jpeg, image/png" onChange={handleChange} />
       <button onClick={handleUpload}>Upload</button></span>
       :
       ""}
@@ -244,10 +244,10 @@ const Profile = (props: any) => {
 
           <Switch>
             <Route path={props.match.url + "/following"} key="following" render={(props) => 
-              <FollowingUserList userInfoId={userInfo.id}  />} 
+              <UserList userInfoId={userInfo.id} feedType={"following"} />} 
             />
             <Route path={props.match.url + "/followers"} key="followers" render={(props) => 
-              <FollowerUserList userInfoId={userInfo.id}  />} 
+              <UserList userInfoId={userInfo.id} feedType={"follower"}  />} 
             />
             <Route path={props.match.url + "/topics"} key="topics" render={(props) => 
               <FollowingTopicList userInfoId={userInfo.id} />} 

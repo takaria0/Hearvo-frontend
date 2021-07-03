@@ -9,7 +9,7 @@ import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import RenderTopic from '../Feed/RenderTopic';
 import { InvitePeopleViaTwitterButton, InvitePeopleViaTwitterButtonDetail } from './InviteTwitter';
-
+import EncourageFeed from './EncourageFeed';
 
 const DetailInfo = (props: any) => {
 
@@ -200,6 +200,7 @@ const SideBar = (props: any) => {
       return (
         <span>
           <RelatedPosts postId={postId} />
+          <EncourageFeed />
           <InvitePeopleViaTwitterButtonDetail id={postId} text={i18n.t("twitterInvite.detailButtonText")} />
           <GoogleAdSideBar />
         </span>
@@ -210,6 +211,7 @@ const SideBar = (props: any) => {
       return (
         <span>
           <TrendingTopics />
+          <EncourageFeed />
           <InvitePeopleViaTwitterButton text={i18n.t("twitterInvite.buttonText")} />
           <GoogleAdSideBar />
         </span>

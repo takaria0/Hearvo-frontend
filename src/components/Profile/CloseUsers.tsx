@@ -16,8 +16,10 @@ import 'leaflet/dist/leaflet.css';
 import './leaflet-icon-override.css';
 import L from 'leaflet';
 import { divIcon } from 'leaflet';
+import TopicWordCloud from './TopicWordCloud';
 
-const [ imgHeight, imgWidth ] = [50, 50];
+const [ imgHeight, imgWidth ] = [40, 40];
+const CLOSE_USERS_HEIGHT = 300;
 
 interface ImgIconProps {
   imgUrl: string;
@@ -76,14 +78,14 @@ const CloseUsersLeaflet = (props: any) => {
 
 
   if (loading) return (
-      <MapContainer center={[0, 0]} zoom={13} scrollWheelZoom={true} zoomControl={false} style={{ height: 500 }} attributionControl={false}>
+      <MapContainer center={[0, 0]} zoom={13} scrollWheelZoom={true} zoomControl={false} style={{ height: CLOSE_USERS_HEIGHT, backgroundColor: "rgb(242, 242, 242)" }} attributionControl={false}>
         <ImgIcon position={[0, 0]} imgUrl={props.userInfo.profile_img_url} profileName={props.userInfo.first_name + " " + props.userInfo.last_name} />
       </MapContainer>
   );
 
   return (
     <div>
-      <MapContainer center={[0, 0]} zoom={13} scrollWheelZoom={true} zoomControl={false} style={{ height: 500 }} attributionControl={false}>
+      <MapContainer center={[0, 0]} zoom={13} scrollWheelZoom={true} zoomControl={false} style={{ height: CLOSE_USERS_HEIGHT, backgroundColor: "rgb(242, 242, 242)" }} attributionControl={false}>
         <ImgIcon position={[0, 0]} imgUrl={props.userInfo.profile_img_url} profileName={props.userInfo.first_name + " " + props.userInfo.last_name}/>
         {closeUserList.map((each: any, idx: number) => {
           const radian = (Math.PI*idx)/3;
@@ -135,6 +137,7 @@ const CloseUsers = (props: any) => {
         </NextButton>
       </ButtonDiv>
       <CloseUsersLeaflet userInfo={props.userInfo} date={date}/>
+      <TopicWordCloud userInfo={props.userInfo} date={date}></TopicWordCloud>
     </MainDiv>
   )
 }
